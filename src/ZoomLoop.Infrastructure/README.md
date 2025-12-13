@@ -38,13 +38,15 @@ dotnet ef database update --context ZoomLoopDbContext --startup-project ../ZoomL
 
 ## Seeding
 
-The database is automatically seeded with initial data when the application starts:
+The database is automatically seeded with initial data when the application starts **in Development environment only**:
 
 - **Roles**: Administrator, Dealer, User
 - **Admin User**: Username: `admin`, Password: `Admin123!`
 - **Vehicle Makes and Models**: Toyota, Honda, Ford with sample models
 
 The seeding logic is implemented in `SeedService.cs` and is executed during application startup in `Program.cs`.
+
+> **Security Note**: The default admin password should be changed immediately after first login in any non-development environment. For production, consider using environment variables or secure configuration providers for initial admin credentials.
 
 ## Entity Relationships
 

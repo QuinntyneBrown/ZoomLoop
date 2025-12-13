@@ -10,22 +10,25 @@ builder.Services.AddApiServices(builder.Configuration);
 
 var app = builder.Build();
 
-// Migrate and seed database
-using (var scope = app.Services.CreateScope())
+// Migrate and seed database in development only
+if (app.Environment.IsDevelopment())
 {
-    var services = scope.ServiceProvider;
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        var context = services.GetRequiredService<ZoomLoopDbContext>();
-        await context.Database.MigrateAsync();
+        var services = scope.ServiceProvider;
+        try
+        {
+            var context = services.GetRequiredService<ZoomLoopDbContext>();
+            await context.Database.MigrateAsync();
 
-        var seedService = services.GetRequiredService<ISeedService>();
-        await seedService.SeedAsync();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred during database migration or seeding.");
+            var seedService = services.GetRequiredService<ISeedService>();
+            await seedService.SeedAsync();
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred during database migration or seeding.");
+        }
     }
 }
 
