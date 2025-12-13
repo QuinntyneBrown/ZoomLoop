@@ -129,7 +129,7 @@ public class VehicleIngestionService : IVehicleIngestionService
         if (jsonStart >= 0 && jsonEnd > jsonStart)
         {
             var json = content.Substring(jsonStart, jsonEnd - jsonStart + 1);
-            var parsed = System.Text.Json.JsonDocument.Parse(json);
+            using var parsed = System.Text.Json.JsonDocument.Parse(json);
             var root = parsed.RootElement;
 
             return (
@@ -148,17 +148,51 @@ public class VehicleIngestionService : IVehicleIngestionService
     {
         var chatClient = _openAIClient.GetChatClient(_deploymentName);
 
+        // Note: For image analysis with GPT-4o, we would use the vision capabilities.
+        // In this implementation, we use a text-based approach by first analyzing images
+        // with Computer Vision, then using GPT-4o to interpret the results.
+        // For production, consider using GPT-4 Vision API directly.
+        
+        var imageAnalysisResults = new List<string>();
+        
+        // Analyze each image with Computer Vision
+        foreach (var imageBytes in images.Take(3)) // Analyze up to 3 images
+        {
+            try
+            {
+                var imageData = new BinaryData(imageBytes);
+                var result = await _visionClient.AnalyzeAsync(
+                    imageData,
+                    VisualFeatures.Caption | VisualFeatures.Tags | VisualFeatures.Objects,
+                    cancellationToken: cancellationToken);
+
+                var description = result.Value.Caption?.Text ?? "No description available";
+                
+                var tagsList = new List<string>();
+                if (result.Value.Tags != null && result.Value.Tags.Values != null)
+                {
+                    foreach (var tag in result.Value.Tags.Values)
+                    {
+                        tagsList.Add(tag.Name);
+                    }
+                }
+                
+                imageAnalysisResults.Add($"Image: {description}. Tags: {string.Join(", ", tagsList)}");
+            }
+            catch
+            {
+                // Continue with other images if one fails
+                continue;
+            }
+        }
+
+        var imageDescriptions = string.Join(" | ", imageAnalysisResults);
+        
         var messages = new List<ChatMessage>
         {
-            new SystemChatMessage("You are a vehicle inspection expert. Analyze the vehicle images and provide: interior condition (Excellent/Good/Fair/Poor), exterior condition (Excellent/Good/Fair/Poor), and number of doors. Respond only with a JSON object in this exact format: {\"interiorCondition\": \"Good\", \"exteriorCondition\": \"Excellent\", \"numberOfDoors\": 4}")
+            new SystemChatMessage("You are a vehicle inspection expert. Based on the image analysis results, provide: interior condition (Excellent/Good/Fair/Poor), exterior condition (Excellent/Good/Fair/Poor), and number of doors. Respond only with a JSON object in this exact format: {\"interiorCondition\": \"Good\", \"exteriorCondition\": \"Excellent\", \"numberOfDoors\": 4}"),
+            new UserChatMessage($"Analyze these vehicle images and provide the assessment. Image analysis results: {imageDescriptions}")
         };
-
-        // For the first image, add it to the prompt
-        if (images.Length > 0)
-        {
-            var base64Image = Convert.ToBase64String(images[0]);
-            messages.Add(new UserChatMessage($"Analyze this vehicle image. Provide the interior condition, exterior condition, and number of doors visible."));
-        }
 
         var response = await chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
         var content = response.Value.Content[0].Text;
@@ -169,7 +203,7 @@ public class VehicleIngestionService : IVehicleIngestionService
         if (jsonStart >= 0 && jsonEnd > jsonStart)
         {
             var json = content.Substring(jsonStart, jsonEnd - jsonStart + 1);
-            var parsed = System.Text.Json.JsonDocument.Parse(json);
+            using var parsed = System.Text.Json.JsonDocument.Parse(json);
             var root = parsed.RootElement;
 
             return (
@@ -188,10 +222,45 @@ public class VehicleIngestionService : IVehicleIngestionService
     {
         var chatClient = _openAIClient.GetChatClient(_deploymentName);
 
+        // Analyze images with Computer Vision first
+        var imageAnalysisResults = new List<string>();
+        
+        foreach (var imageBytes in images.Take(5)) // Analyze up to 5 images for description
+        {
+            try
+            {
+                var imageData = new BinaryData(imageBytes);
+                var result = await _visionClient.AnalyzeAsync(
+                    imageData,
+                    VisualFeatures.Caption | VisualFeatures.Tags | VisualFeatures.DenseCaptions,
+                    cancellationToken: cancellationToken);
+
+                var description = result.Value.Caption?.Text ?? "No description available";
+                
+                var tagsList = new List<string>();
+                if (result.Value.Tags != null && result.Value.Tags.Values != null)
+                {
+                    foreach (var tag in result.Value.Tags.Values.Take(10))
+                    {
+                        tagsList.Add(tag.Name);
+                    }
+                }
+                
+                imageAnalysisResults.Add($"{description}. Features: {string.Join(", ", tagsList)}");
+            }
+            catch
+            {
+                // Continue with other images if one fails
+                continue;
+            }
+        }
+
+        var imageDescriptions = string.Join(" | ", imageAnalysisResults);
+
         var messages = new List<ChatMessage>
         {
-            new SystemChatMessage("You are a professional automotive writer. Create a compelling 200-word description of the vehicle based on the images provided. Focus on key features, condition, and appeal."),
-            new UserChatMessage("Generate a 200-word description for this vehicle based on the images.")
+            new SystemChatMessage("You are a professional automotive writer. Create a compelling 200-word description of the vehicle based on the image analysis provided. Focus on key features, condition, and appeal. Make it engaging for potential buyers."),
+            new UserChatMessage($"Generate a 200-word description for this vehicle. Image analysis: {imageDescriptions}")
         };
 
         var response = await chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
