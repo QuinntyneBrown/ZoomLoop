@@ -1,0 +1,20 @@
+<div class="tabs" [class.tabs--centered]="centered" [class.tabs--full]="fullWidth" [class.tabs--equal]="equalWidth">
+  <div class="tabs__list" role="tablist" [attr.aria-orientation]="'horizontal'" (keydown)="onKeydown($event)">
+    <button
+      *ngFor="let tab of tabs; let i = index; trackBy: trackByValue"
+      class="tabs__tab"
+      [class.tabs__tab--active]="i === selectedIndex"
+      [class.tabs__tab--disabled]="tab.disabled"
+      role="tab"
+      [attr.aria-selected]="i === selectedIndex"
+      [attr.tabindex]="i === selectedIndex ? 0 : -1"
+      [attr.aria-controls]="'panel-' + i"
+      (click)="selectTab(tab, i)"
+    >
+      <span *ngIf="tab.icon" class="tabs__icon" [class]="tab.icon"></span>
+      <span class="tabs__label">{{ tab.label }}</span>
+      <span *ngIf="tab.badge" class="tabs__badge">{{ tab.badge }}</span>
+      <span *ngIf="underline" class="tabs__indicator" [class.tabs__indicator--active]="i === selectedIndex"></span>
+    </button>
+  </div>
+</div>

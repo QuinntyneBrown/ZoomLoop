@@ -11,3 +11,4 @@ export * from './slider';
 export * from './stat';
 export * from './timeline';
 export * from './vehicle-card';
+export * from './tabs/tabs';
