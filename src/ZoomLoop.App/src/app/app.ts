@@ -1,12 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { FooterComponent, NavbarComponent } from './components';
 
 @Component({
   selector: 'zl-root',
-  imports: [RouterOutlet],
+  imports: [
+    NavbarComponent,
+    FooterComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('ZoomLoop.App');
+
 }
