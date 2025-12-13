@@ -1,17 +1,17 @@
-<div class="carousel-container" [style.height]="height">
-  <div class="carousel-wrapper" *ngIf="items.length > 0">
+<div class="zl-carousel-container" [style.height]="height">
+  <div class="zl-carousel-wrapper" *ngIf="items.length > 0">
     <!-- Carousel Track -->
-    <div class="carousel-track">
-      <div class="carousel-slide" *ngFor="let item of items; let i = index" 
+    <div class="zl-carousel-track">
+      <div class="zl-carousel-slide" *ngFor="let item of items; let i = index" 
            [class.active]="i === currentIndex">
         <img 
           [src]="item.imageUrl" 
           [alt]="item.alt || 'Carousel item ' + (i + 1)"
-          class="carousel-image"
+          class="zl-carousel-image"
         />
-        <div class="carousel-content" *ngIf="item.title || item.description">
-          <h3 class="carousel-title" *ngIf="item.title">{{ item.title }}</h3>
-          <p class="carousel-description" *ngIf="item.description">
+        <div class="zl-carousel-content" *ngIf="item.title || item.description">
+          <h3 class="zl-carousel-title" *ngIf="item.title">{{ item.title }}</h3>
+          <p class="zl-carousel-description" *ngIf="item.description">
             {{ item.description }}
           </p>
         </div>
@@ -20,28 +20,28 @@
 
     <!-- Navigation Arrows -->
     <button 
-      class="carousel-arrow carousel-arrow-prev" 
+      class="zl-carousel-arrow zl-carousel-arrow-prev" 
       (click)="prevSlide()"
       aria-label="Previous slide"
       type="button"
     >
-      <span class="arrow-icon">‹</span>
+      <span class="zl-arrow-icon">‹</span>
     </button>
     
     <button 
-      class="carousel-arrow carousel-arrow-next" 
+      class="zl-carousel-arrow zl-carousel-arrow-next" 
       (click)="nextSlide()"
       aria-label="Next slide"
       type="button"
     >
-      <span class="arrow-icon">›</span>
+      <span class="zl-arrow-icon">›</span>
     </button>
 
     <!-- Indicators/Dots -->
-    <div class="carousel-indicators" *ngIf="showIndicators && items.length > 1">
+    <div class="zl-carousel-indicators" *ngIf="showIndicators && items.length > 1">
       <button 
         *ngFor="let item of items; let i = index"
-        class="indicator-dot"
+        class="zl-indicator-dot"
         [class.active]="i === currentIndex"
         (click)="goToSlide(i)"
         [attr.aria-label]="'Go to slide ' + (i + 1)"
@@ -50,13 +50,13 @@
     </div>
 
     <!-- Slide Counter -->
-    <div class="carousel-counter" *ngIf="items.length > 1">
+    <div class="zl-carousel-counter" *ngIf="items.length > 1">
       {{ currentIndex + 1 }} / {{ items.length }}
     </div>
   </div>
 
   <!-- Empty State -->
-  <div class="carousel-empty" *ngIf="items.length === 0">
+  <div class="zl-carousel-empty" *ngIf="items.length === 0">
     <p>No items to display</p>
   </div>
 </div>

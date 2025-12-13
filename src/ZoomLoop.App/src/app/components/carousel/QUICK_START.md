@@ -16,7 +16,7 @@ import { CarouselComponent, CarouselItem } from '@app/components';
   selector: 'app-my-carousel',
   standalone: true,
   imports: [CarouselComponent],
-  template: `<app-carousel [items]="items"></app-carousel>`,
+  template: `<zl-carousel [items]="items"></zl-carousel>`,
 })
 export class MyCarouselComponent {
   items: CarouselItem[] = [
@@ -40,33 +40,33 @@ export class MyCarouselComponent {
 
 ### Disable Auto-Play
 ```html
-<app-carousel [items]="items" [autoPlay]="false"></app-carousel>
+<zl-carousel [items]="items" [autoPlay]="false"></zl-carousel>
 ```
 
 ### Change Height
 ```html
-<app-carousel [items]="items" [height]="'500px'"></app-carousel>
+<zl-carousel [items]="items" [height]="'500px'"></zl-carousel>
 ```
 
 ### Adjust Auto-Play Speed
 ```html
-<app-carousel [items]="items" [autoPlayInterval]="3000"></app-carousel>
+<zl-carousel [items]="items" [autoPlayInterval]="3000"></zl-carousel>
 ```
 
 ### Hide Indicator Dots
 ```html
-<app-carousel [items]="items" [showIndicators]="false"></app-carousel>
+<zl-carousel [items]="items" [showIndicators]="false"></zl-carousel>
 ```
 
 ### Combine Multiple Options
 ```html
-<app-carousel 
+<zl-carousel 
   [items]="items"
   [autoPlay]="true"
   [autoPlayInterval]="4000"
   [height]="'600px'"
   [showIndicators]="true"
-></app-carousel>
+></zl-carousel>
 ```
 
 ## Files Included

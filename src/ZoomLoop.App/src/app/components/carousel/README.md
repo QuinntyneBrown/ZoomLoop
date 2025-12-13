@@ -35,7 +35,7 @@ import { CarouselComponent, CarouselItem } from '@app/components';
   standalone: true,
   imports: [CarouselComponent],
   template: `
-    <app-carousel [items]="carouselItems" [height]="'500px'"></app-carousel>
+    <zl-carousel [items]="carouselItems" [height]="'500px'"></zl-carousel>
   `,
 })
 export class ExampleComponent {
@@ -65,13 +65,13 @@ export class ExampleComponent {
 ### With Custom Configuration
 
 ```typescript
-<app-carousel 
+<zl-carousel 
   [items]="carouselItems"
   [autoPlay]="true"
   [autoPlayInterval]="4000"
   [showIndicators]="true"
   [height]="'600px'"
-></app-carousel>
+></zl-carousel>
 ```
 
 ## API
@@ -184,12 +184,12 @@ ng test
   standalone: true,
   imports: [CarouselComponent],
   template: `
-    <app-carousel 
+    <zl-carousel 
       [items]="propertyImages"
       [height]="'500px'"
       [autoPlay]="true"
       [autoPlayInterval]="6000"
-    ></app-carousel>
+    ></zl-carousel>
   `,
 })
 export class PropertyCarouselComponent {

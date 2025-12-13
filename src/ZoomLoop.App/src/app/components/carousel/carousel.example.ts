@@ -6,7 +6,7 @@ import { CarouselComponent, CarouselItem } from './carousel.component';
  * This shows a typical use case for displaying a series of images.
  */
 @Component({
-  selector: 'app-carousel-example',
+  selector: 'zl-carousel-example',
   standalone: true,
   imports: [CarouselComponent],
   template: `
@@ -17,48 +17,48 @@ import { CarouselComponent, CarouselItem } from './carousel.component';
       <section>
         <h2>Basic Carousel</h2>
         <p>Simple carousel with default settings</p>
-        <app-carousel [items]="basicItems"></app-carousel>
+        <zl-carousel [items]="basicItems"></zl-carousel>
       </section>
 
       <!-- Example 2: Carousel with Custom Height -->
       <section>
         <h2>Custom Height Carousel</h2>
         <p>Carousel with custom height of 300px</p>
-        <app-carousel [items]="basicItems" [height]="'300px'"></app-carousel>
+        <zl-carousel [items]="basicItems" [height]="'300px'"></zl-carousel>
       </section>
 
       <!-- Example 3: Carousel without Auto-Play -->
       <section>
         <h2>Manual Navigation Carousel</h2>
         <p>Carousel with auto-play disabled - use arrows only</p>
-        <app-carousel
+        <zl-carousel
           [items]="basicItems"
           [autoPlay]="false"
-        ></app-carousel>
+        ></zl-carousel>
       </section>
 
       <!-- Example 4: Carousel with Titles and Descriptions -->
       <section>
         <h2>Carousel with Content</h2>
         <p>Carousel displaying image with title and description overlay</p>
-        <app-carousel [items]="detailedItems"></app-carousel>
+        <zl-carousel [items]="detailedItems"></zl-carousel>
       </section>
 
       <!-- Example 5: Single Item Carousel -->
       <section>
         <h2>Single Item Carousel</h2>
         <p>Carousel with only one item (no navigation needed)</p>
-        <app-carousel [items]="singleItem"></app-carousel>
+        <zl-carousel [items]="singleItem"></zl-carousel>
       </section>
 
       <!-- Example 6: Carousel without Indicators -->
       <section>
         <h2>Carousel without Indicator Dots</h2>
         <p>Carousel with indicator dots disabled</p>
-        <app-carousel
+        <zl-carousel
           [items]="basicItems"
           [showIndicators]="false"
-        ></app-carousel>
+        ></zl-carousel>
       </section>
     </div>
   `,
@@ -98,7 +98,7 @@ import { CarouselComponent, CarouselItem } from './carousel.component';
         border-bottom: none;
       }
 
-      app-carousel {
+      zl-carousel {
         display: block;
       }
     `,

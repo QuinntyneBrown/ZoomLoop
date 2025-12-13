@@ -215,12 +215,12 @@ describe('CarouselComponent', () => {
     });
 
     it('should render carousel slides', () => {
-      const slides = compiled.queryAll(By.css('.carousel-slide'));
+      const slides = compiled.queryAll(By.css('.zl-carousel-slide'));
       expect(slides.length).toBe(3);
     });
 
     it('should mark active slide with active class', () => {
-      const activeSlide = compiled.query(By.css('.carousel-slide.active'));
+      const activeSlide = compiled.query(By.css('.zl-carousel-slide.active'));
       expect(activeSlide).toBeTruthy();
       expect(component.currentIndex).toBe(0);
     });
@@ -228,36 +228,36 @@ describe('CarouselComponent', () => {
     it('should update active slide on navigation', () => {
       component.nextSlide();
       fixture.detectChanges();
-      const activeSlide = compiled.query(By.css('.carousel-slide.active'));
+      const activeSlide = compiled.query(By.css('.zl-carousel-slide.active'));
       expect(activeSlide.nativeElement.style.opacity).toBeDefined();
     });
 
     it('should render navigation arrows', () => {
-      const prevBtn = compiled.query(By.css('.carousel-arrow-prev'));
-      const nextBtn = compiled.query(By.css('.carousel-arrow-next'));
+      const prevBtn = compiled.query(By.css('.zl-carousel-arrow-prev'));
+      const nextBtn = compiled.query(By.css('.zl-carousel-arrow-next'));
       expect(prevBtn).toBeTruthy();
       expect(nextBtn).toBeTruthy();
     });
 
     it('should render indicator dots', () => {
-      const dots = compiled.queryAll(By.css('.indicator-dot'));
+      const dots = compiled.queryAll(By.css('.zl-indicator-dot'));
       expect(dots.length).toBe(3);
     });
 
     it('should mark active indicator dot', () => {
-      const activeDot = compiled.query(By.css('.indicator-dot.active'));
+      const activeDot = compiled.query(By.css('.zl-indicator-dot.active'));
       expect(activeDot).toBeTruthy();
     });
 
     it('should hide indicators when showIndicators is false', () => {
       component.showIndicators = false;
       fixture.detectChanges();
-      const indicators = compiled.query(By.css('.carousel-indicators'));
+      const indicators = compiled.query(By.css('.zl-carousel-indicators'));
       expect(indicators).toBeFalsy();
     });
 
     it('should render carousel images with correct src', () => {
-      const images = compiled.queryAll(By.css('.carousel-image'));
+      const images = compiled.queryAll(By.css('.zl-carousel-image'));
       expect(images.length).toBe(3);
       expect(images[0].nativeElement.src).toContain('image1.jpg');
       expect(images[1].nativeElement.src).toContain('image2.jpg');
@@ -265,17 +265,17 @@ describe('CarouselComponent', () => {
     });
 
     it('should display slide titles', () => {
-      const titles = compiled.queryAll(By.css('.carousel-title'));
+      const titles = compiled.queryAll(By.css('.zl-carousel-title'));
       expect(titles.length).toBeGreaterThan(0);
     });
 
     it('should display slide descriptions', () => {
-      const descriptions = compiled.queryAll(By.css('.carousel-description'));
+      const descriptions = compiled.queryAll(By.css('.zl-carousel-description'));
       expect(descriptions.length).toBeGreaterThan(0);
     });
 
     it('should render slide counter', () => {
-      const counter = compiled.query(By.css('.carousel-counter'));
+      const counter = compiled.query(By.css('.zl-carousel-counter'));
       expect(counter).toBeTruthy();
       expect(counter.nativeElement.textContent).toContain('1 / 3');
     });
@@ -283,7 +283,7 @@ describe('CarouselComponent', () => {
     it('should show empty state when no items', () => {
       component.items = [];
       fixture.detectChanges();
-      const emptyState = compiled.query(By.css('.carousel-empty'));
+      const emptyState = compiled.query(By.css('.zl-carousel-empty'));
       expect(emptyState).toBeTruthy();
     });
   });
@@ -296,7 +296,7 @@ describe('CarouselComponent', () => {
     });
 
     it('should navigate to next slide on next button click', () => {
-      const nextBtn = compiled.query(By.css('.carousel-arrow-next'));
+      const nextBtn = compiled.query(By.css('.zl-carousel-arrow-next'));
       nextBtn.nativeElement.click();
       expect(component.currentIndex).toBe(1);
     });
@@ -304,13 +304,13 @@ describe('CarouselComponent', () => {
     it('should navigate to prev slide on prev button click', () => {
       component.currentIndex = 1;
       fixture.detectChanges();
-      const prevBtn = compiled.query(By.css('.carousel-arrow-prev'));
+      const prevBtn = compiled.query(By.css('.zl-carousel-arrow-prev'));
       prevBtn.nativeElement.click();
       expect(component.currentIndex).toBe(0);
     });
 
     it('should navigate to slide on indicator click', () => {
-      const dots = compiled.queryAll(By.css('.indicator-dot'));
+      const dots = compiled.queryAll(By.css('.zl-indicator-dot'));
       dots[2].nativeElement.click();
       expect(component.currentIndex).toBe(2);
     });
@@ -321,7 +321,7 @@ describe('CarouselComponent', () => {
       component.items = mockItems;
       component.height = '500px';
       fixture.detectChanges();
-      const container = compiled.query(By.css('.carousel-container'));
+      const container = compiled.query(By.css('.zl-carousel-container'));
       expect(container.nativeElement.style.height).toBe('500px');
     });
 
@@ -329,12 +329,12 @@ describe('CarouselComponent', () => {
       component.items = mockItems;
       component.height = '300px';
       fixture.detectChanges();
-      let container = compiled.query(By.css('.carousel-container'));
+      let container = compiled.query(By.css('.zl-carousel-container'));
       expect(container.nativeElement.style.height).toBe('300px');
 
       component.height = '600px';
       fixture.detectChanges();
-      container = compiled.query(By.css('.carousel-container'));
+      container = compiled.query(By.css('.zl-carousel-container'));
       expect(container.nativeElement.style.height).toBe('600px');
     });
   });
@@ -346,8 +346,8 @@ describe('CarouselComponent', () => {
     });
 
     it('should have aria labels on navigation buttons', () => {
-      const prevBtn = compiled.query(By.css('.carousel-arrow-prev'));
-      const nextBtn = compiled.query(By.css('.carousel-arrow-next'));
+      const prevBtn = compiled.query(By.css('.zl-carousel-arrow-prev'));
+      const nextBtn = compiled.query(By.css('.zl-carousel-arrow-next'));
       expect(prevBtn.nativeElement.getAttribute('aria-label')).toBe(
         'Previous slide'
       );
@@ -357,7 +357,7 @@ describe('CarouselComponent', () => {
     });
 
     it('should have aria labels on indicator dots', () => {
-      const dots = compiled.queryAll(By.css('.indicator-dot'));
+      const dots = compiled.queryAll(By.css('.zl-indicator-dot'));
       expect(dots[0].nativeElement.getAttribute('aria-label')).toContain(
         'Go to slide 1'
       );
@@ -370,7 +370,7 @@ describe('CarouselComponent', () => {
     });
 
     it('should have alt text on images', () => {
-      const images = compiled.queryAll(By.css('.carousel-image'));
+      const images = compiled.queryAll(By.css('.zl-carousel-image'));
       expect(images[0].nativeElement.getAttribute('alt')).toBe('Image 1');
       expect(images[1].nativeElement.getAttribute('alt')).toBe('Image 2');
       expect(images[2].nativeElement.getAttribute('alt')).toBe('Image 3');
@@ -382,7 +382,7 @@ describe('CarouselComponent', () => {
       };
       component.items = [itemWithoutAlt];
       fixture.detectChanges();
-      const image = compiled.query(By.css('.carousel-image'));
+      const image = compiled.query(By.css('.zl-carousel-image'));
       expect(image.nativeElement.getAttribute('alt')).toContain(
         'Carousel item'
       );

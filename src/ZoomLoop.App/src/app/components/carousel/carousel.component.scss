@@ -4,7 +4,7 @@ $light-text: #ffffff;
 $transition-speed: 0.5s;
 $border-radius: 8px;
 
-.carousel-container {
+.zl-carousel-container {
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -16,7 +16,7 @@ $border-radius: 8px;
   min-height: 200px;
 }
 
-.carousel-wrapper {
+.zl-carousel-wrapper {
   position: relative;
   width: 100%;
   height: 100%;
@@ -24,7 +24,7 @@ $border-radius: 8px;
   border-radius: $border-radius;
 }
 
-.carousel-track {
+.zl-carousel-track {
   position: relative;
   width: 100%;
   height: 100%;
@@ -32,7 +32,7 @@ $border-radius: 8px;
   align-items: center;
 }
 
-.carousel-slide {
+.zl-carousel-slide {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -47,14 +47,14 @@ $border-radius: 8px;
   }
 }
 
-.carousel-image {
+.zl-carousel-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.carousel-content {
+.zl-carousel-content {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -65,7 +65,7 @@ $border-radius: 8px;
   z-index: 5;
 }
 
-.carousel-title {
+.zl-carousel-title {
   margin: 0 0 10px;
   font-size: 24px;
   font-weight: 600;
@@ -80,7 +80,7 @@ $border-radius: 8px;
   }
 }
 
-.carousel-description {
+.zl-carousel-description {
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
@@ -96,7 +96,7 @@ $border-radius: 8px;
 }
 
 // Arrow Navigation
-.carousel-arrow {
+.zl-carousel-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -129,14 +129,14 @@ $border-radius: 8px;
     transform: translateY(-50%) scale(0.95);
   }
 
-  .arrow-icon {
+  .zl-arrow-icon {
     display: block;
     font-weight: 700;
     line-height: 1;
   }
 }
 
-.carousel-arrow-prev {
+.zl-carousel-arrow-prev {
   left: 15px;
 
   @media (max-width: 768px) {
@@ -154,7 +154,7 @@ $border-radius: 8px;
   }
 }
 
-.carousel-arrow-next {
+.zl-carousel-arrow-next {
   right: 15px;
 
   @media (max-width: 768px) {
@@ -173,7 +173,7 @@ $border-radius: 8px;
 }
 
 // Indicators/Dots
-.carousel-indicators {
+.zl-carousel-indicators {
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -190,7 +190,7 @@ $border-radius: 8px;
   }
 }
 
-.indicator-dot {
+.zl-indicator-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -227,7 +227,7 @@ $border-radius: 8px;
 }
 
 // Slide Counter
-.carousel-counter {
+.zl-carousel-counter {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -248,7 +248,7 @@ $border-radius: 8px;
 }
 
 // Empty State
-.carousel-empty {
+.zl-carousel-empty {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -264,12 +264,12 @@ $border-radius: 8px;
 
 // Accessibility
 @media (prefers-reduced-motion: reduce) {
-  .carousel-slide {
+  .zl-carousel-slide {
     transition: none;
   }
 
-  .carousel-arrow,
-  .indicator-dot {
+  .zl-carousel-arrow,
+  .zl-indicator-dot {
     transition: none;
 
     &:hover {

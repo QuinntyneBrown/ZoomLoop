@@ -10,7 +10,7 @@ export interface CarouselItem {
 }
 
 @Component({
-  selector: 'app-carousel',
+  selector: 'zl-carousel',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './carousel.component.html',
