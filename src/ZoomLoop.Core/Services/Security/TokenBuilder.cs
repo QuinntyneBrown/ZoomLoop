@@ -7,16 +7,6 @@ using System.Security.Claims;
 
 namespace ZoomLoop.Core.Services.Security;
 
-public interface ITokenBuilder
-{
-    TokenBuilder AddOrUpdateClaim(Claim claim);
-    TokenBuilder AddClaim(Claim claim);
-    TokenBuilder AddUsername(string username);
-    string Build();
-    TokenBuilder FromClaimsPrincipal(ClaimsPrincipal claimsPrincipal);
-    TokenBuilder RemoveClaim(Claim claim);
-}
-
 public class TokenBuilder : ITokenBuilder
 {
     private readonly ITokenProvider _tokenProvider;

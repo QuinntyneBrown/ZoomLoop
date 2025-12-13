@@ -6,11 +6,6 @@ using System;
 
 namespace ZoomLoop.Core.Services.Security;
 
-public interface IPasswordHasher
-{
-    string HashPassword(byte[] salt, string password);
-}
-
 public class PasswordHasher : IPasswordHasher
 {
     public string HashPassword(byte[] salt, string password)
