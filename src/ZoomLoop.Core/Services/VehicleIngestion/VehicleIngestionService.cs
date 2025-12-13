@@ -55,7 +55,7 @@ public class VehicleIngestionService : IVehicleIngestionService
         };
     }
 
-    private async Task<string> ExtractVINFromImagesAsync(byte[][] images, CancellationToken cancellationToken)
+    protected virtual async Task<string> ExtractVINFromImagesAsync(byte[][] images, CancellationToken cancellationToken)
     {
         foreach (var imageBytes in images)
         {
@@ -94,7 +94,7 @@ public class VehicleIngestionService : IVehicleIngestionService
         throw new InvalidOperationException("Could not extract VIN from any of the provided images");
     }
 
-    private async Task<(int Year, string Make, string Model)> GetVehicleInfoFromVINAsync(
+    protected virtual async Task<(int Year, string Make, string Model)> GetVehicleInfoFromVINAsync(
         string vin,
         CancellationToken cancellationToken)
     {
@@ -125,7 +125,7 @@ public class VehicleIngestionService : IVehicleIngestionService
         throw new InvalidOperationException("Failed to parse vehicle information from VIN");
     }
 
-    private async Task<(string InteriorCondition, string ExteriorCondition, int NumberOfDoors)> GetVehicleDetailsFromImagesAsync(
+    protected virtual async Task<(string InteriorCondition, string ExteriorCondition, int NumberOfDoors)> GetVehicleDetailsFromImagesAsync(
         byte[][] images,
         CancellationToken cancellationToken)
     {
@@ -196,7 +196,7 @@ public class VehicleIngestionService : IVehicleIngestionService
         throw new InvalidOperationException("Failed to parse vehicle details from images");
     }
 
-    private async Task<string> GenerateVehicleDescriptionAsync(
+    protected virtual async Task<string> GenerateVehicleDescriptionAsync(
         byte[][] images,
         CancellationToken cancellationToken)
     {

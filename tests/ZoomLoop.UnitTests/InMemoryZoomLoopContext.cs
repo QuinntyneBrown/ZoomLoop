@@ -43,7 +43,7 @@ public class InMemoryZoomLoopContext : DbContext, IZoomLoopContext
         {
             entity.HasKey(e => e.UserId);
             entity.HasMany(e => e.Roles)
-                .WithMany();
+                .WithMany(r => r.Users);
         });
 
         // Configure Role entity
@@ -51,7 +51,9 @@ public class InMemoryZoomLoopContext : DbContext, IZoomLoopContext
         {
             entity.HasKey(e => e.RoleId);
             entity.HasMany(e => e.Privileges)
-                .WithMany();
+                .WithOne(p => p.Role)
+                .HasForeignKey(p => p.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Configure Privilege entity

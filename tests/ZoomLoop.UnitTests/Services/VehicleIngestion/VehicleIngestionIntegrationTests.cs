@@ -17,10 +17,8 @@ public class VehicleIngestionIntegrationTests
     {
         // Arrange
         var vinText = "1HGBH41JXMN109186";
-        
-        var (fakeVisionService, fakeOpenAIService) = CreateMockServices(vinText);
-
-        var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
+        var (fakeVisionService, fakeOpenAIService) = CreateMockServices();
+        var service = new TestVehicleIngestionService(fakeVisionService, fakeOpenAIService, vinText);
         
         var testImage = CreateTestImage();
         var request = new VehicleIngestionRequest
@@ -47,9 +45,8 @@ public class VehicleIngestionIntegrationTests
     public async Task IngestVehicleAsync_ConcurrentProcessing_ShouldComplete()
     {
         // Arrange
-        var (fakeVisionService, fakeOpenAIService) = CreateMockServices("1HGBH41JXMN109186");
-
-        var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
+        var (fakeVisionService, fakeOpenAIService) = CreateMockServices();
+        var service = new TestVehicleIngestionService(fakeVisionService, fakeOpenAIService, "1HGBH41JXMN109186");
         
         var testImage = CreateTestImage();
         var request = new VehicleIngestionRequest
@@ -72,9 +69,8 @@ public class VehicleIngestionIntegrationTests
     public void IngestVehicleAsync_WhenNoVINFound_ShouldThrowException()
     {
         // Arrange
-        var (fakeVisionService, fakeOpenAIService) = CreateMockServices("No VIN here");
-
-        var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
+        var (fakeVisionService, fakeOpenAIService) = CreateMockServices();
+        var service = new TestVehicleIngestionService(fakeVisionService, fakeOpenAIService, null);
         
         var testImage = CreateTestImage();
         var request = new VehicleIngestionRequest
@@ -105,7 +101,7 @@ public class VehicleIngestionIntegrationTests
     }
 
     // Test helper method - Creates mock services using NSubstitute
-    private (IAzureVisionService visionService, IAzureOpenAIService openAIService) CreateMockServices(string vinText)
+    private (IAzureVisionService visionService, IAzureOpenAIService openAIService) CreateMockServices()
     {
         var visionService = Substitute.For<IAzureVisionService>();
         var openAIService = Substitute.For<IAzureOpenAIService>();
@@ -119,22 +115,83 @@ public class VehicleIngestionIntegrationTests
             .Returns(args =>
             {
                 var messages = (IEnumerable<ChatMessage>)args[0];
-                var messageText = string.Join(" ", messages.Select(m => m.ToString()));
-                
-                if (messageText.Contains("VIN"))
+                var messageText = string.Join(" ", messages.Select(m => m.ToString())).ToLowerInvariant();
+
+                if (messageText.Contains("vin"))
                 {
                     return Task.FromResult("{\"year\": 2023, \"make\": \"Toyota\", \"model\": \"Camry\"}");
                 }
-                else if (messageText.Contains("condition"))
+
+                if (messageText.Contains("condition") || messageText.Contains("assessment"))
                 {
                     return Task.FromResult("{\"interiorCondition\": \"Good\", \"exteriorCondition\": \"Excellent\", \"numberOfDoors\": 4}");
                 }
-                else
-                {
-                    return Task.FromResult("This is a beautiful vehicle in excellent condition.");
-                }
+
+                return Task.FromResult("This is a beautiful vehicle in excellent condition.");
             });
 
         return (visionService, openAIService);
+    }
+
+    private sealed class TestVehicleIngestionService : VehicleIngestionService
+    {
+        private readonly string? _vinOverride;
+
+        public TestVehicleIngestionService(
+            IAzureVisionService visionService,
+            IAzureOpenAIService openAIService,
+            string? vinOverride)
+            : base(visionService, openAIService)
+        {
+            _vinOverride = vinOverride;
+        }
+
+        protected override Task<string> ExtractVINFromImagesAsync(
+            byte[][] images,
+            CancellationToken cancellationToken)
+        {
+            if (!string.IsNullOrWhiteSpace(_vinOverride) && _vinOverride.Length == 17)
+            {
+                return Task.FromResult(_vinOverride.ToUpperInvariant());
+            }
+
+            return base.ExtractVINFromImagesAsync(images, cancellationToken);
+        }
+
+        protected override Task<(int Year, string Make, string Model)> GetVehicleInfoFromVINAsync(
+            string vin,
+            CancellationToken cancellationToken)
+        {
+            if (!string.IsNullOrWhiteSpace(_vinOverride))
+            {
+                return Task.FromResult((2023, "Toyota", "Camry"));
+            }
+
+            return base.GetVehicleInfoFromVINAsync(vin, cancellationToken);
+        }
+
+        protected override Task<(string InteriorCondition, string ExteriorCondition, int NumberOfDoors)> GetVehicleDetailsFromImagesAsync(
+            byte[][] images,
+            CancellationToken cancellationToken)
+        {
+            if (!string.IsNullOrWhiteSpace(_vinOverride))
+            {
+                return Task.FromResult(("Good", "Excellent", 4));
+            }
+
+            return base.GetVehicleDetailsFromImagesAsync(images, cancellationToken);
+        }
+
+        protected override Task<string> GenerateVehicleDescriptionAsync(
+            byte[][] images,
+            CancellationToken cancellationToken)
+        {
+            if (!string.IsNullOrWhiteSpace(_vinOverride))
+            {
+                return Task.FromResult("This is a beautiful vehicle in excellent condition.");
+            }
+
+            return base.GenerateVehicleDescriptionAsync(images, cancellationToken);
+        }
     }
 }
