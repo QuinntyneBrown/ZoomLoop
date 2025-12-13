@@ -47,13 +47,27 @@ public static class ConfigureServices
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.Configure<Authentication>(authenticationSection);
 
+        var allowedOrigins = configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? Array.Empty<string>();
+
         services.AddCors(options => options.AddPolicy("CorsPolicy",
-            builder => builder
-            .WithOrigins("http://localhost:4200")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .SetIsOriginAllowed(isOriginAllowed: _ => true)
-            .AllowCredentials()));
+            builder =>
+            {
+                if (allowedOrigins.Length > 0)
+                {
+                    builder.WithOrigins(allowedOrigins)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                }
+                else
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                }
+            }));
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
