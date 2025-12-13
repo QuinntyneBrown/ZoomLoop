@@ -1,0 +1,22 @@
+<div class="input-wrapper">
+  @if (label) {
+    <label [for]="id" class="input-label">
+      {{ label }}
+      @if (required) {
+        <span class="required">*</span>
+      }
+    </label>
+  }
+  <input
+    [type]="type"
+    [id]="id"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [required]="required"
+    [autocomplete]="autocomplete"
+    [value]="value"
+    (input)="onInputChange($event)"
+    (blur)="onBlur()"
+    class="input-field"
+  />
+</div>

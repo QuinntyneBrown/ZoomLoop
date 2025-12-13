@@ -1,0 +1,8 @@
+<div class="login-container">
+  <app-login-form
+    [username]="username"
+    [password]="password"
+    [rememberMe]="rememberMe"
+    (tryToLogin)="handleTryToLogin($event)"
+  ></app-login-form>
+</div>
