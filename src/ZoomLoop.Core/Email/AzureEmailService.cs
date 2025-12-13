@@ -40,11 +40,12 @@ public class AzureEmailService : IEmailService
             cancellationToken);
 
         // Check if the email was successfully sent
-        if (emailSendOperation.HasCompleted && emailSendOperation.HasValue)
+        if (emailSendOperation.HasValue && emailSendOperation.Value.Status == EmailSendStatus.Succeeded)
         {
             return;
         }
 
-        throw new InvalidOperationException("Failed to send email");
+        var status = emailSendOperation.HasValue ? emailSendOperation.Value.Status.ToString() : "Unknown";
+        throw new InvalidOperationException($"Failed to send email. Status: {status}");
     }
 }
