@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ZoomLoop.Core.Services.Email;
 using ZoomLoop.Core.Services.Security;
+using ZoomLoop.Core.Services.VehicleIngestion;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -60,6 +61,29 @@ public static class ConfigureServices
                 emailConfig.AzureCommunicationServicesConnectionString,
                 emailConfig.DefaultFromAddress);
         });
+
+        // Vehicle Ingestion services
+        var vehicleIngestionSection = configuration.GetSection("VehicleIngestion");
+        services.Configure<VehicleIngestionConfiguration>(vehicleIngestionSection);
+        
+        services.AddSingleton<IAzureVisionService>(sp =>
+        {
+            var config = vehicleIngestionSection.Get<VehicleIngestionConfiguration>() ?? new VehicleIngestionConfiguration();
+            return new AzureVisionService(
+                config.AzureComputerVisionEndpoint,
+                config.AzureComputerVisionKey);
+        });
+        
+        services.AddSingleton<IAzureOpenAIService>(sp =>
+        {
+            var config = vehicleIngestionSection.Get<VehicleIngestionConfiguration>() ?? new VehicleIngestionConfiguration();
+            return new AzureOpenAIService(
+                config.AzureOpenAIEndpoint,
+                config.AzureOpenAIKey,
+                config.AzureOpenAIDeploymentName);
+        });
+        
+        services.AddSingleton<IVehicleIngestionService, VehicleIngestionService>();
 
         var allowedOrigins = configuration
             .GetSection("Cors:AllowedOrigins")

@@ -15,6 +15,7 @@
     <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit.Analyzers" Version="4.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="NSubstitute" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ZoomLoop.Core\ZoomLoop.Core.csproj" />
     <ProjectReference Include="..\..\src\ZoomLoop.Api\ZoomLoop.Api.csproj" />
+    <ProjectReference Include="..\ZoomLoop.Testing\ZoomLoop.Testing.csproj" />
   </ItemGroup>
 
 </Project>

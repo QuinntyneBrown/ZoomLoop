@@ -28,6 +28,7 @@ public interface IZoomLoopContext
     DbSet<Review> Reviews { get; }
     DbSet<VehicleHistory> VehicleHistories { get; }
     DbSet<JsonContent> JsonContents { get; }
+    DbSet<DigitalAsset> DigitalAssets { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
