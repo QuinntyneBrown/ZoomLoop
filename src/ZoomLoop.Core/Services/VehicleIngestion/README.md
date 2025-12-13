@@ -8,7 +8,11 @@ The Vehicle Ingestion Service is a comprehensive solution for automatically extr
 
 ### 1. Azure AI Vision (Computer Vision)
 
-Used for optical character recognition (OCR) to extract VIN numbers from vehicle images.
+Used for:
+- Optical character recognition (OCR) to extract VIN numbers from vehicle images
+- Image captioning and tagging to analyze vehicle features
+- Dense captions for detailed vehicle descriptions
+- Object detection for identifying vehicle components
 
 **Setup:**
 - Create an Azure AI Vision resource in the Azure Portal
@@ -18,6 +22,7 @@ Used for optical character recognition (OCR) to extract VIN numbers from vehicle
 - [Azure AI Vision Overview](https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview)
 - [OCR in Computer Vision](https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview-ocr)
 - [Quickstart: Image Analysis](https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/image-analysis-client-library)
+- [Image Captioning](https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/concept-describe-images-40)
 
 **Video Tutorials:**
 - [Azure Computer Vision Tutorial](https://www.youtube.com/watch?v=xD6z0_PQSRY)
@@ -27,12 +32,14 @@ Used for optical character recognition (OCR) to extract VIN numbers from vehicle
 
 Used for:
 - Decoding VIN numbers to determine Year, Make, and Model
-- Analyzing vehicle images to assess condition and features
-- Generating vehicle descriptions
+- Interpreting image analysis results to assess vehicle condition
+- Generating compelling 200-word vehicle descriptions based on image analysis
+
+**Note:** The service uses Azure AI Vision for image analysis (captioning, tagging, object detection) and then uses Azure OpenAI GPT-4o to interpret those results and generate structured outputs and descriptions.
 
 **Setup:**
 - Create an Azure OpenAI resource in the Azure Portal
-- Deploy a GPT-4o model (recommended) or GPT-4 Vision model
+- Deploy a GPT-4o model (recommended) or GPT-4 model
 - Copy the endpoint, key, and deployment name to your configuration
 
 **Documentation:**
@@ -143,6 +150,39 @@ public class MyController : ControllerBase
     }
 }
 ```
+
+## How It Works
+
+The Vehicle Ingestion Service processes vehicle images through a multi-stage pipeline:
+
+### Stage 1: VIN Extraction
+1. Iterates through all provided images
+2. Uses Azure AI Vision OCR to extract text from each image
+3. Searches for a 17-character alphanumeric string (VIN format)
+4. Returns the first valid VIN found
+
+### Stage 2: Concurrent Processing
+Once the VIN is extracted, the service performs three operations in parallel:
+
+**A. VIN Decoding**
+- Sends the VIN to Azure OpenAI GPT-4o
+- Requests structured JSON output with Year, Make, and Model
+- Parses the response to extract vehicle information
+
+**B. Vehicle Details Analysis**
+- Analyzes up to 3 images using Azure AI Vision
+- Extracts captions, tags, and object detection results
+- Sends analysis results to Azure OpenAI for interpretation
+- Returns structured assessment of interior/exterior condition and door count
+
+**C. Description Generation**
+- Analyzes up to 5 images using Azure AI Vision
+- Extracts detailed captions and feature tags
+- Sends comprehensive image analysis to Azure OpenAI
+- Generates a compelling 200-word marketing description
+
+### Stage 3: Result Aggregation
+All concurrent operations complete and results are combined into a single `VehicleIngestionResult` object.
 
 ### Result Structure
 
