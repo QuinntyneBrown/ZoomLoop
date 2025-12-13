@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export interface VehicleSpec {
@@ -10,6 +11,9 @@ export interface VehicleSpec {
   standalone: true,
   templateUrl: './vehicle-card.component.html',
   styleUrl: './vehicle-card.component.scss',
+  imports: [
+    CommonModule
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VehicleCardComponent {

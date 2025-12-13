@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export interface TimelineItem {
@@ -10,6 +11,9 @@ export interface TimelineItem {
 @Component({
   selector: 'zl-timeline',
   standalone: true,
+  imports: [
+    CommonModule
+  ],
   templateUrl: './timeline.component.html',
   styleUrl: './timeline.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
