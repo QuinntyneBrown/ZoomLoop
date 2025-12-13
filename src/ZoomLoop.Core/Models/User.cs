@@ -8,9 +8,11 @@ public class User {
     public User()
     {
         UserName = string.Empty;
+        Roles = new List<Role>();
     }
 
     public Guid UserId { get; set; }
     public string UserName { get; set; }
+    public List<Role> Roles { get; set; }
 
 }
