@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ZoomLoop.Core.Email;
 using ZoomLoop.Core.Security;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -46,6 +47,19 @@ public static class ConfigureServices
         services.AddSingleton<ITokenBuilder, TokenBuilder>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.Configure<Authentication>(authenticationSection);
+
+        // Email services
+        var emailSection = configuration.GetSection("Email");
+        services.Configure<EmailConfiguration>(emailSection);
+        services.AddSingleton<ITemplateEngine, RazorTemplateEngine>();
+        services.AddSingleton<IQrCodeGenerator, QrCodeGenerator>();
+        services.AddSingleton<IEmailService>(sp =>
+        {
+            var emailConfig = emailSection.Get<EmailConfiguration>() ?? new EmailConfiguration();
+            return new AzureEmailService(
+                emailConfig.AzureCommunicationServicesConnectionString,
+                emailConfig.DefaultFromAddress);
+        });
 
         var allowedOrigins = configuration
             .GetSection("Cors:AllowedOrigins")
