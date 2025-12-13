@@ -136,7 +136,13 @@ export class SliderComponent implements ControlValueAccessor {
   private updateValueFromPercentage(percentage: number): void {
     const rawValue = this.min + (percentage / 100) * (this.max - this.min);
     const steppedValue = Math.round(rawValue / this.step) * this.step;
-    const clampedValue = Math.max(this.min, Math.min(this.max, steppedValue));
+    // Handle floating-point precision by rounding to a reasonable number of decimal places
+    const decimalPlaces = this.step.toString().includes('.') 
+      ? this.step.toString().split('.')[1].length 
+      : 0;
+    const clampedValue = Math.max(this.min, Math.min(this.max, 
+      parseFloat(steppedValue.toFixed(decimalPlaces))
+    ));
     
     if (this.value !== clampedValue) {
       this.value = clampedValue;
