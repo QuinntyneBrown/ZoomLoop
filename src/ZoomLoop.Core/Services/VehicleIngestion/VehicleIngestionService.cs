@@ -1,36 +1,22 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Azure;
-using Azure.AI.OpenAI;
 using Azure.AI.Vision.ImageAnalysis;
 using OpenAI.Chat;
-using System.ClientModel;
 
 namespace ZoomLoop.Core.Services.VehicleIngestion;
 
 public class VehicleIngestionService : IVehicleIngestionService
 {
-    private readonly ImageAnalysisClient _visionClient;
-    private readonly AzureOpenAIClient _openAIClient;
-    private readonly string _deploymentName;
+    private readonly IAzureVisionService _visionService;
+    private readonly IAzureOpenAIService _openAIService;
 
     public VehicleIngestionService(
-        string visionEndpoint,
-        string visionKey,
-        string openAIEndpoint,
-        string openAIKey,
-        string deploymentName)
+        IAzureVisionService visionService,
+        IAzureOpenAIService openAIService)
     {
-        _visionClient = new ImageAnalysisClient(
-            new Uri(visionEndpoint),
-            new AzureKeyCredential(visionKey));
-
-        _openAIClient = new AzureOpenAIClient(
-            new Uri(openAIEndpoint),
-            new ApiKeyCredential(openAIKey));
-
-        _deploymentName = deploymentName;
+        _visionService = visionService;
+        _openAIService = openAIService;
     }
 
     public async Task<VehicleIngestionResult> IngestVehicleAsync(
@@ -76,14 +62,14 @@ public class VehicleIngestionService : IVehicleIngestionService
             try
             {
                 var imageData = new BinaryData(imageBytes);
-                var result = await _visionClient.AnalyzeAsync(
+                var result = await _visionService.AnalyzeImageAsync(
                     imageData,
                     VisualFeatures.Read,
-                    cancellationToken: cancellationToken);
+                    cancellationToken);
 
-                if (result.Value.Read?.Blocks != null)
+                if (result.Read?.Blocks != null)
                 {
-                    foreach (var block in result.Value.Read.Blocks)
+                    foreach (var block in result.Read.Blocks)
                     {
                         foreach (var line in block.Lines)
                         {
@@ -112,16 +98,13 @@ public class VehicleIngestionService : IVehicleIngestionService
         string vin,
         CancellationToken cancellationToken)
     {
-        var chatClient = _openAIClient.GetChatClient(_deploymentName);
-
         var messages = new List<ChatMessage>
         {
             new SystemChatMessage("You are a vehicle identification expert. Given a VIN number, provide the year, make, and model of the vehicle. Respond only with a JSON object in this exact format: {\"year\": 2020, \"make\": \"Toyota\", \"model\": \"Camry\"}"),
             new UserChatMessage($"VIN: {vin}")
         };
 
-        var response = await chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
-        var content = response.Value.Content[0].Text;
+        var content = await _openAIService.CompleteChatAsync(messages, cancellationToken);
 
         // Parse JSON response
         var jsonStart = content.IndexOf('{');
@@ -146,8 +129,6 @@ public class VehicleIngestionService : IVehicleIngestionService
         byte[][] images,
         CancellationToken cancellationToken)
     {
-        var chatClient = _openAIClient.GetChatClient(_deploymentName);
-
         // Note: For image analysis with GPT-4o, we would use the vision capabilities.
         // In this implementation, we use a text-based approach by first analyzing images
         // with Computer Vision, then using GPT-4o to interpret the results.
@@ -161,17 +142,17 @@ public class VehicleIngestionService : IVehicleIngestionService
             try
             {
                 var imageData = new BinaryData(imageBytes);
-                var result = await _visionClient.AnalyzeAsync(
+                var result = await _visionService.AnalyzeImageAsync(
                     imageData,
                     VisualFeatures.Caption | VisualFeatures.Tags | VisualFeatures.Objects,
-                    cancellationToken: cancellationToken);
+                    cancellationToken);
 
-                var description = result.Value.Caption?.Text ?? "No description available";
+                var description = result.Caption?.Text ?? "No description available";
                 
                 var tagsList = new List<string>();
-                if (result.Value.Tags != null && result.Value.Tags.Values != null)
+                if (result.Tags != null && result.Tags.Values != null)
                 {
-                    foreach (var tag in result.Value.Tags.Values)
+                    foreach (var tag in result.Tags.Values)
                     {
                         tagsList.Add(tag.Name);
                     }
@@ -194,8 +175,7 @@ public class VehicleIngestionService : IVehicleIngestionService
             new UserChatMessage($"Analyze these vehicle images and provide the assessment. Image analysis results: {imageDescriptions}")
         };
 
-        var response = await chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
-        var content = response.Value.Content[0].Text;
+        var content = await _openAIService.CompleteChatAsync(messages, cancellationToken);
 
         // Parse JSON response
         var jsonStart = content.IndexOf('{');
@@ -220,8 +200,6 @@ public class VehicleIngestionService : IVehicleIngestionService
         byte[][] images,
         CancellationToken cancellationToken)
     {
-        var chatClient = _openAIClient.GetChatClient(_deploymentName);
-
         // Analyze images with Computer Vision first
         var imageAnalysisResults = new List<string>();
         
@@ -230,17 +208,17 @@ public class VehicleIngestionService : IVehicleIngestionService
             try
             {
                 var imageData = new BinaryData(imageBytes);
-                var result = await _visionClient.AnalyzeAsync(
+                var result = await _visionService.AnalyzeImageAsync(
                     imageData,
                     VisualFeatures.Caption | VisualFeatures.Tags | VisualFeatures.DenseCaptions,
-                    cancellationToken: cancellationToken);
+                    cancellationToken);
 
-                var description = result.Value.Caption?.Text ?? "No description available";
+                var description = result.Caption?.Text ?? "No description available";
                 
                 var tagsList = new List<string>();
-                if (result.Value.Tags != null && result.Value.Tags.Values != null)
+                if (result.Tags != null && result.Tags.Values != null)
                 {
-                    foreach (var tag in result.Value.Tags.Values.Take(10))
+                    foreach (var tag in result.Tags.Values.Take(10))
                     {
                         tagsList.Add(tag.Name);
                     }
@@ -263,7 +241,7 @@ public class VehicleIngestionService : IVehicleIngestionService
             new UserChatMessage($"Generate a 200-word description for this vehicle. Image analysis: {imageDescriptions}")
         };
 
-        var response = await chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
-        return response.Value.Content[0].Text;
+        var content = await _openAIService.CompleteChatAsync(messages, cancellationToken);
+        return content;
     }
 }

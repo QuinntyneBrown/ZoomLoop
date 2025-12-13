@@ -65,16 +65,25 @@ public static class ConfigureServices
         // Vehicle Ingestion services
         var vehicleIngestionSection = configuration.GetSection("VehicleIngestion");
         services.Configure<VehicleIngestionConfiguration>(vehicleIngestionSection);
-        services.AddSingleton<IVehicleIngestionService>(sp =>
+        
+        services.AddSingleton<IAzureVisionService>(sp =>
         {
             var config = vehicleIngestionSection.Get<VehicleIngestionConfiguration>() ?? new VehicleIngestionConfiguration();
-            return new VehicleIngestionService(
+            return new AzureVisionService(
                 config.AzureComputerVisionEndpoint,
-                config.AzureComputerVisionKey,
+                config.AzureComputerVisionKey);
+        });
+        
+        services.AddSingleton<IAzureOpenAIService>(sp =>
+        {
+            var config = vehicleIngestionSection.Get<VehicleIngestionConfiguration>() ?? new VehicleIngestionConfiguration();
+            return new AzureOpenAIService(
                 config.AzureOpenAIEndpoint,
                 config.AzureOpenAIKey,
                 config.AzureOpenAIDeploymentName);
         });
+        
+        services.AddSingleton<IVehicleIngestionService, VehicleIngestionService>();
 
         var allowedOrigins = configuration
             .GetSection("Cors:AllowedOrigins")

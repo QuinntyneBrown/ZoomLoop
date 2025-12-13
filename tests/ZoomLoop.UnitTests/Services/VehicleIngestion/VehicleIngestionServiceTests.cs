@@ -13,12 +13,9 @@ public class VehicleIngestionServiceTests
     public void Constructor_ShouldInitializeService()
     {
         // Arrange & Act
-        var service = new VehicleIngestionService(
-            "https://test.cognitiveservices.azure.com/",
-            "test-vision-key",
-            "https://test.openai.azure.com/",
-            "test-openai-key",
-            "gpt-4o");
+        var fakeVisionService = new FakeAzureVisionService();
+        var fakeOpenAIService = new FakeAzureOpenAIService();
+        var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
 
         // Assert
         Assert.That(service, Is.Not.Null);
@@ -28,12 +25,9 @@ public class VehicleIngestionServiceTests
     public void IngestVehicleAsync_WithNullImages_ShouldThrowArgumentException()
     {
         // Arrange
-        var service = new VehicleIngestionService(
-            "https://test.cognitiveservices.azure.com/",
-            "test-vision-key",
-            "https://test.openai.azure.com/",
-            "test-openai-key",
-            "gpt-4o");
+        var fakeVisionService = new FakeAzureVisionService();
+        var fakeOpenAIService = new FakeAzureOpenAIService();
+        var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
 
         var request = new VehicleIngestionRequest { Images = null! };
 
@@ -46,12 +40,9 @@ public class VehicleIngestionServiceTests
     public void IngestVehicleAsync_WithEmptyImages_ShouldThrowArgumentException()
     {
         // Arrange
-        var service = new VehicleIngestionService(
-            "https://test.cognitiveservices.azure.com/",
-            "test-vision-key",
-            "https://test.openai.azure.com/",
-            "test-openai-key",
-            "gpt-4o");
+        var fakeVisionService = new FakeAzureVisionService();
+        var fakeOpenAIService = new FakeAzureOpenAIService();
+        var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
 
         var request = new VehicleIngestionRequest { Images = Array.Empty<byte[]>() };
 
