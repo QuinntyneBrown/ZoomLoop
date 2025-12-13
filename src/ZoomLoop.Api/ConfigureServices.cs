@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ZoomLoop.Core.Services.Email;
 using ZoomLoop.Core.Services.Security;
+using ZoomLoop.Core.Services.VehicleIngestion;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -59,6 +60,20 @@ public static class ConfigureServices
             return new AzureEmailService(
                 emailConfig.AzureCommunicationServicesConnectionString,
                 emailConfig.DefaultFromAddress);
+        });
+
+        // Vehicle Ingestion services
+        var vehicleIngestionSection = configuration.GetSection("VehicleIngestion");
+        services.Configure<VehicleIngestionConfiguration>(vehicleIngestionSection);
+        services.AddSingleton<IVehicleIngestionService>(sp =>
+        {
+            var config = vehicleIngestionSection.Get<VehicleIngestionConfiguration>() ?? new VehicleIngestionConfiguration();
+            return new VehicleIngestionService(
+                config.AzureComputerVisionEndpoint,
+                config.AzureComputerVisionKey,
+                config.AzureOpenAIEndpoint,
+                config.AzureOpenAIKey,
+                config.AzureOpenAIDeploymentName);
         });
 
         var allowedOrigins = configuration
