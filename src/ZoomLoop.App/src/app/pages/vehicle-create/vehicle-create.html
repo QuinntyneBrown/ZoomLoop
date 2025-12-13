@@ -290,19 +290,24 @@
 
       <!-- Form Actions -->
       <div class="vehicle-form__actions">
-        <button 
-          type="button" 
-          class="vehicle-form__button vehicle-form__button--secondary"
-          (click)="cancel()"
-          [disabled]="isSubmitting()">
-          Cancel
-        </button>
-        <button 
-          type="submit" 
-          class="vehicle-form__button vehicle-form__button--primary"
-          [disabled]="form.invalid || isSubmitting()">
-          {{ isSubmitting() ? 'Creating...' : 'Create Vehicle' }}
-        </button>
+        <div class="vehicle-form__error-message" *ngIf="errorMessage()">
+          {{ errorMessage() }}
+        </div>
+        <div class="vehicle-form__button-group">
+          <button 
+            type="button" 
+            class="vehicle-form__button vehicle-form__button--secondary"
+            (click)="cancel()"
+            [disabled]="isSubmitting()">
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="vehicle-form__button vehicle-form__button--primary"
+            [disabled]="form.invalid || isSubmitting()">
+            {{ isSubmitting() ? 'Creating...' : 'Create Vehicle' }}
+          </button>
+        </div>
       </div>
     </form>
   </div>

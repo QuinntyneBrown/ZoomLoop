@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { Vehicle, VehicleImage, VehicleFeature } from '../../models';
 
 @Component({
@@ -25,6 +26,7 @@ export class VehicleCreate implements OnInit {
   features = signal<VehicleFeature[]>([]);
   isDragging = signal(false);
   isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
   // Common vehicle options
   transmissions = ['Automatic', 'Manual', 'CVT', 'Semi-Automatic'];
@@ -171,6 +173,7 @@ export class VehicleCreate implements OnInit {
     }
 
     this.isSubmitting.set(true);
+    this.errorMessage.set(null);
 
     const vehicle: Vehicle = {
       ...this.form.value,
@@ -179,15 +182,16 @@ export class VehicleCreate implements OnInit {
     };
 
     try {
-      const response = await this._http.post<{ vehicle: Vehicle }>('/api/vehicle', { vehicle }).toPromise();
+      const response = await firstValueFrom(this._http.post<{ vehicle: Vehicle }>('/api/vehicle', { vehicle }));
       
       if (response?.vehicle?.vehicleId) {
         // Navigate to vehicle detail or list page
         this._router.navigate(['/vehicles']);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating vehicle:', error);
-      // TODO: Show error message to user
+      const errorMsg = error?.error?.message || error?.message || 'Failed to create vehicle. Please try again.';
+      this.errorMessage.set(errorMsg);
     } finally {
       this.isSubmitting.set(false);
     }
