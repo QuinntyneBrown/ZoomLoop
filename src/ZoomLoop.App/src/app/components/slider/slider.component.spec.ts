@@ -427,7 +427,7 @@ describe('SliderComponent', () => {
       component.max = 50;
       component.value = 50;
       
-      expect(component.percentage).toBe(NaN);
+      expect(component.percentage).toBe(0);
     });
 
     it('should clamp value within range', async () => {

@@ -53,7 +53,9 @@ export class SliderComponent implements ControlValueAccessor {
   }
 
   get percentage(): number {
-    return ((this.value - this.min) / (this.max - this.min)) * 100;
+    const range = this.max - this.min;
+    if (range === 0) return 0;
+    return ((this.value - this.min) / range) * 100;
   }
 
   onInputChange(event: Event): void {
