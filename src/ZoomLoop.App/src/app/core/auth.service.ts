@@ -56,18 +56,18 @@ export class AuthService {
   public hasReadWritePrivileges$(aggregate:string): Observable<boolean> {
     return this.currentUser$
     .pipe(
-      map(user => user ? this._hasPrivilege(user, aggregate, AccessRight.Read) && this._hasPrivilege(user, aggregate, AccessRight.Write) : false)
+      map(user => user ? this.hasPrivilege(user, aggregate, AccessRight.Read) && this.hasPrivilege(user, aggregate, AccessRight.Write) : false)
     )
   }
 
-  _hasPrivilege(user: User, aggregate: string, accessRight: AccessRight):boolean {
+  private hasPrivilege(user: User, aggregate: string, accessRight: AccessRight):boolean {
     let hasPrivilege = false;
 
     for(let i = 0; i < user.roles.length; i++) {
       const privileges = user.roles[i].privileges || [];
       for(let j = 0; j < privileges.length; j++) {
         let privilege = privileges[j];
-        if(privilege.accessRight == accessRight && privilege.aggregate == aggregate) {
+        if(privilege.accessRight === accessRight && privilege.aggregate === aggregate) {
           hasPrivilege = true;
         }
       }

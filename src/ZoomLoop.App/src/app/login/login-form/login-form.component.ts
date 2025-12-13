@@ -1,7 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../components/input';
@@ -14,7 +14,7 @@ import { ButtonComponent } from '../../components/button';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit {
   @Input()
   username: string | null = null;
 
@@ -32,7 +32,7 @@ export class LoginFormComponent {
 
   @Output() readonly tryToLogin: EventEmitter<{ username: string, password: string, rememberMe: boolean }> = new EventEmitter();
 
-  ngAfterContentInit(): void {
+  ngOnInit(): void {
     this.form.patchValue({
       username: this.username,
       password: this.password,

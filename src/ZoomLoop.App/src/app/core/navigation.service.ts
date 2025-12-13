@@ -34,11 +34,10 @@ export class NavigationService {
 
   public redirectPreLogin(): void {
     if (this.lastPath && this.lastPath !== this.loginUrl) {
-      window.location.href = this.lastPath;
+      this.router.navigate([this.lastPath]);
       this.lastPath = '';
     } else {
       this.router.navigate([this.defaultPath]);
-      window.location.href = this.defaultPath;
     }
   }
 }

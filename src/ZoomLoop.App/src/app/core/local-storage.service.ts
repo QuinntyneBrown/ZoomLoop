@@ -52,10 +52,7 @@ export class LocalStorageService {
     });
 
     if (!itemExists) {
-      let items: any[] | null = this.items;
-      items.push({ name: options.name, value: options.value });
-      this.items = items;
-      items = null;
+      this.items.push({ name: options.name, value: options.value });
     }
 
     this.updateLocalStorage();
