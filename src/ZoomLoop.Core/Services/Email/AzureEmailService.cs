@@ -4,7 +4,7 @@
 using Azure;
 using Azure.Communication.Email;
 
-namespace ZoomLoop.Core.Email;
+namespace ZoomLoop.Core.Services.Email;
 
 public class AzureEmailService : IEmailService
 {

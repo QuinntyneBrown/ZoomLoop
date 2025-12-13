@@ -4,20 +4,20 @@
 import { Component, OnInit, inject, OnDestroy } from '@angular/core';
 import { takeUntil, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { AuthService } from '../core/auth.service';
-import { NavigationService } from '../core/navigation.service';
-import { LocalStorageService, loginCredentialsKey } from '../core';
-import { LoginFormComponent } from './login-form/login-form.component';
+import { AuthService } from '../../core/auth.service';
+import { NavigationService } from '../../core/navigation.service';
+import { LocalStorageService, loginCredentialsKey } from '../../core';
+import { LoginForm } from './login-form/login-form';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-login',
+  selector: 'zl-login',
   standalone: true,
-  imports: [CommonModule, LoginFormComponent],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  imports: [CommonModule, LoginForm],
+  templateUrl: './login.html',
+  styleUrls: ['./login.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class Login implements OnInit, OnDestroy {
   private readonly _authService = inject(AuthService);
   private readonly _navigationService = inject(NavigationService);
   private readonly _localStorageService = inject(LocalStorageService);
