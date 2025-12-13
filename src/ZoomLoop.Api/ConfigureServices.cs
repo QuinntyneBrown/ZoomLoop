@@ -6,8 +6,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ZoomLoop.Core.Email;
-using ZoomLoop.Core.Security;
+using ZoomLoop.Core.Services.Email;
+using ZoomLoop.Core.Services.Security;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

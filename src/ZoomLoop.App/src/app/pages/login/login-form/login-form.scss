@@ -1,4 +1,4 @@
-.login-form-card {
+.zl-login-form {
   background: var(--bg-white, #ffffff);
   border-radius: 0.5rem;
   padding: 2rem;
@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-.login-form-title {
+.zl-login-form__title {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary, #1f2937);
@@ -15,30 +15,30 @@
   text-align: center;
 }
 
-form {
+.zl-login-form__form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.form-field {
+.zl-login-form__field {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.error-message {
+.zl-login-form__error {
   font-size: 0.875rem;
   color: var(--error, #ef4444);
   margin-top: 0.25rem;
 }
 
-.checkbox-field {
-  flex-direction: row;
+.zl-login-form__checkbox {
+  display: flex;
   align-items: center;
 }
 
-.checkbox-label {
+.zl-login-form__checkbox-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -47,12 +47,12 @@ form {
   cursor: pointer;
 }
 
-.checkbox {
+.zl-login-form__checkbox-input {
   width: 1rem;
   height: 1rem;
   cursor: pointer;
 }
 
-.form-actions {
+.zl-login-form__actions {
   margin-top: 0.5rem;
 }

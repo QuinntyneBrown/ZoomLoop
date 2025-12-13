@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace ZoomLoop.Core.Security;
+namespace ZoomLoop.Core.Services.Security;
 
 public interface ITokenBuilder
 {

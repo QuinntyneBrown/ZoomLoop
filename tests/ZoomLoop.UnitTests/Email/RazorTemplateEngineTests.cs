@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using NUnit.Framework;
-using ZoomLoop.Core.Email;
+using ZoomLoop.Core.Services.Email;
 
 namespace ZoomLoop.UnitTests.Email;
 

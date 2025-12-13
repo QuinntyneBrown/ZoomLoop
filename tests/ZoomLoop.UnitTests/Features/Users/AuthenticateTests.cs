@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using ZoomLoop.Api.Features.Users;
 using ZoomLoop.Core;
 using ZoomLoop.Core.Models;
-using ZoomLoop.Core.Security;
+using ZoomLoop.Core.Services.Security;
 
 namespace ZoomLoop.UnitTests.Features.Users;
 

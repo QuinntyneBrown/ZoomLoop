@@ -3,7 +3,7 @@
 
 using RazorEngineCore;
 
-namespace ZoomLoop.Core.Email;
+namespace ZoomLoop.Core.Services.Email;
 
 public class RazorTemplateEngine : ITemplateEngine
 {

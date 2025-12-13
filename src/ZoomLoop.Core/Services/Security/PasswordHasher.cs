@@ -4,7 +4,7 @@
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 
-namespace ZoomLoop.Core.Security;
+namespace ZoomLoop.Core.Services.Security;
 
 public interface IPasswordHasher
 {
