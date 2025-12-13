@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using ZoomLoop.Core;
 using ZoomLoop.Core.Models;
 using ZoomLoop.Core.Security;
@@ -89,19 +90,19 @@ public class CurrentUserResponse
 public record CreateUserRequest(UserDto User) : IRequest<CreateUserResponse>;
 public class CreateUserResponse
 {
-    public UserDto User { get; set; }
+    public UserDto User { get; set; } = default!;
 }
 
 public record UpdateUserRequest(UserDto User) : IRequest<UpdateUserResponse>;
 public class UpdateUserResponse
 {
-    public UserDto User { get; set; }
+    public UserDto User { get; set; } = default!;
 }
 
 public record RemoveUserRequest(Guid UserId) : IRequest<RemoveUserResponse>;
 public class RemoveUserResponse
 {
-    public UserDto User { get; set; }
+    public UserDto User { get; set; } = default!;
 }
 
 public record AuthenticateRequest(string Username, string Password) : IRequest<AuthenticateResponse>;

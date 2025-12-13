@@ -16,7 +16,7 @@ public static class ConfigureServices
     {
         services.AddHttpContextAccessor();
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+        services.AddMediatR(typeof(Program));
 
         var authenticationSection = configuration.GetSection("Authentication");
         var issuer = authenticationSection[nameof(Authentication.JwtIssuer)];
