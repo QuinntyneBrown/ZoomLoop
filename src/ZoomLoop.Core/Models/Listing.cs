@@ -14,8 +14,8 @@ public class Listing
         Province = string.Empty;
         City = string.Empty;
         PostalCode = string.Empty;
-        Inquiries = new List<Inquiry>();
-        Favorites = new List<Favorite>();
+            Inquiries = [];
+            Favorites = [];
     }
 
     public Guid ListingId { get; set; }

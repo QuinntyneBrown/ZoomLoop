@@ -9,7 +9,7 @@ public class Make
     {
         Name = string.Empty;
         LogoUrl = string.Empty;
-        VehicleModels = new List<VehicleModel>();
+        VehicleModels = [];
     }
 
     public Guid MakeId { get; set; }

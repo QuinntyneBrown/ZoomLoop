@@ -30,15 +30,15 @@ public class TokenProvider : ITokenProvider
     {
         var now = DateTime.UtcNow;
         var nowDateTimeOffset = new DateTimeOffset(now);
-        var claims = new List<Claim>
-        {
+        List<Claim> claims =
+        [
             new Claim(JwtRegisteredClaimNames.UniqueName, uniqueName),
             new Claim(ClaimTypes.Name, uniqueName),
             new Claim(JwtRegisteredClaimNames.Sub, uniqueName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Iat, nowDateTimeOffset.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
             new Claim(JwtRegisteredClaimNames.Typ, "at+jwt")
-        };
+        ];
 
         if (customClaims != null)
         {

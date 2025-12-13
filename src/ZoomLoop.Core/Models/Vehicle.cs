@@ -17,8 +17,8 @@ public class Vehicle
         DriveType = string.Empty;
         BodyType = string.Empty;
         Description = string.Empty;
-        Images = new List<VehicleImage>();
-        Features = new List<VehicleFeature>();
+        Images = [];
+        Features = [];
     }
 
     public Guid VehicleId { get; set; }

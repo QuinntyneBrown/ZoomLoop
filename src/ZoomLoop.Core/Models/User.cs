@@ -7,12 +7,19 @@ public class User {
 
     public User()
     {
-        UserName = string.Empty;
-        Roles = new List<Role>();
+        Username = string.Empty;
+        Password = string.Empty;
+        Salt = [];
+        Roles = [];
     }
 
     public Guid UserId { get; set; }
-    public string UserName { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public byte[] Salt { get; set; }
     public List<Role> Roles { get; set; }
+    public Guid CurrentProfileId { get; set; }
+    public Guid DefaultProfileId { get; set; }
+    public bool IsDeleted { get; set; }
 
 }

@@ -11,7 +11,7 @@ public class PrivateSeller
         LastName = string.Empty;
         Email = string.Empty;
         PhoneNumber = string.Empty;
-        Listings = new List<Listing>();
+        Listings = [];
     }
 
     public Guid PrivateSellerId { get; set; }

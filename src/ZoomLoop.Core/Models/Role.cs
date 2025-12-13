@@ -8,8 +8,8 @@ public class Role
     public Role()
     {
         Name = string.Empty;
-        Users = new List<User>();
-        Privileges = new List<Privilege>();
+        Users = [];
+        Privileges = [];
     }
 
     public Guid RoleId { get; set; }

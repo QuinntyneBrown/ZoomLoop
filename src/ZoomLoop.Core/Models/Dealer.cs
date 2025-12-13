@@ -13,9 +13,9 @@ public class Dealer
         WebsiteUrl = string.Empty;
         LogoUrl = string.Empty;
         Description = string.Empty;
-        Locations = new List<DealerLocation>();
-        Listings = new List<Listing>();
-        Reviews = new List<Review>();
+        Locations = [];
+        Listings = [];
+        Reviews = [];
     }
 
     public Guid DealerId { get; set; }

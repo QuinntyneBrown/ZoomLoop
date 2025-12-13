@@ -21,7 +21,7 @@ public class TokenBuilder : ITokenBuilder
 {
     private readonly ITokenProvider _tokenProvider;
     private string _username;
-    private List<Claim> _claims = new List<Claim>();
+    private List<Claim> _claims = [];
 
     public TokenBuilder(ITokenProvider tokenProvider)
     {
