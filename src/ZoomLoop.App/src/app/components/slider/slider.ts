@@ -9,18 +9,18 @@ import { CommonModule } from '@angular/common';
   selector: 'zl-slider',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './slider.component.html',
-  styleUrl: './slider.component.scss',
+  templateUrl: './slider.html',
+  styleUrl: './slider.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SliderComponent),
+      useExisting: forwardRef(() => Slider),
       multi: true
     }
   ]
 })
-export class SliderComponent implements ControlValueAccessor {
+export class Slider implements ControlValueAccessor {
   @Input() label = '';
   @Input() min = 0;
   @Input() max = 100;

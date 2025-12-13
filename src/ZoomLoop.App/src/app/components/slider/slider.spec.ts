@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SliderComponent } from './slider.component';
+import { Slider } from './slider';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-describe('SliderComponent', () => {
-  let component: SliderComponent;
-  let fixture: ComponentFixture<SliderComponent>;
+describe('Slider', () => {
+  let component: Slider;
+  let fixture: ComponentFixture<Slider>;
   let compiled: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SliderComponent],
+      imports: [Slider],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SliderComponent);
+    fixture = TestBed.createComponent(Slider);
     component = fixture.componentInstance;
     compiled = fixture.debugElement;
     fixture.detectChanges();
@@ -326,7 +326,7 @@ describe('SliderComponent', () => {
 
     it('should update fill width based on percentage', async () => {
       // Create a new fixture to avoid ExpressionChangedAfterItHasBeenCheckedError
-      const testFixture = TestBed.createComponent(SliderComponent);
+      const testFixture = TestBed.createComponent(Slider);
       const testComponent = testFixture.componentInstance;
       testComponent.value = 50;
       testFixture.detectChanges();
@@ -338,7 +338,7 @@ describe('SliderComponent', () => {
 
     it('should update thumb position based on percentage', async () => {
       // Create a new fixture to avoid ExpressionChangedAfterItHasBeenCheckedError
-      const testFixture = TestBed.createComponent(SliderComponent);
+      const testFixture = TestBed.createComponent(Slider);
       const testComponent = testFixture.componentInstance;
       testComponent.value = 75;
       testFixture.detectChanges();
@@ -432,7 +432,7 @@ describe('SliderComponent', () => {
 
     it('should clamp value within range', async () => {
       // Create a new fixture to avoid ExpressionChangedAfterItHasBeenCheckedError
-      const testFixture = TestBed.createComponent(SliderComponent);
+      const testFixture = TestBed.createComponent(Slider);
       const testComponent = testFixture.componentInstance;
       testComponent.value = 150;
       testFixture.detectChanges();
