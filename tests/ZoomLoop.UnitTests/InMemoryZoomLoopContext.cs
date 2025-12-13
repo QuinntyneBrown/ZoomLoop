@@ -31,7 +31,7 @@ public class InMemoryZoomLoopContext : DbContext, IZoomLoopContext
     public DbSet<Inquiry> Inquiries { get; set; } = default!;
     public DbSet<Review> Reviews { get; set; } = default!;
     public DbSet<VehicleHistory> VehicleHistories { get; set; } = default!;
-    public DbSet<DigitalAsset> DigitalAssets { get; set; } = default!;
+    public DbSet<JsonContent> JsonContents { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
