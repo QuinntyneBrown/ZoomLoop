@@ -9,6 +9,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
@@ -16,5 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZoomLoop.Core\ZoomLoop.Core.csproj" />
+    <ProjectReference Include="..\ZoomLoop.Infrastructure\ZoomLoop.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
