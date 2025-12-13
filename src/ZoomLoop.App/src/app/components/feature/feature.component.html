@@ -1,0 +1,10 @@
+<div class="feature" [class.feature--horizontal]="horizontal">
+  <div class="feature__icon-wrapper">
+    <ng-content select="[feature-icon]"></ng-content>
+  </div>
+  <div>
+    <h3 class="feature__title" *ngIf="title">{{ title }}</h3>
+    <p class="feature__description" *ngIf="description">{{ description }}</p>
+    <ng-content />
+  </div>
+</div>

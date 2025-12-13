@@ -1,0 +1,45 @@
+<article class="vehicle-card">
+  <div class="vehicle-card__gallery">
+    <img class="vehicle-card__image" [src]="imageUrl" alt="" />
+    <div class="vehicle-card__badges">
+      <div class="vehicle-card__badge-group">
+        <span *ngIf="certified" class="vehicle-card__badge vehicle-card__badge--certified">Certified</span>
+        <span *ngIf="featured" class="vehicle-card__badge vehicle-card__badge--featured">Featured</span>
+        <span *ngIf="newArrival" class="vehicle-card__badge vehicle-card__badge--new-arrival">New Arrival</span>
+        <ng-container *ngFor="let badge of badges">
+          <span class="vehicle-card__badge">{{ badge }}</span>
+        </ng-container>
+      </div>
+      <button type="button" class="vehicle-card__favorite" [class.vehicle-card__favorite--active]="favorite">
+        <ng-content select="[favorite-icon]"></ng-content>
+      </button>
+    </div>
+  </div>
+
+  <div class="vehicle-card__content">
+    <h3 class="vehicle-card__title" *ngIf="title">{{ title }}</h3>
+    <p class="vehicle-card__subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+
+    <div class="vehicle-card__specs">
+      <div class="vehicle-card__spec" *ngFor="let spec of specs">
+        <span class="vehicle-card__spec-icon" *ngIf="spec.icon">{{ spec.icon }}</span>
+        <span>{{ spec.label }}</span>
+      </div>
+    </div>
+
+    <div class="vehicle-card__features">
+      <span class="vehicle-card__feature-tag" *ngFor="let feature of features">{{ feature }}</span>
+    </div>
+
+    <div class="vehicle-card__footer">
+      <div>
+        <div class="vehicle-card__price" *ngIf="price">{{ price }}</div>
+        <div class="vehicle-card__price-details" *ngIf="priceDetails">{{ priceDetails }}</div>
+        <span class="vehicle-card__price-label" *ngIf="priceLabel">{{ priceLabel }}</span>
+      </div>
+      <div class="vehicle-card__actions">
+        <ng-content select="[vehicle-actions]"></ng-content>
+      </div>
+    </div>
+  </div>
+</article>

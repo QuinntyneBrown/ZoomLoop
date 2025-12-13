@@ -1,0 +1,30 @@
+<article class="card">
+  <div class="card__image-wrapper" *ngIf="imageUrl">
+    <img class="card__image" [src]="imageUrl" alt="" />
+    <span
+      *ngIf="badgeLabel"
+      class="card__badge"
+      [class.card__badge--featured]="badgeType === 'featured'"
+      [class.card__badge--sold]="badgeType === 'sold'"
+    >
+      {{ badgeLabel }}
+    </span>
+  </div>
+  <div class="card__content">
+    <h3 class="card__title" *ngIf="title">{{ title }}</h3>
+    <p class="card__subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+    <p class="card__description" *ngIf="description">{{ description }}</p>
+    <div class="card__meta">
+      <ng-content select="[card-meta]"></ng-content>
+    </div>
+    <div class="card__footer">
+      <div *ngIf="price" class="card__price">
+        {{ price }}
+        <small class="card__price-label" *ngIf="priceLabel">{{ priceLabel }}</small>
+      </div>
+      <div class="card__actions">
+        <ng-content select="[card-actions]"></ng-content>
+      </div>
+    </div>
+  </div>
+</article>
