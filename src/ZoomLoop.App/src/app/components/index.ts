@@ -3,6 +3,7 @@ export * from './card';
 export * from './feature';
 export * from './footer';
 export * from './hero';
+export * from './input';
 export * from './navbar';
 export * from './price-tag';
 export * from './stat';
