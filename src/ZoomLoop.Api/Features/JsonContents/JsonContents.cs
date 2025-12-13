@@ -3,7 +3,7 @@
 
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 using ZoomLoop.Core;
 using ZoomLoop.Core.Models;
 
@@ -26,7 +26,7 @@ public class JsonContentDto
 {
     public Guid? JsonContentId { get; set; }
     public string Name { get; set; } = string.Empty;
-    public JObject Json { get; set; } = JObject.FromObject(new { });
+    public string Json { get; set; } = "{}";
 }
 
 // Queries
