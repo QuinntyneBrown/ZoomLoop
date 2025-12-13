@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Azure.AI.Vision.ImageAnalysis;
+using System.Reflection;
 
 namespace ZoomLoop.Core.Services.VehicleIngestion;
 
@@ -11,7 +12,7 @@ public class FakeAzureVisionService : IAzureVisionService
 
     public FakeAzureVisionService(Func<BinaryData, VisualFeatures, ImageAnalysisResult>? analyzeFunc = null)
     {
-        _analyzeFunc = analyzeFunc;
+        _analyzeFunc = analyzeFunc ?? DefaultAnalyzeFunc;
     }
 
     public Task<ImageAnalysisResult> AnalyzeImageAsync(
@@ -19,19 +20,17 @@ public class FakeAzureVisionService : IAzureVisionService
         VisualFeatures visualFeatures,
         CancellationToken cancellationToken = default)
     {
-        if (_analyzeFunc != null)
-        {
-            return Task.FromResult(_analyzeFunc(imageData, visualFeatures));
-        }
-
-        // Default fake implementation
-        return Task.FromResult(CreateDefaultResult(visualFeatures));
+        return Task.FromResult(_analyzeFunc(imageData, visualFeatures));
     }
 
-    private ImageAnalysisResult CreateDefaultResult(VisualFeatures features)
+    private static ImageAnalysisResult DefaultAnalyzeFunc(BinaryData imageData, VisualFeatures features)
     {
-        // Create a minimal fake result based on the features requested
-        // This is a simplified implementation for testing
-        throw new NotImplementedException("Use the constructor with a custom function to provide fake results");
+        // Provide a minimal working default that returns empty results
+        // Create instance using non-public constructor via reflection
+        var instance = (ImageAnalysisResult)Activator.CreateInstance(
+            typeof(ImageAnalysisResult),
+            nonPublic: true)!;
+        
+        return instance;
     }
 }
