@@ -120,6 +120,9 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
             entity.HasOne(e => e.Vehicle)
                 .WithMany()
                 .HasForeignKey(e => e.VehicleId);
+            entity.HasOne(e => e.Dealer)
+                .WithMany(d => d.Listings)
+                .HasForeignKey(e => e.DealerId);
             entity.HasOne(e => e.PrivateSeller)
                 .WithMany(ps => ps.Listings)
                 .HasForeignKey(e => e.PrivateSellerId);
@@ -134,21 +137,33 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
         modelBuilder.Entity<PrivateSeller>(entity =>
         {
             entity.HasKey(e => e.PrivateSellerId);
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
         });
 
         modelBuilder.Entity<SavedSearch>(entity =>
         {
             entity.HasKey(e => e.SavedSearchId);
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
         });
 
         modelBuilder.Entity<Favorite>(entity =>
         {
             entity.HasKey(e => e.FavoriteId);
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
         });
 
         modelBuilder.Entity<Inquiry>(entity =>
         {
             entity.HasKey(e => e.InquiryId);
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
         });
 
         modelBuilder.Entity<Review>(entity =>
@@ -157,11 +172,17 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
             entity.HasOne(e => e.Dealer)
                 .WithMany(d => d.Reviews)
                 .HasForeignKey(e => e.DealerId);
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
         });
 
         modelBuilder.Entity<VehicleHistory>(entity =>
         {
             entity.HasKey(e => e.VehicleHistoryId);
+            entity.HasOne(e => e.Vehicle)
+                .WithMany()
+                .HasForeignKey(e => e.VehicleId);
         });
 
         modelBuilder.Entity<JsonContent>(entity =>

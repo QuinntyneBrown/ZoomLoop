@@ -12,7 +12,7 @@ using ZoomLoop.Infrastructure;
 namespace ZoomLoop.Infrastructure.Migrations
 {
     [DbContext(typeof(ZoomLoopDbContext))]
-    [Migration("20251213211327_InitialCreate")]
+    [Migration("20251213211920_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
