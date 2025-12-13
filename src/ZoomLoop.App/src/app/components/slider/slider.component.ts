@@ -123,11 +123,12 @@ export class SliderComponent implements ControlValueAccessor {
   }
 
   private updateValueFromTouchEvent(event: TouchEvent): void {
-    if (!this.trackRef || event.touches.length === 0) return;
+    if (!this.trackRef || event.touches.length === 0 || !event.touches[0]) return;
     
     const track = this.trackRef.nativeElement;
     const rect = track.getBoundingClientRect();
-    const x = event.touches[0].clientX - rect.left;
+    const touch = event.touches[0];
+    const x = touch.clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
     
     this.updateValueFromPercentage(percentage);
@@ -137,8 +138,9 @@ export class SliderComponent implements ControlValueAccessor {
     const rawValue = this.min + (percentage / 100) * (this.max - this.min);
     const steppedValue = Math.round(rawValue / this.step) * this.step;
     // Handle floating-point precision by rounding to a reasonable number of decimal places
-    const decimalPlaces = this.step.toString().includes('.') 
-      ? this.step.toString().split('.')[1].length 
+    const stepString = this.step.toString();
+    const decimalPlaces = stepString.includes('.') 
+      ? stepString.split('.')[1].length 
       : 0;
     const clampedValue = Math.max(this.min, Math.min(this.max, 
       parseFloat(steppedValue.toFixed(decimalPlaces))
