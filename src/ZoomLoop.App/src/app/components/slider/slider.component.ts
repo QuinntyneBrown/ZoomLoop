@@ -1,7 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, Input, forwardRef, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, forwardRef, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './slider.component.html',
   styleUrl: './slider.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -36,8 +37,11 @@ export class SliderComponent implements ControlValueAccessor {
   onChange: (value: number) => void = () => {};
   onTouched: () => void = () => {};
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   writeValue(value: number): void {
     this.value = value ?? this.min;
+    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: (value: number) => void): void {
@@ -123,7 +127,7 @@ export class SliderComponent implements ControlValueAccessor {
   }
 
   private updateValueFromTouchEvent(event: TouchEvent): void {
-    if (!this.trackRef || event.touches.length === 0 || !event.touches[0]) return;
+    if (!this.trackRef || event.touches.length === 0) return;
     
     const track = this.trackRef.nativeElement;
     const rect = track.getBoundingClientRect();
