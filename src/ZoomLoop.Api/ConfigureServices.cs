@@ -4,11 +4,14 @@
 using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ZoomLoop.Core;
 using ZoomLoop.Core.Services.Email;
 using ZoomLoop.Core.Services.Security;
 using ZoomLoop.Core.Services.VehicleIngestion;
+using ZoomLoop.Infrastructure;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -19,6 +22,14 @@ public static class ConfigureServices
         services.AddHttpContextAccessor();
 
         services.AddMediatR(typeof(Program));
+
+        // Database configuration
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<ZoomLoopDbContext>(options =>
+            options.UseSqlServer(connectionString));
+
+        services.AddScoped<IZoomLoopContext>(provider => provider.GetRequiredService<ZoomLoopDbContext>());
+        services.AddScoped<ISeedService, SeedService>();
 
         var authenticationSection = configuration.GetSection("Authentication");
         var issuer = authenticationSection[nameof(Authentication.JwtIssuer)];
