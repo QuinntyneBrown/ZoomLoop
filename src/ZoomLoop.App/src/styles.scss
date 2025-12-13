@@ -5,6 +5,7 @@
  * - Modifier: .component-name--modifier
  * 
  * Organization:
+ * 0. Global Base Styles
  * 1. Base & Layout
  * 2. Navigation Components
  * 3. Hero Components
@@ -18,6 +19,15 @@
  * 11. Footer Components
  * 12. Utility Components
  */
+
+/* ========================================
+   0. GLOBAL BASE STYLES
+   ======================================== */
+
+html,
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
 
 /* ========================================
    1. BASE & LAYOUT
