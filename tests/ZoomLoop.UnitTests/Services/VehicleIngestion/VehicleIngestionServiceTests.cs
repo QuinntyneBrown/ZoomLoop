@@ -3,6 +3,7 @@
 
 using NUnit.Framework;
 using ZoomLoop.Core.Services.VehicleIngestion;
+using ZoomLoop.Testing.Services.VehicleIngestion;
 
 namespace ZoomLoop.UnitTests.Services.VehicleIngestion;
 

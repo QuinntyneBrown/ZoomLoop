@@ -2,8 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using OpenAI.Chat;
+using ZoomLoop.Core.Services.VehicleIngestion;
 
-namespace ZoomLoop.Core.Services.VehicleIngestion;
+namespace ZoomLoop.Testing.Services.VehicleIngestion;
 
 public class FakeAzureOpenAIService : IAzureOpenAIService
 {

@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ZoomLoop.Core\ZoomLoop.Core.csproj" />
     <ProjectReference Include="..\..\src\ZoomLoop.Api\ZoomLoop.Api.csproj" />
+    <ProjectReference Include="..\ZoomLoop.Testing\ZoomLoop.Testing.csproj" />
   </ItemGroup>
 
 </Project>

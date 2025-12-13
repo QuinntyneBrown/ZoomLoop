@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Azure.AI.Vision.ImageAnalysis;
-using System.Reflection;
+using ZoomLoop.Core.Services.VehicleIngestion;
 
-namespace ZoomLoop.Core.Services.VehicleIngestion;
+namespace ZoomLoop.Testing.Services.VehicleIngestion;
 
 public class FakeAzureVisionService : IAzureVisionService
 {
