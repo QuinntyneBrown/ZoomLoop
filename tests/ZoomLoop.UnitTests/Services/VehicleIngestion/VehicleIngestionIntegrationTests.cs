@@ -1,7 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Azure.AI.Vision.ImageAnalysis;
+using NSubstitute;
 using NUnit.Framework;
+using OpenAI.Chat;
 using ZoomLoop.Core.Services.VehicleIngestion;
 
 namespace ZoomLoop.UnitTests.Services.VehicleIngestion;
@@ -15,8 +18,7 @@ public class VehicleIngestionIntegrationTests
         // Arrange
         var vinText = "1HGBH41JXMN109186";
         
-        var fakeVisionService = new TestVisionService(vinText);
-        var fakeOpenAIService = new TestOpenAIService();
+        var (fakeVisionService, fakeOpenAIService) = CreateMockServices(vinText);
 
         var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
         
@@ -45,8 +47,7 @@ public class VehicleIngestionIntegrationTests
     public async Task IngestVehicleAsync_ConcurrentProcessing_ShouldComplete()
     {
         // Arrange
-        var fakeVisionService = new TestVisionService("1HGBH41JXMN109186");
-        var fakeOpenAIService = new TestOpenAIService();
+        var (fakeVisionService, fakeOpenAIService) = CreateMockServices("1HGBH41JXMN109186");
 
         var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
         
@@ -71,8 +72,7 @@ public class VehicleIngestionIntegrationTests
     public void IngestVehicleAsync_WhenNoVINFound_ShouldThrowException()
     {
         // Arrange
-        var fakeVisionService = new TestVisionService("No VIN here");
-        var fakeOpenAIService = new TestOpenAIService();
+        var (fakeVisionService, fakeOpenAIService) = CreateMockServices("No VIN here");
 
         var service = new VehicleIngestionService(fakeVisionService, fakeOpenAIService);
         
@@ -104,171 +104,37 @@ public class VehicleIngestionIntegrationTests
         };
     }
 
-    // Test helper classes
-    private class TestVisionService : IAzureVisionService
+    // Test helper method - Creates mock services using NSubstitute
+    private (IAzureVisionService visionService, IAzureOpenAIService openAIService) CreateMockServices(string vinText)
     {
-        private readonly string _textToReturn;
+        var visionService = Substitute.For<IAzureVisionService>();
+        var openAIService = Substitute.For<IAzureOpenAIService>();
 
-        public TestVisionService(string textToReturn)
-        {
-            _textToReturn = textToReturn;
-        }
+        // Mock vision service to return the VIN text in read results
+        visionService.AnalyzeImageAsync(Arg.Any<BinaryData>(), Arg.Any<VisualFeatures>(), Arg.Any<CancellationToken>())
+            .Returns(x => Task.FromResult((ImageAnalysisResult)null!));
 
-        public Task<ImageAnalysisResult> AnalyzeImageAsync(
-            BinaryData imageData,
-            VisualFeatures visualFeatures,
-            CancellationToken cancellationToken = default)
-        {
-            // Return a mock result that contains the specified text
-            var result = new TestImageAnalysisResult(_textToReturn, visualFeatures);
-            return Task.FromResult<ImageAnalysisResult>(result);
-        }
-    }
-
-    private class TestOpenAIService : IAzureOpenAIService
-    {
-        public Task<string> CompleteChatAsync(
-            IEnumerable<ChatMessage> messages,
-            CancellationToken cancellationToken = default)
-        {
-            var messageText = string.Join(" ", messages.Select(m => m.ToString()));
-            
-            if (messageText.Contains("VIN"))
+        // Mock OpenAI service responses
+        openAIService.CompleteChatAsync(Arg.Any<IEnumerable<ChatMessage>>(), Arg.Any<CancellationToken>())
+            .Returns(args =>
             {
-                return Task.FromResult("{\"year\": 2023, \"make\": \"Toyota\", \"model\": \"Camry\"}");
-            }
-            else if (messageText.Contains("condition"))
-            {
-                return Task.FromResult("{\"interiorCondition\": \"Good\", \"exteriorCondition\": \"Excellent\", \"numberOfDoors\": 4}");
-            }
-            else
-            {
-                return Task.FromResult("This is a beautiful vehicle in excellent condition.");
-            }
-        }
-    }
-
-    // Minimal test implementation of ImageAnalysisResult
-    private class TestImageAnalysisResult : ImageAnalysisResult
-    {
-        private readonly string _text;
-        private readonly VisualFeatures _features;
-
-        public TestImageAnalysisResult(string text, VisualFeatures features)
-        {
-            _text = text;
-            _features = features;
-        }
-
-        public new ReadResult? Read
-        {
-            get
-            {
-                if (_features.HasFlag(VisualFeatures.Read))
+                var messages = (IEnumerable<ChatMessage>)args[0];
+                var messageText = string.Join(" ", messages.Select(m => m.ToString()));
+                
+                if (messageText.Contains("VIN"))
                 {
-                    return new TestReadResult(_text);
+                    return Task.FromResult("{\"year\": 2023, \"make\": \"Toyota\", \"model\": \"Camry\"}");
                 }
-                return null;
-            }
-        }
-
-        public new CaptionResult? Caption
-        {
-            get
-            {
-                if (_features.HasFlag(VisualFeatures.Caption))
+                else if (messageText.Contains("condition"))
                 {
-                    return new TestCaptionResult("A vehicle photo");
+                    return Task.FromResult("{\"interiorCondition\": \"Good\", \"exteriorCondition\": \"Excellent\", \"numberOfDoors\": 4}");
                 }
-                return null;
-            }
-        }
-
-        public new TagsResult? Tags
-        {
-            get
-            {
-                if (_features.HasFlag(VisualFeatures.Tags))
+                else
                 {
-                    return new TestTagsResult();
+                    return Task.FromResult("This is a beautiful vehicle in excellent condition.");
                 }
-                return null;
-            }
-        }
-    }
+            });
 
-    private class TestReadResult : ReadResult
-    {
-        private readonly string _text;
-
-        public TestReadResult(string text)
-        {
-            _text = text;
-        }
-
-        public new IReadOnlyList<DetectedTextBlock> Blocks => new List<DetectedTextBlock>
-        {
-            new TestTextBlock(_text)
-        };
-    }
-
-    private class TestTextBlock : DetectedTextBlock
-    {
-        private readonly string _text;
-
-        public TestTextBlock(string text)
-        {
-            _text = text;
-        }
-
-        public new IReadOnlyList<DetectedTextLine> Lines => new List<DetectedTextLine>
-        {
-            new TestTextLine(_text)
-        };
-    }
-
-    private class TestTextLine : DetectedTextLine
-    {
-        private readonly string _text;
-
-        public TestTextLine(string text)
-        {
-            _text = text;
-        }
-
-        public new string Text => _text;
-    }
-
-    private class TestCaptionResult : CaptionResult
-    {
-        private readonly string _text;
-
-        public TestCaptionResult(string text)
-        {
-            _text = text;
-        }
-
-        public new string Text => _text;
-    }
-
-    private class TestTagsResult : TagsResult
-    {
-        public new IReadOnlyList<DetectedTag> Values => new List<DetectedTag>
-        {
-            new TestDetectedTag("car"),
-            new TestDetectedTag("vehicle")
-        };
-    }
-
-    private class TestDetectedTag : DetectedTag
-    {
-        private readonly string _name;
-
-        public TestDetectedTag(string name)
-        {
-            _name = name;
-        }
-
-        public new string Name => _name;
+        return (visionService, openAIService);
     }
 }
