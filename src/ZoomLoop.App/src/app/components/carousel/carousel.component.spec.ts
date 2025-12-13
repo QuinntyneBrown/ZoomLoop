@@ -67,7 +67,7 @@ describe('CarouselComponent', () => {
     });
 
     it('should warn when no items provided', () => {
-      spyOn(console, 'warn');
+      vi.spyOn(console, 'warn');
       component.items = [];
       component.ngOnInit();
       expect(console.warn).toHaveBeenCalledWith('Carousel: No items provided');
@@ -201,7 +201,7 @@ describe('CarouselComponent', () => {
       component.autoPlay = true;
       component.ngOnInit();
       const timer = component.autoPlayTimer;
-      spyOn(window, 'clearInterval');
+      vi.spyOn(window, 'clearInterval');
       component.ngOnDestroy();
       expect(window.clearInterval).toHaveBeenCalledWith(timer);
     });

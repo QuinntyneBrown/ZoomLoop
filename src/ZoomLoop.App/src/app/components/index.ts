@@ -7,6 +7,7 @@ export * from './hero';
 export * from './input';
 export * from './navbar';
 export * from './price-tag';
+export * from './slider';
 export * from './stat';
 export * from './timeline';
 export * from './vehicle-card';
