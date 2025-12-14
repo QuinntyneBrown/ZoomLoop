@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>1998,4014,,SA1101,SA1600,,SA1200,SA1633,1591,SA1309</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <UserSecretsId>49008688-e396-44af-aa0e-6420fe5e20c4</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
