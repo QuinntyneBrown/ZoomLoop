@@ -172,10 +172,12 @@ export class RangeSlider implements ControlValueAccessor, OnDestroy {
   }
 
   private clampValue(value: RangeValue): RangeValue {
-    return {
-      low: Math.max(this.min, Math.min(value.low, this.max)),
-      high: Math.max(this.min, Math.min(value.high, this.max))
-    };
+    const clampedLow = Math.max(this.min, Math.min(value.low, this.max));
+    const clampedHigh = Math.max(this.min, Math.min(value.high, this.max));
+    const low = Math.min(clampedLow, clampedHigh);
+    const high = Math.max(clampedLow, clampedHigh);
+
+    return { low, high };
   }
 
   ngOnDestroy(): void {

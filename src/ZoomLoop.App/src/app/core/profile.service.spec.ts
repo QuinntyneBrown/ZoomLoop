@@ -6,6 +6,7 @@ import { ProfileService } from './profile.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Profile } from '../models';
 import { provideHttpClient } from '@angular/common/http';
+import { expect } from 'vitest';
 
 describe('ProfileService', () => {
   let service: ProfileService;
@@ -71,7 +72,7 @@ describe('ProfileService', () => {
       const req = httpMock.expectOne('/api/profile/current');
       req.error(new ProgressEvent('error'));
 
-      await expect(profilePromise).rejects.toThrow();
+      await expect(profilePromise).rejects.toThrowError();
     });
   });
 
@@ -105,7 +106,7 @@ describe('ProfileService', () => {
       const req = httpMock.expectOne('/api/profile');
       req.error(new ProgressEvent('error'));
 
-      await expect(updatePromise).rejects.toThrow();
+      await expect(updatePromise).rejects.toThrowError();
     });
   });
 });

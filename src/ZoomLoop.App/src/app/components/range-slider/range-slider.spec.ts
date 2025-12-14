@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { vi } from 'vitest';
 import { RangeSlider, RangeValue } from './range-slider';
 
 describe('RangeSlider', () => {
@@ -49,14 +50,14 @@ describe('RangeSlider', () => {
     });
 
     it('should register onChange callback', () => {
-      const fn = jasmine.createSpy('onChange');
+      const fn = vi.fn();
       component.registerOnChange(fn);
       component.setValue({ low: 2016, high: 2023 });
       expect(fn).toHaveBeenCalledWith({ low: 2016, high: 2023 });
     });
 
     it('should register onTouched callback', () => {
-      const fn = jasmine.createSpy('onTouched');
+      const fn = vi.fn();
       component.registerOnTouched(fn);
       expect(fn).not.toHaveBeenCalled();
     });
@@ -149,15 +150,15 @@ describe('RangeSlider', () => {
     });
 
     it('should call onTouched when thumb is pressed', () => {
-      const fn = jasmine.createSpy('onTouched');
+      const fn = vi.fn();
       component.registerOnTouched(fn);
       
       const event = new MouseEvent('mousedown');
-      spyOn(event, 'preventDefault');
+      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
       
       component.onThumbMouseDown('low', event);
       expect(fn).toHaveBeenCalled();
-      expect(event.preventDefault).toHaveBeenCalled();
+      expect(preventDefaultSpy).toHaveBeenCalled();
     });
   });
 
@@ -169,7 +170,7 @@ describe('RangeSlider', () => {
       expect(component.value()).toEqual({ low: 2019, high: 2025 });
     });
 
-    it('should emit changes to FormControl', (done) => {
+    it('should emit changes to FormControl', () => {
       const control = new FormControl<RangeValue>({ low: 2015, high: 2026 }, { nonNullable: true });
       component.registerOnChange((value) => {
         control.setValue(value, { emitEvent: false });
@@ -177,11 +178,8 @@ describe('RangeSlider', () => {
 
       component.setValue({ low: 2017, high: 2023 });
       fixture.detectChanges();
-      
-      setTimeout(() => {
-        expect(control.value).toEqual({ low: 2017, high: 2023 });
-        done();
-      }, 0);
+
+      expect(control.value).toEqual({ low: 2017, high: 2023 });
     });
   });
 
@@ -218,7 +216,7 @@ describe('RangeSlider', () => {
   describe('OnPush change detection', () => {
     it('should trigger change detection when value changes', () => {
       const cdr = (component as any).cdr;
-      spyOn(cdr, 'markForCheck');
+      vi.spyOn(cdr, 'markForCheck');
       
       component.setValue({ low: 2020, high: 2024 });
       expect(cdr.markForCheck).toHaveBeenCalled();
@@ -226,7 +224,7 @@ describe('RangeSlider', () => {
 
     it('should trigger change detection when disabled state changes', () => {
       const cdr = (component as any).cdr;
-      spyOn(cdr, 'markForCheck');
+      vi.spyOn(cdr, 'markForCheck');
       
       component.setDisabledState(true);
       expect(cdr.markForCheck).toHaveBeenCalled();
