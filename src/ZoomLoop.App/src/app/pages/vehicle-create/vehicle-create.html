@@ -236,19 +236,21 @@
             [class.vehicle-form__image--primary]="image.isPrimary">
             <img [src]="image.imageUrl" [alt]="'Vehicle image ' + (i + 1)">
             <div class="vehicle-form__image-actions">
-              <button 
+              <zl-button 
                 type="button" 
-                class="vehicle-form__image-btn"
-                (click)="setPrimaryImage(i)"
+                variant="secondary"
+                size="small"
+                (handleClick)="setPrimaryImage(i)"
                 *ngIf="!image.isPrimary">
                 Set as Primary
-              </button>
-              <button 
+              </zl-button>
+              <zl-button 
                 type="button" 
-                class="vehicle-form__image-btn vehicle-form__image-btn--remove"
-                (click)="removeImage(i)">
+                variant="danger"
+                size="small"
+                (handleClick)="removeImage(i)">
                 Remove
-              </button>
+              </zl-button>
             </div>
             <span class="vehicle-form__image-badge" *ngIf="image.isPrimary">Primary</span>
           </div>
@@ -297,19 +299,19 @@
           {{ errorMessage() }}
         </div>
         <div class="vehicle-form__button-group">
-          <button 
+          <zl-button 
             type="button" 
-            class="vehicle-form__button vehicle-form__button--secondary"
-            (click)="cancel()"
+            variant="secondary"
+            (handleClick)="cancel()"
             [disabled]="isSubmitting()">
             Cancel
-          </button>
-          <button 
+          </zl-button>
+          <zl-button 
             type="submit" 
-            class="vehicle-form__button vehicle-form__button--primary"
+            variant="primary"
             [disabled]="form.invalid || isSubmitting()">
             {{ isSubmitting() ? 'Creating...' : 'Create Vehicle' }}
-          </button>
+          </zl-button>
         </div>
       </div>
     </form>

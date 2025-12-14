@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Button } from '../button';
 
 export interface TabItem {
   label: string;
@@ -12,7 +13,7 @@ export interface TabItem {
 @Component({
   selector: 'zl-tabs',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Button],
   templateUrl: './tabs.html',
   styleUrl: './tabs.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -7,6 +7,6 @@ test.describe('App launch', () => {
     await expect(page).toHaveTitle(/ZoomLoopApp/i);
 
     const heading = page.getByRole('heading', { level: 1 });
-    await expect(heading).toHaveText(/Welcome to ZoomLoop/i);
+    await expect(heading).toHaveText(/Buy or Sell Your Car/i);
   });
 });

@@ -1,36 +1,49 @@
-<nav class="navbar">
-  <div class="navbar__container container">
-    <a href="/" class="navbar__logo" *ngIf="logoText || logoImageUrl">
-      <img *ngIf="logoImageUrl" [src]="logoImageUrl" alt="Logo" class="navbar__logo-image" />
-      <span *ngIf="logoText && !logoImageUrl">{{ logoText }}</span>
-    </a>
-
-    <button
-      type="button"
-      class="navbar__toggle"
-      (click)="toggleMenu()"
-      [attr.aria-label]="menuOpen ? 'Close menu' : 'Open menu'"
-      [attr.aria-expanded]="menuOpen"
-    >
-      ☰
-    </button>
-
-    <ul class="navbar__menu" [class.navbar__menu--open]="menuOpen">
-      <li class="navbar__item" *ngFor="let item of navItems">
-        <a
-          [href]="item.url"
-          class="navbar__link"
-          [class.navbar__link--primary]="item.primary"
-          [class.navbar__link--active]="item.active"
-          (click)="closeMenu()"
-        >
-          {{ item.label }}
+<header class="site-header">
+  <div class="header-container">
+    <div class="header-top">
+      <!-- Logo -->
+      <div class="header-logo" *ngIf="logoText || logoImageUrl">
+        <a href="/" aria-label="ZoomLoop - Home">
+          <img *ngIf="logoImageUrl" [src]="logoImageUrl" alt="ZoomLoop" />
+          <span *ngIf="logoText && !logoImageUrl">{{ logoText }}</span>
         </a>
-      </li>
-    </ul>
+      </div>
 
-    <div class="navbar__actions">
-      <ng-content />
+      <!-- Navigation -->
+      <nav class="header-nav" [class.active]="menuOpen" aria-label="Main navigation">
+        <ul>
+          <li *ngFor="let item of navItems">
+            <a 
+              [href]="item.url"
+              [class.active]="item.active"
+              [attr.aria-current]="item.active ? 'page' : null"
+              (click)="closeMenu()"
+            >
+              {{ item.label }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Utilities -->
+      <div class="header-utilities">
+        <ng-content />
+      </div>
+
+      <!-- Mobile Toggle -->
+      <zl-button
+        type="button"
+        variant="ghost"
+        (handleClick)="toggleMenu()"
+        [ariaLabel]="menuOpen ? 'Close menu' : 'Open menu'"
+        [attr.aria-expanded]="menuOpen"
+        class="mobile-menu-toggle"
+        [class.active]="menuOpen"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </zl-button>
     </div>
   </div>
-</nav>
+</header>

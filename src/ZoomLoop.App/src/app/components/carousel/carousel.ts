@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Button } from '../button';
 
 export interface CarouselItem {
   imageUrl: string;
@@ -12,7 +13,7 @@ export interface CarouselItem {
 @Component({
   selector: 'zl-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Button],
   templateUrl: './carousel.html',
   styleUrl: './carousel.scss',
 })
