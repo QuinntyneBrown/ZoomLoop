@@ -1,9 +1,9 @@
-import { Component, signal, viewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
 import { Footer, Navbar, Button } from './components';
 import { RouterOutlet } from '@angular/router';
 import { LoginDialog } from './dialogs';
 import { AuthService } from './core/auth.service';
-import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
     Navbar,
     Footer,
     RouterOutlet,
-    LoginDialog,
     Button,
     CommonModule
 ],
@@ -21,12 +20,13 @@ import { CommonModule } from '@angular/common';
 })
 export class App {
   private readonly _authService = inject(AuthService);
-  protected readonly loginDialog = viewChild(LoginDialog);
+  private readonly _dialog = inject(Dialog);
 
   protected openLoginDialog() {
-    const dialog = this.loginDialog();
-    if (dialog) {
-      dialog.open();
-    }
+    this._dialog.open(LoginDialog, {
+      hasBackdrop: true,
+      disableClose: false,
+      panelClass: 'cdk-overlay-pane'
+    });
   }
 }

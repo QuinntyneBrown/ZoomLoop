@@ -1,26 +1,26 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
+import { DialogRef } from '@angular/cdk/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from '../../core/auth.service';
 import { LocalStorageService, loginCredentialsKey } from '../../core';
 import { LoginForm } from '../../components/login-form';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'zl-login-dialog',
   standalone: true,
-  imports: [CommonModule, LoginForm],
+  imports: [LoginForm],
   templateUrl: './login-dialog.html',
   styleUrls: ['./login-dialog.scss']
 })
 export class LoginDialog implements OnDestroy {
   private readonly _authService = inject(AuthService);
   private readonly _localStorageService = inject(LocalStorageService);
+  private readonly _dialogRef = inject(DialogRef);
 
-  readonly isOpen = signal(false);
   private _destroyed$ = new Subject<void>();
 
   ngOnDestroy() {
@@ -28,12 +28,8 @@ export class LoginDialog implements OnDestroy {
     this._destroyed$.complete();
   }
 
-  open() {
-    this.isOpen.set(true);
-  }
-
   close() {
-    this.isOpen.set(false);
+    this._dialogRef.close();
   }
 
   handleTryToLogin($event: { username: string, password: string, rememberMe: boolean }) {
@@ -56,11 +52,5 @@ export class LoginDialog implements OnDestroy {
         })
       )
       .subscribe();
-  }
-
-  handleBackdropClick(event: MouseEvent) {
-    if (event.target === event.currentTarget) {
-      this.close();
-    }
   }
 }
