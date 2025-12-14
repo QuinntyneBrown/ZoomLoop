@@ -1,7 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, EventEmitter, Output, signal, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,6 +39,7 @@ export class SearchInput implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _vehicleService = inject(VehicleService);
 
+  @Input() initialFilters?: SearchFilters;
   @Output() search = new EventEmitter<SearchFilters>();
 
   searchForm!: FormGroup;
@@ -51,19 +52,19 @@ export class SearchInput implements OnInit {
 
   ngOnInit() {
     this.searchForm = this._fb.group({
-      make: [''],
-      model: [''],
-      yearMin: [null],
-      yearMax: [null],
-      priceMin: [null],
-      priceMax: [null],
-      mileageMin: [null],
-      mileageMax: [null],
-      color: [''],
-      transmission: [''],
-      doors: [null],
-      accidentFree: [false],
-      isNewest: [false]
+      make: [this.initialFilters?.makes?.[0] || ''],
+      model: [this.initialFilters?.models?.[0] || ''],
+      yearMin: [this.initialFilters?.year?.min || null],
+      yearMax: [this.initialFilters?.year?.max || null],
+      priceMin: [this.initialFilters?.price?.min || null],
+      priceMax: [this.initialFilters?.price?.max || null],
+      mileageMin: [this.initialFilters?.kilometers?.min || null],
+      mileageMax: [this.initialFilters?.kilometers?.max || null],
+      color: [this.initialFilters?.colors?.[0] || ''],
+      transmission: [this.initialFilters?.transmissions?.[0] || ''],
+      doors: [this.initialFilters?.doors || null],
+      accidentFree: [this.initialFilters?.accidentFree || false],
+      isNewest: [this.initialFilters?.isNewest || false]
     });
 
     // Setup type-ahead for make
