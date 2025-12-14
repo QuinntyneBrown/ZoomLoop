@@ -25,17 +25,17 @@ import { ComparisonWidget, LoanScenario } from './comparison-widget';
           <div class="detail-card">
             <h4>Primary Scenario</h4>
             <ul>
-              <li>Term: {{ primaryScenario.term }} months ({{ primaryScenario.term / 12 }} years)</li>
+              <li>Term: {{ primaryScenario.term }} months ({{ getYears(primaryScenario.term) }} years)</li>
               <li>Rate: {{ primaryScenario.rate }}%</li>
-              <li>Principal: ${{ primaryScenario.principal.toLocaleString() }}</li>
+              <li>Principal: {{ formatPrincipal(primaryScenario.principal) }}</li>
             </ul>
           </div>
           <div class="detail-card">
             <h4>Secondary Scenario</h4>
             <ul>
-              <li>Term: {{ secondaryScenario.term }} months ({{ secondaryScenario.term / 12 }} years)</li>
+              <li>Term: {{ secondaryScenario.term }} months ({{ getYears(secondaryScenario.term) }} years)</li>
               <li>Rate: {{ secondaryScenario.rate }}%</li>
-              <li>Principal: ${{ secondaryScenario.principal.toLocaleString() }}</li>
+              <li>Principal: {{ formatPrincipal(secondaryScenario.principal) }}</li>
             </ul>
           </div>
         </div>
@@ -165,6 +165,14 @@ export class ComparisonWidgetExample {
   };
 
   activeScenario: 'primary' | 'secondary' = 'primary';
+
+  getYears(months: number): number {
+    return months / 12;
+  }
+
+  formatPrincipal(amount: number): string {
+    return `$${amount.toLocaleString()}`;
+  }
 
   onScenarioSwitch(event: { primary: LoanScenario; secondary: LoanScenario }): void {
     this.primaryScenario = event.primary;
