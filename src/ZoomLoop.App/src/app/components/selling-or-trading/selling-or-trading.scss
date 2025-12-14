@@ -8,7 +8,7 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 
-  .trading-card {
+  &__card {
     width: 100%;
     max-width: 600px;
     margin: auto;
@@ -19,27 +19,17 @@
     }
   }
 
-  mat-card-header {
-    margin-bottom: 24px;
-
-    mat-card-title {
-      font-size: 28px;
-      font-weight: 500;
-      color: #1a237e;
-      text-align: center;
-    }
+  &__form {
+    display: flex;
+    flex-direction: column;
   }
 
-  mat-card-content {
-    padding: 16px;
-  }
-
-  .full-width {
+  &__field {
     width: 100%;
     margin-bottom: 16px;
   }
 
-  .error-message {
+  &__error {
     color: #d32f2f;
     margin-bottom: 16px;
     padding: 12px;
@@ -48,7 +38,7 @@
     font-size: 14px;
   }
 
-  .button-container {
+  &__button-container {
     display: flex;
     justify-content: center;
     margin-top: 24px;
@@ -68,83 +58,83 @@
     }
   }
 
-  .vehicle-info {
+  &__vehicle-info {
     margin-bottom: 32px;
     padding: 20px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 8px;
     color: white;
     text-align: center;
-
-    h3 {
-      margin: 0 0 12px 0;
-      font-size: 20px;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-
-    .vehicle-description {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 600;
-    }
   }
 
-  .valuation-result {
+  &__vehicle-title {
+    margin: 0 0 12px 0;
+    font-size: 20px;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  &__vehicle-description {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  &__result {
     text-align: center;
+  }
 
-    h3 {
-      margin: 0 0 24px 0;
-      font-size: 24px;
-      font-weight: 500;
-      color: #1a237e;
-    }
+  &__result-title {
+    margin: 0 0 24px 0;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1a237e;
+  }
 
-    .fair-value {
-      margin-bottom: 32px;
-      padding: 32px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
+  &__fair-value {
+    margin-bottom: 32px;
+    padding: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
 
-      .label {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 18px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
+  &__fair-value-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
 
-      .value {
-        color: white;
-        font-size: 48px;
-        font-weight: 700;
-      }
-    }
+  &__fair-value-amount {
+    color: white;
+    font-size: 48px;
+    font-weight: 700;
+  }
 
-    .explanation {
-      margin-bottom: 32px;
-      padding: 24px;
-      background-color: #f5f5f5;
-      border-radius: 8px;
-      text-align: left;
+  &__explanation {
+    margin-bottom: 32px;
+    padding: 24px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    text-align: left;
+  }
 
-      h4 {
-        margin: 0 0 16px 0;
-        font-size: 18px;
-        font-weight: 500;
-        color: #424242;
-      }
+  &__explanation-title {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #424242;
+  }
 
-      p {
-        margin: 0;
-        font-size: 16px;
-        line-height: 1.6;
-        color: #616161;
-      }
-    }
+  &__explanation-text {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #616161;
   }
 }

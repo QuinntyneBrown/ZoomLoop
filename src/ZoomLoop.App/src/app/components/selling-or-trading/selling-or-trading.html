@@ -1,5 +1,5 @@
 <div class="selling-or-trading">
-  <mat-card class="trading-card">
+  <mat-card class="selling-or-trading__card">
     <mat-card-header>
       <mat-card-title>Selling Or Trading?</mat-card-title>
     </mat-card-header>
@@ -7,8 +7,8 @@
     <mat-card-content>
       <!-- Stage 1: VIN Input -->
       @if (stage === 'vin-input') {
-        <form [formGroup]="vinForm" (ngSubmit)="handleGetInstantOffer()">
-          <mat-form-field appearance="outline" class="full-width">
+        <form [formGroup]="vinForm" (ngSubmit)="handleGetInstantOffer()" class="selling-or-trading__form">
+          <mat-form-field appearance="outline" class="selling-or-trading__field">
             <mat-label>Vehicle Identification Number (VIN)</mat-label>
             <input
               matInput
@@ -25,10 +25,10 @@
           </mat-form-field>
 
           @if (error) {
-            <div class="error-message">{{ error }}</div>
+            <div class="selling-or-trading__error">{{ error }}</div>
           }
 
-          <div class="button-container">
+          <div class="selling-or-trading__button-container">
             <button
               mat-raised-button
               color="primary"
@@ -48,15 +48,15 @@
 
       <!-- Stage 2: Details Input -->
       @if (stage === 'details-input' && vehicleInfo) {
-        <div class="vehicle-info">
-          <h3>Your Vehicle</h3>
-          <p class="vehicle-description">
+        <div class="selling-or-trading__vehicle-info">
+          <h3 class="selling-or-trading__vehicle-title">Your Vehicle</h3>
+          <p class="selling-or-trading__vehicle-description">
             {{ vehicleInfo.year }} {{ vehicleInfo.make }} {{ vehicleInfo.model }}
           </p>
         </div>
 
-        <form [formGroup]="detailsForm" (ngSubmit)="handleGetInstantQuote()">
-          <mat-form-field appearance="outline" class="full-width">
+        <form [formGroup]="detailsForm" (ngSubmit)="handleGetInstantQuote()" class="selling-or-trading__form">
+          <mat-form-field appearance="outline" class="selling-or-trading__field">
             <mat-label>What's your postal code?</mat-label>
             <input
               matInput
@@ -68,7 +68,7 @@
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline" class="selling-or-trading__field">
             <mat-label>How many kilometers does the vehicle have?</mat-label>
             <input
               matInput
@@ -82,7 +82,7 @@
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline" class="selling-or-trading__field">
             <mat-label>How many accidents?</mat-label>
             <input
               matInput
@@ -96,7 +96,7 @@
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline" class="selling-or-trading__field">
             <mat-label>What's the condition of the interior?</mat-label>
             <mat-select formControlName="interiorCondition">
               @for (option of conditionOptions; track option) {
@@ -108,7 +108,7 @@
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline" class="selling-or-trading__field">
             <mat-label>What's the condition of the exterior?</mat-label>
             <mat-select formControlName="exteriorCondition">
               @for (option of conditionOptions; track option) {
@@ -121,10 +121,10 @@
           </mat-form-field>
 
           @if (error) {
-            <div class="error-message">{{ error }}</div>
+            <div class="selling-or-trading__error">{{ error }}</div>
           }
 
-          <div class="button-container">
+          <div class="selling-or-trading__button-container">
             <button
               mat-raised-button
               color="primary"
@@ -144,17 +144,17 @@
 
       <!-- Stage 3: Result -->
       @if (stage === 'result' && valuationResult) {
-        <div class="valuation-result">
-          <h3>Your Vehicle Valuation</h3>
-          <div class="fair-value">
-            <span class="label">Fair Value:</span>
-            <span class="value">${{ valuationResult.fairValue | number:'1.2-2' }}</span>
+        <div class="selling-or-trading__result">
+          <h3 class="selling-or-trading__result-title">Your Vehicle Valuation</h3>
+          <div class="selling-or-trading__fair-value">
+            <span class="selling-or-trading__fair-value-label">Fair Value:</span>
+            <span class="selling-or-trading__fair-value-amount">${{ valuationResult.fairValue | number:'1.2-2' }}</span>
           </div>
-          <div class="explanation">
-            <h4>Valuation Details</h4>
-            <p>{{ valuationResult.explanation }}</p>
+          <div class="selling-or-trading__explanation">
+            <h4 class="selling-or-trading__explanation-title">Valuation Details</h4>
+            <p class="selling-or-trading__explanation-text">{{ valuationResult.explanation }}</p>
           </div>
-          <div class="button-container">
+          <div class="selling-or-trading__button-container">
             <button
               mat-raised-button
               color="primary"
