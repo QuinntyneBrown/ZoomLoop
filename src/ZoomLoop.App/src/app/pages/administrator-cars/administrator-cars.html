@@ -1,0 +1,316 @@
+<div class="administrator-cars">
+  <div class="administrator-cars__container">
+    <div class="administrator-cars__header">
+      <div class="administrator-cars__title-section">
+        <h1 class="administrator-cars__title">Vehicle Management</h1>
+        <p class="administrator-cars__subtitle">Manage all vehicles in the system</p>
+      </div>
+      <button 
+        mat-flat-button 
+        color="primary"
+        class="administrator-cars__create-btn"
+        (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Create Vehicle
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="administrator-cars__error">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <div class="administrator-cars__content">
+      <!-- Master List -->
+      <div class="administrator-cars__list">
+        <mat-card class="administrator-cars__card">
+          <mat-card-content>
+            @if (isLoading()) {
+              <div class="administrator-cars__loading">
+                <mat-spinner diameter="50"></mat-spinner>
+                <p>Loading vehicles...</p>
+              </div>
+            } @else {
+              <div class="administrator-cars__table-container">
+                <table mat-table [dataSource]="dataSource" class="administrator-cars__table">
+                  
+                  <!-- Image Column -->
+                  <ng-container matColumnDef="image">
+                    <th mat-header-cell *matHeaderCellDef>Image</th>
+                    <td mat-cell *matCellDef="let vehicle">
+                      <img 
+                        [src]="getPrimaryImage(vehicle)" 
+                        alt="Vehicle"
+                        class="administrator-cars__thumbnail"
+                        (error)="$any($event.target).src='/assets/placeholder-vehicle.png'">
+                    </td>
+                  </ng-container>
+
+                  <!-- Year Column -->
+                  <ng-container matColumnDef="year">
+                    <th mat-header-cell *matHeaderCellDef>Year</th>
+                    <td mat-cell *matCellDef="let vehicle">{{ vehicle.year }}</td>
+                  </ng-container>
+
+                  <!-- VIN Column -->
+                  <ng-container matColumnDef="vin">
+                    <th mat-header-cell *matHeaderCellDef>VIN</th>
+                    <td mat-cell *matCellDef="let vehicle">
+                      <code class="administrator-cars__vin">{{ vehicle.vin }}</code>
+                    </td>
+                  </ng-container>
+
+                  <!-- Stock Number Column -->
+                  <ng-container matColumnDef="stockNumber">
+                    <th mat-header-cell *matHeaderCellDef>Stock #</th>
+                    <td mat-cell *matCellDef="let vehicle">{{ vehicle.stockNumber }}</td>
+                  </ng-container>
+
+                  <!-- Mileage Column -->
+                  <ng-container matColumnDef="mileage">
+                    <th mat-header-cell *matHeaderCellDef>Mileage</th>
+                    <td mat-cell *matCellDef="let vehicle">
+                      {{ vehicle.mileage | number }} km
+                    </td>
+                  </ng-container>
+
+                  <!-- Status Column -->
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let vehicle">
+                      <mat-chip 
+                        [class]="getVehicleStatus(vehicle).class"
+                        class="administrator-cars__status-chip">
+                        {{ getVehicleStatus(vehicle).label }}
+                      </mat-chip>
+                    </td>
+                  </ng-container>
+
+                  <!-- Actions Column -->
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let vehicle">
+                      <div class="administrator-cars__actions">
+                        <button 
+                          mat-icon-button 
+                          color="primary"
+                          (click)="selectVehicle(vehicle); $event.stopPropagation()"
+                          matTooltip="View Details">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button 
+                          mat-icon-button 
+                          color="accent"
+                          (click)="editVehicle(vehicle); $event.stopPropagation()"
+                          matTooltip="Edit">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button 
+                          mat-icon-button 
+                          color="warn"
+                          (click)="deleteVehicle(vehicle); $event.stopPropagation()"
+                          matTooltip="Delete">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr 
+                    mat-row 
+                    *matRowDef="let row; columns: displayedColumns;"
+                    class="administrator-cars__row"
+                    [class.administrator-cars__row--selected]="selectedVehicle()?.vehicleId === row.vehicleId"
+                    (click)="selectVehicle(row)">
+                  </tr>
+                </table>
+              </div>
+
+              <mat-paginator
+                [length]="totalVehicles()"
+                [pageSize]="pageSize()"
+                [pageIndex]="pageIndex()"
+                [pageSizeOptions]="[5, 10, 25, 50, 100]"
+                (page)="onPageChange($event)"
+                showFirstLastButtons>
+              </mat-paginator>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Detail View -->
+      @if (selectedVehicle()) {
+        <div class="administrator-cars__detail">
+          <mat-card class="administrator-cars__card">
+            <mat-card-header>
+              <div class="administrator-cars__detail-header">
+                <h2 class="administrator-cars__detail-title">
+                  {{ selectedVehicle()!.year }} {{ selectedVehicle()!.vin }}
+                </h2>
+                <button 
+                  mat-icon-button 
+                  (click)="clearSelection()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <!-- Vehicle Images -->
+              @if (selectedVehicle()!.images.length > 0) {
+                <div class="administrator-cars__detail-images">
+                  <div class="administrator-cars__detail-primary-image">
+                    <img 
+                      [src]="getPrimaryImage(selectedVehicle()!)" 
+                      alt="Vehicle"
+                      (error)="$any($event.target).src='/assets/placeholder-vehicle.png'">
+                  </div>
+                  @if (selectedVehicle()!.images.length > 1) {
+                    <div class="administrator-cars__detail-thumbnails">
+                      @for (image of selectedVehicle()!.images; track image.vehicleImageId) {
+                        <img 
+                          [src]="image.thumbnailUrl" 
+                          alt="Vehicle thumbnail"
+                          class="administrator-cars__detail-thumbnail"
+                          (error)="$any($event.target).src='/assets/placeholder-vehicle.png'">
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Vehicle Details -->
+              <div class="administrator-cars__detail-section">
+                <h3 class="administrator-cars__detail-section-title">Basic Information</h3>
+                <div class="administrator-cars__detail-grid">
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">VIN:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.vin }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Stock Number:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.stockNumber }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Year:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.year }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Trim:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.trim || 'N/A' }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Mileage:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.mileage | number }} km</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Status:</span>
+                    <mat-chip [class]="getVehicleStatus(selectedVehicle()!).class">
+                      {{ getVehicleStatus(selectedVehicle()!).label }}
+                    </mat-chip>
+                  </div>
+                </div>
+              </div>
+
+              <div class="administrator-cars__detail-section">
+                <h3 class="administrator-cars__detail-section-title">Specifications</h3>
+                <div class="administrator-cars__detail-grid">
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Exterior Color:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.exteriorColor }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Interior Color:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.interiorColor }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Transmission:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.transmission }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Fuel Type:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.fuelType }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Drive Type:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.driveType }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Body Type:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.bodyType }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Doors:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.doors }}</span>
+                  </div>
+                  <div class="administrator-cars__detail-item">
+                    <span class="administrator-cars__detail-label">Seats:</span>
+                    <span class="administrator-cars__detail-value">{{ selectedVehicle()!.seats }}</span>
+                  </div>
+                  @if (selectedVehicle()!.engineSize) {
+                    <div class="administrator-cars__detail-item">
+                      <span class="administrator-cars__detail-label">Engine Size:</span>
+                      <span class="administrator-cars__detail-value">{{ selectedVehicle()!.engineSize }}L</span>
+                    </div>
+                  }
+                  @if (selectedVehicle()!.cylinders) {
+                    <div class="administrator-cars__detail-item">
+                      <span class="administrator-cars__detail-label">Cylinders:</span>
+                      <span class="administrator-cars__detail-value">{{ selectedVehicle()!.cylinders }}</span>
+                    </div>
+                  }
+                  @if (selectedVehicle()!.horsepower) {
+                    <div class="administrator-cars__detail-item">
+                      <span class="administrator-cars__detail-label">Horsepower:</span>
+                      <span class="administrator-cars__detail-value">{{ selectedVehicle()!.horsepower }} hp</span>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              @if (selectedVehicle()!.description) {
+                <div class="administrator-cars__detail-section">
+                  <h3 class="administrator-cars__detail-section-title">Description</h3>
+                  <p class="administrator-cars__detail-description">{{ selectedVehicle()!.description }}</p>
+                </div>
+              }
+
+              @if (selectedVehicle()!.features.length > 0) {
+                <div class="administrator-cars__detail-section">
+                  <h3 class="administrator-cars__detail-section-title">Features</h3>
+                  <div class="administrator-cars__detail-features">
+                    @for (feature of selectedVehicle()!.features; track feature.vehicleFeatureId) {
+                      <mat-chip class="administrator-cars__feature-chip">
+                        {{ feature.name }}
+                      </mat-chip>
+                    }
+                  </div>
+                </div>
+              }
+
+              <div class="administrator-cars__detail-actions">
+                <button 
+                  mat-flat-button 
+                  color="primary"
+                  (click)="editVehicle(selectedVehicle()!)">
+                  <mat-icon>edit</mat-icon>
+                  Edit Vehicle
+                </button>
+                <button 
+                  mat-stroked-button 
+                  color="warn"
+                  (click)="deleteVehicle(selectedVehicle()!)">
+                  <mat-icon>delete</mat-icon>
+                  Delete Vehicle
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      }
+    </div>
+  </div>
+</div>

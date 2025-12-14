@@ -1,0 +1,88 @@
+<div class="vehicle-image-drop-dialog">
+  <div class="vehicle-image-drop-dialog__header">
+    <h2 class="vehicle-image-drop-dialog__title">Upload Vehicle Images</h2>
+    <button 
+      mat-icon-button 
+      class="vehicle-image-drop-dialog__close"
+      (click)="close()"
+      [disabled]="isUploading()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="vehicle-image-drop-dialog__content">
+    <div 
+      class="vehicle-image-drop-dialog__dropzone"
+      [class.vehicle-image-drop-dialog__dropzone--dragging]="isDragging()"
+      [class.vehicle-image-drop-dialog__dropzone--disabled]="isUploading()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)">
+      <input 
+        type="file" 
+        id="fileInput" 
+        multiple 
+        accept="image/*"
+        (change)="onFileSelect($event)"
+        [disabled]="isUploading()"
+        style="display: none;">
+      <label for="fileInput" class="vehicle-image-drop-dialog__dropzone-label">
+        <mat-icon class="vehicle-image-drop-dialog__dropzone-icon">add_photo_alternate</mat-icon>
+        <p class="vehicle-image-drop-dialog__dropzone-text">Drag and drop vehicle images here</p>
+        <p class="vehicle-image-drop-dialog__dropzone-hint">or click to select files</p>
+        <p class="vehicle-image-drop-dialog__dropzone-hint">Supports multiple images</p>
+      </label>
+    </div>
+
+    @if (uploadedFiles().length > 0) {
+      <div class="vehicle-image-drop-dialog__previews">
+        <h3 class="vehicle-image-drop-dialog__previews-title">
+          Selected Images ({{ uploadedFiles().length }})
+        </h3>
+        <div class="vehicle-image-drop-dialog__preview-grid">
+          @for (url of previewUrls(); track $index) {
+            <div class="vehicle-image-drop-dialog__preview">
+              <img [src]="url" [alt]="'Preview ' + ($index + 1)">
+              <button 
+                mat-icon-button 
+                class="vehicle-image-drop-dialog__preview-remove"
+                (click)="removeFile($index)"
+                [disabled]="isUploading()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="vehicle-image-drop-dialog__error">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="vehicle-image-drop-dialog__actions">
+    <button 
+      mat-stroked-button 
+      color="primary"
+      (click)="close()"
+      [disabled]="isUploading()">
+      Cancel
+    </button>
+    <button 
+      mat-flat-button 
+      color="primary"
+      (click)="submit()"
+      [disabled]="uploadedFiles().length === 0 || isUploading()">
+      @if (isUploading()) {
+        <mat-spinner diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+        Uploading...
+      } @else {
+        Upload & Create Vehicle
+      }
+    </button>
+  </div>
+</div>
