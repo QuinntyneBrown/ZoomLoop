@@ -81,12 +81,9 @@ describe('DashboardCardComponent', () => {
     });
 
     it('should not render title when not provided', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.title = '';
-      newFixture.detectChanges();
-      const newCompiled = newFixture.debugElement;
-      const title = newCompiled.query(By.css('.dashboard-card__title'));
+      fixture.componentRef.setInput('title', '');
+      fixture.detectChanges();
+      const title = compiled.query(By.css('.dashboard-card__title'));
       expect(title).toBeFalsy();
     });
 
@@ -99,12 +96,9 @@ describe('DashboardCardComponent', () => {
     });
 
     it('should not render description when not provided', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.description = '';
-      newFixture.detectChanges();
-      const newCompiled = newFixture.debugElement;
-      const description = newCompiled.query(By.css('.dashboard-card__description'));
+      fixture.componentRef.setInput('description', '');
+      fixture.detectChanges();
+      const description = compiled.query(By.css('.dashboard-card__description'));
       expect(description).toBeFalsy();
     });
 
@@ -114,12 +108,9 @@ describe('DashboardCardComponent', () => {
     });
 
     it('should apply icon color to icon wrapper', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.iconColor = '#0066cc';
-      newFixture.detectChanges();
-      const newCompiled = newFixture.debugElement;
-      const iconWrapper = newCompiled.query(By.css('.dashboard-card__icon-wrapper'));
+      fixture.componentRef.setInput('iconColor', '#0066cc');
+      fixture.detectChanges();
+      const iconWrapper = compiled.query(By.css('.dashboard-card__icon-wrapper'));
       expect(iconWrapper.nativeElement.style.color).toBe('rgb(0, 102, 204)');
     });
 
@@ -131,12 +122,9 @@ describe('DashboardCardComponent', () => {
     });
 
     it('should not render arrow when showArrow is false', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.showArrow = false;
-      newFixture.detectChanges();
-      const newCompiled = newFixture.debugElement;
-      const arrow = newCompiled.query(By.css('.dashboard-card__arrow'));
+      fixture.componentRef.setInput('showArrow', false);
+      fixture.detectChanges();
+      const arrow = compiled.query(By.css('.dashboard-card__arrow'));
       expect(arrow).toBeFalsy();
     });
 
@@ -163,12 +151,9 @@ describe('DashboardCardComponent', () => {
     });
 
     it('should not add clickable class when clickable is false', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.clickable = false;
-      newFixture.detectChanges();
-      const newCompiled = newFixture.debugElement;
-      const card = newCompiled.query(By.css('.dashboard-card'));
+      fixture.componentRef.setInput('clickable', false);
+      fixture.detectChanges();
+      const card = compiled.query(By.css('.dashboard-card'));
       expect(card.nativeElement.classList.contains('dashboard-card--clickable')).toBe(false);
     });
   });
@@ -207,97 +192,62 @@ describe('DashboardCardComponent', () => {
 
   describe('Dynamic Updates', () => {
     it('should update title dynamically', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.title = 'Initial Title';
-      newFixture.detectChanges();
-      let newCompiled = newFixture.debugElement;
-      let title = newCompiled.query(By.css('.dashboard-card__title'));
+      fixture.componentRef.setInput('title', 'Initial Title');
+      fixture.detectChanges();
+      let title = compiled.query(By.css('.dashboard-card__title'));
       expect(title.nativeElement.textContent.trim()).toBe('Initial Title');
 
-      // Create a fresh component for testing dynamic update
-      const updatedFixture = TestBed.createComponent(DashboardCardComponent);
-      const updatedComponent = updatedFixture.componentInstance;
-      updatedComponent.title = 'Updated Title';
-      updatedFixture.detectChanges();
-      const updatedCompiled = updatedFixture.debugElement;
-      title = updatedCompiled.query(By.css('.dashboard-card__title'));
+      fixture.componentRef.setInput('title', 'Updated Title');
+      fixture.detectChanges();
+      title = compiled.query(By.css('.dashboard-card__title'));
       expect(title.nativeElement.textContent.trim()).toBe('Updated Title');
     });
 
     it('should update description dynamically', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.description = 'Initial description';
-      newFixture.detectChanges();
-      let newCompiled = newFixture.debugElement;
-      let description = newCompiled.query(By.css('.dashboard-card__description'));
+      fixture.componentRef.setInput('description', 'Initial description');
+      fixture.detectChanges();
+      let description = compiled.query(By.css('.dashboard-card__description'));
       expect(description.nativeElement.textContent.trim()).toBe('Initial description');
 
-      // Create a fresh component for testing dynamic update
-      const updatedFixture = TestBed.createComponent(DashboardCardComponent);
-      const updatedComponent = updatedFixture.componentInstance;
-      updatedComponent.description = 'Updated description';
-      updatedFixture.detectChanges();
-      const updatedCompiled = updatedFixture.debugElement;
-      description = updatedCompiled.query(By.css('.dashboard-card__description'));
+      fixture.componentRef.setInput('description', 'Updated description');
+      fixture.detectChanges();
+      description = compiled.query(By.css('.dashboard-card__description'));
       expect(description.nativeElement.textContent.trim()).toBe('Updated description');
     });
 
     it('should update icon color dynamically', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.iconColor = '#ff0000';
-      newFixture.detectChanges();
-      let newCompiled = newFixture.debugElement;
-      let iconWrapper = newCompiled.query(By.css('.dashboard-card__icon-wrapper'));
+      fixture.componentRef.setInput('iconColor', '#ff0000');
+      fixture.detectChanges();
+      let iconWrapper = compiled.query(By.css('.dashboard-card__icon-wrapper'));
       expect(iconWrapper.nativeElement.style.color).toBe('rgb(255, 0, 0)');
 
-      // Create a fresh component for testing dynamic update
-      const updatedFixture = TestBed.createComponent(DashboardCardComponent);
-      const updatedComponent = updatedFixture.componentInstance;
-      updatedComponent.iconColor = '#00ff00';
-      updatedFixture.detectChanges();
-      const updatedCompiled = updatedFixture.debugElement;
-      iconWrapper = updatedCompiled.query(By.css('.dashboard-card__icon-wrapper'));
+      fixture.componentRef.setInput('iconColor', '#00ff00');
+      fixture.detectChanges();
+      iconWrapper = compiled.query(By.css('.dashboard-card__icon-wrapper'));
       expect(iconWrapper.nativeElement.style.color).toBe('rgb(0, 255, 0)');
     });
 
     it('should toggle arrow visibility dynamically', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.showArrow = true;
-      newFixture.detectChanges();
-      let newCompiled = newFixture.debugElement;
-      let arrow = newCompiled.query(By.css('.dashboard-card__arrow'));
+      fixture.componentRef.setInput('showArrow', true);
+      fixture.detectChanges();
+      let arrow = compiled.query(By.css('.dashboard-card__arrow'));
       expect(arrow).toBeTruthy();
 
-      // Create a fresh component for testing dynamic update
-      const updatedFixture = TestBed.createComponent(DashboardCardComponent);
-      const updatedComponent = updatedFixture.componentInstance;
-      updatedComponent.showArrow = false;
-      updatedFixture.detectChanges();
-      const updatedCompiled = updatedFixture.debugElement;
-      arrow = updatedCompiled.query(By.css('.dashboard-card__arrow'));
+      fixture.componentRef.setInput('showArrow', false);
+      fixture.detectChanges();
+      arrow = compiled.query(By.css('.dashboard-card__arrow'));
       expect(arrow).toBeFalsy();
     });
 
     it('should toggle clickable class dynamically', () => {
-      const newFixture = TestBed.createComponent(DashboardCardComponent);
-      const newComponent = newFixture.componentInstance;
-      newComponent.clickable = true;
-      newFixture.detectChanges();
-      let newCompiled = newFixture.debugElement;
-      let card = newCompiled.query(By.css('.dashboard-card'));
+      fixture.componentRef.setInput('clickable', true);
+      fixture.detectChanges();
+      let card = compiled.query(By.css('.dashboard-card'));
       expect(card.nativeElement.classList.contains('dashboard-card--clickable')).toBe(true);
 
-      // Create a fresh component for testing dynamic update
-      const updatedFixture = TestBed.createComponent(DashboardCardComponent);
-      const updatedComponent = updatedFixture.componentInstance;
-      updatedComponent.clickable = false;
-      updatedFixture.detectChanges();
-      const updatedCompiled = updatedFixture.debugElement;
-      card = updatedCompiled.query(By.css('.dashboard-card'));
+      fixture.componentRef.setInput('clickable', false);
+      fixture.detectChanges();
+      card = compiled.query(By.css('.dashboard-card'));
       expect(card.nativeElement.classList.contains('dashboard-card--clickable')).toBe(false);
     });
   });
