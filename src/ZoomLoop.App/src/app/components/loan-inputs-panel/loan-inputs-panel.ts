@@ -1,7 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LoanCalculation, LOAN_TERM_OPTIONS } from '../../models';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'zl-loan-inputs-panel',
@@ -28,8 +29,9 @@ import { LoanCalculation, LOAN_TERM_OPTIONS } from '../../models';
   templateUrl: './loan-inputs-panel.html',
   styleUrls: ['./loan-inputs-panel.scss']
 })
-export class LoanInputsPanel implements OnInit {
+export class LoanInputsPanel implements OnInit, OnDestroy {
   private readonly _fb = inject(FormBuilder);
+  private readonly _destroy$ = new Subject<void>();
 
   form!: FormGroup;
   loanTermOptions = LOAN_TERM_OPTIONS;
@@ -44,13 +46,20 @@ export class LoanInputsPanel implements OnInit {
       termMonths: [60, [Validators.required]]
     });
 
-    // Subscribe to form changes to recalculate
-    this.form.valueChanges.subscribe(() => {
-      this.calculateLoan();
-    });
+    // Subscribe to form changes to recalculate (automatically cleaned up on destroy)
+    this.form.valueChanges
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(() => {
+        this.calculateLoan();
+      });
 
     // Initial calculation
     this.calculateLoan();
+  }
+
+  ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   get priceControl() {
@@ -110,8 +119,9 @@ export class LoanInputsPanel implements OnInit {
     }
   }
 
-  onDownPaymentInputChange(value: string | number): void {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+  onDownPaymentInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const numValue = parseFloat(input.value);
     if (!isNaN(numValue) && this.downPaymentControl) {
       const clampedValue = Math.min(numValue, this.maxDownPayment);
       if (clampedValue !== numValue) {

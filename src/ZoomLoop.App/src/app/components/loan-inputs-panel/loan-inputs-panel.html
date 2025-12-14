@@ -63,7 +63,7 @@
           step="1000"
           placeholder="10000"
           aria-label="Down payment in dollars"
-          (input)="onDownPaymentInputChange($any($event.target).value)"
+          (input)="onDownPaymentInputChange($event)"
           (keydown.arrowup)="incrementField('downPayment')"
           (keydown.arrowdown)="decrementField('downPayment')"
         />

@@ -195,20 +195,29 @@ describe('LoanInputsPanel', () => {
 
     it('should clamp down payment input to max price', () => {
       component.form.patchValue({ price: 30000 });
-      component.onDownPaymentInputChange(40000);
+      const mockEvent = {
+        target: { value: '40000' }
+      } as unknown as Event;
+      component.onDownPaymentInputChange(mockEvent);
       expect(component.form.get('downPayment')?.value).toBe(30000);
     });
 
     it('should handle string input for down payment', () => {
       component.form.patchValue({ price: 50000, downPayment: 10000 });
-      component.onDownPaymentInputChange('12000');
+      const mockEvent = {
+        target: { value: '12000' }
+      } as unknown as Event;
+      component.onDownPaymentInputChange(mockEvent);
       // Value should remain unchanged when input is under max (clamping only applies when over max)
       expect(component.form.get('downPayment')?.value).toBe(10000);
     });
 
     it('should handle invalid string input for down payment', () => {
       const currentValue = component.form.get('downPayment')?.value;
-      component.onDownPaymentInputChange('invalid');
+      const mockEvent = {
+        target: { value: 'invalid' }
+      } as unknown as Event;
+      component.onDownPaymentInputChange(mockEvent);
       // Should not change the value for invalid input
       expect(component.form.get('downPayment')?.value).toBe(currentValue);
     });
