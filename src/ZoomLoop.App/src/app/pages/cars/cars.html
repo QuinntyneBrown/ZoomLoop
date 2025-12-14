@@ -5,6 +5,7 @@
 
   <div class="page-content">
     <zl-search-input 
+      [initialFilters]="initialFilters()"
       (search)="onSearch($event)">
     </zl-search-input>
 
