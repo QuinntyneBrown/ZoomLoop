@@ -1,0 +1,55 @@
+<div class="zl-login-form">
+  <h2 class="zl-login-form__title">
+    Sign in to ZoomLoop
+  </h2>
+
+  <form class="zl-login-form__form" novalidate autocomplete='off' spellcheck='false' [formGroup]='form' (ngSubmit)="handleSubmit()">
+    <div class="zl-login-form__field">
+      <zl-input
+        type="text"
+        label="Username"
+        id="username"
+        placeholder="Enter your username"
+        formControlName="username"
+        [required]="true"
+        autocomplete="username"
+      ></zl-input>
+      @if (form.get('username')?.invalid && form.get('username')?.touched) {
+        <span class="zl-login-form__error">Username is required</span>
+      }
+    </div>
+
+    <div class="zl-login-form__field">
+      <zl-input
+        type="password"
+        label="Password"
+        id="password"
+        placeholder="Enter your password"
+        formControlName="password"
+        [required]="true"
+        autocomplete="current-password"
+      ></zl-input>
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <span class="zl-login-form__error">Password is required</span>
+      }
+    </div>
+
+    <div class="zl-login-form__checkbox">
+      <label class="zl-login-form__checkbox-label">
+        <input type="checkbox" formControlName="rememberMe" class="zl-login-form__checkbox-input">
+        <span>Remember Me</span>
+      </label>
+    </div>
+
+    <div class="zl-login-form__actions">
+      <zl-button
+        type="submit"
+        variant="primary"
+        [block]="true"
+        [disabled]="!form.valid"
+      >
+        Sign In
+      </zl-button>
+    </div>
+  </form>
+</div>

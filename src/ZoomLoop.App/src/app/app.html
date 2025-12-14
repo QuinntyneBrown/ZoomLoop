@@ -1,4 +1,12 @@
-<zl-navbar></zl-navbar>
+<zl-navbar>
+  <zl-button 
+    variant="primary" 
+    size="normal"
+    (buttonClick)="openLoginDialog()"
+  >
+    Sign In
+  </zl-button>
+</zl-navbar>
 
 <h1>Welcome to ZoomLoop</h1>
 
@@ -26,3 +34,5 @@
     { label: 'Terms', url: '/terms' }
   ]"
 />
+
+<zl-login-dialog></zl-login-dialog>
