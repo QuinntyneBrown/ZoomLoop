@@ -15,17 +15,18 @@ test.describe('Personal Info Page', () => {
         contentType: 'application/json',
         body: JSON.stringify({
           profile: {
+            profileImageUrl: 'https://example.com/photo.jpg',
             firstName: 'John',
             lastName: 'Doe',
-            email: 'john.doe@example.com',
             phoneNumber: '555-1234',
-            addressLine1: '123 Main St',
-            addressLine2: 'Apt 4B',
-            city: 'New York',
-            province: 'NY',
-            postalCode: '10001',
-            country: 'USA',
-            isVerified: true
+            dateOfBirth: '1990-01-01',
+            homeAddress: {
+              address1: '123 Main St',
+              address2: 'Apt 4B',
+              city: 'New York',
+              province: 'NY',
+              postalCode: '10001'
+            }
           }
         })
       });
@@ -40,31 +41,29 @@ test.describe('Personal Info Page', () => {
 
     // Check for form sections
     await expect(page.getByRole('heading', { name: /basic information/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /address/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /home address/i })).toBeVisible();
   });
 
   test('loads and displays existing profile data', async ({ page }) => {
     // Wait for the form to load
-    await page.waitForSelector('input[name="firstName"]', { state: 'visible' });
+    await page.waitForSelector('input[formcontrolname="firstName"]', { state: 'visible' });
 
     // Check that form fields are populated with existing data
     await expect(page.locator('input[formcontrolname="firstName"]')).toHaveValue('John');
     await expect(page.locator('input[formcontrolname="lastName"]')).toHaveValue('Doe');
-    await expect(page.locator('input[formcontrolname="email"]')).toHaveValue('john.doe@example.com');
     await expect(page.locator('input[formcontrolname="phoneNumber"]')).toHaveValue('555-1234');
   });
 
   test('loads and displays address data', async ({ page }) => {
     // Wait for the form to load
-    await page.waitForSelector('input[formcontrolname="addressLine1"]', { state: 'visible' });
+    await page.waitForSelector('input[formcontrolname="address1"]', { state: 'visible' });
 
     // Check that address fields are populated
-    await expect(page.locator('input[formcontrolname="addressLine1"]')).toHaveValue('123 Main St');
-    await expect(page.locator('input[formcontrolname="addressLine2"]')).toHaveValue('Apt 4B');
+    await expect(page.locator('input[formcontrolname="address1"]')).toHaveValue('123 Main St');
+    await expect(page.locator('input[formcontrolname="address2"]')).toHaveValue('Apt 4B');
     await expect(page.locator('input[formcontrolname="city"]')).toHaveValue('New York');
     await expect(page.locator('input[formcontrolname="province"]')).toHaveValue('NY');
     await expect(page.locator('input[formcontrolname="postalCode"]')).toHaveValue('10001');
-    await expect(page.locator('input[formcontrolname="country"]')).toHaveValue('USA');
   });
 
   test('validates required fields', async ({ page }) => {
@@ -77,19 +76,6 @@ test.describe('Personal Info Page', () => {
 
     // Check for validation error
     await expect(page.getByText(/first name is required/i)).toBeVisible();
-  });
-
-  test('validates email format', async ({ page }) => {
-    // Wait for the form to load
-    await page.waitForSelector('input[formcontrolname="email"]', { state: 'visible' });
-
-    // Enter invalid email
-    await page.locator('input[formcontrolname="email"]').clear();
-    await page.locator('input[formcontrolname="email"]').fill('invalid-email');
-    await page.locator('input[formcontrolname="email"]').blur();
-
-    // Check for validation error
-    await expect(page.getByText(/please enter a valid email address/i)).toBeVisible();
   });
 
   test('can update profile information', async ({ page }) => {

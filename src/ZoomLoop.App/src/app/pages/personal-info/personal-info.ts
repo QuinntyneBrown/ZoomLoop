@@ -46,17 +46,17 @@ export class PersonalInfo implements OnInit {
 
   ngOnInit() {
     this.form = this._fb.group({
+      profileImageUrl: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', Validators.required],
-      address: this._fb.group({
-        addressLine1: [''],
-        addressLine2: [''],
+      dateOfBirth: ['', Validators.required],
+      homeAddress: this._fb.group({
+        address1: [''],
+        address2: [''],
         city: [''],
         province: [''],
-        postalCode: [''],
-        country: ['']
+        postalCode: ['']
       })
     });
 
@@ -72,18 +72,12 @@ export class PersonalInfo implements OnInit {
       
       if (profile) {
         this.form.patchValue({
+          profileImageUrl: profile.profileImageUrl,
           firstName: profile.firstName,
           lastName: profile.lastName,
-          email: profile.email,
           phoneNumber: profile.phoneNumber,
-          address: {
-            addressLine1: profile.addressLine1,
-            addressLine2: profile.addressLine2,
-            city: profile.city,
-            province: profile.province,
-            postalCode: profile.postalCode,
-            country: profile.country
-          }
+          dateOfBirth: profile.dateOfBirth,
+          homeAddress: profile.homeAddress
         });
       }
     } catch (error: any) {
@@ -107,20 +101,14 @@ export class PersonalInfo implements OnInit {
 
     try {
       const formValue = this.form.value;
-      const address = formValue.address as Address;
 
       const profile: Profile = {
+        profileImageUrl: formValue.profileImageUrl || '',
         firstName: formValue.firstName,
         lastName: formValue.lastName,
-        email: formValue.email,
         phoneNumber: formValue.phoneNumber,
-        addressLine1: address.addressLine1,
-        addressLine2: address.addressLine2,
-        city: address.city,
-        province: address.province,
-        postalCode: address.postalCode,
-        country: address.country,
-        isVerified: false
+        dateOfBirth: formValue.dateOfBirth,
+        homeAddress: formValue.homeAddress as Address
       };
 
       await firstValueFrom(this._profileService.updateProfile(profile));

@@ -13,18 +13,18 @@ describe('ProfileService', () => {
 
   const mockProfile: Profile = {
     profileId: '123',
-    userId: '456',
+    profileImageUrl: 'https://example.com/photo.jpg',
     firstName: 'John',
     lastName: 'Doe',
-    email: 'john.doe@example.com',
     phoneNumber: '555-1234',
-    addressLine1: '123 Main St',
-    addressLine2: 'Apt 4B',
-    city: 'New York',
-    province: 'NY',
-    postalCode: '10001',
-    country: 'USA',
-    isVerified: true
+    dateOfBirth: new Date('1990-01-01'),
+    homeAddress: {
+      address1: '123 Main St',
+      address2: 'Apt 4B',
+      city: 'New York',
+      province: 'NY',
+      postalCode: '10001'
+    }
   };
 
   beforeEach(() => {

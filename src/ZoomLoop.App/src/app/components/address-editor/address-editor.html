@@ -3,7 +3,7 @@
     <mat-label>Address Line 1</mat-label>
     <input
       matInput
-      formControlName="addressLine1"
+      formControlName="address1"
       placeholder="Street address"
       (input)="onAddressSearch($event)"
       (blur)="markAsTouched()"
@@ -14,7 +14,7 @@
     <mat-label>Address Line 2</mat-label>
     <input
       matInput
-      formControlName="addressLine2"
+      formControlName="address2"
       placeholder="Apartment, suite, etc. (optional)"
       (blur)="markAsTouched()"
     />
@@ -36,11 +36,6 @@
     <mat-form-field appearance="outline" class="form-field-flex">
       <mat-label>Postal Code</mat-label>
       <input matInput formControlName="postalCode" placeholder="Postal/ZIP Code" (blur)="markAsTouched()" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="form-field-flex">
-      <mat-label>Country</mat-label>
-      <input matInput formControlName="country" placeholder="Country" (blur)="markAsTouched()" />
     </mat-form-field>
   </div>
 </div>

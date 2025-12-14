@@ -33,24 +33,22 @@ describe('AddressEditor', () => {
 
     it('should initialize form with empty values', () => {
       const formValue = component.form.value;
-      expect(formValue.addressLine1).toBe('');
-      expect(formValue.addressLine2).toBe('');
+      expect(formValue.address1).toBe('');
+      expect(formValue.address2).toBe('');
       expect(formValue.city).toBe('');
       expect(formValue.province).toBe('');
       expect(formValue.postalCode).toBe('');
-      expect(formValue.country).toBe('');
     });
   });
 
   describe('ControlValueAccessor', () => {
     it('should write value to form', () => {
       const address: Address = {
-        addressLine1: '123 Main St',
-        addressLine2: 'Apt 4B',
+        address1: '123 Main St',
+        address2: 'Apt 4B',
         city: 'New York',
         province: 'NY',
-        postalCode: '10001',
-        country: 'USA'
+        postalCode: '10001'
       };
 
       component.writeValue(address);
@@ -60,19 +58,18 @@ describe('AddressEditor', () => {
 
     it('should reset form when writeValue is called with null', () => {
       const address: Address = {
-        addressLine1: '123 Main St',
-        addressLine2: 'Apt 4B',
+        address1: '123 Main St',
+        address2: 'Apt 4B',
         city: 'New York',
         province: 'NY',
-        postalCode: '10001',
-        country: 'USA'
+        postalCode: '10001'
       };
 
       component.writeValue(address);
-      expect(component.form.value.addressLine1).toBe('123 Main St');
+      expect(component.form.value.address1).toBe('123 Main St');
 
       component.writeValue(null);
-      expect(component.form.value.addressLine1).toBeNull();
+      expect(component.form.value.address1).toBeNull();
     });
 
     it('should register onChange callback', () => {
@@ -125,12 +122,12 @@ describe('AddressEditor', () => {
       });
 
       component.form.patchValue({
-        addressLine1: '321 Pine St',
+        address1: '321 Pine St',
         city: 'Seattle'
       });
 
       expect(capturedValue).toBeTruthy();
-      expect(capturedValue.addressLine1).toBe('321 Pine St');
+      expect(capturedValue.address1).toBe('321 Pine St');
       expect(capturedValue.city).toBe('Seattle');
     });
   });

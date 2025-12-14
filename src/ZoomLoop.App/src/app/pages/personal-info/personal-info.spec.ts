@@ -18,17 +18,18 @@ describe('PersonalInfo', () => {
   let mockSnackBar: any;
 
   const mockProfile: Profile = {
+    profileImageUrl: 'https://example.com/photo.jpg',
     firstName: 'John',
     lastName: 'Doe',
-    email: 'john.doe@example.com',
     phoneNumber: '555-1234',
-    addressLine1: '123 Main St',
-    addressLine2: 'Apt 4B',
-    city: 'New York',
-    province: 'NY',
-    postalCode: '10001',
-    country: 'USA',
-    isVerified: true
+    dateOfBirth: new Date('1990-01-01'),
+    homeAddress: {
+      address1: '123 Main St',
+      address2: 'Apt 4B',
+      city: 'New York',
+      province: 'NY',
+      postalCode: '10001'
+    }
   };
 
   beforeEach(async () => {
@@ -67,11 +68,12 @@ describe('PersonalInfo', () => {
     it('should initialize form on ngOnInit', () => {
       fixture.detectChanges();
       expect(component.form).toBeDefined();
+      expect(component.form.get('profileImageUrl')).toBeDefined();
       expect(component.form.get('firstName')).toBeDefined();
       expect(component.form.get('lastName')).toBeDefined();
-      expect(component.form.get('email')).toBeDefined();
       expect(component.form.get('phoneNumber')).toBeDefined();
-      expect(component.form.get('address')).toBeDefined();
+      expect(component.form.get('dateOfBirth')).toBeDefined();
+      expect(component.form.get('homeAddress')).toBeDefined();
     });
 
     it('should load profile on initialization', async () => {
@@ -81,15 +83,15 @@ describe('PersonalInfo', () => {
       expect(mockProfileService.getCurrentProfile).toHaveBeenCalled();
       expect(component.form.value.firstName).toBe('John');
       expect(component.form.value.lastName).toBe('Doe');
-      expect(component.form.value.email).toBe('john.doe@example.com');
+      expect(component.form.value.phoneNumber).toBe('555-1234');
     });
 
     it('should populate address fields from profile', async () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      const address = component.form.value.address;
-      expect(address.addressLine1).toBe('123 Main St');
+      const address = component.form.value.homeAddress;
+      expect(address.address1).toBe('123 Main St');
       expect(address.city).toBe('New York');
       expect(address.postalCode).toBe('10001');
     });
@@ -118,21 +120,6 @@ describe('PersonalInfo', () => {
       expect(lastNameControl?.hasError('required')).toBe(false);
     });
 
-    it('should require email', () => {
-      const emailControl = component.form.get('email');
-      emailControl?.setValue('');
-      expect(emailControl?.hasError('required')).toBe(true);
-    });
-
-    it('should validate email format', () => {
-      const emailControl = component.form.get('email');
-      emailControl?.setValue('invalid-email');
-      expect(emailControl?.hasError('email')).toBe(true);
-
-      emailControl?.setValue('valid@email.com');
-      expect(emailControl?.hasError('email')).toBe(false);
-    });
-
     it('should require phoneNumber', () => {
       const phoneControl = component.form.get('phoneNumber');
       phoneControl?.setValue('');
@@ -140,6 +127,15 @@ describe('PersonalInfo', () => {
 
       phoneControl?.setValue('555-1234');
       expect(phoneControl?.hasError('required')).toBe(false);
+    });
+
+    it('should require dateOfBirth', () => {
+      const dobControl = component.form.get('dateOfBirth');
+      dobControl?.setValue('');
+      expect(dobControl?.hasError('required')).toBe(true);
+
+      dobControl?.setValue('1990-01-01');
+      expect(dobControl?.hasError('required')).toBe(false);
     });
   });
 
@@ -165,16 +161,17 @@ describe('PersonalInfo', () => {
 
     it('should submit when form is valid', async () => {
       component.form.patchValue({
+        profileImageUrl: 'https://example.com/new-photo.jpg',
         firstName: 'Jane',
         lastName: 'Smith',
-        email: 'jane@example.com',
         phoneNumber: '555-5678',
-        address: {
-          addressLine1: '456 Oak Ave',
+        dateOfBirth: new Date('1995-05-05'),
+        homeAddress: {
+          address1: '456 Oak Ave',
+          address2: '',
           city: 'Boston',
           province: 'MA',
-          postalCode: '02101',
-          country: 'USA'
+          postalCode: '02101'
         }
       });
 

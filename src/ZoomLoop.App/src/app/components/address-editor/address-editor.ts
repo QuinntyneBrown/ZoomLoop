@@ -16,12 +16,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export interface Address {
-  addressLine1: string;
-  addressLine2?: string;
+  address1: string;
+  address2: string;
   city: string;
   province: string;
   postalCode: string;
-  country: string;
 }
 
 @Component({
@@ -54,12 +53,11 @@ export class AddressEditor implements ControlValueAccessor {
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      addressLine1: [''],
-      addressLine2: [''],
+      address1: [''],
+      address2: [''],
       city: [''],
       province: [''],
-      postalCode: [''],
-      country: ['']
+      postalCode: ['']
     });
 
     this.form.valueChanges.subscribe(value => {

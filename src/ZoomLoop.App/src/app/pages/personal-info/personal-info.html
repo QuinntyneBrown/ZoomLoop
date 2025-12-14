@@ -15,6 +15,11 @@
           <div class="form-section">
             <h3>Basic Information</h3>
             
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Profile Image URL</mat-label>
+              <input matInput formControlName="profileImageUrl" placeholder="https://..." />
+            </mat-form-field>
+
             <div class="form-row">
               <mat-form-field appearance="outline" class="form-field-flex">
                 <mat-label>First Name</mat-label>
@@ -34,28 +39,25 @@
             </div>
 
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Email</mat-label>
-              <input matInput type="email" formControlName="email" required />
-              @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
-                <mat-error>Email is required</mat-error>
-              }
-              @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
-                <mat-error>Please enter a valid email address</mat-error>
-              }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full-width">
               <mat-label>Phone Number</mat-label>
               <input matInput type="tel" formControlName="phoneNumber" required />
               @if (form.get('phoneNumber')?.hasError('required') && form.get('phoneNumber')?.touched) {
                 <mat-error>Phone number is required</mat-error>
               }
             </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Date of Birth</mat-label>
+              <input matInput type="date" formControlName="dateOfBirth" required />
+              @if (form.get('dateOfBirth')?.hasError('required') && form.get('dateOfBirth')?.touched) {
+                <mat-error>Date of birth is required</mat-error>
+              }
+            </mat-form-field>
           </div>
 
           <div class="form-section">
-            <h3>Address</h3>
-            <zl-address-editor formControlName="address"></zl-address-editor>
+            <h3>Home Address</h3>
+            <zl-address-editor formControlName="homeAddress"></zl-address-editor>
           </div>
 
           @if (errorMessage()) {
