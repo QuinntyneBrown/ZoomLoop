@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CarouselComponent, CarouselItem } from './carousel.component';
+import { Carousel, CarouselItem } from './carousel';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -234,7 +234,7 @@ describe('Carousel', () => {
     });
 
     it('should update active slide on navigation', () => {
-      const testFixture = TestBed.createComponent(CarouselComponent);
+      const testFixture = TestBed.createComponent(Carousel);
       const testComponent = testFixture.componentInstance;
       testComponent.items = mockItems;
       testComponent.autoPlay = false;
@@ -265,7 +265,7 @@ describe('Carousel', () => {
     });
 
     it('should hide indicators when showIndicators is false', () => {
-      const testFixture = TestBed.createComponent(CarouselComponent);
+      const testFixture = TestBed.createComponent(Carousel);
       const testComponent = testFixture.componentInstance;
       testComponent.items = mockItems;
       testComponent.showIndicators = false;
@@ -301,7 +301,7 @@ describe('Carousel', () => {
     });
 
     it('should show empty state when no items', () => {
-      const testFixture = TestBed.createComponent(CarouselComponent);
+      const testFixture = TestBed.createComponent(Carousel);
       const testComponent = testFixture.componentInstance;
       testComponent.items = [];
       testFixture.detectChanges();
@@ -325,7 +325,7 @@ describe('Carousel', () => {
     });
 
     it('should navigate to prev slide on prev button click', () => {
-      const testFixture = TestBed.createComponent(CarouselComponent);
+      const testFixture = TestBed.createComponent(Carousel);
       const testComponent = testFixture.componentInstance;
       testComponent.items = mockItems;
       testComponent.currentIndex = 1;
@@ -354,7 +354,7 @@ describe('Carousel', () => {
     });
 
     it('should update height dynamically', () => {
-      const testFixture = TestBed.createComponent(CarouselComponent);
+      const testFixture = TestBed.createComponent(Carousel);
       const testComponent = testFixture.componentInstance;
       testComponent.items = mockItems;
       testComponent.height = '300px';
@@ -364,7 +364,7 @@ describe('Carousel', () => {
       expect(container.nativeElement.style.height).toBe('300px');
       
       // Create a new fixture for the second part of the test
-      const testFixture2 = TestBed.createComponent(CarouselComponent);
+      const testFixture2 = TestBed.createComponent(Carousel);
       const testComponent2 = testFixture2.componentInstance;
       testComponent2.items = mockItems;
       testComponent2.height = '600px';
@@ -413,7 +413,7 @@ describe('Carousel', () => {
     });
 
     it('should use default alt text when not provided', () => {
-      const testFixture = TestBed.createComponent(CarouselComponent);
+      const testFixture = TestBed.createComponent(Carousel);
       const testComponent = testFixture.componentInstance;
       const itemWithoutAlt: CarouselItem = {
         imageUrl: 'https://example.com/image.jpg',
