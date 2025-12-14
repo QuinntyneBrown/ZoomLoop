@@ -282,6 +282,85 @@ public class VehicleIngestTests
         Assert.That(result.Vehicle.Images[2].DisplayOrder, Is.EqualTo(3));
     }
 
+    [Test]
+    public async Task ShouldUpdateExistingVehicleWhenVINExists()
+    {
+        // Arrange - Create and save an existing vehicle first
+        var existingMake = new Make
+        {
+            MakeId = Guid.NewGuid(),
+            Name = "Toyota",
+            LogoUrl = "toyota-logo.png",
+            IsActive = true
+        };
+        _context.Makes.Add(existingMake);
+
+        var existingModel = new VehicleModel
+        {
+            VehicleModelId = Guid.NewGuid(),
+            MakeId = existingMake.MakeId,
+            Name = "Camry",
+            Description = "Sedan",
+            IsActive = true
+        };
+        _context.VehicleModels.Add(existingModel);
+
+        var existingVehicle = new Vehicle
+        {
+            VehicleId = Guid.NewGuid(),
+            VIN = "1HGBH41JXMN109186",
+            StockNumber = "OLD123",
+            MakeId = existingMake.MakeId,
+            VehicleModelId = existingModel.VehicleModelId,
+            Year = 2020,
+            Doors = 2,
+            Description = "Old description"
+        };
+        _context.Vehicles.Add(existingVehicle);
+        await _context.SaveChangesAsync();
+        
+        var existingVehicleId = existingVehicle.VehicleId;
+
+        // Arrange - Setup ingestion result with SAME make/model to avoid creating new ones
+        var ingestionResult = new VehicleIngestionResult
+        {
+            VIN = "1HGBH41JXMN109186",
+            Year = 2023,
+            Make = "Toyota", // Same make
+            Model = "Camry", // Same model
+            InteriorCondition = "Good",
+            ExteriorCondition = "Excellent",
+            NumberOfDoors = 4,
+            Description = "Updated vehicle with new information from AI analysis."
+        };
+
+        _vehicleIngestionService
+            .IngestVehicleAsync(Arg.Any<VehicleIngestionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(ingestionResult);
+
+        var handler = new VehicleIngestHandler(_context, _vehicleIngestionService);
+
+        var imageFile = CreateMockFormFile("test-image.jpg", "image/jpeg", new byte[] { 1, 2, 3 });
+        var request = new VehicleIngestRequest(new List<IFormFile> { imageFile });
+
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Vehicle.VehicleId, Is.EqualTo(existingVehicleId));
+        Assert.That(result.Vehicle.VIN, Is.EqualTo("1HGBH41JXMN109186"));
+        Assert.That(result.Vehicle.Year, Is.EqualTo(2023));
+        Assert.That(result.Vehicle.Doors, Is.EqualTo(4));
+        Assert.That(result.Vehicle.Description, Is.EqualTo("Updated vehicle with new information from AI analysis."));
+
+        var vehicles = await _context.Vehicles.ToListAsync();
+        Assert.That(vehicles, Has.Count.EqualTo(1)); // Should still be only 1 vehicle
+        Assert.That(vehicles[0].VehicleId, Is.EqualTo(existingVehicleId));
+        Assert.That(vehicles[0].Year, Is.EqualTo(2023)); // Updated
+        Assert.That(vehicles[0].Doors, Is.EqualTo(4)); // Updated
+    }
+
     private static IFormFile CreateMockFormFile(string fileName, string contentType, byte[] content)
     {
         var stream = new MemoryStream(content);

@@ -69,35 +69,51 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
             _context.VehicleModels.Add(vehicleModel);
         }
 
-        // Create new Vehicle entity
-        var vehicle = new Vehicle
+        // Find or create Vehicle by VIN
+        var vehicle = await _context.Vehicles
+            .FirstOrDefaultAsync(v => v.VIN == ingestionResult.VIN, cancellationToken);
+
+        if (vehicle == null)
         {
-            VehicleId = Guid.NewGuid(),
-            VIN = ingestionResult.VIN,
-            StockNumber = string.Empty,
-            MakeId = make.MakeId,
-            VehicleModelId = vehicleModel.VehicleModelId,
-            Year = ingestionResult.Year,
-            Trim = string.Empty,
-            Mileage = 0,
-            ExteriorColor = string.Empty,
-            InteriorColor = string.Empty,
-            Transmission = string.Empty,
-            FuelType = string.Empty,
-            DriveType = string.Empty,
-            BodyType = string.Empty,
-            Doors = ingestionResult.NumberOfDoors,
-            Seats = 0,
-            Description = ingestionResult.Description,
-            IsNew = false,
-            IsCertified = false
-        };
+            // Create new Vehicle entity
+            vehicle = new Vehicle
+            {
+                VehicleId = Guid.NewGuid(),
+                VIN = ingestionResult.VIN,
+                StockNumber = string.Empty,
+                MakeId = make.MakeId,
+                VehicleModelId = vehicleModel.VehicleModelId,
+                Year = ingestionResult.Year,
+                Trim = string.Empty,
+                Mileage = 0,
+                ExteriorColor = string.Empty,
+                InteriorColor = string.Empty,
+                Transmission = string.Empty,
+                FuelType = string.Empty,
+                DriveType = string.Empty,
+                BodyType = string.Empty,
+                Doors = ingestionResult.NumberOfDoors,
+                Seats = 0,
+                Description = ingestionResult.Description,
+                IsNew = false,
+                IsCertified = false
+            };
+            _context.Vehicles.Add(vehicle);
+        }
+        else
+        {
+            // Update existing Vehicle entity
+            vehicle.MakeId = make.MakeId;
+            vehicle.VehicleModelId = vehicleModel.VehicleModelId;
+            vehicle.Year = ingestionResult.Year;
+            vehicle.Doors = ingestionResult.NumberOfDoors;
+            vehicle.Description = ingestionResult.Description;
+        }
 
         // Create VehicleImage entities and DigitalAssets for uploaded images
         CreateVehicleImagesAndAssets(request.Images, vehicle);
 
-        // Add vehicle to database and save all changes in a single transaction
-        _context.Vehicles.Add(vehicle);
+        // Save all changes in a single transaction
         await _context.SaveChangesAsync(cancellationToken);
 
         return new VehicleIngestResponse { Vehicle = vehicle.ToDto() };
@@ -149,7 +165,7 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
                     CreatedDate = DateTime.UtcNow
                 };
 
-                vehicle.Images.Add(vehicleImage);
+                _context.VehicleImages.Add(vehicleImage);
             }
         }
     }
