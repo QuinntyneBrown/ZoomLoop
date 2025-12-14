@@ -26,7 +26,7 @@ public class SearchVehiclesHandler : IRequestHandler<SearchVehiclesRequest, Sear
         var page = Math.Max(1, request.Page);
         var pageSize = Math.Clamp(request.PageSize, 1, 100);
 
-        // Build query
+        // Build query with proper includes to avoid N+1
         var query = BuildQuery(request.Filters);
 
         // Get total count
@@ -35,52 +35,63 @@ public class SearchVehiclesHandler : IRequestHandler<SearchVehiclesRequest, Sear
         // Apply sorting
         query = ApplySorting(query, request.Sort);
 
-        // Apply pagination
+        // Apply pagination and get results with related data
         var skip = (page - 1) * pageSize;
-        var items = await query
+        var vehicles = await query
             .Skip(skip)
             .Take(pageSize)
-            .Select(v => new
-            {
-                Vehicle = v,
-                Listing = _context.Listings
-                    .Where(l => l.VehicleId == v.VehicleId)
-                    .OrderByDescending(l => l.ListedDate)
-                    .FirstOrDefault(),
-                History = _context.VehicleHistories
-                    .Where(h => h.VehicleId == v.VehicleId)
-                    .OrderByDescending(h => h.ReportDate)
-                    .FirstOrDefault(),
-                PrimaryImage = v.Images
-                    .Where(i => i.IsPrimary)
-                    .Select(i => i.ImageUrl)
-                    .FirstOrDefault() ?? v.Images
-                    .OrderBy(i => i.DisplayOrder)
-                    .Select(i => i.ImageUrl)
-                    .FirstOrDefault()
-            })
             .ToListAsync(cancellationToken);
 
-        var results = items.Select(x => new VehicleSearchResultDto
+        // Get vehicle IDs for efficient querying of related data
+        var vehicleIds = vehicles.Select(v => v.VehicleId).ToList();
+
+        // Fetch listings in a single query
+        var listings = await _context.Listings
+            .Where(l => vehicleIds.Contains(l.VehicleId))
+            .ToListAsync(cancellationToken);
+
+        var listingsByVehicle = listings
+            .GroupBy(l => l.VehicleId)
+            .ToDictionary(g => g.Key, g => g.OrderByDescending(l => l.ListedDate).First());
+
+        // Fetch histories in a single query
+        var histories = await _context.VehicleHistories
+            .Where(h => vehicleIds.Contains(h.VehicleId))
+            .ToListAsync(cancellationToken);
+
+        var historyByVehicle = histories
+            .GroupBy(h => h.VehicleId)
+            .ToDictionary(g => g.Key, g => g.OrderByDescending(h => h.ReportDate).First());
+
+        // Map to DTOs
+        var results = vehicles.Select(v =>
         {
-            VehicleId = x.Vehicle.VehicleId,
-            VIN = x.Vehicle.VIN,
-            StockNumber = x.Vehicle.StockNumber,
-            Make = x.Vehicle.Make?.Name ?? string.Empty,
-            Model = x.Vehicle.VehicleModel?.Name ?? string.Empty,
-            Year = x.Vehicle.Year,
-            Trim = x.Vehicle.Trim,
-            Mileage = x.Vehicle.Mileage,
-            ExteriorColor = x.Vehicle.ExteriorColor,
-            InteriorColor = x.Vehicle.InteriorColor,
-            Transmission = x.Vehicle.Transmission,
-            Doors = x.Vehicle.Doors,
-            Price = x.Listing?.Price,
-            IsNew = x.Vehicle.IsNew,
-            IsCertified = x.Vehicle.IsCertified,
-            AccidentFree = x.History != null ? !x.History.HasAccidents : null,
-            PrimaryImageUrl = x.PrimaryImage,
-            ListedDate = x.Listing?.ListedDate
+            listingsByVehicle.TryGetValue(v.VehicleId, out var listing);
+            historyByVehicle.TryGetValue(v.VehicleId, out var history);
+            var primaryImage = v.Images.FirstOrDefault(i => i.IsPrimary)?.ImageUrl
+                ?? v.Images.OrderBy(i => i.DisplayOrder).FirstOrDefault()?.ImageUrl;
+
+            return new VehicleSearchResultDto
+            {
+                VehicleId = v.VehicleId,
+                VIN = v.VIN,
+                StockNumber = v.StockNumber,
+                Make = v.Make?.Name ?? string.Empty,
+                Model = v.VehicleModel?.Name ?? string.Empty,
+                Year = v.Year,
+                Trim = v.Trim,
+                Mileage = v.Mileage,
+                ExteriorColor = v.ExteriorColor,
+                InteriorColor = v.InteriorColor,
+                Transmission = v.Transmission,
+                Doors = v.Doors,
+                Price = listing?.Price,
+                IsNew = v.IsNew,
+                IsCertified = v.IsCertified,
+                AccidentFree = history != null ? !history.HasAccidents : null,
+                PrimaryImageUrl = primaryImage,
+                ListedDate = listing?.ListedDate
+            };
         }).ToList();
 
         return new SearchVehiclesResponse
@@ -181,28 +192,30 @@ public class SearchVehiclesHandler : IRequestHandler<SearchVehiclesRequest, Sear
         // Filter by price (requires joining with Listings)
         if (filters.Price != null)
         {
-            var vehiclesInPriceRange = _context.Listings.AsQueryable();
-            
-            if (filters.Price.Min.HasValue)
-                vehiclesInPriceRange = vehiclesInPriceRange.Where(l => l.Price >= filters.Price.Min.Value);
-            if (filters.Price.Max.HasValue)
-                vehiclesInPriceRange = vehiclesInPriceRange.Where(l => l.Price <= filters.Price.Max.Value);
-            
-            var vehicleIds = vehiclesInPriceRange.Select(l => l.VehicleId);
-            query = query.Where(v => vehicleIds.Contains(v.VehicleId));
+            query = from v in query
+                    join l in _context.Listings on v.VehicleId equals l.VehicleId
+                    where (!filters.Price.Min.HasValue || l.Price >= filters.Price.Min.Value) &&
+                          (!filters.Price.Max.HasValue || l.Price <= filters.Price.Max.Value)
+                    select v;
         }
 
         // Filter by accident-free (requires joining with VehicleHistory)
         if (filters.AccidentFree.HasValue)
         {
-            var accidentFreeVehicles = _context.VehicleHistories
-                .Where(h => !h.HasAccidents)
-                .Select(h => h.VehicleId);
-            
             if (filters.AccidentFree.Value)
-                query = query.Where(v => accidentFreeVehicles.Contains(v.VehicleId));
+            {
+                query = from v in query
+                        join h in _context.VehicleHistories on v.VehicleId equals h.VehicleId
+                        where !h.HasAccidents
+                        select v;
+            }
             else
-                query = query.Where(v => !accidentFreeVehicles.Contains(v.VehicleId));
+            {
+                query = from v in query
+                        join h in _context.VehicleHistories on v.VehicleId equals h.VehicleId
+                        where h.HasAccidents
+                        select v;
+            }
         }
 
         return query;

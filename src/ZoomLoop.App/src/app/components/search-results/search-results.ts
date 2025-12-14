@@ -110,7 +110,7 @@ export class SearchResults implements OnInit {
     const request: SearchVehiclesRequest = {
       filters,
       page: 1,
-      pageSize: 100 // Fetch more for client-side filtering
+      pageSize: 50 // Fetch reasonable amount for client-side filtering
     };
 
     this._vehicleService.searchVehicles(request).subscribe({
