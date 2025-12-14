@@ -71,6 +71,9 @@ public class PaymentCalculator : IPaymentCalculator
     /// Calculates the power of a decimal number with high precision.
     /// Used for amortization calculations.
     /// Uses Math.Pow for conversion as decimal doesn't have native power function.
+    /// Note: Converting to double and back is acceptable for typical financial calculations
+    /// where the result is rounded to cents. Double precision (~15-17 digits) is sufficient
+    /// for loan amounts up to millions with standard APR ranges (0-25%) and terms (1-360 months).
     /// </summary>
     /// <param name="baseValue">The base value</param>
     /// <param name="exponent">The exponent (can be negative)</param>
