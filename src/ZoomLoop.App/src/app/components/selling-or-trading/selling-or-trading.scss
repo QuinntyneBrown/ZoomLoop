@@ -1,0 +1,150 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+.selling-or-trading {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+  .trading-card {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+    @media (min-width: 768px) {
+      margin-top: 40px;
+    }
+  }
+
+  mat-card-header {
+    margin-bottom: 24px;
+
+    mat-card-title {
+      font-size: 28px;
+      font-weight: 500;
+      color: #1a237e;
+      text-align: center;
+    }
+  }
+
+  mat-card-content {
+    padding: 16px;
+  }
+
+  .full-width {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .error-message {
+    color: #d32f2f;
+    margin-bottom: 16px;
+    padding: 12px;
+    background-color: #ffebee;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+
+    button {
+      min-width: 200px;
+      height: 48px;
+      font-size: 16px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      mat-spinner {
+        display: inline-block;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .vehicle-info {
+    margin-bottom: 32px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+
+    h3 {
+      margin: 0 0 12px 0;
+      font-size: 20px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .vehicle-description {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+
+  .valuation-result {
+    text-align: center;
+
+    h3 {
+      margin: 0 0 24px 0;
+      font-size: 24px;
+      font-weight: 500;
+      color: #1a237e;
+    }
+
+    .fair-value {
+      margin-bottom: 32px;
+      padding: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+
+      .label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 18px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .value {
+        color: white;
+        font-size: 48px;
+        font-weight: 700;
+      }
+    }
+
+    .explanation {
+      margin-bottom: 32px;
+      padding: 24px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      text-align: left;
+
+      h4 {
+        margin: 0 0 16px 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: #424242;
+      }
+
+      p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #616161;
+      }
+    }
+  }
+}

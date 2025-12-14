@@ -12,6 +12,7 @@ using ZoomLoop.Core.Services.Email;
 using ZoomLoop.Core.Services.Financing;
 using ZoomLoop.Core.Services.Security;
 using ZoomLoop.Core.Services.VehicleIngestion;
+using ZoomLoop.Core.Services.VehicleValuation;
 using ZoomLoop.Infrastructure;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -96,6 +97,9 @@ public static class ConfigureServices
         });
         
         services.AddSingleton<IVehicleIngestionService, VehicleIngestionService>();
+
+        // Vehicle Valuation services
+        services.AddSingleton<IVehicleValuationService, VehicleValuationService>();
 
         // Financing services
         services.AddSingleton<IFinancingCalculator, FinancingCalculator>();
