@@ -1,0 +1,96 @@
+<div class="personal-info-page">
+  <mat-card class="personal-info-card">
+    <mat-card-header>
+      <mat-card-title>Personal Information</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (isLoading()) {
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Loading profile...</p>
+        </div>
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-section">
+            <h3>Basic Information</h3>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Profile Image URL</mat-label>
+              <input matInput formControlName="profileImageUrl" placeholder="https://..." />
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field-flex">
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="firstName" required />
+                @if (form.get('firstName')?.hasError('required') && form.get('firstName')?.touched) {
+                  <mat-error>First name is required</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field-flex">
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="lastName" required />
+                @if (form.get('lastName')?.hasError('required') && form.get('lastName')?.touched) {
+                  <mat-error>Last name is required</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Phone Number</mat-label>
+              <input matInput type="tel" formControlName="phoneNumber" required />
+              @if (form.get('phoneNumber')?.hasError('required') && form.get('phoneNumber')?.touched) {
+                <mat-error>Phone number is required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Date of Birth</mat-label>
+              <input matInput type="date" formControlName="dateOfBirth" required />
+              @if (form.get('dateOfBirth')?.hasError('required') && form.get('dateOfBirth')?.touched) {
+                <mat-error>Date of birth is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="form-section">
+            <h3>Home Address</h3>
+            <zl-address-editor formControlName="homeAddress"></zl-address-editor>
+          </div>
+
+          @if (errorMessage()) {
+            <div class="error-message">
+              {{ errorMessage() }}
+            </div>
+          }
+
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              type="button"
+              (click)="cancel()"
+              [disabled]="isSaving()"
+            >
+              Cancel
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="isSaving() || form.invalid"
+            >
+              @if (isSaving()) {
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Saving...</span>
+              } @else {
+                <span>Save Changes</span>
+              }
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

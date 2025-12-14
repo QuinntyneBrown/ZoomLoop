@@ -9,3 +9,4 @@ export * from './headers.interceptor';
 export * from './jwt.interceptor';
 export * from './local-storage.service';
 export * from './navigation.service';
+export * from './profile.service';

@@ -7,6 +7,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login').then(m => m.Login)
   },
   {
+    path: 'personal-info',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/personal-info').then(m => m.PersonalInfo)
+  },
+  {
     path: 'vehicles/create',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/vehicle-create').then(m => m.VehicleCreate)
