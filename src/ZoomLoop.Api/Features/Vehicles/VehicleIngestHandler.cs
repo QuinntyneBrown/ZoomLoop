@@ -59,7 +59,6 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
                 DisplayOrder = 0
             };
             _context.Makes.Add(make);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         // Find or create VehicleModel
@@ -77,7 +76,6 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
                 IsActive = true
             };
             _context.VehicleModels.Add(vehicleModel);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         // Create new Vehicle entity
@@ -138,7 +136,7 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
             }
         }
 
-        // Add vehicle to database
+        // Add vehicle to database and save all changes in a single transaction
         _context.Vehicles.Add(vehicle);
         await _context.SaveChangesAsync(cancellationToken);
 
