@@ -13,12 +13,3 @@ public class ProfileDto
     public DateTime DateOfBirth { get; set; }
     public AddressDto HomeAddress { get; set; } = new();
 }
-
-public class AddressDto
-{
-    public string Address1 { get; set; } = string.Empty;
-    public string Address2 { get; set; } = string.Empty;
-    public string City { get; set; } = string.Empty;
-    public string Province { get; set; } = string.Empty;
-    public string PostalCode { get; set; } = string.Empty;
-}

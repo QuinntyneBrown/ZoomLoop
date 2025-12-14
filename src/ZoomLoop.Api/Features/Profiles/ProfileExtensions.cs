@@ -21,18 +21,6 @@ public static class ProfileExtensions
         };
     }
 
-    public static AddressDto ToDto(this Address address)
-    {
-        return new AddressDto
-        {
-            Address1 = address.Address1,
-            Address2 = address.Address2,
-            City = address.City,
-            Province = address.Province,
-            PostalCode = address.PostalCode
-        };
-    }
-
     public static void UpdateFromDto(this Profile profile, ProfileDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto.HomeAddress);
