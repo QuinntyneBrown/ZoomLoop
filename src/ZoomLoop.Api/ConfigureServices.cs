@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ZoomLoop.Core;
 using ZoomLoop.Core.Services.Email;
+using ZoomLoop.Core.Services.Financing;
 using ZoomLoop.Core.Services.Security;
 using ZoomLoop.Core.Services.VehicleIngestion;
 using ZoomLoop.Infrastructure;
@@ -95,6 +96,9 @@ public static class ConfigureServices
         });
         
         services.AddSingleton<IVehicleIngestionService, VehicleIngestionService>();
+
+        // Financing services
+        services.AddSingleton<IFinancingCalculator, FinancingCalculator>();
 
         var allowedOrigins = configuration
             .GetSection("Cors:AllowedOrigins")
