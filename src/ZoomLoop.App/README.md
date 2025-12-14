@@ -2,6 +2,29 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
 
+## Configuration
+
+### Backend API URL
+
+The application is configured to communicate with a backend API. The API base URL is managed through environment configuration files:
+
+- **Development**: `src/environments/environment.development.ts` - configured to use `https://localhost:7217`
+- **Production**: `src/environments/environment.ts` - configured to use relative URLs (empty string)
+
+To change the backend URL for development:
+
+1. Open `src/environments/environment.development.ts`
+2. Update the `apiBaseUrl` property to your desired backend URL
+
+```typescript
+export const environment = {
+  production: false,
+  apiBaseUrl: 'https://localhost:7217'  // Change this to your backend URL
+};
+```
+
+The `ApiBaseUrlInterceptor` automatically prepends this base URL to all API requests that start with `/api/`.
+
 ## Development server
 
 To start a local development server, run:
