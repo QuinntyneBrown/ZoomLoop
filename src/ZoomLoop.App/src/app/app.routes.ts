@@ -25,8 +25,8 @@ export const routes: Routes = [
     loadComponent: () => import('./components/tabs/tabs.demo').then(m => m.TabsDemo)
   },
   {
-    path: 'demo/loan-inputs-panel',
-    loadComponent: () => import('./components/loan-inputs-panel/loan-inputs-panel.demo').then(m => m.LoanInputsPanelDemo)
+    path: 'demo/summary-card',
+    loadComponent: () => import('./components/summary-card/summary-card.demo').then(m => m.SummaryCardDemo)
   },
   {
     path: '',
