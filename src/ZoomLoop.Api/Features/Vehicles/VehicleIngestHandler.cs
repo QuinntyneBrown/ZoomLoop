@@ -116,7 +116,13 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
         // Save all changes in a single transaction
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new VehicleIngestResponse { Vehicle = vehicle.ToDto() };
+        // Reload the vehicle with images for the response DTO
+        var vehicleWithImages = await _context.Vehicles
+            .Include(v => v.Images)
+            .Include(v => v.Features)
+            .FirstAsync(v => v.VehicleId == vehicle.VehicleId, cancellationToken);
+
+        return new VehicleIngestResponse { Vehicle = vehicleWithImages.ToDto() };
     }
 
     private static async Task<List<byte[]>> ConvertImagesToByteArraysAsync(List<IFormFile> images, CancellationToken cancellationToken)

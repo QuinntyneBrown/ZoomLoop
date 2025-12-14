@@ -71,6 +71,8 @@ public class VehicleIngestTests
         Assert.That(result.Vehicle.Year, Is.EqualTo(2023));
         Assert.That(result.Vehicle.Doors, Is.EqualTo(4));
         Assert.That(result.Vehicle.Description, Is.EqualTo("A well-maintained Honda Civic in excellent condition."));
+        Assert.That(result.Vehicle.Images, Has.Count.EqualTo(1));
+        Assert.That(result.Vehicle.Images[0].IsPrimary, Is.True);
 
         var savedVehicle = await _context.Vehicles
             .Include(v => v.Images)
@@ -353,6 +355,7 @@ public class VehicleIngestTests
         Assert.That(result.Vehicle.Year, Is.EqualTo(2023));
         Assert.That(result.Vehicle.Doors, Is.EqualTo(4));
         Assert.That(result.Vehicle.Description, Is.EqualTo("Updated vehicle with new information from AI analysis."));
+        Assert.That(result.Vehicle.Images, Has.Count.EqualTo(1)); // Should have the newly added image
 
         var vehicles = await _context.Vehicles.ToListAsync();
         Assert.That(vehicles, Has.Count.EqualTo(1)); // Should still be only 1 vehicle
