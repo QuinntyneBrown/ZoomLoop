@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DashboardCardComponent } from './dashboard-card.component';
+import { DashboardCard } from './dashboard-card';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-describe('DashboardCardComponent', () => {
-  let component: DashboardCardComponent;
-  let fixture: ComponentFixture<DashboardCardComponent>;
+describe('DashboardCard', () => {
+  let component: DashboardCard;
+  let fixture: ComponentFixture<DashboardCard>;
   let compiled: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardCardComponent],
+      imports: [DashboardCard],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardCardComponent);
+    fixture = TestBed.createComponent(DashboardCard);
     component = fixture.componentInstance;
     compiled = fixture.debugElement;
   });
