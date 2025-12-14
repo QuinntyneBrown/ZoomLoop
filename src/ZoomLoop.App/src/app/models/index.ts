@@ -4,3 +4,4 @@
 export * from './user';
 export * from './vehicle';
 export * from './profile';
+export * from './loan';
