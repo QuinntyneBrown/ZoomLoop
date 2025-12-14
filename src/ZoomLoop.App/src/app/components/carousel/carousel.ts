@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface CarouselItem {
@@ -14,9 +14,9 @@ export interface CarouselItem {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './carousel.html',
-  styleUrls: ['./carousel.scss'],
+  styleUrl: './carousel.scss',
 })
-export class Carousel implements OnInit {
+export class Carousel implements OnInit, OnDestroy {
   @Input() items: CarouselItem[] = [];
   @Input() autoPlay = true;
   @Input() autoPlayInterval = 5000;
