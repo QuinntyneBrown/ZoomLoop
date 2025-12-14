@@ -44,6 +44,10 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
             entity.HasKey(e => e.UserId);
             entity.HasMany(e => e.Roles)
                 .WithMany(r => r.Users);
+            entity.HasOne<Profile>()
+                .WithOne()
+                .HasForeignKey<User>(u => u.CurrentProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -204,14 +208,6 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
         {
             entity.HasKey(e => e.ProfileId);
             entity.OwnsOne(e => e.HomeAddress);
-        });
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasOne<Profile>()
-                .WithOne()
-                .HasForeignKey<User>(u => u.CurrentProfileId)
-                .OnDelete(DeleteBehavior.NoAction);
         });
     }
 }

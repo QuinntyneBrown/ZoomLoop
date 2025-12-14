@@ -35,6 +35,8 @@ public static class ProfileExtensions
 
     public static void UpdateFromDto(this Profile profile, ProfileDto dto)
     {
+        ArgumentNullException.ThrowIfNull(dto.HomeAddress);
+        
         profile.ProfileImageUrl = dto.ProfileImageUrl;
         profile.FirstName = dto.FirstName;
         profile.LastName = dto.LastName;
