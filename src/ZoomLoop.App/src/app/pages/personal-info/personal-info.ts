@@ -51,12 +51,12 @@ export class PersonalInfo implements OnInit {
       lastName: ['', Validators.required],
       phoneNumber: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      homeAddress: this._fb.group({
-        address1: [''],
-        address2: [''],
-        city: [''],
-        province: [''],
-        postalCode: ['']
+      homeAddress: this._fb.control<Address>({
+        address1: '',
+        address2: '',
+        city: '',
+        province: '',
+        postalCode: ''
       })
     });
 
@@ -119,9 +119,9 @@ export class PersonalInfo implements OnInit {
       // this._router.navigate(['/']);
     } catch (error: any) {
       console.error('Error updating profile:', error);
-      const errorMsg = error?.error?.message || error?.message || 'Failed to update profile. Please try again.';
+      const errorMsg = 'Failed to update profile. Please try again.';
       this.errorMessage.set(errorMsg);
-      this._snackBar.open(errorMsg, 'Close', { duration: 5000 });
+      this._snackBar.open('Could not save profile changes', 'Close', { duration: 5000 });
     } finally {
       this.isSaving.set(false);
     }
