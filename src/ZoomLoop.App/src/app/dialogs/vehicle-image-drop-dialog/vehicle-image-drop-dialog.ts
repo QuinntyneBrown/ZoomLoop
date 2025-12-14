@@ -7,6 +7,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { firstValueFrom } from 'rxjs';
 import { VehicleService } from '../../core';
 import { Vehicle } from '../../models';
 
@@ -101,7 +102,7 @@ export class VehicleImageDropDialog {
     this.errorMessage.set(null);
 
     try {
-      const response = await this._vehicleService.ingestVehicle(files).toPromise();
+      const response = await firstValueFrom(this._vehicleService.ingestVehicle(files));
       this._dialogRef.close(response?.vehicle);
     } catch (error: any) {
       console.error('Error uploading vehicle images:', error);

@@ -34,7 +34,7 @@ describe('AdministratorCars', () => {
 
   it('should have correct display columns', () => {
     expect(component.displayedColumns).toEqual([
-      'image', 'year', 'make', 'model', 'vin', 'stockNumber', 'mileage', 'status', 'actions'
+      'image', 'year', 'vin', 'stockNumber', 'mileage', 'status', 'actions'
     ]);
   });
 

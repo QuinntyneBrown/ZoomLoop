@@ -42,7 +42,7 @@ export class AdministratorCars implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['image', 'year', 'make', 'model', 'vin', 'stockNumber', 'mileage', 'status', 'actions'];
+  displayedColumns: string[] = ['image', 'year', 'vin', 'stockNumber', 'mileage', 'status', 'actions'];
   dataSource = new MatTableDataSource<Vehicle>([]);
   
   isLoading = signal(true);
