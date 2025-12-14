@@ -12,6 +12,7 @@ export * from './navbar';
 export * from './price-tag';
 export * from './slider';
 export * from './stat';
+export * from './summary-card';
 export * from './timeline';
 export * from './vehicle-card';
 export * from './tabs/tabs';

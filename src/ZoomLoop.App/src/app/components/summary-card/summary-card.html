@@ -1,0 +1,56 @@
+<div class="summary-card" [class.summary-card--sticky]="sticky" role="article" aria-label="Loan Summary">
+  <div class="summary-card__header">
+    <h2 class="summary-card__title">Loan Summary</h2>
+  </div>
+
+  <div class="summary-card__content">
+    <!-- Monthly Payment - Primary metric -->
+    <div class="summary-card__primary">
+      <div class="summary-card__label">Monthly Payment</div>
+      <div class="summary-card__value summary-card__value--large">
+        {{ monthlyPayment | currency }}
+      </div>
+    </div>
+
+    <div class="summary-card__divider"></div>
+
+    <!-- Key metrics -->
+    <div class="summary-card__metrics">
+      <div class="summary-card__metric">
+        <div class="summary-card__label">Total Paid</div>
+        <div class="summary-card__value">{{ totalPaid | currency }}</div>
+      </div>
+
+      <div class="summary-card__metric">
+        <div class="summary-card__label">Total Interest</div>
+        <div class="summary-card__value">{{ totalInterest | currency }}</div>
+      </div>
+
+      <div class="summary-card__metric">
+        <div class="summary-card__label">Financed Principal</div>
+        <div class="summary-card__value">{{ financedPrincipal | currency }}</div>
+      </div>
+    </div>
+
+    <div class="summary-card__divider"></div>
+
+    <!-- Assumptions -->
+    <div class="summary-card__assumptions">
+      <div class="summary-card__assumptions-title">Key Assumptions</div>
+      <div class="summary-card__assumptions-grid">
+        <div class="summary-card__assumption">
+          <span class="summary-card__assumption-label">Term:</span>
+          <span class="summary-card__assumption-value">{{ term }} months</span>
+        </div>
+        <div class="summary-card__assumption">
+          <span class="summary-card__assumption-label">APR:</span>
+          <span class="summary-card__assumption-value">{{ apr | number: '1.2-2' }}%</span>
+        </div>
+        <div class="summary-card__assumption">
+          <span class="summary-card__assumption-label">Taxes/Fees:</span>
+          <span class="summary-card__assumption-value">{{ taxesAndFees | currency }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
