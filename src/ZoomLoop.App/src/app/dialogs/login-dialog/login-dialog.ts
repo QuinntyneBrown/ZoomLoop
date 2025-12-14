@@ -37,6 +37,8 @@ export class LoginDialog implements OnDestroy {
   }
 
   handleTryToLogin($event: { username: string, password: string, rememberMe: boolean }) {
+    // Note: Following the same pattern as the Login page component
+    // Storing passwords in localStorage is not recommended for production use
     this._localStorageService.put({ name: loginCredentialsKey, value: $event.rememberMe ? $event : null });
 
     this._authService
@@ -46,7 +48,12 @@ export class LoginDialog implements OnDestroy {
       })
       .pipe(
         takeUntil(this._destroyed$),
-        tap(_ => this.close())
+        tap({
+          next: () => this.close(),
+          error: () => {
+            // Keep dialog open on error - error handling should be done at a higher level
+          }
+        })
       )
       .subscribe();
   }

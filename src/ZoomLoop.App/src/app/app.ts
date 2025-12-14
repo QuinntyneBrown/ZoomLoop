@@ -24,6 +24,9 @@ export class App {
   protected readonly loginDialog = viewChild(LoginDialog);
 
   protected openLoginDialog() {
-    this.loginDialog()?.open();
+    const dialog = this.loginDialog();
+    if (dialog) {
+      dialog.open();
+    }
   }
 }
