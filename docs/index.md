@@ -108,6 +108,12 @@ Please see [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines on contributing 
 
 ## Documentation
 
+### Guides
+- [Getting Started](getting-started.md) - Setup and installation guide
+- [Architecture](architecture.md) - System architecture and design patterns
+- [Contributing](../CONTRIBUTING.md) - Contribution guidelines
+
+### Component Documentation
 - [Frontend README](../src/ZoomLoop.App/README.md)
 - [Infrastructure README](../src/ZoomLoop.Infrastructure/README.md)
 - [Vehicle Ingestion Service](../src/ZoomLoop.Core/Services/VehicleIngestion/README.md)
