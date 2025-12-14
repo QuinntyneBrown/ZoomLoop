@@ -18,8 +18,8 @@ export interface NavItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Navbar {
-  @Input() logoText = '';
-  @Input() logoImageUrl = '';
+  @Input() logoText = 'ZoomLoop';
+  @Input() logoImageUrl = 'logo.svg';
   @Input() navItems: NavItem[] = [];
   
   protected menuOpen = false;
