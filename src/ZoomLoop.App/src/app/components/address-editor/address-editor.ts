@@ -64,7 +64,6 @@ export class AddressEditor implements ControlValueAccessor {
 
     this.form.valueChanges.subscribe(value => {
       this.onChange(value);
-      this.onTouched();
     });
   }
 
@@ -101,7 +100,11 @@ export class AddressEditor implements ControlValueAccessor {
     if (searchValue && searchValue.length > 3) {
       // TODO: Integrate with address autocomplete API
       // Example: Google Places Autocomplete, Mapbox Geocoding, etc.
-      console.log('Address search:', searchValue);
     }
+  }
+
+  // Mark as touched when user interacts with the form
+  markAsTouched(): void {
+    this.onTouched();
   }
 }

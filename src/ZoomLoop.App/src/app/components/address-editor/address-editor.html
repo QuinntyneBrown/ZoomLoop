@@ -6,6 +6,7 @@
       formControlName="addressLine1"
       placeholder="Street address"
       (input)="onAddressSearch($event)"
+      (blur)="markAsTouched()"
     />
   </mat-form-field>
 
@@ -15,30 +16,31 @@
       matInput
       formControlName="addressLine2"
       placeholder="Apartment, suite, etc. (optional)"
+      (blur)="markAsTouched()"
     />
   </mat-form-field>
 
   <div class="form-row">
     <mat-form-field appearance="outline" class="form-field-flex">
       <mat-label>City</mat-label>
-      <input matInput formControlName="city" placeholder="City" />
+      <input matInput formControlName="city" placeholder="City" (blur)="markAsTouched()" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field-flex">
       <mat-label>Province/State</mat-label>
-      <input matInput formControlName="province" placeholder="Province or State" />
+      <input matInput formControlName="province" placeholder="Province or State" (blur)="markAsTouched()" />
     </mat-form-field>
   </div>
 
   <div class="form-row">
     <mat-form-field appearance="outline" class="form-field-flex">
       <mat-label>Postal Code</mat-label>
-      <input matInput formControlName="postalCode" placeholder="Postal/ZIP Code" />
+      <input matInput formControlName="postalCode" placeholder="Postal/ZIP Code" (blur)="markAsTouched()" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field-flex">
       <mat-label>Country</mat-label>
-      <input matInput formControlName="country" placeholder="Country" />
+      <input matInput formControlName="country" placeholder="Country" (blur)="markAsTouched()" />
     </mat-form-field>
   </div>
 </div>

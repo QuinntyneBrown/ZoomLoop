@@ -88,7 +88,7 @@ describe('AddressEditor', () => {
       const onTouched = vi.fn();
       component.registerOnTouched(onTouched);
 
-      component.form.patchValue({ city: 'Boston' });
+      component.markAsTouched();
 
       expect(onTouched).toHaveBeenCalled();
     });

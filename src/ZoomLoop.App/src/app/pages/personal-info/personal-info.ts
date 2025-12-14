@@ -115,7 +115,7 @@ export class PersonalInfo implements OnInit {
         email: formValue.email,
         phoneNumber: formValue.phoneNumber,
         addressLine1: address.addressLine1,
-        addressLine2: address.addressLine2 || undefined,
+        addressLine2: address.addressLine2,
         city: address.city,
         province: address.province,
         postalCode: address.postalCode,
