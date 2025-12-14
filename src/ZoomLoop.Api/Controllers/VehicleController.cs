@@ -92,4 +92,18 @@ public class VehicleController
         var request = new VehicleIngestRequest(images);
         return await _mediator.Send(request);
     }
+
+    [HttpPost("search", Name = "SearchVehiclesRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(SearchVehiclesResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<SearchVehiclesResponse>> Search([FromBody] SearchVehiclesRequest request)
+        => await _mediator.Send(request);
+
+    [HttpGet("suggestions", Name = "GetVehicleSuggestionsRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(GetVehicleSuggestionsResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetVehicleSuggestionsResponse>> GetSuggestions([FromQuery] GetVehicleSuggestionsRequest request)
+        => await _mediator.Send(request);
 }
