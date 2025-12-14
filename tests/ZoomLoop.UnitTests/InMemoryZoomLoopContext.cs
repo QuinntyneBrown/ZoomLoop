@@ -33,6 +33,7 @@ public class InMemoryZoomLoopContext : DbContext, IZoomLoopContext
     public DbSet<VehicleHistory> VehicleHistories { get; set; } = default!;
     public DbSet<JsonContent> JsonContents { get; set; } = default!;
     public DbSet<DigitalAsset> DigitalAssets { get; set; } = default!;
+    public DbSet<Profile> Profiles { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,6 +61,13 @@ public class InMemoryZoomLoopContext : DbContext, IZoomLoopContext
         modelBuilder.Entity<Privilege>(entity =>
         {
             entity.HasKey(e => e.PrivilegeId);
+        });
+
+        // Configure Profile entity
+        modelBuilder.Entity<Profile>(entity =>
+        {
+            entity.HasKey(e => e.ProfileId);
+            entity.OwnsOne(e => e.HomeAddress);
         });
     }
 }

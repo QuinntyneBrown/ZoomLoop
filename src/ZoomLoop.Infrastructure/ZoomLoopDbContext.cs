@@ -33,6 +33,7 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
     public DbSet<VehicleHistory> VehicleHistories { get; set; } = default!;
     public DbSet<JsonContent> JsonContents { get; set; } = default!;
     public DbSet<DigitalAsset> DigitalAssets { get; set; } = default!;
+    public DbSet<Profile> Profiles { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -197,6 +198,20 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
         modelBuilder.Entity<DigitalAsset>(entity =>
         {
             entity.HasKey(e => e.DigitalAssetId);
+        });
+
+        modelBuilder.Entity<Profile>(entity =>
+        {
+            entity.HasKey(e => e.ProfileId);
+            entity.OwnsOne(e => e.HomeAddress);
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasOne<Profile>()
+                .WithOne()
+                .HasForeignKey<User>(u => u.CurrentProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
     }
 }
