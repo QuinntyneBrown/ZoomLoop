@@ -6,15 +6,15 @@ test.describe('Login Dialog', () => {
   });
 
   test('displays Sign In button in navbar', async ({ page }) => {
-    await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible();
+    await expect(page.locator('zl-navbar').getByRole('button', { name: /sign in/i })).toBeVisible();
   });
 
   test('opens login dialog when Sign In button is clicked', async ({ page }) => {
     // Initially dialog should not be visible
     await expect(page.getByRole('dialog')).not.toBeVisible();
 
-    // Click Sign In button
-    await page.getByRole('button', { name: /sign in/i }).click();
+    // Click Sign In button in navbar
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
 
     // Dialog should now be visible
     await expect(page.getByRole('dialog')).toBeVisible();
@@ -23,7 +23,7 @@ test.describe('Login Dialog', () => {
 
   test('closes dialog when close button is clicked', async ({ page }) => {
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
     // Click close button
@@ -35,7 +35,7 @@ test.describe('Login Dialog', () => {
 
   test('closes dialog when backdrop is clicked', async ({ page }) => {
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
     // Click backdrop (the area outside the dialog)
@@ -47,7 +47,7 @@ test.describe('Login Dialog', () => {
 
   test('does not close dialog when clicking inside dialog', async ({ page }) => {
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
     // Click inside the dialog
@@ -59,20 +59,20 @@ test.describe('Login Dialog', () => {
 
   test('displays login form inside dialog', async ({ page }) => {
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
 
     // Check for form fields
     await expect(page.getByLabel(/username/i)).toBeVisible();
     await expect(page.getByLabel(/password/i)).toBeVisible();
     await expect(page.getByLabel(/remember me/i)).toBeVisible();
-    await expect(page.getByRole('button', { name: /sign in/i }).last()).toBeVisible();
+    await expect(page.locator('form').getByRole('button', { name: /sign in/i })).toBeVisible();
   });
 
   test('validates form fields in dialog', async ({ page }) => {
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).first().click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
 
-    const submitButton = page.getByRole('button', { name: /sign in/i }).last();
+    const submitButton = page.locator('form').getByRole('button', { name: /sign in/i });
 
     // Submit button should be disabled initially
     await expect(submitButton).toBeDisabled();
@@ -116,7 +116,7 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).first().click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
     // Fill in credentials
@@ -124,7 +124,7 @@ test.describe('Login Dialog', () => {
     await page.getByLabel(/password/i).fill('testpass');
 
     // Submit the form
-    await page.getByRole('button', { name: /sign in/i }).last().click();
+    await page.locator('form').getByRole('button', { name: /sign in/i }).click();
 
     // Wait for dialog to close
     await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 5000 });
@@ -158,14 +158,14 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).first().click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
 
     // Fill in credentials
     await page.getByLabel(/username/i).fill('testuser');
     await page.getByLabel(/password/i).fill('testpass');
 
     // Submit the form
-    await page.getByRole('button', { name: /sign in/i }).last().click();
+    await page.locator('form').getByRole('button', { name: /sign in/i }).click();
 
     // Wait a bit for the async operation
     await page.waitForTimeout(1000);
@@ -222,10 +222,10 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog and login
-    await page.getByRole('button', { name: /sign in/i }).first().click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
     await page.getByLabel(/username/i).fill('testuser');
     await page.getByLabel(/password/i).fill('testpass');
-    await page.getByRole('button', { name: /sign in/i }).last().click();
+    await page.locator('form').getByRole('button', { name: /sign in/i }).click();
 
     // Wait for dialog to close
     await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 5000 });
@@ -270,7 +270,7 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).first().click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
 
     // Fill in credentials and check Remember Me
     await page.getByLabel(/username/i).fill('testuser');
@@ -278,7 +278,7 @@ test.describe('Login Dialog', () => {
     await page.getByLabel(/remember me/i).check();
 
     // Submit the form
-    await page.getByRole('button', { name: /sign in/i }).last().click();
+    await page.locator('form').getByRole('button', { name: /sign in/i }).click();
 
     // Wait for dialog to close
     await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 5000 });
@@ -326,14 +326,14 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.getByRole('button', { name: /sign in/i }).first().click();
+    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
 
     // Fill in credentials without checking Remember Me
     await page.getByLabel(/username/i).fill('testuser');
     await page.getByLabel(/password/i).fill('testpass');
 
     // Submit the form
-    await page.getByRole('button', { name: /sign in/i }).last().click();
+    await page.locator('form').getByRole('button', { name: /sign in/i }).click();
 
     // Wait for dialog to close
     await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 5000 });
