@@ -82,4 +82,14 @@ public class VehicleController
         var request = new UploadVehicleImagesRequest(vehicleId, files);
         return await _mediator.Send(request);
     }
+
+    [HttpPost("ingest", Name = "VehicleIngestRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(VehicleIngestResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<VehicleIngestResponse>> Ingest([FromForm] List<IFormFile> images)
+    {
+        var request = new VehicleIngestRequest(images);
+        return await _mediator.Send(request);
+    }
 }
