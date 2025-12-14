@@ -76,11 +76,21 @@ test.describe('Vehicle Create Page', () => {
       await page.locator('input#mileage').fill('15000');
       await page.locator('input#exteriorColor').fill('Silver');
       await page.locator('input#interiorColor').fill('Black');
-      await page.locator('input#transmission').selectOption('Automatic');
-      await page.locator('input#fuelType').selectOption('Gasoline');
-      await page.locator('input#driveType').selectOption('FWD');
-      await page.locator('input#bodyType').selectOption('Sedan');
-      await page.locator('input#description').fill('Well-maintained vehicle');
+      
+      // Material select components require clicking to open dropdown, then selecting option
+      await page.locator('mat-select#transmission').click();
+      await page.getByRole('option', { name: 'Automatic' }).click();
+      
+      await page.locator('mat-select#fuelType').click();
+      await page.getByRole('option', { name: 'Gasoline' }).click();
+      
+      await page.locator('mat-select#driveType').click();
+      await page.getByRole('option', { name: 'FWD' }).click();
+      
+      await page.locator('mat-select#bodyType').click();
+      await page.getByRole('option', { name: 'Sedan' }).click();
+      
+      await page.locator('textarea#description').fill('Well-maintained vehicle');
       
       // Button should be enabled now
       await expect(submitButton).toBeEnabled();
@@ -108,16 +118,16 @@ test.describe('Vehicle Create Page', () => {
     test.skip('can select and deselect features', async ({ page }) => {
       await page.goto('/vehicles/create');
       
-      // Find and click a feature checkbox
-      const backupCameraCheckbox = page.getByLabel(/backup camera/i);
-      await backupCameraCheckbox.check();
+      // Material checkboxes for features
+      const backupCameraCheckbox = page.locator('mat-checkbox').filter({ hasText: /backup camera/i });
+      await backupCameraCheckbox.click();
       
       // Should show in selected features
       await expect(page.getByText(/selected features/i)).toBeVisible();
       await expect(page.getByText(/backup camera ×/i)).toBeVisible();
       
       // Uncheck the feature
-      await backupCameraCheckbox.uncheck();
+      await backupCameraCheckbox.click();
       
       // Should be removed from selected features
       await expect(page.getByText(/backup camera ×/i)).not.toBeVisible();
@@ -127,20 +137,21 @@ test.describe('Vehicle Create Page', () => {
     test.skip('can toggle between new and certified', async ({ page }) => {
       await page.goto('/vehicles/create');
       
-      const newVehicleCheckbox = page.getByLabel(/new vehicle/i);
-      const certifiedCheckbox = page.getByLabel(/certified pre-owned/i);
+      // Material checkboxes use mat-checkbox selector
+      const newVehicleCheckbox = page.locator('mat-checkbox#isNew');
+      const certifiedCheckbox = page.locator('mat-checkbox#isCertified');
       
       // Check new vehicle
-      await newVehicleCheckbox.check();
-      await expect(newVehicleCheckbox).toBeChecked();
+      await newVehicleCheckbox.click();
+      await expect(newVehicleCheckbox).toHaveClass(/mat-mdc-checkbox-checked/);
       
       // Check certified
-      await certifiedCheckbox.check();
-      await expect(certifiedCheckbox).toBeChecked();
+      await certifiedCheckbox.click();
+      await expect(certifiedCheckbox).toHaveClass(/mat-mdc-checkbox-checked/);
       
       // Both can be checked
-      await expect(newVehicleCheckbox).toBeChecked();
-      await expect(certifiedCheckbox).toBeChecked();
+      await expect(newVehicleCheckbox).toHaveClass(/mat-mdc-checkbox-checked/);
+      await expect(certifiedCheckbox).toHaveClass(/mat-mdc-checkbox-checked/);
     });
 
     // SKIPPED: Auth guard prevents access to page - see above
@@ -156,23 +167,24 @@ test.describe('Vehicle Create Page', () => {
     test.skip('displays all specification dropdowns', async ({ page }) => {
       await page.goto('/vehicles/create');
       
-      // Check transmission options
-      const transmissionSelect = page.locator('input#transmission');
-      await transmissionSelect.click();
+      // Check transmission options - Material select
+      await page.locator('mat-select#transmission').click();
       await expect(page.getByRole('option', { name: /automatic/i })).toBeVisible();
       await expect(page.getByRole('option', { name: /manual/i })).toBeVisible();
+      // Close the dropdown
+      await page.keyboard.press('Escape');
       
       // Check fuel type options
-      const fuelTypeSelect = page.locator('input#fuelType');
-      await fuelTypeSelect.click();
+      await page.locator('mat-select#fuelType').click();
       await expect(page.getByRole('option', { name: /gasoline/i })).toBeVisible();
       await expect(page.getByRole('option', { name: /electric/i })).toBeVisible();
+      await page.keyboard.press('Escape');
       
       // Check body type options
-      const bodyTypeSelect = page.locator('input#bodyType');
-      await bodyTypeSelect.click();
+      await page.locator('mat-select#bodyType').click();
       await expect(page.getByRole('option', { name: /sedan/i })).toBeVisible();
       await expect(page.getByRole('option', { name: /suv/i })).toBeVisible();
+      await page.keyboard.press('Escape');
     });
 
     // SKIPPED: Auth guard prevents access to page - see above
