@@ -59,7 +59,7 @@ export class AmortizationSchedule implements OnChanges {
 
     for (let i = 1; i <= this.loanTermMonths; i++) {
       const interestPayment = balance * monthlyRate;
-      const principalPayment = payment - interestPayment;
+      const principalPayment = Math.max(0, payment - interestPayment);
       balance = Math.max(0, balance - principalPayment);
 
       totalPrincipalSum += principalPayment;
@@ -72,6 +72,11 @@ export class AmortizationSchedule implements OnChanges {
         remainingBalance: balance,
         totalPayment: payment
       });
+
+      // Stop if balance is paid off
+      if (balance === 0) {
+        break;
+      }
     }
 
     this.schedule.set(payments);
