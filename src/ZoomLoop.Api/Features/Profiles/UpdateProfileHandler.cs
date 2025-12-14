@@ -24,12 +24,18 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileRequest, Update
     public async Task<UpdateProfileResponse> Handle(UpdateProfileRequest request, CancellationToken cancellationToken)
     {
         var principal = _httpContextAccessor.HttpContext?.User;
-        var userIdClaim = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-            ?? principal?.FindFirst("userId")?.Value;
+        
+        if (principal?.Identity?.IsAuthenticated != true)
+        {
+            throw new UnauthorizedAccessException("User not authenticated");
+        }
+        
+        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            ?? principal.FindFirst("userId")?.Value;
 
         if (!Guid.TryParse(userIdClaim, out var userId))
         {
-            throw new UnauthorizedAccessException("User not authenticated");
+            throw new UnauthorizedAccessException("User not found");
         }
 
         var user = await _context.Users

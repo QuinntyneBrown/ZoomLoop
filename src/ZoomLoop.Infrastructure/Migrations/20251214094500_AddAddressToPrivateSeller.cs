@@ -21,8 +21,7 @@ namespace ZoomLoop.Infrastructure.Migrations
                 name: "AddressLine2",
                 table: "PrivateSellers",
                 type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "City",

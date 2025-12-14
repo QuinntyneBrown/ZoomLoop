@@ -95,8 +95,9 @@ export class AddressEditor implements ControlValueAccessor {
   // Address autocomplete functionality
   // This is a placeholder for third-party address lookup API integration
   // In a real implementation, you would integrate with Google Places API or similar
-  onAddressSearch(event: any): void {
-    const searchValue = event.target.value;
+  onAddressSearch(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const searchValue = target?.value;
     if (searchValue && searchValue.length > 3) {
       // TODO: Integrate with address autocomplete API
       // Example: Google Places Autocomplete, Mapbox Geocoding, etc.
