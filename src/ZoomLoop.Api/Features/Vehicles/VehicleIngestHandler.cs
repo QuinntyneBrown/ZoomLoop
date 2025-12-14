@@ -25,16 +25,7 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
     public async Task<VehicleIngestResponse> Handle(VehicleIngestRequest request, CancellationToken cancellationToken)
     {
         // Convert uploaded images to byte arrays
-        var imageBytes = new List<byte[]>();
-        foreach (var file in request.Images)
-        {
-            if (file.Length > 0)
-            {
-                using var memoryStream = new MemoryStream();
-                await file.CopyToAsync(memoryStream, cancellationToken);
-                imageBytes.Add(memoryStream.ToArray());
-            }
-        }
+        var imageBytes = await ConvertImagesToByteArraysAsync(request.Images, cancellationToken);
 
         // Call the ingestion service with the images
         var ingestionRequest = new VehicleIngestionRequest
@@ -103,8 +94,34 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
         };
 
         // Create VehicleImage entities and DigitalAssets for uploaded images
+        CreateVehicleImagesAndAssets(request.Images, vehicle);
+
+        // Add vehicle to database and save all changes in a single transaction
+        _context.Vehicles.Add(vehicle);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new VehicleIngestResponse { Vehicle = vehicle.ToDto() };
+    }
+
+    private static async Task<List<byte[]>> ConvertImagesToByteArraysAsync(List<IFormFile> images, CancellationToken cancellationToken)
+    {
+        var imageBytes = new List<byte[]>();
+        foreach (var file in images)
+        {
+            if (file.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream, cancellationToken);
+                imageBytes.Add(memoryStream.ToArray());
+            }
+        }
+        return imageBytes;
+    }
+
+    private void CreateVehicleImagesAndAssets(List<IFormFile> images, Vehicle vehicle)
+    {
         var displayOrder = 0;
-        foreach (var file in request.Images)
+        foreach (var file in images)
         {
             if (file.Length > 0)
             {
@@ -135,11 +152,5 @@ public class VehicleIngestHandler : IRequestHandler<VehicleIngestRequest, Vehicl
                 vehicle.Images.Add(vehicleImage);
             }
         }
-
-        // Add vehicle to database and save all changes in a single transaction
-        _context.Vehicles.Add(vehicle);
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return new VehicleIngestResponse { Vehicle = vehicle.ToDto() };
     }
 }
