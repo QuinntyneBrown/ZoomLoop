@@ -7,6 +7,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login').then(m => m.Login)
   },
   {
+    path: 'loan-calculator',
+    loadComponent: () => import('./pages/loan-calculator').then(m => m.LoanCalculator)
+  },
+  {
     path: 'personal-info',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/personal-info').then(m => m.PersonalInfo)
