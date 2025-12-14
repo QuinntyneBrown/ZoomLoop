@@ -26,6 +26,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/vehicle-create').then(m => m.VehicleCreate)
   },
   {
+    path: 'cars/:keyword',
+    loadComponent: () => import('./pages/cars').then(m => m.Cars)
+  },
+  {
+    path: 'cars',
+    loadComponent: () => import('./pages/cars').then(m => m.Cars)
+  },
+  {
     path: 'loan-calculator',
     loadComponent: () => import('./pages/loan-calculator').then(m => m.LoanCalculator)
   },
