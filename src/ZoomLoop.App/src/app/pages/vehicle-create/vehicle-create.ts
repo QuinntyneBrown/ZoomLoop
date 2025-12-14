@@ -9,11 +9,23 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { Vehicle, VehicleImage, VehicleFeature } from '../../models';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'zl-vehicle-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatButtonModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule
+  ],
   templateUrl: './vehicle-create.html',
   styleUrls: ['./vehicle-create.scss']
 })
