@@ -29,6 +29,7 @@ public interface IZoomLoopContext
     DbSet<VehicleHistory> VehicleHistories { get; }
     DbSet<JsonContent> JsonContents { get; }
     DbSet<DigitalAsset> DigitalAssets { get; }
+    DbSet<Profile> Profiles { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
