@@ -1,0 +1,246 @@
+.comparison-widget {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.comparison-widget__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.comparison-widget__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.comparison-widget__switch-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #0066cc;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #0052a3;
+  }
+
+  &:focus {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.comparison-widget__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.comparison-widget__scenario {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+
+  &:hover {
+    border-color: #cbd5e1;
+    background: #ffffff;
+  }
+
+  &:focus {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+  }
+
+  &--active {
+    border-color: #0066cc;
+    background: #eff6ff;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  }
+
+  &--primary {
+    &.comparison-widget__scenario--active {
+      border-color: #0066cc;
+    }
+  }
+
+  &--secondary {
+    &.comparison-widget__scenario--active {
+      border-color: #059669;
+      background: #f0fdf4;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+  }
+}
+
+.comparison-widget__scenario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.comparison-widget__scenario-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comparison-widget__active-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: #0066cc;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+
+  .comparison-widget__scenario--secondary & {
+    background: #059669;
+  }
+}
+
+.comparison-widget__scenario-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.comparison-widget__scenario-terms {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comparison-widget__term-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comparison-widget__term-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.comparison-widget__term-value {
+  font-size: 0.875rem;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.comparison-widget__metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.comparison-widget__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.comparison-widget__metric-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comparison-widget__metric-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0066cc;
+
+  .comparison-widget__scenario--secondary & {
+    color: #059669;
+  }
+}
+
+.comparison-widget__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.comparison-widget__delta {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.comparison-widget__delta-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comparison-widget__delta-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comparison-widget__delta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comparison-widget__delta-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.comparison-widget__delta-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2937;
+
+  &--positive {
+    color: #dc2626;
+  }
+
+  &--negative {
+    color: #059669;
+  }
+}
