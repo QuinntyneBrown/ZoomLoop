@@ -4,6 +4,7 @@
 import { Component, OnInit, inject, signal, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { SearchInput } from '../../components/search-input';
 import { SearchResults } from '../../components/search-results';
 import { VehicleService, SearchFilters } from '../../core/vehicle.service';
@@ -14,6 +15,11 @@ interface LocationInfo {
   latitude?: number;
   longitude?: number;
 }
+
+const DEFAULT_LOCATION: LocationInfo = {
+  city: 'Toronto',
+  province: 'ON'
+};
 
 @Component({
   selector: 'zl-cars',
@@ -52,10 +58,17 @@ export class Cars implements OnInit, AfterViewInit {
     // Watch for result changes to update the title
     if (this.searchResults) {
       const results = this.searchResults.results;
-      // Create an effect to watch for changes
-      setTimeout(() => {
-        this.updatePageTitle();
+      // Use effect to watch for changes in results
+      const updateInterval = setInterval(() => {
+        const count = this.searchResults?.totalResults();
+        if (count !== undefined && count >= 0) {
+          this.updatePageTitle();
+          clearInterval(updateInterval);
+        }
       }, 100);
+
+      // Clear interval after 5 seconds to prevent memory leak
+      setTimeout(() => clearInterval(updateInterval), 5000);
     }
   }
 
@@ -66,8 +79,7 @@ export class Cars implements OnInit, AfterViewInit {
           // For now, we'll set a default location
           // In a real app, you'd reverse geocode the coordinates to get city/province
           this.userLocation.set({
-            city: 'Toronto',
-            province: 'ON',
+            ...DEFAULT_LOCATION,
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           });
@@ -75,19 +87,13 @@ export class Cars implements OnInit, AfterViewInit {
         },
         (error) => {
           // Default location if geolocation fails
-          this.userLocation.set({
-            city: 'Toronto',
-            province: 'ON'
-          });
+          this.userLocation.set(DEFAULT_LOCATION);
           this.updatePageTitle();
         }
       );
     } else {
       // Default location if geolocation not supported
-      this.userLocation.set({
-        city: 'Toronto',
-        province: 'ON'
-      });
+      this.userLocation.set(DEFAULT_LOCATION);
       this.updatePageTitle();
     }
   }
@@ -136,7 +142,7 @@ export class Cars implements OnInit, AfterViewInit {
 
   private async isValidMake(keyword: string): Promise<boolean> {
     try {
-      const response = await this._vehicleService.getVehicleSuggestions(keyword, 'make', 1).toPromise();
+      const response = await firstValueFrom(this._vehicleService.getVehicleSuggestions(keyword, 'make', 1));
       if (!response || !response.suggestions || response.suggestions.length === 0) {
         return false;
       }
