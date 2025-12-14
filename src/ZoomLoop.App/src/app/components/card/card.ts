@@ -7,11 +7,11 @@ export type CardBadge = 'featured' | 'sold' | 'default' | '';
   selector: 'zl-card',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './card.component.html',
-  styleUrl: './card.component.scss',
+  templateUrl: './card.html',
+  styleUrl: './card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CardComponent {
+export class Card {
   @Input() title = '';
   @Input() subtitle = '';
   @Input() description = '';

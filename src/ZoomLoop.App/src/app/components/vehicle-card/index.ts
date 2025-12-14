@@ -1,1 +1,1 @@
-export * from './vehicle-card.component';
+export * from './vehicle-card';

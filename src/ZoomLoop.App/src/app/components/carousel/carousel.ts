@@ -13,10 +13,10 @@ export interface CarouselItem {
   selector: 'zl-carousel',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './carousel.component.html',
-  styleUrls: ['./carousel.component.scss'],
+  templateUrl: './carousel.html',
+  styleUrls: ['./carousel.scss'],
 })
-export class CarouselComponent implements OnInit {
+export class Carousel implements OnInit {
   @Input() items: CarouselItem[] = [];
   @Input() autoPlay = true;
   @Input() autoPlayInterval = 5000;

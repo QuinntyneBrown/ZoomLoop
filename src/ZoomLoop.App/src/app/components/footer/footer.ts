@@ -20,11 +20,11 @@ export interface SocialLink {
   selector: 'zl-footer',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss',
+  templateUrl: './footer.html',
+  styleUrl: './footer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FooterComponent {
+export class Footer {
   @Input() logo = '';
   @Input() description = '';
   @Input() sections: FooterSection[] = [];
