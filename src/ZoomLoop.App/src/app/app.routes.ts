@@ -18,6 +18,6 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadComponent: () => import('./pages/login').then(m => m.Login)
+    loadComponent: () => import('./pages').then(m => m.BuyOrSellYourCar)
   }
 ];
