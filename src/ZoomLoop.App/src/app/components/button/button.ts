@@ -7,11 +7,11 @@ export type ButtonType = 'button' | 'submit' | 'reset';
 @Component({
   selector: 'zl-button',
   standalone: true,
-  templateUrl: './button.component.html',
-  styleUrl: './button.component.scss',
+  templateUrl: './button.html',
+  styleUrl: './button.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ButtonComponent {
+export class Button {
   @Input() variant: ButtonVariant = 'primary';
   @Input() size: ButtonSize = 'normal';
   @Input() block = false;

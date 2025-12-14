@@ -137,7 +137,7 @@ Components implement ControlValueAccessor for form integration:
   standalone: true,
   // No OnPush to avoid issues with programmatic value changes
 })
-export class InputComponent implements ControlValueAccessor {
+export class Input implements ControlValueAccessor {
   // Implementation
 }
 ```
@@ -249,7 +249,7 @@ public async Task CreateVehicle_ShouldReturnVehicle()
 Example:
 ```typescript
 it('should create component', () => {
-  const fixture = TestBed.createComponent(InputComponent);
+  const fixture = TestBed.createComponent(Input);
   expect(fixture.componentInstance).toBeTruthy();
 });
 ```

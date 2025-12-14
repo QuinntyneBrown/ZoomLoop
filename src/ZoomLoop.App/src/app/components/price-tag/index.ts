@@ -1,1 +1,1 @@
-export * from './price-tag.component';
+export * from './price-tag';

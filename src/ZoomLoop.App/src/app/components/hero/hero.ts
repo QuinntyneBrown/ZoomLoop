@@ -2,14 +2,17 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'zl-stat',
+  selector: 'zl-hero',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './stat.component.html',
-  styleUrl: './stat.component.scss',
+  templateUrl: './hero.html',
+  styleUrl: './hero.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatComponent {
-  @Input() value = '';
-  @Input() label = '';
+export class Hero {
+  @Input() title = '';
+  @Input() subtitle = '';
+  @Input() backgroundUrl = '';
+  @Input() compact = false;
+  @Input() fullHeight = false;
 }

@@ -5,11 +5,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'zl-price-tag',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './price-tag.component.html',
-  styleUrl: './price-tag.component.scss',
+  templateUrl: './price-tag.html',
+  styleUrl: './price-tag.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PriceTagComponent {
+export class PriceTag {
   @Input() amount = '';
   @Input() label = '';
   @Input() details = '';

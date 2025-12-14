@@ -14,10 +14,10 @@ export interface TimelineItem {
   imports: [
     CommonModule
   ],
-  templateUrl: './timeline.component.html',
-  styleUrl: './timeline.component.scss',
+  templateUrl: './timeline.html',
+  styleUrl: './timeline.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TimelineComponent {
+export class Timeline {
   @Input() items: TimelineItem[] = [];
 }

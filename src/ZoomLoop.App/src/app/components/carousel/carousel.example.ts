@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CarouselComponent, CarouselItem } from './carousel.component';
+import { Carousel, CarouselItem } from './carousel';
 
 /**
  * Example component demonstrating the Carousel component usage.
@@ -8,7 +8,7 @@ import { CarouselComponent, CarouselItem } from './carousel.component';
 @Component({
   selector: 'zl-carousel-example',
   standalone: true,
-  imports: [CarouselComponent],
+  imports: [Carousel],
   template: `
     <div class="carousel-demo">
       <h1>Carousel Component Examples</h1>

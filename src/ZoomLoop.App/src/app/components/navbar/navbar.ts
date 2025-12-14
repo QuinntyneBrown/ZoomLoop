@@ -12,11 +12,11 @@ export interface NavItem {
   selector: 'zl-navbar',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss',
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavbarComponent {
+export class Navbar {
   @Input() logoText = '';
   @Input() logoImageUrl = '';
   @Input() navItems: NavItem[] = [];

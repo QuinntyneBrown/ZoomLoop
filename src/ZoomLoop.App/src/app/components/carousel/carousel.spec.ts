@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { CarouselComponent, CarouselItem } from './carousel.component';
+import { Carousel, CarouselItem } from './carousel';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-describe('CarouselComponent', () => {
-  let component: CarouselComponent;
-  let fixture: ComponentFixture<CarouselComponent>;
+describe('Carousel', () => {
+  let component: Carousel;
+  let fixture: ComponentFixture<Carousel>;
   let compiled: DebugElement;
 
   const mockItems: CarouselItem[] = [
@@ -31,10 +31,10 @@ describe('CarouselComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CarouselComponent],
+      imports: [Carousel],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CarouselComponent);
+    fixture = TestBed.createComponent(Carousel);
     component = fixture.componentInstance;
     compiled = fixture.debugElement;
   });

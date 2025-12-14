@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { FooterComponent, NavbarComponent } from './components';
+import { Footer, Navbar } from './components';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'zl-root',
   imports: [
-    NavbarComponent,
-    FooterComponent,
+    Navbar,
+    Footer,
     RouterOutlet
 ],
   templateUrl: './app.html',

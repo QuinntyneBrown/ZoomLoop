@@ -9,14 +9,14 @@ export interface VehicleSpec {
 @Component({
   selector: 'zl-vehicle-card',
   standalone: true,
-  templateUrl: './vehicle-card.component.html',
-  styleUrl: './vehicle-card.component.scss',
+  templateUrl: './vehicle-card.html',
+  styleUrl: './vehicle-card.scss',
   imports: [
     CommonModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VehicleCardComponent {
+export class VehicleCard {
   @Input() title = '';
   @Input() subtitle = '';
   @Input() imageUrl = '';

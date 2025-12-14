@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface CarouselItem {
@@ -13,10 +13,10 @@ export interface CarouselItem {
   selector: 'zl-carousel',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './carousel.component.html',
-  styleUrls: ['./carousel.component.scss'],
+  templateUrl: './carousel.html',
+  styleUrl: './carousel.scss',
 })
-export class CarouselComponent implements OnInit {
+export class Carousel implements OnInit, OnDestroy {
   @Input() items: CarouselItem[] = [];
   @Input() autoPlay = true;
   @Input() autoPlayInterval = 5000;

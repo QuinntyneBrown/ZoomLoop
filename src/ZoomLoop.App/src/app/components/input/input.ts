@@ -11,18 +11,18 @@ export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url'
   selector: 'zl-input',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './input.component.html',
-  styleUrl: './input.component.scss',
+  templateUrl: './input.html',
+  styleUrl: './input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => Input),
       multi: true
     }
   ]
 })
-export class InputComponent implements ControlValueAccessor {
+export class Input implements ControlValueAccessor {
   @Input() type: InputType = 'text';
   @Input() placeholder = '';
   @Input() label = '';

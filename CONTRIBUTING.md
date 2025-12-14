@@ -4,6 +4,13 @@
 
 This repository follows strict, automated-friendly coding standards to keep the codebase consistent and maintainable. All contributors must follow these rules when adding or modifying code.
 
+### Frontend Component Naming
+
+- Frontend components (Angular) must NOT use the `.component` suffix in their filenames or class names.
+- File names should be: `component-name.ts`, `component-name.html`, `component-name.scss`, `component-name.spec.ts`
+- Class names should be simple without the `Component` suffix, e.g., `export class Button` instead of `export class ButtonComponent`
+- Component selectors remain prefixed with the application prefix (e.g., `zl-button`)
+
 ### One type per file
 - Every top-level type (class, record, interface, enum, struct, delegate) should be declared in its own file. Files that contain multiple top-level types should be split so there is exactly one top-level type per file.
 - File name MUST match the primary type name exactly (PascalCase). For example, `CreateJsonContentHandler` must be in `CreateJsonContentHandler.cs`.
