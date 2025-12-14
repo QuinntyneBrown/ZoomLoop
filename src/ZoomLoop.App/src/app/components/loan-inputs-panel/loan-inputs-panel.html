@@ -1,0 +1,260 @@
+<div class="loan-inputs-panel">
+  <h2 class="loan-inputs-panel__title">Loan Calculator</h2>
+  
+  <form [formGroup]="form" class="loan-form">
+    <!-- Price Input -->
+    <div class="loan-form__field-group">
+      <mat-form-field appearance="outline" class="loan-form__field">
+        <mat-label>Vehicle Price</mat-label>
+        <span matTextPrefix>$&nbsp;</span>
+        <input
+          matInput
+          type="number"
+          id="price"
+          formControlName="price"
+          min="0"
+          step="1000"
+          placeholder="50000"
+          aria-label="Vehicle price in dollars"
+          (keydown.arrowup)="incrementField('price')"
+          (keydown.arrowdown)="decrementField('price')"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="decrementField('price')"
+          [disabled]="(priceControl?.value || 0) <= 0"
+          aria-label="Decrease price"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="incrementField('price')"
+          aria-label="Increase price"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-hint>Enter the vehicle purchase price</mat-hint>
+        <mat-error *ngIf="priceControl?.hasError('required')">
+          Price is required
+        </mat-error>
+        <mat-error *ngIf="priceControl?.hasError('min')">
+          Price must be greater than 0
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Down Payment Input with Slider -->
+    <div class="loan-form__field-group">
+      <mat-form-field appearance="outline" class="loan-form__field">
+        <mat-label>Down Payment</mat-label>
+        <span matTextPrefix>$&nbsp;</span>
+        <input
+          matInput
+          type="number"
+          id="downPayment"
+          formControlName="downPayment"
+          min="0"
+          [max]="maxDownPayment"
+          step="1000"
+          placeholder="10000"
+          aria-label="Down payment in dollars"
+          (input)="onDownPaymentInputChange($event)"
+          (keydown.arrowup)="incrementField('downPayment')"
+          (keydown.arrowdown)="decrementField('downPayment')"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="decrementField('downPayment')"
+          [disabled]="(downPaymentControl?.value || 0) <= 0"
+          aria-label="Decrease down payment"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="incrementField('downPayment')"
+          [disabled]="(downPaymentControl?.value || 0) >= maxDownPayment"
+          aria-label="Increase down payment"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-hint>Amount to pay upfront (max: ${{ maxDownPayment | number }})</mat-hint>
+        <mat-error *ngIf="downPaymentControl?.hasError('required')">
+          Down payment is required
+        </mat-error>
+        <mat-error *ngIf="downPaymentControl?.hasError('min')">
+          Down payment must be 0 or greater
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Down Payment Slider -->
+      <div class="loan-form__slider">
+        <mat-slider
+          [min]="0"
+          [max]="maxDownPayment"
+          [step]="100"
+          [discrete]="true"
+          [showTickMarks]="false"
+          aria-label="Adjust down payment"
+        >
+          <input
+            matSliderThumb
+            [value]="downPaymentControl?.value || 0"
+            (valueChange)="onDownPaymentSliderChange($event)"
+          />
+        </mat-slider>
+      </div>
+    </div>
+
+    <!-- Trade-in Value Input -->
+    <div class="loan-form__field-group">
+      <mat-form-field appearance="outline" class="loan-form__field">
+        <mat-label>Trade-in Value</mat-label>
+        <span matTextPrefix>$&nbsp;</span>
+        <input
+          matInput
+          type="number"
+          id="tradeInValue"
+          formControlName="tradeInValue"
+          min="0"
+          step="500"
+          placeholder="0"
+          aria-label="Trade-in value in dollars"
+          (keydown.arrowup)="incrementField('tradeInValue', 500)"
+          (keydown.arrowdown)="decrementField('tradeInValue', 500)"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="decrementField('tradeInValue', 500)"
+          [disabled]="(tradeInValueControl?.value || 0) <= 0"
+          aria-label="Decrease trade-in value"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="incrementField('tradeInValue', 500)"
+          aria-label="Increase trade-in value"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-hint>Value of your current vehicle trade-in</mat-hint>
+        <mat-error *ngIf="tradeInValueControl?.hasError('required')">
+          Trade-in value is required
+        </mat-error>
+        <mat-error *ngIf="tradeInValueControl?.hasError('min')">
+          Trade-in value must be 0 or greater
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- APR Input -->
+    <div class="loan-form__field-group">
+      <mat-form-field appearance="outline" class="loan-form__field">
+        <mat-label>APR (Annual Percentage Rate)</mat-label>
+        <input
+          matInput
+          type="number"
+          id="apr"
+          formControlName="apr"
+          min="0"
+          max="100"
+          step="0.25"
+          placeholder="5.99"
+          aria-label="APR percentage"
+          (keydown.arrowup)="incrementField('apr', 0.25)"
+          (keydown.arrowdown)="decrementField('apr', 0.25)"
+        />
+        <span matTextSuffix>%</span>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="decrementField('apr', 0.25)"
+          [disabled]="(aprControl?.value || 0) <= 0"
+          aria-label="Decrease APR"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="incrementField('apr', 0.25)"
+          [disabled]="(aprControl?.value || 0) >= 100"
+          aria-label="Increase APR"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-hint>Interest rate for the loan</mat-hint>
+        <mat-error *ngIf="aprControl?.hasError('required')">
+          APR is required
+        </mat-error>
+        <mat-error *ngIf="aprControl?.hasError('min')">
+          APR must be 0 or greater
+        </mat-error>
+        <mat-error *ngIf="aprControl?.hasError('max')">
+          APR must be 100 or less
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Term Select -->
+    <div class="loan-form__field-group">
+      <mat-form-field appearance="outline" class="loan-form__field">
+        <mat-label>Loan Term</mat-label>
+        <mat-select
+          id="termMonths"
+          formControlName="termMonths"
+          aria-label="Loan term in months"
+        >
+          <mat-option *ngFor="let term of loanTermOptions" [value]="term">
+            {{ term }} months ({{ term / 12 }} years)
+          </mat-option>
+        </mat-select>
+        <mat-hint>Select loan duration</mat-hint>
+        <mat-error *ngIf="termMonthsControl?.hasError('required')">
+          Loan term is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Results Display -->
+    <div class="loan-results" *ngIf="calculation()">
+      <h3 class="loan-results__title">Estimated Payment</h3>
+      <div class="loan-results__grid">
+        <div class="loan-result">
+          <span class="loan-result__label">Monthly Payment</span>
+          <span class="loan-result__value loan-result__value--primary">
+            ${{ calculation()?.monthlyPayment | number:'1.2-2' }}
+          </span>
+        </div>
+        <div class="loan-result">
+          <span class="loan-result__label">Total Interest</span>
+          <span class="loan-result__value">
+            ${{ calculation()?.totalInterest | number:'1.2-2' }}
+          </span>
+        </div>
+        <div class="loan-result">
+          <span class="loan-result__label">Total Cost</span>
+          <span class="loan-result__value">
+            ${{ calculation()?.totalCost | number:'1.2-2' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

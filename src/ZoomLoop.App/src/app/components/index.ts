@@ -6,6 +6,7 @@ export * from './feature';
 export * from './footer';
 export * from './hero';
 export * from './input';
+export * from './loan-inputs-panel';
 export * from './login-form';
 export * from './navbar';
 export * from './price-tag';

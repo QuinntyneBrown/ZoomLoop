@@ -25,8 +25,8 @@ export const routes: Routes = [
     loadComponent: () => import('./components/tabs/tabs.demo').then(m => m.TabsDemo)
   },
   {
-    path: 'demo/amortization',
-    loadComponent: () => import('./components/amortization-schedule/amortization-schedule.demo').then(m => m.AmortizationScheduleDemo)
+    path: 'demo/loan-inputs-panel',
+    loadComponent: () => import('./components/loan-inputs-panel/loan-inputs-panel.demo').then(m => m.LoanInputsPanelDemo)
   },
   {
     path: '',
