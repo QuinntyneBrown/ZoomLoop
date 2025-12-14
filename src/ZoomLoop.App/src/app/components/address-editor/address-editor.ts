@@ -17,7 +17,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export interface Address {
   addressLine1: string;
-  addressLine2: string;
+  addressLine2?: string;
   city: string;
   province: string;
   postalCode: string;

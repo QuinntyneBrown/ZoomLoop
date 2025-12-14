@@ -12,7 +12,7 @@ public class PrivateSeller
         Email = string.Empty;
         PhoneNumber = string.Empty;
         AddressLine1 = string.Empty;
-        AddressLine2 = string.Empty;
+        AddressLine2 = null;
         City = string.Empty;
         Province = string.Empty;
         PostalCode = string.Empty;
@@ -27,7 +27,7 @@ public class PrivateSeller
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public string AddressLine1 { get; set; }
-    public string AddressLine2 { get; set; }
+    public string? AddressLine2 { get; set; }
     public string City { get; set; }
     public string Province { get; set; }
     public string PostalCode { get; set; }
