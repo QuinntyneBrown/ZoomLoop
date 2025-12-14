@@ -1,0 +1,64 @@
+<div class="range-slider" [class.range-slider--disabled]="disabled()">
+  <div class="range-slider__header" *ngIf="label">
+    <div class="range-slider__label">{{ label }}</div>
+    <div class="range-slider__values">
+      <span class="range-slider__value">{{ value().low }}</span>
+      <span class="range-slider__separator">–</span>
+      <span class="range-slider__value">{{ value().high }}</span>
+    </div>
+  </div>
+
+  <div class="range-slider__track-container">
+    <div
+      #track
+      class="range-slider__track"
+      (click)="onTrackClick($event)"
+    >
+      <div class="range-slider__track-bg"></div>
+      <div
+        class="range-slider__track-fill"
+        [style.left.%]="lowPercent()"
+        [style.width.%]="rangePercent()"
+      ></div>
+
+      <div
+        class="range-slider__thumb range-slider__thumb--low"
+        [style.left.%]="lowPercent()"
+        (mousedown)="onThumbMouseDown('low', $event)"
+        (touchstart)="onThumbTouchStart('low', $event)"
+        [attr.aria-label]="'Low value: ' + value().low"
+        [attr.aria-valuemin]="min"
+        [attr.aria-valuemax]="max"
+        [attr.aria-valuenow]="value().low"
+        role="slider"
+        tabindex="0"
+      >
+        <div class="range-slider__thumb-inner"></div>
+      </div>
+
+      <div
+        class="range-slider__thumb range-slider__thumb--high"
+        [style.left.%]="highPercent()"
+        (mousedown)="onThumbMouseDown('high', $event)"
+        (touchstart)="onThumbTouchStart('high', $event)"
+        [attr.aria-label]="'High value: ' + value().high"
+        [attr.aria-valuemin]="min"
+        [attr.aria-valuemax]="max"
+        [attr.aria-valuenow]="value().high"
+        role="slider"
+        tabindex="0"
+      >
+        <div class="range-slider__thumb-inner"></div>
+      </div>
+    </div>
+
+    <div class="range-slider__markers" *ngIf="!label">
+      <div class="range-slider__marker range-slider__marker--min">
+        {{ min }}
+      </div>
+      <div class="range-slider__marker range-slider__marker--max">
+        {{ max }}
+      </div>
+    </div>
+  </div>
+</div>
