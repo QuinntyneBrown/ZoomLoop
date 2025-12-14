@@ -12,7 +12,7 @@ using ZoomLoop.Infrastructure;
 namespace ZoomLoop.Infrastructure.Migrations
 {
     [DbContext(typeof(ZoomLoopDbContext))]
-    [Migration("20251213211920_InitialCreate")]
+    [Migration("20251214015154_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -630,10 +630,10 @@ namespace ZoomLoop.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CurrentProfileId")
+                    b.Property<Guid?>("CurrentProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DefaultProfileId")
+                    b.Property<Guid?>("DefaultProfileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -1038,13 +1038,13 @@ namespace ZoomLoop.Infrastructure.Migrations
                     b.HasOne("ZoomLoop.Core.Models.Make", "Make")
                         .WithMany()
                         .HasForeignKey("MakeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ZoomLoop.Core.Models.VehicleModel", "VehicleModel")
                         .WithMany()
                         .HasForeignKey("VehicleModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Make");

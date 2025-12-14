@@ -18,8 +18,8 @@ public class User {
     public string Password { get; set; }
     public byte[] Salt { get; set; }
     public List<Role> Roles { get; set; }
-    public Guid CurrentProfileId { get; set; }
-    public Guid DefaultProfileId { get; set; }
+    public Guid? CurrentProfileId { get; set; }
+    public Guid? DefaultProfileId { get; set; }
     public bool IsDeleted { get; set; }
 
 }

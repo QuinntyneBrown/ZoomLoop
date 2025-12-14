@@ -99,8 +99,8 @@ namespace ZoomLoop.Infrastructure.Migrations
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    CurrentProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DefaultProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrentProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DefaultProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -337,14 +337,12 @@ namespace ZoomLoop.Infrastructure.Migrations
                         name: "FK_Vehicles_Makes_MakeId",
                         column: x => x.MakeId,
                         principalTable: "Makes",
-                        principalColumn: "MakeId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "MakeId");
                     table.ForeignKey(
                         name: "FK_Vehicles_VehicleModels_VehicleModelId",
                         column: x => x.VehicleModelId,
                         principalTable: "VehicleModels",
-                        principalColumn: "VehicleModelId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "VehicleModelId");
                 });
 
             migrationBuilder.CreateTable(

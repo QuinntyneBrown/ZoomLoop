@@ -79,10 +79,12 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
             entity.HasKey(e => e.VehicleId);
             entity.HasOne(e => e.Make)
                 .WithMany()
-                .HasForeignKey(e => e.MakeId);
+                .HasForeignKey(e => e.MakeId)
+                .OnDelete(DeleteBehavior.NoAction);
             entity.HasOne(e => e.VehicleModel)
                 .WithMany()
-                .HasForeignKey(e => e.VehicleModelId);
+                .HasForeignKey(e => e.VehicleModelId)
+                .OnDelete(DeleteBehavior.NoAction);
             entity.HasMany(e => e.Images)
                 .WithOne(i => i.Vehicle)
                 .HasForeignKey(i => i.VehicleId);
