@@ -219,4 +219,23 @@ export class LoanCalculator implements OnInit {
     this.result.set(null);
     this.fieldErrors.set({});
   }
+
+  shouldDisableSubmit(): boolean {
+    if (!this.form) {
+      return true;
+    }
+
+    const priceControl = this.form.get('price');
+    const anyTouched = Object.values(this.form.controls).some(control => control.touched);
+
+    if (!anyTouched) {
+      return true;
+    }
+
+    if (priceControl && !priceControl.touched) {
+      return true;
+    }
+
+    return false;
+  }
 }

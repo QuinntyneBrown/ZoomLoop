@@ -30,6 +30,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/loan-calculator').then(m => m.LoanCalculator)
   },
   {
+    path: 'demo/amortization',
+    loadComponent: () => import('./components/amortization-schedule/amortization-schedule.demo').then(m => m.AmortizationScheduleDemo)
+  },
+  {
     path: 'demo/tabs',
     loadComponent: () => import('./components/tabs/tabs.demo').then(m => m.TabsDemo)
   },

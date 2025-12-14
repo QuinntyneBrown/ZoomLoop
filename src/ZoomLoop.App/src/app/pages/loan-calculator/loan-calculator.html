@@ -1,7 +1,7 @@
 <div class="loan-calculator">
   <div class="loan-calculator__container">
     <h1 class="loan-calculator__title">Loan Calculator</h1>
-    <p class="loan-calculator__subtitle">Calculate your monthly payments with our easy-to-use loan calculator</p>
+    <p class="loan-calculator__subtitle">Estimate your financing costs with our easy-to-use loan calculator</p>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="loan-form" novalidate>
       
@@ -19,7 +19,6 @@
             step="100"
             (blur)="onFieldBlur('price')"
             [attr.aria-invalid]="hasFieldError('price')"
-            [attr.aria-describedby]="hasFieldError('price') ? 'price-error' : null"
             aria-required="true">
           <mat-error 
             id="price-error"
@@ -87,18 +86,18 @@
       <div class="loan-form__field-group">
         <mat-form-field appearance="outline" class="loan-form__field">
           <mat-label>Loan Term *</mat-label>
-          <mat-select 
+          <select
+            matNativeControl
             id="termMonths"
             formControlName="termMonths"
-            placeholder="Select term"
             (blur)="onFieldBlur('termMonths')"
             [attr.aria-invalid]="hasFieldError('termMonths')"
-            [attr.aria-describedby]="hasFieldError('termMonths') ? 'termMonths-error' : null"
             aria-required="true">
-            <mat-option *ngFor="let term of allowedTerms" [value]="term">
+            <option value="" disabled>Select term</option>
+            <option *ngFor="let term of allowedTerms" [value]="term">
               {{ term }} months ({{ term / 12 }} years)
-            </mat-option>
-          </mat-select>
+            </option>
+          </select>
           <mat-error 
             id="termMonths-error"
             *ngIf="hasFieldError('termMonths')"
@@ -140,7 +139,7 @@
           type="submit" 
           mat-flat-button
           color="primary"
-          [disabled]="form.invalid">
+          [disabled]="shouldDisableSubmit()">
           Calculate Payment
         </button>
         <button 

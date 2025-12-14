@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-// Helper function to select a mat-select option
+// Helper function to select a native option by term value
 async function selectMatOption(page: any, selectId: string, optionText: string) {
-  await page.locator(`#${selectId}`).click();
-  await page.locator('mat-option').filter({ hasText: optionText }).click();
+  const termValue = optionText.split(' ')[0];
+  await page.locator(`#${selectId}`).selectOption(termValue);
 }
 
 test.describe('Loan Calculator', () => {
@@ -92,20 +92,15 @@ test.describe('Loan Calculator', () => {
   });
 
   test('validates term selection from allowed values', async ({ page }) => {
-    // Click on the mat-select to open the dropdown
-    await page.locator('#termMonths').click();
-    
-    // Check that select panel opens and has allowed term options
-    await expect(page.locator('mat-option').filter({ hasText: '12 months' })).toBeVisible();
-    await expect(page.locator('mat-option').filter({ hasText: '24 months' })).toBeVisible();
-    await expect(page.locator('mat-option').filter({ hasText: '36 months' })).toBeVisible();
-    await expect(page.locator('mat-option').filter({ hasText: '48 months' })).toBeVisible();
-    await expect(page.locator('mat-option').filter({ hasText: '60 months' })).toBeVisible();
-    await expect(page.locator('mat-option').filter({ hasText: '72 months' })).toBeVisible();
-    await expect(page.locator('mat-option').filter({ hasText: '84 months' })).toBeVisible();
-    
-    // Close the dropdown by clicking outside
-    await page.locator('.loan-calculator__title').click();
+    const options = page.locator('#termMonths option');
+
+    await expect(options.filter({ hasText: /12 months/ })).toHaveCount(1);
+    await expect(options.filter({ hasText: /24 months/ })).toHaveCount(1);
+    await expect(options.filter({ hasText: /36 months/ })).toHaveCount(1);
+    await expect(options.filter({ hasText: /48 months/ })).toHaveCount(1);
+    await expect(options.filter({ hasText: /60 months/ })).toHaveCount(1);
+    await expect(options.filter({ hasText: /72 months/ })).toHaveCount(1);
+    await expect(options.filter({ hasText: /84 months/ })).toHaveCount(1);
   });
 
   test('validates fees are non-negative', async ({ page }) => {
