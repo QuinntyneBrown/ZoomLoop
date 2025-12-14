@@ -132,14 +132,16 @@
   flex-shrink: 0;
   margin-left: auto;
 
-  /* Override button styles for header context */
-  ::ng-deep zl-button,
-  ::ng-deep .btn {
+  /* Harmonize Material buttons placed in header */
+  ::ng-deep button.mat-mdc-button,
+  ::ng-deep button.mat-mdc-unelevated-button,
+  ::ng-deep button.mat-mdc-raised-button,
+  ::ng-deep button.mat-mdc-outlined-button {
     white-space: nowrap;
   }
 
-  /* Header CTA button specific styles */
-  ::ng-deep .btn--primary {
+  ::ng-deep button.mat-mdc-unelevated-button,
+  ::ng-deep button.mat-mdc-raised-button {
     padding: 12px 24px;
     font-size: 15px;
     font-weight: 600;
@@ -147,11 +149,13 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
 
-  ::ng-deep .btn--primary:hover {
+  ::ng-deep button.mat-mdc-unelevated-button:hover,
+  ::ng-deep button.mat-mdc-raised-button:hover {
     transform: translateY(-1px);
   }
 
-  ::ng-deep .btn--primary:active {
+  ::ng-deep button.mat-mdc-unelevated-button:active,
+  ::ng-deep button.mat-mdc-raised-button:active {
     transform: translateY(0);
   }
 }
@@ -169,20 +173,6 @@
   cursor: pointer;
   padding: 8px;
   gap: 6px;
-
-  /* Override button component styles */
-  ::ng-deep button {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background: transparent !important;
-    border: none;
-    padding: 8px;
-    gap: 6px;
-  }
 }
 
 .mobile-menu-toggle span {

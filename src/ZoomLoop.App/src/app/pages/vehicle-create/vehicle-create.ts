@@ -8,12 +8,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { Vehicle, VehicleImage, VehicleFeature } from '../../models';
-import { Button } from '../../components/button';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'zl-vehicle-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, Button],
+  imports: [CommonModule, ReactiveFormsModule, MatButtonModule],
   templateUrl: './vehicle-create.html',
   styleUrls: ['./vehicle-create.scss']
 })

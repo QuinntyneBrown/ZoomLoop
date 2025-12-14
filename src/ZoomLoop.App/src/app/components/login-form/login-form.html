@@ -42,14 +42,15 @@
     </div>
 
     <div class="zl-login-form__actions">
-      <zl-button
+      <button
         type="submit"
-        variant="primary"
-        [block]="true"
+        mat-flat-button
+        color="primary"
+        class="zl-login-form__submit"
         [disabled]="!form.valid"
       >
         Sign In
-      </zl-button>
+      </button>
     </div>
   </form>
 </div>

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Button } from '../button';
+import { MatButtonModule } from '@angular/material/button';
 
 export interface NavItem {
   label: string;
@@ -12,7 +12,7 @@ export interface NavItem {
 @Component({
   selector: 'zl-navbar',
   standalone: true,
-  imports: [CommonModule, Button],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

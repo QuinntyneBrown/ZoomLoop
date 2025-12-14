@@ -19,37 +19,37 @@
     </div>
 
     <!-- Navigation Arrows -->
-    <zl-button 
+    <button 
       class="zl-carousel-arrow zl-carousel-arrow-prev" 
-      (handleClick)="prevSlide()"
-      ariaLabel="Previous slide"
+      mat-icon-button
+      (click)="prevSlide()"
+      aria-label="Previous slide"
       type="button"
-      variant="ghost"
     >
       <span class="zl-arrow-icon">‹</span>
-    </zl-button>
+    </button>
     
-    <zl-button 
+    <button 
       class="zl-carousel-arrow zl-carousel-arrow-next" 
-      (handleClick)="nextSlide()"
-      ariaLabel="Next slide"
+      mat-icon-button
+      (click)="nextSlide()"
+      aria-label="Next slide"
       type="button"
-      variant="ghost"
     >
       <span class="zl-arrow-icon">›</span>
-    </zl-button>
+    </button>
 
     <!-- Indicators/Dots -->
     <div class="zl-carousel-indicators" *ngIf="showIndicators && items.length > 1">
-      <zl-button 
+      <button 
         *ngFor="let item of items; let i = index"
         class="zl-indicator-dot"
+        mat-icon-button
         [class.active]="i === currentIndex"
-        (handleClick)="goToSlide(i)"
-        [ariaLabel]="'Go to slide ' + (i + 1)"
+        (click)="goToSlide(i)"
+        [attr.aria-label]="'Go to slide ' + (i + 1)"
         type="button"
-        variant="ghost"
-      ></zl-button>
+      ></button>
     </div>
 
     <!-- Slide Counter -->
