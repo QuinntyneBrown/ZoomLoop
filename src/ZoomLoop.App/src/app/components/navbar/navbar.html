@@ -31,11 +31,11 @@
       </div>
 
       <!-- Mobile Toggle -->
-      <zl-button
+      <button
         type="button"
-        variant="ghost"
-        (handleClick)="toggleMenu()"
-        [ariaLabel]="menuOpen ? 'Close menu' : 'Open menu'"
+        mat-icon-button
+        (click)="toggleMenu()"
+        [attr.aria-label]="menuOpen ? 'Close menu' : 'Open menu'"
         [attr.aria-expanded]="menuOpen"
         class="mobile-menu-toggle"
         [class.active]="menuOpen"
@@ -43,7 +43,7 @@
         <span></span>
         <span></span>
         <span></span>
-      </zl-button>
+      </button>
     </div>
   </div>
 </header>

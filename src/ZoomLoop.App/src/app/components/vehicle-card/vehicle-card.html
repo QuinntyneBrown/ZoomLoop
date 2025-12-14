@@ -10,9 +10,9 @@
           <span class="vehicle-card__badge">{{ badge }}</span>
         </ng-container>
       </div>
-      <zl-button type="button" variant="ghost" class="vehicle-card__favorite" [class.vehicle-card__favorite--active]="favorite">
+      <button type="button" mat-icon-button class="vehicle-card__favorite" [class.vehicle-card__favorite--active]="favorite">
         <ng-content select="[favorite-icon]"></ng-content>
-      </zl-button>
+      </button>
     </div>
   </div>
 

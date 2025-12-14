@@ -8,12 +8,12 @@ import { takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from '../../core/auth.service';
 import { LocalStorageService, loginCredentialsKey } from '../../core';
 import { LoginForm } from '../../components/login-form';
-import { Button } from '../../components/button';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'zl-login-dialog',
   standalone: true,
-  imports: [LoginForm, Button],
+  imports: [LoginForm, MatButtonModule],
   templateUrl: './login-dialog.html',
   styleUrls: ['./login-dialog.scss']
 })

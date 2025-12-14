@@ -1,15 +1,15 @@
 <div class="login-dialog" aria-labelledby="login-dialog-title">
   <div class="login-dialog__header">
     <h2 id="login-dialog-title" class="login-dialog__title" style="display: none;">Sign In</h2>
-    <zl-button
+    <button
       type="button"
-      variant="ghost"
-      (handleClick)="close()"
-      ariaLabel="Close dialog"
+      mat-icon-button
+      (click)="close()"
+      aria-label="Close dialog"
       class="login-dialog__close"
     >
       ×
-    </zl-button>
+    </button>
   </div>
   <div class="login-dialog__content">
     <zl-login-form (tryToLogin)="handleTryToLogin($event)"></zl-login-form>

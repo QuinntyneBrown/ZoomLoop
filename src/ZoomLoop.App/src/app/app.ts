@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Dialog } from '@angular/cdk/dialog';
-import { Footer, Navbar, Button } from './components';
+import { Footer, Navbar } from './components';
 import { RouterOutlet } from '@angular/router';
 import { LoginDialog } from './dialogs';
 import { AuthService } from './core/auth.service';
@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
     Navbar,
     Footer,
     RouterOutlet,
-    Button,
     CommonModule
 ],
   templateUrl: './app.html',

@@ -20,6 +20,32 @@
  * 12. Utility Components
  */
 
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$zoomloop-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$violet-palette,
+  ),
+  typography: (
+    brand-family: 'Plus Jakarta Sans, sans-serif',
+    plain-family: 'Plus Jakarta Sans, sans-serif',
+    bold-weight: 700,
+    medium-weight: 600,
+    regular-weight: 500
+  ),
+  density: (
+    scale: 0
+  )
+));
+
+:root {
+  @include mat.all-component-themes($zoomloop-theme);
+}
+
 /* ========================================
    CDK OVERLAY STYLES
    ======================================== */

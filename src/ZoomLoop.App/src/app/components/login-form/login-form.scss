@@ -1,18 +1,19 @@
 .zl-login-form {
-  background: var(--bg-white, #ffffff);
-  border-radius: 0.5rem;
-  padding: 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  max-width: 400px;
+  background: transparent;
+  border-radius: 0;
+  padding: 0 0 0;
+  box-shadow: none;
+  max-width: 440px;
   width: 100%;
+  margin: 0 auto;
 }
 
 .zl-login-form__title {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-primary, #1f2937);
-  margin-bottom: 1.5rem;
-  text-align: center;
+  color: #111827;
+  margin: 0 0 1.25rem 0;
+  text-align: left;
 }
 
 .zl-login-form__form {
@@ -24,18 +25,19 @@
 .zl-login-form__field {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .zl-login-form__error {
   font-size: 0.875rem;
-  color: var(--error, #ef4444);
+  color: #ef4444;
   margin-top: 0.25rem;
 }
 
 .zl-login-form__checkbox {
   display: flex;
   align-items: center;
+  margin-top: 0.25rem;
 }
 
 .zl-login-form__checkbox-label {
@@ -43,7 +45,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: var(--text-primary, #1f2937);
+  color: #374151;
   cursor: pointer;
 }
 
@@ -54,5 +56,27 @@
 }
 
 .zl-login-form__actions {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.zl-login-form__submit {
+  width: 100%;
+}
+
+/* Harmonize embedded zl-input spacing for modal look */
+.zl-login-form .zl-input {
+  --zl-input-padding-x: 1rem;
+  --zl-input-padding-y: 0.75rem;
+  --zl-input-border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .zl-login-form {
+    max-width: 100%;
+  }
+
+  .zl-login-form__title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
 }

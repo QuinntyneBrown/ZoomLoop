@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Button } from '../button';
+import { MatButtonModule } from '@angular/material/button';
 
 export interface VehicleSpec {
   label: string;
@@ -14,7 +14,7 @@ export interface VehicleSpec {
   styleUrl: './vehicle-card.scss',
   imports: [
     CommonModule,
-    Button
+    MatButtonModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -5,12 +5,12 @@ import { Component, Output, EventEmitter, Input as InputDecorator, OnInit } from
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Input } from '../input';
-import { Button } from '../button';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'zl-login-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, Input, Button],
+  imports: [CommonModule, ReactiveFormsModule, Input, MatButtonModule],
   templateUrl: './login-form.html',
   styleUrls: ['./login-form.scss']
 })
