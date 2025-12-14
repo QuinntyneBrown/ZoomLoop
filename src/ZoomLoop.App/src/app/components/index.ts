@@ -1,3 +1,4 @@
+export * from './amortization-schedule';
 export * from './card';
 export * from './carousel';
 export * from './dashboard';

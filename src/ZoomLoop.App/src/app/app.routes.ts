@@ -25,6 +25,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/tabs/tabs.demo').then(m => m.TabsDemo)
   },
   {
+    path: 'demo/amortization',
+    loadComponent: () => import('./components/amortization-schedule/amortization-schedule.demo').then(m => m.AmortizationScheduleDemo)
+  },
+  {
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('./pages').then(m => m.BuyOrSellYourCar)
