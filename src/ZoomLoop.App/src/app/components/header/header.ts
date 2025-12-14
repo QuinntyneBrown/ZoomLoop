@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
-export interface NavItem {
+export interface HeaderNavItem {
   label: string;
   url: string;
   primary?: boolean;
@@ -10,17 +10,17 @@ export interface NavItem {
 }
 
 @Component({
-  selector: 'zl-navbar',
+  selector: 'zl-header',
   standalone: true,
   imports: [CommonModule, MatButtonModule],
-  templateUrl: './navbar.html',
-  styleUrl: './navbar.scss',
+  templateUrl: './header.html',
+  styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Navbar {
+export class Header {
   @Input() logoText = 'ZoomLoop';
   @Input() logoImageUrl = 'logo.svg';
-  @Input() navItems: NavItem[] = [];
+  @Input() navItems: HeaderNavItem[] = [];
   
   protected menuOpen = false;
 

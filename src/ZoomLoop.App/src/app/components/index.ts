@@ -9,7 +9,7 @@ export * from './hero';
 export * from './input';
 export * from './loan-inputs-panel';
 export * from './login-form';
-export * from './navbar';
+export * from './header';
 export * from './price-tag';
 export * from './search-input';
 export * from './search-results';

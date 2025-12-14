@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Dialog } from '@angular/cdk/dialog';
-import { Footer, Navbar } from './components';
+import { Footer, Header } from './components';
 import { RouterOutlet } from '@angular/router';
 import { LoginDialog } from './dialogs';
 import { AuthService } from './core/auth.service';
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'zl-root',
   imports: [
-    Navbar,
+    Header,
     Footer,
     RouterOutlet,
     CommonModule

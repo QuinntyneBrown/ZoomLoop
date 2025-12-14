@@ -19,6 +19,6 @@ describe('App', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('zl-navbar')).toBeTruthy();
+    expect(compiled.querySelector('zl-header')).toBeTruthy();
   });
 });
