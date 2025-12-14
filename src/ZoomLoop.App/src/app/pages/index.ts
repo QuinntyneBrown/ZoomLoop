@@ -1,4 +1,5 @@
 export * from './login';
+export * from './loan-calculator';
 export * from './vehicle-create';
 export * from './buy-or-sell-your-car';
 export * from './personal-info';

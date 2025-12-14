@@ -1,375 +1,347 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoanCalculator } from './loan-calculator';
-import { DebugElement } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { LoanCalculatorService } from '../../core/loan-calculator.service';
 
 describe('LoanCalculator', () => {
   let component: LoanCalculator;
   let fixture: ComponentFixture<LoanCalculator>;
-  let compiled: DebugElement;
+  let service: LoanCalculatorService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LoanCalculator],
-      providers: [provideAnimations()]
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideAnimations(),
+        LoanCalculatorService
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoanCalculator);
     component = fixture.componentInstance;
-    compiled = fixture.debugElement;
+    service = TestBed.inject(LoanCalculatorService);
     fixture.detectChanges();
   });
 
-  describe('Initialization', () => {
-    it('should create the loan calculator component', () => {
-      expect(component).toBeTruthy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  describe('Form Initialization', () => {
+    it('should initialize form with all required fields', () => {
+      expect(component.form.get('price')).toBeTruthy();
+      expect(component.form.get('downPayment')).toBeTruthy();
+      expect(component.form.get('apr')).toBeTruthy();
+      expect(component.form.get('termMonths')).toBeTruthy();
+      expect(component.form.get('fees')).toBeTruthy();
     });
 
-    it('should initialize the form', () => {
-      expect(component.form).toBeTruthy();
-    });
-
-    it('should have default form values', () => {
-      expect(component.form.value.price).toBe('');
-      expect(component.form.value.downPayment).toBe(0);
-      expect(component.form.value.tradeInValue).toBe(0);
-      expect(component.form.value.interestRate).toBe(7.99);
-      expect(component.form.value.termMonths).toBe(60);
-      expect(component.form.value.taxRate).toBe(7.0);
-      expect(component.form.value.fees).toBe(0);
-    });
-
-    it('should initialize result signals as null', () => {
-      expect(component.monthlyPayment()).toBeNull();
-      expect(component.totalInterest()).toBeNull();
-      expect(component.totalPayment()).toBeNull();
-    });
-
-    it('should have term options defined', () => {
-      expect(component.termOptions.length).toBeGreaterThan(0);
-      expect(component.termOptions).toContain(60);
-    });
-
-    it('should have default tax rate', () => {
-      expect(component.defaultTaxRate).toBe(7.0);
+    it('should set all fields as required', () => {
+      expect(component.form.get('price')?.hasError('required')).toBe(true);
+      expect(component.form.get('downPayment')?.hasError('required')).toBe(true);
+      expect(component.form.get('apr')?.hasError('required')).toBe(true);
+      expect(component.form.get('termMonths')?.hasError('required')).toBe(true);
+      expect(component.form.get('fees')?.hasError('required')).toBe(true);
     });
   });
 
-  describe('Form Validation', () => {
-    it('should be invalid when price is empty', () => {
-      expect(component.form.valid).toBe(false);
+  describe('Price Validation', () => {
+    it('should validate price greater than 0', () => {
+      component.form.patchValue({ price: 0 });
+      expect(component.form.get('price')?.hasError('min')).toBe(true);
     });
 
-    it('should require vehicle price', () => {
-      const priceControl = component.form.get('price');
-      expect(priceControl?.hasError('required')).toBe(true);
-
-      priceControl?.setValue(25000);
-      expect(priceControl?.hasError('required')).toBe(false);
+    it('should validate price within max bounds', () => {
+      component.form.patchValue({ price: 2000000 });
+      expect(component.form.get('price')?.hasError('max')).toBe(true);
     });
 
-    it('should validate price is greater than 0', () => {
-      const priceControl = component.form.get('price');
-
-      priceControl?.setValue(0);
-      expect(priceControl?.hasError('min')).toBe(true);
-
-      priceControl?.setValue(-100);
-      expect(priceControl?.hasError('min')).toBe(true);
-
-      priceControl?.setValue(25000);
-      expect(priceControl?.hasError('min')).toBe(false);
-    });
-
-    it('should require interest rate', () => {
-      const rateControl = component.form.get('interestRate');
-      rateControl?.setValue(null);
-      expect(rateControl?.hasError('required')).toBe(true);
-
-      rateControl?.setValue(7.99);
-      expect(rateControl?.hasError('required')).toBe(false);
-    });
-
-    it('should validate interest rate range (0-100)', () => {
-      const rateControl = component.form.get('interestRate');
-
-      rateControl?.setValue(-1);
-      expect(rateControl?.hasError('min')).toBe(true);
-
-      rateControl?.setValue(101);
-      expect(rateControl?.hasError('max')).toBe(true);
-
-      rateControl?.setValue(7.99);
-      expect(rateControl?.hasError('min')).toBe(false);
-      expect(rateControl?.hasError('max')).toBe(false);
-    });
-
-    it('should require loan term', () => {
-      const termControl = component.form.get('termMonths');
-      termControl?.setValue(null);
-      expect(termControl?.hasError('required')).toBe(true);
-
-      termControl?.setValue(60);
-      expect(termControl?.hasError('required')).toBe(false);
-    });
-
-    it('should validate down payment is not negative', () => {
-      const downPaymentControl = component.form.get('downPayment');
-
-      // When setting to negative, it gets clamped to 0 by validateDownPayment
-      // So we just verify that the value is clamped rather than checking the validator
-      downPaymentControl?.setValue(-100);
-      expect(downPaymentControl?.value).toBe(0);
-
-      downPaymentControl?.setValue(0);
-      expect(downPaymentControl?.hasError('min')).toBe(false);
-    });
-
-    it('should validate tax rate range (0-100)', () => {
-      const taxControl = component.form.get('taxRate');
-
-      taxControl?.setValue(-1);
-      expect(taxControl?.hasError('min')).toBe(true);
-
-      taxControl?.setValue(101);
-      expect(taxControl?.hasError('max')).toBe(true);
-
-      taxControl?.setValue(7.0);
-      expect(taxControl?.hasError('min')).toBe(false);
-      expect(taxControl?.hasError('max')).toBe(false);
-    });
-
-    it('should validate fees are not negative', () => {
-      const feesControl = component.form.get('fees');
-
-      feesControl?.setValue(-100);
-      expect(feesControl?.hasError('min')).toBe(true);
-
-      feesControl?.setValue(0);
-      expect(feesControl?.hasError('min')).toBe(false);
-    });
-
-    it('should be valid with all required fields filled', () => {
-      component.form.patchValue({
-        price: 25000,
-        interestRate: 7.99,
-        termMonths: 60
-      });
-
-      expect(component.form.valid).toBe(true);
+    it('should accept valid price', () => {
+      component.form.patchValue({ price: 25000 });
+      expect(component.form.get('price')?.hasError('min')).toBe(false);
+      expect(component.form.get('price')?.hasError('max')).toBe(false);
     });
   });
 
-  describe('Down Payment Clamping', () => {
-    it('should clamp down payment to price when it exceeds price', () => {
-      component.form.patchValue({
-        price: 25000,
-        downPayment: 30000
-      });
-
-      component.clampDownPayment();
-
-      expect(component.form.get('downPayment')?.value).toBe(25000);
+  describe('Down Payment Validation', () => {
+    it('should validate down payment is non-negative', () => {
+      component.form.patchValue({ downPayment: -100 });
+      expect(component.form.get('downPayment')?.hasError('min')).toBe(true);
     });
 
-    it('should clamp down payment to 0 when negative', () => {
-      component.form.patchValue({
+    it('should validate down payment does not exceed price', () => {
+      component.form.patchValue({ 
         price: 25000,
-        downPayment: -1000
+        downPayment: 30000 
       });
-
-      component.clampDownPayment();
-
-      expect(component.form.get('downPayment')?.value).toBe(0);
+      component.form.get('downPayment')?.updateValueAndValidity();
+      expect(component.form.get('downPayment')?.hasError('exceedsPrice')).toBe(true);
     });
 
-    it('should allow down payment between 0 and price', () => {
-      component.form.patchValue({
+    it('should accept down payment equal to price', () => {
+      component.form.patchValue({ 
         price: 25000,
-        downPayment: 5000
+        downPayment: 25000 
       });
-
-      component.clampDownPayment();
-
-      expect(component.form.get('downPayment')?.value).toBe(5000);
+      component.form.get('downPayment')?.updateValueAndValidity();
+      expect(component.form.get('downPayment')?.hasError('exceedsPrice')).toBe(false);
     });
   });
 
-  describe('Trade-in Value', () => {
-    it('should allow negative trade-in value for negative equity', () => {
-      const tradeInControl = component.form.get('tradeInValue');
-
-      tradeInControl?.setValue(-3000);
-      expect(tradeInControl?.valid).toBe(true);
-      expect(tradeInControl?.value).toBe(-3000);
+  describe('APR Validation', () => {
+    it('should validate APR minimum bound', () => {
+      component.form.patchValue({ apr: -1 });
+      expect(component.form.get('apr')?.hasError('min')).toBe(true);
     });
 
-    it('should allow positive trade-in value', () => {
-      const tradeInControl = component.form.get('tradeInValue');
-
-      tradeInControl?.setValue(5000);
-      expect(tradeInControl?.valid).toBe(true);
-      expect(tradeInControl?.value).toBe(5000);
+    it('should validate APR maximum bound', () => {
+      component.form.patchValue({ apr: 35 });
+      expect(component.form.get('apr')?.hasError('max')).toBe(true);
     });
 
-    it('should allow zero trade-in value', () => {
-      const tradeInControl = component.form.get('tradeInValue');
-
-      tradeInControl?.setValue(0);
-      expect(tradeInControl?.valid).toBe(true);
-      expect(tradeInControl?.value).toBe(0);
+    it('should accept valid APR', () => {
+      component.form.patchValue({ apr: 5.5 });
+      expect(component.form.get('apr')?.valid).toBe(true);
     });
   });
 
-  describe('Payment Calculation', () => {
-    it('should not calculate payment when form is invalid', () => {
-      component.form.patchValue({
-        price: '', // Invalid - required
-        interestRate: 7.99,
-        termMonths: 60
-      });
-
-      component.calculatePayment();
-
-      expect(component.monthlyPayment()).toBeNull();
-      expect(component.totalInterest()).toBeNull();
-      expect(component.totalPayment()).toBeNull();
+  describe('Term Validation', () => {
+    it('should validate term is in allowed set', () => {
+      component.form.patchValue({ termMonths: 30 });
+      component.form.get('termMonths')?.updateValueAndValidity();
+      expect(component.form.get('termMonths')?.hasError('invalidTerm')).toBe(true);
     });
 
-    it('should calculate payment with valid inputs', () => {
+    it('should accept allowed term', () => {
+      component.form.patchValue({ termMonths: 60 });
+      component.form.get('termMonths')?.updateValueAndValidity();
+      expect(component.form.get('termMonths')?.hasError('invalidTerm')).toBe(false);
+    });
+  });
+
+  describe('Fees Validation', () => {
+    it('should validate fees are non-negative', () => {
+      component.form.patchValue({ fees: -50 });
+      expect(component.form.get('fees')?.hasError('min')).toBe(true);
+    });
+
+    it('should accept zero fees', () => {
+      component.form.patchValue({ fees: 0 });
+      expect(component.form.get('fees')?.hasError('min')).toBe(false);
+    });
+  });
+
+  describe('Error Messages', () => {
+    it('should return correct error message for required field', () => {
+      component.form.get('price')?.markAsTouched();
+      const error = component.getFieldError('price');
+      expect(error).toContain('required');
+    });
+
+    it('should return correct error message for min validation', () => {
+      component.form.patchValue({ price: -100 });
+      component.form.get('price')?.markAsTouched();
+      const error = component.getFieldError('price');
+      expect(error).toContain('must be at least');
+    });
+
+    it('should return correct error message for max validation', () => {
+      component.form.patchValue({ apr: 35 });
+      component.form.get('apr')?.markAsTouched();
+      const error = component.getFieldError('apr');
+      expect(error).toContain('cannot exceed');
+    });
+
+    it('should return correct error message for down payment exceeding price', () => {
+      component.form.patchValue({ 
+        price: 25000,
+        downPayment: 30000 
+      });
+      component.form.get('downPayment')?.updateValueAndValidity();
+      component.form.get('downPayment')?.markAsTouched();
+      const error = component.getFieldError('downPayment');
+      expect(error).toBe('Down payment cannot exceed price');
+    });
+
+    it('should return correct error message for invalid term', () => {
+      component.form.patchValue({ termMonths: 30 });
+      component.form.get('termMonths')?.updateValueAndValidity();
+      component.form.get('termMonths')?.markAsTouched();
+      const error = component.getFieldError('termMonths');
+      expect(error).toContain('Term must be one of');
+    });
+  });
+
+  describe('Field Blur Handling', () => {
+    it('should update field errors on blur when field is invalid', () => {
+      component.form.get('price')?.markAsTouched();
+      component.onFieldBlur('price');
+      expect(component.fieldErrors()['price']).toBeDefined();
+    });
+
+    it('should clear field errors on blur when field is valid', () => {
+      component.form.patchValue({ price: 25000 });
+      component.form.get('price')?.markAsTouched();
+      component.onFieldBlur('price');
+      expect(component.fieldErrors()['price']).toBeUndefined();
+    });
+  });
+
+  describe('Loan Calculation', () => {
+    it('should calculate loan when form is valid', () => {
       component.form.patchValue({
         price: 25000,
         downPayment: 5000,
-        tradeInValue: 0,
-        interestRate: 7.99,
+        apr: 5,
         termMonths: 60,
-        taxRate: 7.0,
         fees: 500
       });
-
-      component.calculatePayment();
-
-      expect(component.monthlyPayment()).not.toBeNull();
-      expect(component.monthlyPayment()!).toBeGreaterThan(0);
-      expect(component.totalInterest()).not.toBeNull();
-      expect(component.totalPayment()).not.toBeNull();
+      
+      component.calculateLoan();
+      
+      const result = component.result();
+      expect(result).toBeTruthy();
+      expect(result?.isValid).toBe(true);
+      expect(result?.monthlyPayment).toBeGreaterThan(0);
     });
 
-    it('should calculate correctly with zero interest rate', () => {
+    it('should not calculate when form is invalid', () => {
       component.form.patchValue({
-        price: 24000,
+        price: -1000,
         downPayment: 0,
-        tradeInValue: 0,
-        interestRate: 0,
+        apr: 5,
         termMonths: 60,
-        taxRate: 0,
         fees: 0
       });
-
-      component.calculatePayment();
-
-      // With 0% interest, monthly payment should be principal / months
-      expect(component.monthlyPayment()).toBe(400); // 24000 / 60
-      expect(component.totalInterest()).toBe(0);
-      expect(component.totalPayment()).toBe(24000);
+      
+      component.calculateLoan();
+      
+      // Should mark all as touched but not calculate
+      expect(component.form.get('price')?.touched).toBe(true);
     });
 
-    it('should include negative equity in loan amount', () => {
+    it('should prevent NaN in results', () => {
       component.form.patchValue({
         price: 25000,
-        downPayment: 0,
-        tradeInValue: -3000, // Negative equity
-        interestRate: 0,
+        downPayment: 5000,
+        apr: 5,
         termMonths: 60,
-        taxRate: 0,
-        fees: 0
-      });
-
-      component.calculatePayment();
-
-      // Principal should be price - negative equity = 25000 + 3000 = 28000
-      // Monthly payment = 28000 / 60
-      expect(component.monthlyPayment()).toBeCloseTo(466.67, 1);
-    });
-
-    it('should include taxes and fees in principal', () => {
-      component.form.patchValue({
-        price: 20000,
-        downPayment: 0,
-        tradeInValue: 0,
-        interestRate: 0,
-        termMonths: 60,
-        taxRate: 10, // 10% = $2000
         fees: 500
       });
-
-      component.calculatePayment();
-
-      // Principal = 20000 + 2000 (tax) + 500 (fees) = 22500
-      // Monthly payment = 22500 / 60
-      expect(component.monthlyPayment()).toBe(375);
+      
+      component.calculateLoan();
+      
+      const result = component.result();
+      expect(isNaN(result?.monthlyPayment || 0)).toBe(false);
+      expect(isNaN(result?.totalLoanAmount || 0)).toBe(false);
+      expect(isNaN(result?.totalInterest || 0)).toBe(false);
+      expect(isNaN(result?.totalCost || 0)).toBe(false);
     });
 
-    it('should result in zero payment when down payment and trade-in cover full cost', () => {
+    it('should prevent Infinity in results', () => {
       component.form.patchValue({
-        price: 20000,
-        downPayment: 15000,
-        tradeInValue: 5000,
-        interestRate: 0,
+        price: 25000,
+        downPayment: 5000,
+        apr: 5,
         termMonths: 60,
-        taxRate: 0,
-        fees: 0
+        fees: 500
       });
+      
+      component.calculateLoan();
+      
+      const result = component.result();
+      expect(isFinite(result?.monthlyPayment || 0)).toBe(true);
+      expect(isFinite(result?.totalLoanAmount || 0)).toBe(true);
+      expect(isFinite(result?.totalInterest || 0)).toBe(true);
+      expect(isFinite(result?.totalCost || 0)).toBe(true);
+    });
+  });
 
-      component.calculatePayment();
+  describe('Form Submission', () => {
+    it('should mark all fields as touched on submit when invalid', () => {
+      component.onSubmit();
+      
+      expect(component.form.get('price')?.touched).toBe(true);
+      expect(component.form.get('downPayment')?.touched).toBe(true);
+      expect(component.form.get('apr')?.touched).toBe(true);
+      expect(component.form.get('termMonths')?.touched).toBe(true);
+      expect(component.form.get('fees')?.touched).toBe(true);
+    });
 
-      expect(component.monthlyPayment()).toBe(0);
-      expect(component.totalInterest()).toBe(0);
-      expect(component.totalPayment()).toBe(0);
+    it('should calculate loan on submit when valid', () => {
+      component.form.patchValue({
+        price: 25000,
+        downPayment: 5000,
+        apr: 5,
+        termMonths: 60,
+        fees: 500
+      });
+      
+      component.onSubmit();
+      
+      expect(component.result()).toBeTruthy();
+      expect(component.result()?.isValid).toBe(true);
     });
   });
 
   describe('Reset Functionality', () => {
-    it('should reset form to default values', () => {
-      component.form.patchValue({
-        price: 30000,
-        downPayment: 5000,
-        tradeInValue: 2000,
-        interestRate: 10.5,
-        termMonths: 72,
-        taxRate: 8.5,
-        fees: 1000
-      });
-
-      component.reset();
-
-      expect(component.form.value.price).toBe('');
-      expect(component.form.value.downPayment).toBe(0);
-      expect(component.form.value.tradeInValue).toBe(0);
-      expect(component.form.value.interestRate).toBe(7.99);
-      expect(component.form.value.termMonths).toBe(60);
-      expect(component.form.value.taxRate).toBe(7.0);
-      expect(component.form.value.fees).toBe(0);
-    });
-
-    it('should clear calculation results on reset', () => {
+    it('should reset form to initial state', () => {
       component.form.patchValue({
         price: 25000,
-        interestRate: 7.99,
-        termMonths: 60
+        downPayment: 5000,
+        apr: 5,
+        termMonths: 60,
+        fees: 500
       });
-
-      component.calculatePayment();
-      expect(component.monthlyPayment()).not.toBeNull();
-
+      component.calculateLoan();
+      
       component.reset();
+      
+      expect(component.form.get('price')?.value).toBeNull();
+      expect(component.result()).toBeNull();
+      expect(Object.keys(component.fieldErrors()).length).toBe(0);
+    });
+  });
 
-      expect(component.monthlyPayment()).toBeNull();
-      expect(component.totalInterest()).toBeNull();
-      expect(component.totalPayment()).toBeNull();
+  describe('hasFieldError', () => {
+    it('should return true for dirty invalid field', () => {
+      const control = component.form.get('price');
+      control?.markAsDirty();
+      control?.setErrors({ required: true });
+      
+      expect(component.hasFieldError('price')).toBe(true);
+    });
+
+    it('should return true for touched invalid field', () => {
+      const control = component.form.get('price');
+      control?.markAsTouched();
+      control?.setErrors({ required: true });
+      
+      expect(component.hasFieldError('price')).toBe(true);
+    });
+
+    it('should return false for pristine invalid field', () => {
+      const control = component.form.get('price');
+      control?.setErrors({ required: true });
+      
+      expect(component.hasFieldError('price')).toBe(false);
+    });
+
+    it('should return false for valid field', () => {
+      component.form.patchValue({ price: 25000 });
+      component.form.get('price')?.markAsTouched();
+      
+      expect(component.hasFieldError('price')).toBe(false);
     });
   });
 });

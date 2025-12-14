@@ -1,207 +1,207 @@
-<div class="loan-calculator-container">
-  <div class="header">
-    <h1>Vehicle Loan Calculator</h1>
-    <p>Calculate your monthly car payment with ease</p>
-  </div>
+<div class="loan-calculator">
+  <div class="loan-calculator__container">
+    <h1 class="loan-calculator__title">Loan Calculator</h1>
+    <p class="loan-calculator__subtitle">Calculate your monthly payments with our easy-to-use loan calculator</p>
 
-  <form [formGroup]="form" class="calculator-form">
-    <div class="form-grid">
-      <!-- Vehicle Price -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Vehicle Price *</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="price"
-          placeholder="0.00"
-          min="0"
-          step="100"
-        />
-        <span matPrefix>$&nbsp;</span>
-        <mat-icon
-          matSuffix
-          matTooltip="The total purchase price of the vehicle before taxes and fees"
-          class="info-icon"
-          >info</mat-icon
-        >
-        @if (form.get('price')?.hasError('required') && form.get('price')?.touched) {
-          <mat-error>Price is required</mat-error>
-        }
-        @if (form.get('price')?.hasError('min') && form.get('price')?.touched) {
-          <mat-error>Price must be greater than 0</mat-error>
-        }
-      </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="loan-form" novalidate>
+      
+      <!-- Price Field -->
+      <div class="loan-form__field-group">
+        <mat-form-field appearance="outline" class="loan-form__field">
+          <mat-label>Vehicle Price *</mat-label>
+          <span matTextPrefix>$ </span>
+          <input 
+            matInput
+            type="number"
+            id="price"
+            formControlName="price"
+            placeholder="25000"
+            step="100"
+            (blur)="onFieldBlur('price')"
+            [attr.aria-invalid]="hasFieldError('price')"
+            [attr.aria-describedby]="hasFieldError('price') ? 'price-error' : null"
+            aria-required="true">
+          <mat-error 
+            id="price-error"
+            *ngIf="hasFieldError('price')"
+            role="alert">
+            {{ getFieldError('price') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-      <!-- Down Payment -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Down Payment</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="downPayment"
-          placeholder="0.00"
-          min="0"
-          step="100"
-        />
-        <span matPrefix>$&nbsp;</span>
-        <mat-icon
-          matSuffix
-          matTooltip="Amount paid upfront. Must be between $0 and the vehicle price"
-          class="info-icon"
-          >info</mat-icon
-        >
-        @if (form.get('downPayment')?.hasError('min') && form.get('downPayment')?.touched) {
-          <mat-error>Down payment cannot be negative</mat-error>
-        }
-      </mat-form-field>
+      <!-- Down Payment Field -->
+      <div class="loan-form__field-group">
+        <mat-form-field appearance="outline" class="loan-form__field">
+          <mat-label>Down Payment *</mat-label>
+          <span matTextPrefix>$ </span>
+          <input 
+            matInput
+            type="number"
+            id="downPayment"
+            formControlName="downPayment"
+            placeholder="5000"
+            step="100"
+            (blur)="onFieldBlur('downPayment')"
+            [attr.aria-invalid]="hasFieldError('downPayment')"
+            [attr.aria-describedby]="hasFieldError('downPayment') ? 'downPayment-error' : null"
+            aria-required="true">
+          <mat-error 
+            id="downPayment-error"
+            *ngIf="hasFieldError('downPayment')"
+            role="alert">
+            {{ getFieldError('downPayment') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-      <!-- Trade-in Value -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Trade-in Value</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="tradeInValue"
-          placeholder="0.00"
-          step="100"
-        />
-        <span matPrefix>$&nbsp;</span>
-        <mat-icon
-          matSuffix
-          matTooltip="Value of your trade-in vehicle. Enter a negative value to represent negative equity (money owed on trade-in)"
-          class="info-icon"
-          >info</mat-icon
-        >
-      </mat-form-field>
+      <!-- APR Field -->
+      <div class="loan-form__field-group">
+        <mat-form-field appearance="outline" class="loan-form__field">
+          <mat-label>APR (Annual Percentage Rate) *</mat-label>
+          <input 
+            matInput
+            type="number"
+            id="apr"
+            formControlName="apr"
+            placeholder="5.5"
+            step="0.1"
+            min="0"
+            [max]="config.maxAPR"
+            (blur)="onFieldBlur('apr')"
+            [attr.aria-invalid]="hasFieldError('apr')"
+            [attr.aria-describedby]="hasFieldError('apr') ? 'apr-error' : null"
+            aria-required="true">
+          <span matTextSuffix>%</span>
+          <mat-error 
+            id="apr-error"
+            *ngIf="hasFieldError('apr')"
+            role="alert">
+            {{ getFieldError('apr') }}
+          </mat-error>
+          <mat-hint>Interest rate ({{ config.minAPR }}% - {{ config.maxAPR }}%)</mat-hint>
+        </mat-form-field>
+      </div>
 
-      <!-- Interest Rate (APR) -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Interest Rate (APR) *</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="interestRate"
-          placeholder="7.99"
-          min="0"
-          max="100"
-          step="0.01"
-        />
-        <span matSuffix>
-          %
-          <mat-icon
-            matTooltip="Annual Percentage Rate (APR) - the yearly interest rate charged on the loan. This is different from the monthly interest rate"
-            class="info-icon"
-            >info</mat-icon
-          >
-        </span>
-        @if (form.get('interestRate')?.hasError('required') && form.get('interestRate')?.touched) {
-          <mat-error>Interest rate is required</mat-error>
-        }
-        @if (form.get('interestRate')?.hasError('min') && form.get('interestRate')?.touched) {
-          <mat-error>Interest rate cannot be negative</mat-error>
-        }
-        @if (form.get('interestRate')?.hasError('max') && form.get('interestRate')?.touched) {
-          <mat-error>Interest rate cannot exceed 100%</mat-error>
-        }
-      </mat-form-field>
+      <!-- Term Field -->
+      <div class="loan-form__field-group">
+        <mat-form-field appearance="outline" class="loan-form__field">
+          <mat-label>Loan Term *</mat-label>
+          <mat-select 
+            id="termMonths"
+            formControlName="termMonths"
+            placeholder="Select term"
+            (blur)="onFieldBlur('termMonths')"
+            [attr.aria-invalid]="hasFieldError('termMonths')"
+            [attr.aria-describedby]="hasFieldError('termMonths') ? 'termMonths-error' : null"
+            aria-required="true">
+            <mat-option *ngFor="let term of allowedTerms" [value]="term">
+              {{ term }} months ({{ term / 12 }} years)
+            </mat-option>
+          </mat-select>
+          <mat-error 
+            id="termMonths-error"
+            *ngIf="hasFieldError('termMonths')"
+            role="alert">
+            {{ getFieldError('termMonths') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-      <!-- Loan Term -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Loan Term *</mat-label>
-        <mat-select formControlName="termMonths">
-          @for (term of termOptions; track term) {
-            <mat-option [value]="term">{{ term }} months ({{ term / 12 }} years)</mat-option>
-          }
-        </mat-select>
-        <mat-icon
-          matSuffix
-          matTooltip="Length of the loan in months"
-          class="info-icon"
-          >info</mat-icon
-        >
-        @if (form.get('termMonths')?.hasError('required') && form.get('termMonths')?.touched) {
-          <mat-error>Loan term is required</mat-error>
-        }
-      </mat-form-field>
+      <!-- Fees Field -->
+      <div class="loan-form__field-group">
+        <mat-form-field appearance="outline" class="loan-form__field">
+          <mat-label>Additional Fees *</mat-label>
+          <span matTextPrefix>$ </span>
+          <input 
+            matInput
+            type="number"
+            id="fees"
+            formControlName="fees"
+            placeholder="500"
+            step="50"
+            (blur)="onFieldBlur('fees')"
+            [attr.aria-invalid]="hasFieldError('fees')"
+            [attr.aria-describedby]="hasFieldError('fees') ? 'fees-error' : null"
+            aria-required="true">
+          <mat-error 
+            id="fees-error"
+            *ngIf="hasFieldError('fees')"
+            role="alert">
+            {{ getFieldError('fees') }}
+          </mat-error>
+          <mat-hint>Documentation, registration, and other fees</mat-hint>
+        </mat-form-field>
+      </div>
 
-      <!-- Sales Tax Rate -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Sales Tax Rate</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="taxRate"
-          placeholder="7.00"
-          min="0"
-          max="100"
-          step="0.01"
-        />
-        <span matSuffix>
-          %
-          <mat-icon
-            matTooltip="Sales tax percentage based on your location. This varies by state and local jurisdiction"
-            class="info-icon"
-            >info</mat-icon
-          >
-        </span>
-        @if (form.get('taxRate')?.hasError('min') && form.get('taxRate')?.touched) {
-          <mat-error>Tax rate cannot be negative</mat-error>
-        }
-        @if (form.get('taxRate')?.hasError('max') && form.get('taxRate')?.touched) {
-          <mat-error>Tax rate cannot exceed 100%</mat-error>
-        }
-      </mat-form-field>
+      <!-- Form Actions -->
+      <div class="loan-form__actions">
+        <button 
+          type="submit" 
+          mat-flat-button
+          color="primary"
+          [disabled]="form.invalid">
+          Calculate Payment
+        </button>
+        <button 
+          type="button" 
+          mat-stroked-button
+          color="primary"
+          (click)="reset()">
+          Reset
+        </button>
+      </div>
+    </form>
 
-      <!-- Fees -->
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Additional Fees</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="fees"
-          placeholder="0.00"
-          min="0"
-          step="10"
-        />
-        <span matPrefix>$&nbsp;</span>
-        <mat-icon
-          matSuffix
-          matTooltip="Registration, documentation, and other dealer fees added to the total cost"
-          class="info-icon"
-          >info</mat-icon
-        >
-        @if (form.get('fees')?.hasError('min') && form.get('fees')?.touched) {
-          <mat-error>Fees cannot be negative</mat-error>
-        }
-      </mat-form-field>
-    </div>
+    <!-- Results Section -->
+    <div 
+      class="loan-results" 
+      *ngIf="result()"
+      role="region"
+      aria-label="Loan calculation results">
+      
+      <div *ngIf="result()?.isValid" class="loan-results__valid">
+        <h2 class="loan-results__title">Your Loan Summary</h2>
+        
+        <div class="loan-results__grid">
+          <div class="loan-results__item loan-results__item--primary">
+            <span class="loan-results__label">Monthly Payment</span>
+            <span class="loan-results__value loan-results__value--large">
+              ${{ (result()?.monthlyPayment ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+            </span>
+          </div>
 
-    <div class="form-actions">
-      <button mat-raised-button type="button" (click)="reset()">Reset</button>
-      <button mat-raised-button color="primary" type="button" (click)="calculatePayment()">
-        Calculate
-      </button>
-    </div>
-  </form>
+          <div class="loan-results__item">
+            <span class="loan-results__label">Total Loan Amount</span>
+            <span class="loan-results__value">
+              ${{ (result()?.totalLoanAmount ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+            </span>
+          </div>
 
-  <!-- Results Section -->
-  @if (monthlyPayment() !== null) {
-    <div class="results">
-      <h2>Loan Summary</h2>
-      <div class="results-grid">
-        <div class="result-card">
-          <div class="result-label">Monthly Payment</div>
-          <div class="result-value">${{ monthlyPayment()! | number: '1.2-2' }}</div>
-        </div>
-        <div class="result-card">
-          <div class="result-label">Total Interest</div>
-          <div class="result-value">${{ totalInterest()! | number: '1.2-2' }}</div>
-        </div>
-        <div class="result-card">
-          <div class="result-label">Total Payment</div>
-          <div class="result-value">${{ totalPayment()! | number: '1.2-2' }}</div>
+          <div class="loan-results__item">
+            <span class="loan-results__label">Total Interest</span>
+            <span class="loan-results__value">
+              ${{ (result()?.totalInterest ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+            </span>
+          </div>
+
+          <div class="loan-results__item">
+            <span class="loan-results__label">Total Cost</span>
+            <span class="loan-results__value">
+              ${{ (result()?.totalCost ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+            </span>
+          </div>
         </div>
       </div>
+
+      <div 
+        *ngIf="!result()?.isValid" 
+        class="loan-results__error"
+        role="alert"
+        aria-live="polite">
+        <h2 class="loan-results__error-title">Unable to Calculate</h2>
+        <p class="loan-results__error-message">{{ result()?.error }}</p>
+      </div>
     </div>
-  }
+  </div>
 </div>
