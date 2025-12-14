@@ -1,15 +1,6 @@
 <zl-navbar>
-  <zl-button 
-    variant="primary" 
-    size="normal"
-    (buttonClick)="openLoginDialog()"
-  >
-    Sign In
-  </zl-button>
+  <p (click)="openLoginDialog()">Sign In</p>
 </zl-navbar>
-
-<h1>Welcome to ZoomLoop</h1>
-
 <div>
   <router-outlet></router-outlet>
 </div>

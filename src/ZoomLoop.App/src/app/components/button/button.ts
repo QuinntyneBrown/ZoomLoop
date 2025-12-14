@@ -20,6 +20,7 @@ export class Button {
   @Input() ariaLabel?: string;
 
   @Output() buttonClick = new EventEmitter<MouseEvent>();
+  @Output() handleClick = new EventEmitter<MouseEvent>();
 
   protected get classes(): string {
     const classes = ['btn'];
@@ -43,7 +44,7 @@ export class Button {
     return classes.join(' ');
   }
 
-  protected handleClick(event: MouseEvent): void {
+  protected onClick(event: MouseEvent): void {
     if (this.disabled) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -51,5 +52,6 @@ export class Button {
     }
 
     this.buttonClick.emit(event);
+    this.handleClick.emit(event);
   }
 }

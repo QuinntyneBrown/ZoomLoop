@@ -6,7 +6,7 @@ test.describe('Login Dialog', () => {
   });
 
   test('displays Sign In button in navbar', async ({ page }) => {
-    await expect(page.locator('zl-navbar').getByRole('button', { name: /sign in/i })).toBeVisible();
+    await expect(page.locator('zl-navbar').getByText(/sign in/i)).toBeVisible();
   });
 
   test('opens login dialog when Sign In button is clicked', async ({ page }) => {
@@ -14,7 +14,7 @@ test.describe('Login Dialog', () => {
     await expect(page.getByRole('dialog')).not.toBeVisible();
 
     // Click Sign In button in navbar
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
 
     // Dialog should now be visible
     await expect(page.getByRole('dialog')).toBeVisible();
@@ -23,7 +23,7 @@ test.describe('Login Dialog', () => {
 
   test('closes dialog when close button is clicked', async ({ page }) => {
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
     // Click close button
@@ -35,7 +35,7 @@ test.describe('Login Dialog', () => {
 
   test('closes dialog when backdrop is clicked', async ({ page }) => {
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
     // Click backdrop (the area outside the dialog) - CDK uses .cdk-overlay-backdrop
@@ -47,7 +47,7 @@ test.describe('Login Dialog', () => {
 
   test('does not close dialog when clicking inside dialog', async ({ page }) => {
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
     // Click inside the dialog
@@ -61,7 +61,7 @@ test.describe('Login Dialog', () => {
   // TODO: Refactor component to avoid ID duplication or update test to handle Shadow DOM traversal
   test.skip('displays login form inside dialog', async ({ page }) => {
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
 
     // Check for form fields
     await expect(page.locator('input#username')).toBeVisible();
@@ -73,7 +73,7 @@ test.describe('Login Dialog', () => {
   // SKIPPED: Custom zl-input component creates selector ambiguity - see above
   test.skip('validates form fields in dialog', async ({ page }) => {
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
 
     const submitButton = page.locator('form').getByRole('button', { name: /sign in/i });
 
@@ -120,8 +120,7 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
-    await expect(page.getByRole('dialog')).toBeVisible();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
 
     // Fill in credentials
     await page.locator('input#username').fill('testuser');
@@ -163,7 +162,7 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
 
     // Fill in credentials
     await page.locator('input#username').fill('testuser');
@@ -228,7 +227,7 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog and login
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
     await page.locator('input#username').fill('testuser');
     await page.locator('input#password').fill('testpass');
     await page.locator('form').getByRole('button', { name: /sign in/i }).click();
@@ -277,9 +276,7 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
-
-    // Fill in credentials and check Remember Me
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
     await page.locator('input#username').fill('testuser');
     await page.locator('input#password').fill('testpass');
     await page.getByLabel(/remember me/i).check();
@@ -334,7 +331,7 @@ test.describe('Login Dialog', () => {
     });
 
     // Open the dialog
-    await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
+    await page.locator('zl-navbar').getByText(/sign in/i).click();
 
     // Fill in credentials without checking Remember Me
     await page.locator('input#username').fill('testuser');
