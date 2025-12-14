@@ -27,7 +27,7 @@ export class Input implements ControlValueAccessor {
   @InputDecorator() label = '';
   @InputDecorator() required = false;
   @InputDecorator() disabled = false;
-  @InputDecorator() id?: string;
+  @InputDecorator() id: string = `input-${Math.random().toString(36).substr(2, 9)}`;
   @InputDecorator() autocomplete?: string;
 
   value = '';

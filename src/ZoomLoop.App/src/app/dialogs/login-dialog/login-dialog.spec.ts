@@ -5,7 +5,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginDialog } from './login-dialog';
 import { AuthService } from '../../core/auth.service';
 import { LocalStorageService } from '../../core/local-storage.service';
-import { of } from 'rxjs';
+import { DialogRef } from '@angular/cdk/dialog';
+import { of, throwError } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
@@ -14,15 +15,21 @@ describe('LoginDialog', () => {
   let fixture: ComponentFixture<LoginDialog>;
   let authService: AuthService;
   let localStorageService: LocalStorageService;
+  let dialogRef: DialogRef;
 
   beforeEach(async () => {
+    const dialogRefMock = {
+      close: vi.fn()
+    };
+
     await TestBed.configureTestingModule({
       imports: [LoginDialog],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         AuthService,
-        LocalStorageService
+        LocalStorageService,
+        { provide: DialogRef, useValue: dialogRefMock }
       ]
     }).compileComponents();
 
@@ -30,6 +37,7 @@ describe('LoginDialog', () => {
     component = fixture.componentInstance;
     authService = TestBed.inject(AuthService);
     localStorageService = TestBed.inject(LocalStorageService);
+    dialogRef = TestBed.inject(DialogRef);
     fixture.detectChanges();
   });
 
@@ -37,49 +45,12 @@ describe('LoginDialog', () => {
     it('should create the login dialog component', () => {
       expect(component).toBeTruthy();
     });
-
-    it('should initialize with dialog closed', () => {
-      expect(component.isOpen()).toBe(false);
-    });
   });
 
   describe('Dialog State', () => {
-    it('should open dialog when open() is called', () => {
-      component.open();
-      expect(component.isOpen()).toBe(true);
-    });
-
     it('should close dialog when close() is called', () => {
-      component.open();
-      expect(component.isOpen()).toBe(true);
-      
       component.close();
-      expect(component.isOpen()).toBe(false);
-    });
-
-    it('should close dialog on backdrop click', () => {
-      component.open();
-      expect(component.isOpen()).toBe(true);
-
-      const event = new MouseEvent('click');
-      Object.defineProperty(event, 'target', { value: event.currentTarget, writable: false });
-      
-      component.handleBackdropClick(event);
-      expect(component.isOpen()).toBe(false);
-    });
-
-    it('should not close dialog when clicking inside dialog', () => {
-      component.open();
-      expect(component.isOpen()).toBe(true);
-
-      const event = new MouseEvent('click');
-      const backdrop = document.createElement('div');
-      const dialog = document.createElement('div');
-      Object.defineProperty(event, 'target', { value: dialog, writable: false });
-      Object.defineProperty(event, 'currentTarget', { value: backdrop, writable: false });
-      
-      component.handleBackdropClick(event);
-      expect(component.isOpen()).toBe(true);
+      expect(dialogRef.close).toHaveBeenCalled();
     });
   });
 
@@ -142,9 +113,6 @@ describe('LoginDialog', () => {
       vi.spyOn(authService, 'tryToLogin').mockReturnValue(of({}));
       vi.spyOn(localStorageService, 'put');
 
-      component.open();
-      expect(component.isOpen()).toBe(true);
-
       const loginData = {
         username: 'testuser',
         password: 'testpass',
@@ -156,7 +124,27 @@ describe('LoginDialog', () => {
       // Use setTimeout in a promise to wait for async operations
       await new Promise(resolve => setTimeout(resolve, 100));
       
-      expect(component.isOpen()).toBe(false);
+      expect(dialogRef.close).toHaveBeenCalled();
+    });
+
+    it('should keep dialog open on login error', async () => {
+      vi.spyOn(authService, 'tryToLogin').mockReturnValue(throwError(() => new Error('Login failed')));
+      vi.spyOn(localStorageService, 'put');
+      const closeSpy = dialogRef.close as any;
+      closeSpy.mockClear();
+
+      const loginData = {
+        username: 'testuser',
+        password: 'wrongpass',
+        rememberMe: false
+      };
+
+      component.handleTryToLogin(loginData);
+
+      // Use setTimeout in a promise to wait for async operations
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      expect(dialogRef.close).not.toHaveBeenCalled();
     });
   });
 

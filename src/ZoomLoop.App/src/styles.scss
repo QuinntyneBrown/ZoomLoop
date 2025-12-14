@@ -21,6 +21,24 @@
  */
 
 /* ========================================
+   CDK OVERLAY STYLES
+   ======================================== */
+
+@import '@angular/cdk/overlay-prebuilt.css';
+
+/* CDK Overlay customizations */
+.cdk-overlay-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.cdk-overlay-pane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: static !important;
+}
+
+/* ========================================
    0. GLOBAL BASE STYLES
    ======================================== */
 
