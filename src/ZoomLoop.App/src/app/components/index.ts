@@ -1,6 +1,7 @@
 export * from './button';
 export * from './card';
 export * from './carousel';
+export * from './dashboard-card';
 export * from './feature';
 export * from './footer';
 export * from './hero';
