@@ -99,7 +99,15 @@ describe('VehicleCreate', () => {
 
     it('should require year', () => {
       const yearControl = component.form.get('year');
+      // Year has a default value of current year, so it's not empty
+      expect(yearControl?.value).toBe(new Date().getFullYear());
+      
+      // Clear the value to test required validation
+      yearControl?.setValue(null);
       expect(yearControl?.hasError('required')).toBe(true);
+      
+      yearControl?.setValue(2023);
+      expect(yearControl?.hasError('required')).toBe(false);
     });
 
     it('should validate year range', () => {
@@ -189,14 +197,14 @@ describe('VehicleCreate', () => {
 
   describe('Image Handling', () => {
     it('should set dragging state on drag over', () => {
-      const event = new DragEvent('dragover');
+      const event = { preventDefault: () => {}, stopPropagation: () => {} } as DragEvent;
       component.onDragOver(event);
       expect(component.isDragging()).toBe(true);
     });
 
     it('should clear dragging state on drag leave', () => {
       component.isDragging.set(true);
-      const event = new DragEvent('dragleave');
+      const event = { preventDefault: () => {}, stopPropagation: () => {} } as DragEvent;
       component.onDragLeave(event);
       expect(component.isDragging()).toBe(false);
     });
