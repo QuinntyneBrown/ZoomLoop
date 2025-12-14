@@ -26,30 +26,18 @@ public class VehicleValuationService : IVehicleValuationService
 
         var messages = new List<ChatMessage>
         {
-            new SystemChatMessage("You are a vehicle identification expert. Given a VIN number, provide the year, make, and model of the vehicle. Respond only with a JSON object in this exact format: {\"year\": 2020, \"make\": \"Toyota\", \"model\": \"Camry\"}"),
+            new SystemChatMessage(@"You are a vehicle identification expert. Given a VIN number, provide the year, make, and model of the vehicle. Respond only with a JSON object in this exact format: {""year"": 2020, ""make"": ""Toyota"", ""model"": ""Camry""}"),
             new UserChatMessage($"VIN: {vin}")
         };
 
         var content = await _openAIService.CompleteChatAsync(messages, cancellationToken);
 
-        // Parse JSON response
-        var jsonStart = content.IndexOf('{');
-        var jsonEnd = content.LastIndexOf('}');
-        if (jsonStart >= 0 && jsonEnd > jsonStart)
+        return ParseJson<VehicleInfoByVinResult>(content, root => new VehicleInfoByVinResult
         {
-            var json = content.Substring(jsonStart, jsonEnd - jsonStart + 1);
-            using var parsed = System.Text.Json.JsonDocument.Parse(json);
-            var root = parsed.RootElement;
-
-            return new VehicleInfoByVinResult
-            {
-                Year = root.GetProperty("year").GetInt32(),
-                Make = root.GetProperty("make").GetString() ?? string.Empty,
-                Model = root.GetProperty("model").GetString() ?? string.Empty
-            };
-        }
-
-        throw new InvalidOperationException("Failed to parse vehicle information from VIN");
+            Year = root.GetProperty("year").GetInt32(),
+            Make = root.GetProperty("make").GetString() ?? string.Empty,
+            Model = root.GetProperty("model").GetString() ?? string.Empty
+        }, "Failed to parse vehicle information from VIN");
     }
 
     public async Task<VehicleValuationResult> GetVehicleValuationAsync(
@@ -81,7 +69,15 @@ Exterior Condition: {request.ExteriorCondition}")
 
         var content = await _openAIService.CompleteChatAsync(messages, cancellationToken);
 
-        // Parse JSON response
+        return ParseJson<VehicleValuationResult>(content, root => new VehicleValuationResult
+        {
+            FairValue = root.GetProperty("fairValue").GetDecimal(),
+            Explanation = root.GetProperty("explanation").GetString() ?? string.Empty
+        }, "Failed to parse vehicle valuation from AI response");
+    }
+
+    private static T ParseJson<T>(string content, Func<System.Text.Json.JsonElement, T> parser, string errorMessage)
+    {
         var jsonStart = content.IndexOf('{');
         var jsonEnd = content.LastIndexOf('}');
         if (jsonStart >= 0 && jsonEnd > jsonStart)
@@ -89,14 +85,9 @@ Exterior Condition: {request.ExteriorCondition}")
             var json = content.Substring(jsonStart, jsonEnd - jsonStart + 1);
             using var parsed = System.Text.Json.JsonDocument.Parse(json);
             var root = parsed.RootElement;
-
-            return new VehicleValuationResult
-            {
-                FairValue = root.GetProperty("fairValue").GetDecimal(),
-                Explanation = root.GetProperty("explanation").GetString() ?? string.Empty
-            };
+            return parser(root);
         }
 
-        throw new InvalidOperationException("Failed to parse vehicle valuation from AI response");
+        throw new InvalidOperationException(errorMessage);
     }
 }
