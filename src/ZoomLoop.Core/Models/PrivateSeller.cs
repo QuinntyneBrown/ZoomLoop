@@ -11,6 +11,12 @@ public class PrivateSeller
         LastName = string.Empty;
         Email = string.Empty;
         PhoneNumber = string.Empty;
+        AddressLine1 = string.Empty;
+        AddressLine2 = string.Empty;
+        City = string.Empty;
+        Province = string.Empty;
+        PostalCode = string.Empty;
+        Country = string.Empty;
         Listings = [];
     }
 
@@ -20,6 +26,12 @@ public class PrivateSeller
     public string LastName { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
+    public string AddressLine1 { get; set; }
+    public string AddressLine2 { get; set; }
+    public string City { get; set; }
+    public string Province { get; set; }
+    public string PostalCode { get; set; }
+    public string Country { get; set; }
     public bool IsVerified { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? LastModifiedDate { get; set; }
