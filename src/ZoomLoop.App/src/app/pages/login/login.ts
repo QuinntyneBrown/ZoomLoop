@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 import { NavigationService } from '../../core/navigation.service';
 import { LocalStorageService, loginCredentialsKey } from '../../core';
-import { LoginForm } from './login-form/login-form';
+import { LoginForm } from '../../components/login-form';
 import { CommonModule } from '@angular/common';
 
 @Component({
