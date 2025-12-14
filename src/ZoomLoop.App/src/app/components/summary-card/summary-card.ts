@@ -1,10 +1,10 @@
-import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'zl-summary-card',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, DecimalPipe],
+  imports: [CommonModule],
   templateUrl: './summary-card.html',
   styleUrl: './summary-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
