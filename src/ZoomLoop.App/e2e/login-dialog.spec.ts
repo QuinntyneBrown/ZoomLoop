@@ -38,8 +38,8 @@ test.describe('Login Dialog', () => {
     await page.locator('zl-navbar').getByRole('button', { name: /sign in/i }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
 
-    // Click backdrop (the area outside the dialog)
-    await page.locator('.login-dialog-backdrop').click({ position: { x: 0, y: 0 } });
+    // Click backdrop (the area outside the dialog) - CDK uses .cdk-overlay-backdrop
+    await page.locator('.cdk-overlay-backdrop').click({ position: { x: 0, y: 0 } });
 
     // Dialog should be closed
     await expect(page.getByRole('dialog')).not.toBeVisible();

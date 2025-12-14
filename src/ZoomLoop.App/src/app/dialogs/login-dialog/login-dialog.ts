@@ -51,6 +51,10 @@ export class LoginDialog implements OnDestroy {
           }
         })
       )
-      .subscribe();
+      .subscribe({
+        error: () => {
+          // Error already handled in tap operator
+        }
+      });
   }
 }
