@@ -11,3 +11,4 @@ export * from './loan-calculator.service';
 export * from './local-storage.service';
 export * from './navigation.service';
 export * from './profile.service';
+export * from './vehicle.service';
