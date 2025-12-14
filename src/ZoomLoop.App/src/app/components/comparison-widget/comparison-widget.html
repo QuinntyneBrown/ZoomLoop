@@ -1,0 +1,154 @@
+<div class="comparison-widget">
+  <div class="comparison-widget__header">
+    <h3 class="comparison-widget__title">Loan Comparison</h3>
+    <button 
+      *ngIf="primaryScenario && secondaryScenario"
+      class="comparison-widget__switch-btn"
+      (click)="switchScenarios()"
+      aria-label="Switch primary and secondary scenarios"
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 8L8 4M8 4L4 0M8 4H2M16 12L12 16M12 16L16 20M12 16H18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Switch
+    </button>
+  </div>
+
+  <div class="comparison-widget__content">
+    <!-- Primary Scenario -->
+    <div 
+      class="comparison-widget__scenario comparison-widget__scenario--primary"
+      [class.comparison-widget__scenario--active]="activeScenario === 'primary'"
+      (click)="setActiveScenario('primary')"
+      role="button"
+      tabindex="0"
+      [attr.aria-pressed]="activeScenario === 'primary'"
+    >
+      <div class="comparison-widget__scenario-header">
+        <span class="comparison-widget__scenario-label">Primary</span>
+        <span 
+          *ngIf="activeScenario === 'primary'" 
+          class="comparison-widget__active-badge"
+          aria-label="Active scenario"
+        >
+          Active
+        </span>
+      </div>
+      
+      <div *ngIf="primaryScenario" class="comparison-widget__scenario-details">
+        <div class="comparison-widget__scenario-terms">
+          <div class="comparison-widget__term-item">
+            <span class="comparison-widget__term-label">Term:</span>
+            <span class="comparison-widget__term-value">{{ primaryScenario.term }} months</span>
+          </div>
+          <div class="comparison-widget__term-item">
+            <span class="comparison-widget__term-label">Rate:</span>
+            <span class="comparison-widget__term-value">{{ formatPercentage(primaryScenario.rate) }}</span>
+          </div>
+        </div>
+
+        <div class="comparison-widget__metrics">
+          <div class="comparison-widget__metric">
+            <div class="comparison-widget__metric-label">Monthly Payment</div>
+            <div class="comparison-widget__metric-value">
+              {{ formatCurrency(getPrimaryComparison()?.monthlyPayment ?? 0) }}
+            </div>
+          </div>
+          <div class="comparison-widget__metric">
+            <div class="comparison-widget__metric-label">Total Interest</div>
+            <div class="comparison-widget__metric-value">
+              {{ formatCurrency(getPrimaryComparison()?.totalInterest ?? 0) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!primaryScenario" class="comparison-widget__empty">
+        No primary scenario set
+      </div>
+    </div>
+
+    <!-- Secondary Scenario -->
+    <div 
+      class="comparison-widget__scenario comparison-widget__scenario--secondary"
+      [class.comparison-widget__scenario--active]="activeScenario === 'secondary'"
+      (click)="setActiveScenario('secondary')"
+      role="button"
+      tabindex="0"
+      [attr.aria-pressed]="activeScenario === 'secondary'"
+    >
+      <div class="comparison-widget__scenario-header">
+        <span class="comparison-widget__scenario-label">Secondary</span>
+        <span 
+          *ngIf="activeScenario === 'secondary'" 
+          class="comparison-widget__active-badge"
+          aria-label="Active scenario"
+        >
+          Active
+        </span>
+      </div>
+      
+      <div *ngIf="secondaryScenario" class="comparison-widget__scenario-details">
+        <div class="comparison-widget__scenario-terms">
+          <div class="comparison-widget__term-item">
+            <span class="comparison-widget__term-label">Term:</span>
+            <span class="comparison-widget__term-value">{{ secondaryScenario.term }} months</span>
+          </div>
+          <div class="comparison-widget__term-item">
+            <span class="comparison-widget__term-label">Rate:</span>
+            <span class="comparison-widget__term-value">{{ formatPercentage(secondaryScenario.rate) }}</span>
+          </div>
+        </div>
+
+        <div class="comparison-widget__metrics">
+          <div class="comparison-widget__metric">
+            <div class="comparison-widget__metric-label">Monthly Payment</div>
+            <div class="comparison-widget__metric-value">
+              {{ formatCurrency(getSecondaryComparison()?.monthlyPayment ?? 0) }}
+            </div>
+          </div>
+          <div class="comparison-widget__metric">
+            <div class="comparison-widget__metric-label">Total Interest</div>
+            <div class="comparison-widget__metric-value">
+              {{ formatCurrency(getSecondaryComparison()?.totalInterest ?? 0) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!secondaryScenario" class="comparison-widget__empty">
+        No secondary scenario set
+      </div>
+    </div>
+  </div>
+
+  <!-- Delta Display -->
+  <div 
+    *ngIf="primaryScenario && secondaryScenario" 
+    class="comparison-widget__delta"
+  >
+    <div class="comparison-widget__delta-title">Difference (Secondary - Primary)</div>
+    <div class="comparison-widget__delta-metrics">
+      <div class="comparison-widget__delta-item">
+        <span class="comparison-widget__delta-label">Monthly Payment:</span>
+        <span 
+          class="comparison-widget__delta-value"
+          [class.comparison-widget__delta-value--positive]="getMonthlyPaymentDelta() > 0"
+          [class.comparison-widget__delta-value--negative]="getMonthlyPaymentDelta() < 0"
+        >
+          {{ getMonthlyPaymentDelta() >= 0 ? '+' : '' }}{{ formatCurrency(getMonthlyPaymentDelta()) }}
+        </span>
+      </div>
+      <div class="comparison-widget__delta-item">
+        <span class="comparison-widget__delta-label">Total Interest:</span>
+        <span 
+          class="comparison-widget__delta-value"
+          [class.comparison-widget__delta-value--positive]="getTotalInterestDelta() > 0"
+          [class.comparison-widget__delta-value--negative]="getTotalInterestDelta() < 0"
+        >
+          {{ getTotalInterestDelta() >= 0 ? '+' : '' }}{{ formatCurrency(getTotalInterestDelta()) }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

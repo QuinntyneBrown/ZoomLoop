@@ -1,5 +1,6 @@
 export * from './card';
 export * from './carousel';
+export * from './comparison-widget';
 export * from './dashboard';
 export * from './feature';
 export * from './footer';
