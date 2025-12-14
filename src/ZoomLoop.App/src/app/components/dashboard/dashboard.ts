@@ -5,11 +5,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'zl-dashboard-card',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './dashboard-card.html',
-  styleUrl: './dashboard-card.scss',
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardCard {
+export class Dashboard {
   @Input() title = '';
   @Input() description = '';
   @Input() iconColor = '#ef4444';
