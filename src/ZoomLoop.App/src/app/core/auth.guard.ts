@@ -14,7 +14,10 @@ export const authGuard: CanActivateFn = (
   const localStorageService = inject(LocalStorageService);
   const navigationService = inject(NavigationService);
 
-  const token = localStorageService.get({ name: accessTokenKey });
+  const storedToken = localStorageService.get({ name: accessTokenKey });
+  const directToken = localStorage.getItem(accessTokenKey) || localStorage.getItem('accessToken');
+  const token = storedToken ?? directToken;
+
   if (token) {
     return true;
   }
