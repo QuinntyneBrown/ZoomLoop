@@ -1,0 +1,150 @@
+<mat-expansion-panel class="search-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon>search</mat-icon>
+      <span>Search Vehicles</span>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <div class="search-grid">
+      <!-- Make & Model -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Make</mat-label>
+          <input 
+            matInput 
+            formControlName="make"
+            [matAutocomplete]="makeAuto"
+            placeholder="e.g., Toyota, Honda">
+          <mat-icon matSuffix>directions_car</mat-icon>
+          <mat-autocomplete #makeAuto="matAutocomplete">
+            @for (make of makeSuggestions(); track make) {
+              <mat-option [value]="make">{{ make }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Model</mat-label>
+          <input 
+            matInput 
+            formControlName="model"
+            [matAutocomplete]="modelAuto"
+            placeholder="e.g., Camry, Civic">
+          <mat-icon matSuffix>commute</mat-icon>
+          <mat-autocomplete #modelAuto="matAutocomplete">
+            @for (model of modelSuggestions(); track model) {
+              <mat-option [value]="model">{{ model }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <!-- Year Range -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Year From</mat-label>
+          <input matInput type="number" formControlName="yearMin" placeholder="e.g., 2020">
+          <mat-icon matSuffix>calendar_today</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Year To</mat-label>
+          <input matInput type="number" formControlName="yearMax" placeholder="e.g., 2024">
+          <mat-icon matSuffix>calendar_today</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- Price Range -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Price Min</mat-label>
+          <input matInput type="number" formControlName="priceMin" placeholder="e.g., 10000">
+          <mat-icon matSuffix>attach_money</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Price Max</mat-label>
+          <input matInput type="number" formControlName="priceMax" placeholder="e.g., 50000">
+          <mat-icon matSuffix>attach_money</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- Mileage Range -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mileage Min (km)</mat-label>
+          <input matInput type="number" formControlName="mileageMin" placeholder="e.g., 0">
+          <mat-icon matSuffix>speed</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mileage Max (km)</mat-label>
+          <input matInput type="number" formControlName="mileageMax" placeholder="e.g., 100000">
+          <mat-icon matSuffix>speed</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- Color & Transmission -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Color</mat-label>
+          <input 
+            matInput 
+            formControlName="color"
+            [matAutocomplete]="colorAuto"
+            placeholder="e.g., Red, Blue">
+          <mat-icon matSuffix>palette</mat-icon>
+          <mat-autocomplete #colorAuto="matAutocomplete">
+            @for (color of colorSuggestions(); track color) {
+              <mat-option [value]="color">{{ color }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Transmission</mat-label>
+          <mat-select formControlName="transmission">
+            <mat-option value="">Any</mat-option>
+            @for (option of transmissionOptions; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matSuffix>settings</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- Doors & Checkboxes -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Doors</mat-label>
+          <mat-select formControlName="doors">
+            <mat-option [value]="null">Any</mat-option>
+            @for (option of doorOptions; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matSuffix>sensor_door</mat-icon>
+        </mat-form-field>
+
+        <div class="checkbox-group">
+          <mat-checkbox formControlName="accidentFree">Accident Free</mat-checkbox>
+          <mat-checkbox formControlName="isNewest">Newest Arrivals</mat-checkbox>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>search</mat-icon>
+          Search
+        </button>
+        <button mat-stroked-button type="button" (click)="onReset()">
+          <mat-icon>clear</mat-icon>
+          Reset
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-expansion-panel>
