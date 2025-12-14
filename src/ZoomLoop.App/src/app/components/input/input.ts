@@ -1,7 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core';
+import { Component, Input as InputDecorator, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,7 +13,6 @@ export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url'
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './input.html',
   styleUrl: './input.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -23,13 +22,13 @@ export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url'
   ]
 })
 export class Input implements ControlValueAccessor {
-  @Input() type: InputType = 'text';
-  @Input() placeholder = '';
-  @Input() label = '';
-  @Input() required = false;
-  @Input() disabled = false;
-  @Input() id?: string;
-  @Input() autocomplete?: string;
+  @InputDecorator() type: InputType = 'text';
+  @InputDecorator() placeholder = '';
+  @InputDecorator() label = '';
+  @InputDecorator() required = false;
+  @InputDecorator() disabled = false;
+  @InputDecorator() id?: string;
+  @InputDecorator() autocomplete?: string;
 
   value = '';
   onChange: (value: any) => void = () => {};

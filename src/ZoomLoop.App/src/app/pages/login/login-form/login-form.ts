@@ -1,7 +1,7 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, Input as InputDecorator, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Input } from '../../../components/input';
@@ -15,13 +15,13 @@ import { Button } from '../../../components/button';
   styleUrls: ['./login-form.scss']
 })
 export class LoginForm implements OnInit {
-  @Input()
+  @InputDecorator()
   username: string | null = null;
 
-  @Input()
+  @InputDecorator()
   password: string | null = null;
 
-  @Input()
+  @InputDecorator()
   rememberMe: boolean | null = null;
 
   readonly form = new FormGroup({
