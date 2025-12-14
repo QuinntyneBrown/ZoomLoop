@@ -5,6 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { ApiBaseUrlInterceptor } from './api-base-url.interceptor';
+import { environment } from '../../environments/environment';
 
 describe('ApiBaseUrlInterceptor', () => {
   let httpMock: HttpTestingController;
@@ -37,7 +38,10 @@ describe('ApiBaseUrlInterceptor', () => {
       return request.url.includes('/api/user/current');
     });
 
-    expect(req.request.url).toContain('https://localhost:7217/api/user/current');
+    const expectedUrl = environment.apiBaseUrl 
+      ? `${environment.apiBaseUrl}/api/user/current` 
+      : '/api/user/current';
+    expect(req.request.url).toBe(expectedUrl);
     req.flush({});
   });
 
@@ -58,7 +62,10 @@ describe('ApiBaseUrlInterceptor', () => {
       return request.url.includes('/api/user/token');
     });
 
-    expect(req.request.url).toContain('https://localhost:7217/api/user/token');
+    const expectedUrl = environment.apiBaseUrl 
+      ? `${environment.apiBaseUrl}/api/user/token` 
+      : '/api/user/token';
+    expect(req.request.url).toBe(expectedUrl);
     expect(req.request.body).toEqual(payload);
     req.flush({});
   });
