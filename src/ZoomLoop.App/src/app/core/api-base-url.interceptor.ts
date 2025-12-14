@@ -15,6 +15,7 @@ import { environment } from '../../environments/environment';
 export class ApiBaseUrlInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+
     // Only prepend base URL for relative API paths
     if (request.url.startsWith('/api/') && environment.apiBaseUrl) {
       const apiRequest = request.clone({
