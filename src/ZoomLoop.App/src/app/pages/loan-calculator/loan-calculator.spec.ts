@@ -163,7 +163,7 @@ describe('LoanCalculator', () => {
     });
   });
 
-  describe('Down Payment Validation', () => {
+  describe('Down Payment Clamping', () => {
     it('should clamp down payment to price when it exceeds price', () => {
       component.form.patchValue({
         price: 25000,
