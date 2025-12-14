@@ -51,13 +51,13 @@
           <div class="comparison-widget__metric">
             <div class="comparison-widget__metric-label">Monthly Payment</div>
             <div class="comparison-widget__metric-value">
-              {{ formatCurrency(getPrimaryComparison()?.monthlyPayment ?? 0) }}
+              {{ formatCurrency(primaryComparison()?.monthlyPayment ?? 0) }}
             </div>
           </div>
           <div class="comparison-widget__metric">
             <div class="comparison-widget__metric-label">Total Interest</div>
             <div class="comparison-widget__metric-value">
-              {{ formatCurrency(getPrimaryComparison()?.totalInterest ?? 0) }}
+              {{ formatCurrency(primaryComparison()?.totalInterest ?? 0) }}
             </div>
           </div>
         </div>
@@ -104,13 +104,13 @@
           <div class="comparison-widget__metric">
             <div class="comparison-widget__metric-label">Monthly Payment</div>
             <div class="comparison-widget__metric-value">
-              {{ formatCurrency(getSecondaryComparison()?.monthlyPayment ?? 0) }}
+              {{ formatCurrency(secondaryComparison()?.monthlyPayment ?? 0) }}
             </div>
           </div>
           <div class="comparison-widget__metric">
             <div class="comparison-widget__metric-label">Total Interest</div>
             <div class="comparison-widget__metric-value">
-              {{ formatCurrency(getSecondaryComparison()?.totalInterest ?? 0) }}
+              {{ formatCurrency(secondaryComparison()?.totalInterest ?? 0) }}
             </div>
           </div>
         </div>
@@ -133,20 +133,20 @@
         <span class="comparison-widget__delta-label">Monthly Payment:</span>
         <span 
           class="comparison-widget__delta-value"
-          [class.comparison-widget__delta-value--positive]="getMonthlyPaymentDelta() > 0"
-          [class.comparison-widget__delta-value--negative]="getMonthlyPaymentDelta() < 0"
+          [class.comparison-widget__delta-value--positive]="monthlyPaymentDelta() > 0"
+          [class.comparison-widget__delta-value--negative]="monthlyPaymentDelta() < 0"
         >
-          {{ getMonthlyPaymentDelta() >= 0 ? '+' : '' }}{{ formatCurrency(getMonthlyPaymentDelta()) }}
+          {{ monthlyPaymentDelta() >= 0 ? '+' : '' }}{{ formatCurrency(monthlyPaymentDelta()) }}
         </span>
       </div>
       <div class="comparison-widget__delta-item">
         <span class="comparison-widget__delta-label">Total Interest:</span>
         <span 
           class="comparison-widget__delta-value"
-          [class.comparison-widget__delta-value--positive]="getTotalInterestDelta() > 0"
-          [class.comparison-widget__delta-value--negative]="getTotalInterestDelta() < 0"
+          [class.comparison-widget__delta-value--positive]="totalInterestDelta() > 0"
+          [class.comparison-widget__delta-value--negative]="totalInterestDelta() < 0"
         >
-          {{ getTotalInterestDelta() >= 0 ? '+' : '' }}{{ formatCurrency(getTotalInterestDelta()) }}
+          {{ totalInterestDelta() >= 0 ? '+' : '' }}{{ formatCurrency(totalInterestDelta()) }}
         </span>
       </div>
     </div>

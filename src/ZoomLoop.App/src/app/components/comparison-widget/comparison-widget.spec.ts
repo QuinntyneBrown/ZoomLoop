@@ -131,7 +131,7 @@ describe('ComparisonWidget', () => {
     });
 
     it('should get primary comparison values', () => {
-      const comparison = component.getPrimaryComparison();
+      const comparison = component.primaryComparison();
       expect(comparison).toBeTruthy();
       expect(comparison?.monthlyPayment).toBeGreaterThan(0);
       expect(comparison?.totalInterest).toBeGreaterThan(0);
@@ -139,7 +139,7 @@ describe('ComparisonWidget', () => {
     });
 
     it('should get secondary comparison values', () => {
-      const comparison = component.getSecondaryComparison();
+      const comparison = component.secondaryComparison();
       expect(comparison).toBeTruthy();
       expect(comparison?.monthlyPayment).toBeGreaterThan(0);
       expect(comparison?.totalInterest).toBeGreaterThan(0);
@@ -148,13 +148,15 @@ describe('ComparisonWidget', () => {
 
     it('should return null when primary scenario is not set', () => {
       component.primaryScenario = undefined;
-      const comparison = component.getPrimaryComparison();
+      fixture.detectChanges();
+      const comparison = component.primaryComparison();
       expect(comparison).toBeNull();
     });
 
     it('should return null when secondary scenario is not set', () => {
       component.secondaryScenario = undefined;
-      const comparison = component.getSecondaryComparison();
+      fixture.detectChanges();
+      const comparison = component.secondaryComparison();
       expect(comparison).toBeNull();
     });
   });
@@ -167,19 +169,20 @@ describe('ComparisonWidget', () => {
     });
 
     it('should calculate monthly payment delta', () => {
-      const delta = component.getMonthlyPaymentDelta();
+      const delta = component.monthlyPaymentDelta();
       expect(delta).toBeGreaterThan(0); // Secondary has higher monthly payment
     });
 
     it('should calculate total interest delta', () => {
-      const delta = component.getTotalInterestDelta();
+      const delta = component.totalInterestDelta();
       expect(delta).toBeLessThan(0); // Secondary has lower total interest
     });
 
     it('should return 0 delta when scenarios are missing', () => {
       component.secondaryScenario = undefined;
-      const monthlyDelta = component.getMonthlyPaymentDelta();
-      const interestDelta = component.getTotalInterestDelta();
+      fixture.detectChanges();
+      const monthlyDelta = component.monthlyPaymentDelta();
+      const interestDelta = component.totalInterestDelta();
       expect(monthlyDelta).toBe(0);
       expect(interestDelta).toBe(0);
     });

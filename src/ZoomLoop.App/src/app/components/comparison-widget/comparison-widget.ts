@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, computed, signal } from '@angular/core';
 
 export interface LoanScenario {
   term: number; // in months
@@ -25,15 +25,83 @@ export interface LoanComparison {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ComparisonWidget {
-  @Input() primaryScenario?: LoanScenario;
-  @Input() secondaryScenario?: LoanScenario;
-  @Input() activeScenario: 'primary' | 'secondary' = 'primary';
+  private primaryScenarioSignal = signal<LoanScenario | undefined>(undefined);
+  private secondaryScenarioSignal = signal<LoanScenario | undefined>(undefined);
+  private activeScenarioSignal = signal<'primary' | 'secondary'>('primary');
+
+  @Input() 
+  set primaryScenario(value: LoanScenario | undefined) {
+    this.primaryScenarioSignal.set(value);
+  }
+  get primaryScenario(): LoanScenario | undefined {
+    return this.primaryScenarioSignal();
+  }
+
+  @Input() 
+  set secondaryScenario(value: LoanScenario | undefined) {
+    this.secondaryScenarioSignal.set(value);
+  }
+  get secondaryScenario(): LoanScenario | undefined {
+    return this.secondaryScenarioSignal();
+  }
+
+  @Input() 
+  set activeScenario(value: 'primary' | 'secondary') {
+    this.activeScenarioSignal.set(value);
+  }
+  get activeScenario(): 'primary' | 'secondary' {
+    return this.activeScenarioSignal();
+  }
   
   @Output() scenarioSwitch = new EventEmitter<{ primary: LoanScenario; secondary: LoanScenario }>();
   @Output() activeScenarioChange = new EventEmitter<'primary' | 'secondary'>();
 
+  primaryComparison = computed(() => {
+    const scenario = this.primaryScenarioSignal();
+    if (!scenario) return null;
+
+    const monthlyPayment = this.calculateMonthlyPayment(scenario);
+    const totalInterest = this.calculateTotalInterest(scenario);
+    
+    return {
+      monthlyPayment,
+      totalInterest,
+      totalPaid: monthlyPayment * scenario.term
+    };
+  });
+
+  secondaryComparison = computed(() => {
+    const scenario = this.secondaryScenarioSignal();
+    if (!scenario) return null;
+
+    const monthlyPayment = this.calculateMonthlyPayment(scenario);
+    const totalInterest = this.calculateTotalInterest(scenario);
+    
+    return {
+      monthlyPayment,
+      totalInterest,
+      totalPaid: monthlyPayment * scenario.term
+    };
+  });
+
+  monthlyPaymentDelta = computed(() => {
+    const primary = this.primaryComparison();
+    const secondary = this.secondaryComparison();
+    
+    if (!primary || !secondary) return 0;
+    return secondary.monthlyPayment - primary.monthlyPayment;
+  });
+
+  totalInterestDelta = computed(() => {
+    const primary = this.primaryComparison();
+    const secondary = this.secondaryComparison();
+    
+    if (!primary || !secondary) return 0;
+    return secondary.totalInterest - primary.totalInterest;
+  });
+
   calculateMonthlyPayment(scenario: LoanScenario): number {
-    if (!scenario || scenario.term <= 0 || scenario.rate < 0) {
+    if (!scenario || scenario.term <= 0 || scenario.rate < 0 || scenario.principal <= 0) {
       return 0;
     }
 
@@ -60,58 +128,6 @@ export class ComparisonWidget {
     const monthlyPayment = this.calculateMonthlyPayment(scenario);
     const totalPaid = monthlyPayment * scenario.term;
     return totalPaid - scenario.principal;
-  }
-
-  getPrimaryComparison(): LoanComparison | null {
-    if (!this.primaryScenario) {
-      return null;
-    }
-
-    const monthlyPayment = this.calculateMonthlyPayment(this.primaryScenario);
-    const totalInterest = this.calculateTotalInterest(this.primaryScenario);
-    
-    return {
-      monthlyPayment,
-      totalInterest,
-      totalPaid: monthlyPayment * this.primaryScenario.term
-    };
-  }
-
-  getSecondaryComparison(): LoanComparison | null {
-    if (!this.secondaryScenario) {
-      return null;
-    }
-
-    const monthlyPayment = this.calculateMonthlyPayment(this.secondaryScenario);
-    const totalInterest = this.calculateTotalInterest(this.secondaryScenario);
-    
-    return {
-      monthlyPayment,
-      totalInterest,
-      totalPaid: monthlyPayment * this.secondaryScenario.term
-    };
-  }
-
-  getMonthlyPaymentDelta(): number {
-    const primary = this.getPrimaryComparison();
-    const secondary = this.getSecondaryComparison();
-    
-    if (!primary || !secondary) {
-      return 0;
-    }
-
-    return secondary.monthlyPayment - primary.monthlyPayment;
-  }
-
-  getTotalInterestDelta(): number {
-    const primary = this.getPrimaryComparison();
-    const secondary = this.getSecondaryComparison();
-    
-    if (!primary || !secondary) {
-      return 0;
-    }
-
-    return secondary.totalInterest - primary.totalInterest;
   }
 
   switchScenarios(): void {
