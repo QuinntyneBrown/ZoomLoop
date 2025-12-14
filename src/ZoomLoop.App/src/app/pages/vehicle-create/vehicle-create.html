@@ -193,13 +193,13 @@
         </div>
 
         <div class="vehicle-form__checkboxes">
-          <label class="vehicle-form__checkbox">
-            <input type="checkbox" formControlName="isNew">
+          <label class="vehicle-form__checkbox" for="isNew">
+            <input type="checkbox" id="isNew" formControlName="isNew">
             <span>New Vehicle</span>
           </label>
 
-          <label class="vehicle-form__checkbox">
-            <input type="checkbox" formControlName="isCertified">
+          <label class="vehicle-form__checkbox" for="isCertified">
+            <input type="checkbox" id="isCertified" formControlName="isCertified">
             <span>Certified Pre-Owned</span>
           </label>
         </div>
@@ -265,9 +265,12 @@
             <label 
               *ngFor="let feature of category.features" 
               class="vehicle-form__feature"
-              [class.vehicle-form__feature--selected]="isFeatureSelected(feature)">
+              [class.vehicle-form__feature--selected]="isFeatureSelected(feature)"
+              [attr.for]="'feature-' + category.name + '-' + feature.replace(/\\s+/g, '-')">
               <input 
-                type="checkbox" 
+                type="checkbox"
+                [attr.id]="'feature-' + category.name + '-' + feature.replace(/\\s+/g, '-')"
+                [attr.aria-label]="feature"
                 [checked]="isFeatureSelected(feature)"
                 (change)="toggleFeature(feature, category.name)">
               <span>{{ feature }}</span>

@@ -10,32 +10,32 @@ test.describe('Login Page', () => {
     await expect(page.getByRole('heading', { name: /sign in to zoomloop/i })).toBeVisible();
 
     // Check for form fields
-    await expect(page.getByLabel(/username/i)).toBeVisible();
-    await expect(page.getByLabel(/password/i)).toBeVisible();
-    await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible();
+    await expect(page.locator('input#username')).toBeVisible();
+    await expect(page.locator('input#password')).toBeVisible();
+    await expect(page.locator('form').getByRole('button', { name: /sign in/i })).toBeVisible();
   });
 
   test('validates required fields', async ({ page }) => {
-    const submitButton = page.getByRole('button', { name: /sign in/i });
+    const submitButton = page.locator('form').getByRole('button', { name: /sign in/i });
 
     // Initially, the button should be disabled
     await expect(submitButton).toBeDisabled();
 
     // Fill in username only
-    await page.getByLabel(/username/i).fill('testuser');
+    await page.locator('input#username').fill('testuser');
     await expect(submitButton).toBeDisabled();
 
     // Fill in password
-    await page.getByLabel(/password/i).fill('testpass');
+    await page.locator('input#password').fill('testpass');
     
     // Now button should be enabled
     await expect(submitButton).toBeEnabled();
   });
 
   test('clears form fields when empty', async ({ page }) => {
-    const usernameInput = page.getByLabel(/username/i);
-    const passwordInput = page.getByLabel(/password/i);
-    const submitButton = page.getByRole('button', { name: /sign in/i });
+    const usernameInput = page.locator('input#username');
+    const passwordInput = page.locator('input#password');
+    const submitButton = page.locator('form').getByRole('button', { name: /sign in/i });
 
     // Fill both fields
     await usernameInput.fill('testuser');
@@ -48,8 +48,8 @@ test.describe('Login Page', () => {
   });
 
   test('shows validation errors on blur', async ({ page }) => {
-    const usernameInput = page.getByLabel(/username/i);
-    const passwordInput = page.getByLabel(/password/i);
+    const usernameInput = page.locator('input#username');
+    const passwordInput = page.locator('input#password');
 
     // Focus and blur username without filling
     await usernameInput.focus();
@@ -78,8 +78,8 @@ test.describe('Login Page', () => {
   });
 
   test('form inputs accept text', async ({ page }) => {
-    const usernameInput = page.getByLabel(/username/i);
-    const passwordInput = page.getByLabel(/password/i);
+    const usernameInput = page.locator('input#username');
+    const passwordInput = page.locator('input#password');
 
     await usernameInput.fill('testuser123');
     await expect(usernameInput).toHaveValue('testuser123');
@@ -89,7 +89,7 @@ test.describe('Login Page', () => {
   });
 
   test('password field masks input', async ({ page }) => {
-    const passwordInput = page.getByLabel(/password/i);
+    const passwordInput = page.locator('input#password');
     await expect(passwordInput).toHaveAttribute('type', 'password');
   });
 });
