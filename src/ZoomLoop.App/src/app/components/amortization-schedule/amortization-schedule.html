@@ -1,0 +1,67 @@
+<div class="amortization-schedule">
+  <button 
+    type="button"
+    class="schedule-toggle"
+    (click)="toggleExpanded()"
+    [attr.aria-expanded]="isExpanded()"
+    aria-controls="schedule-content"
+  >
+    <span class="toggle-icon" [class.expanded]="isExpanded()">▶</span>
+    <span class="toggle-label">Amortization Schedule</span>
+    @if (!isExpanded() && schedule().length > 0) {
+      <span class="toggle-summary">
+        {{ schedule().length }} payments | Total Interest: {{ formatCurrency(totalInterest()) }}
+      </span>
+    }
+  </button>
+
+  @if (isExpanded()) {
+    <div id="schedule-content" class="schedule-content">
+      @if (schedule().length > 0) {
+        <div class="schedule-totals">
+          <div class="total-item">
+            <span class="total-label">Total Principal:</span>
+            <span class="total-value">{{ formatCurrency(totalPrincipal()) }}</span>
+          </div>
+          <div class="total-item">
+            <span class="total-label">Total Interest:</span>
+            <span class="total-value">{{ formatCurrency(totalInterest()) }}</span>
+          </div>
+          <div class="total-item total-item--highlight">
+            <span class="total-label">Total Amount:</span>
+            <span class="total-value">{{ formatCurrency(totalPrincipal() + totalInterest()) }}</span>
+          </div>
+        </div>
+
+        <div class="schedule-table-wrapper">
+          <table class="schedule-table" role="table">
+            <thead>
+              <tr>
+                <th scope="col">Payment #</th>
+                <th scope="col">Payment</th>
+                <th scope="col">Principal</th>
+                <th scope="col">Interest</th>
+                <th scope="col">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (payment of schedule(); track payment.paymentNumber) {
+                <tr>
+                  <td class="payment-number">{{ payment.paymentNumber }}</td>
+                  <td class="payment-amount">{{ formatCurrency(payment.totalPayment) }}</td>
+                  <td class="principal-amount">{{ formatCurrency(payment.principal) }}</td>
+                  <td class="interest-amount">{{ formatCurrency(payment.interest) }}</td>
+                  <td class="balance-amount">{{ formatCurrency(payment.remainingBalance) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="schedule-empty">
+          <p>No schedule available. Please provide valid loan details.</p>
+        </div>
+      }
+    </div>
+  }
+</div>
