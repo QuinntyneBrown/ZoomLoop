@@ -323,7 +323,7 @@ li {
 
 .grid {
   display: grid;
-  gap: 2rem;
+  gap: var(--md-sys-spacing-8);
 }
 
 .grid--2col {
