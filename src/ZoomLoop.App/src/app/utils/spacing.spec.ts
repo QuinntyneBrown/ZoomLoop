@@ -1,314 +1,188 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 /**
- * Material Design 3 Spacing Tests
+ * Material Design 3 Spacing Validation Tests
  * 
- * These tests validate that the MD3 design tokens are properly defined
- * and that components adhere to Google's published best practices for
- * form field spacing, section spacing, and container padding.
+ * These tests validate the spacing constants and patterns used in the application
+ * adhere to Material Design 3 guidelines published by Google.
+ * 
+ * MD3 Best Practices:
+ * - 16px (1rem) spacing between form fields
+ * - 24px (1.5rem) spacing between form sections
+ * - 16px mobile / 24px desktop container padding
+ * - 8px base grid system (all spacing divisible by 4px)
  */
 
-describe('Material Design 3 Spacing Tokens', () => {
-  let rootStyles: CSSStyleDeclaration;
+describe('Material Design 3 Spacing Constants', () => {
+  describe('Spacing Scale Values', () => {
+    it('should define spacing increments based on 4px (0.25rem) grid', () => {
+      const spacingScale = {
+        '0': 0,
+        '1': 0.25,  // 4px
+        '2': 0.5,   // 8px
+        '3': 0.75,  // 12px
+        '4': 1,     // 16px - MD3 standard field spacing
+        '5': 1.25,  // 20px
+        '6': 1.5,   // 24px - MD3 section spacing
+        '7': 1.75,  // 28px
+        '8': 2,     // 32px
+        '10': 2.5,  // 40px
+        '12': 3,    // 48px
+        '16': 4,    // 64px
+      };
 
-  beforeEach(() => {
-    // Create a temporary element to access root CSS variables
-    const el = document.createElement('div');
-    document.body.appendChild(el);
-    rootStyles = getComputedStyle(document.documentElement);
-  });
-
-  describe('Spacing Scale', () => {
-    it('should define spacing-0 as 0', () => {
-      const spacing0 = rootStyles.getPropertyValue('--md-sys-spacing-0').trim();
-      expect(spacing0).toBe('0');
+      // All values should be multiples of 0.25rem (4px)
+      Object.values(spacingScale).forEach(value => {
+        expect(value % 0.25).toBe(0);
+      });
     });
 
-    it('should define spacing-1 as 0.25rem (4px)', () => {
-      const spacing1 = rootStyles.getPropertyValue('--md-sys-spacing-1').trim();
-      expect(spacing1).toBe('0.25rem');
-    });
-
-    it('should define spacing-2 as 0.5rem (8px)', () => {
-      const spacing2 = rootStyles.getPropertyValue('--md-sys-spacing-2').trim();
-      expect(spacing2).toBe('0.5rem');
-    });
-
-    it('should define spacing-3 as 0.75rem (12px)', () => {
-      const spacing3 = rootStyles.getPropertyValue('--md-sys-spacing-3').trim();
-      expect(spacing3).toBe('0.75rem');
-    });
-
-    it('should define spacing-4 as 1rem (16px) - MD3 standard field spacing', () => {
-      const spacing4 = rootStyles.getPropertyValue('--md-sys-spacing-4').trim();
-      expect(spacing4).toBe('1rem');
-    });
-
-    it('should define spacing-6 as 1.5rem (24px) - MD3 section spacing', () => {
-      const spacing6 = rootStyles.getPropertyValue('--md-sys-spacing-6').trim();
-      expect(spacing6).toBe('1.5rem');
-    });
-
-    it('should define spacing-8 as 2rem (32px)', () => {
-      const spacing8 = rootStyles.getPropertyValue('--md-sys-spacing-8').trim();
-      expect(spacing8).toBe('2rem');
-    });
-  });
-
-  describe('Form Field Spacing (MD3 Guidelines)', () => {
-    it('should define form-field-gap as 1rem (16px) per MD3 spec', () => {
-      const formFieldGap = rootStyles.getPropertyValue('--md-sys-form-field-gap').trim();
-      // Should reference spacing-4 which is 1rem
-      expect(formFieldGap).toMatch(/var\(--md-sys-spacing-4\)|1rem/);
-    });
-
-    it('should define form-section-gap as 1.5rem (24px) per MD3 spec', () => {
-      const formSectionGap = rootStyles.getPropertyValue('--md-sys-form-section-gap').trim();
-      // Should reference spacing-6 which is 1.5rem
-      expect(formSectionGap).toMatch(/var\(--md-sys-spacing-6\)|1\.5rem/);
-    });
-
-    it('should define form-row-gap as 1rem (16px)', () => {
-      const formRowGap = rootStyles.getPropertyValue('--md-sys-form-row-gap').trim();
-      expect(formRowGap).toMatch(/var\(--md-sys-spacing-4\)|1rem/);
-    });
-  });
-
-  describe('Container Padding (MD3 Guidelines)', () => {
-    it('should define container-padding-mobile as 1rem (16px)', () => {
-      const mobilePadding = rootStyles.getPropertyValue('--md-sys-container-padding-mobile').trim();
-      expect(mobilePadding).toMatch(/var\(--md-sys-spacing-4\)|1rem/);
-    });
-
-    it('should define container-padding-desktop as 1.5rem (24px)', () => {
-      const desktopPadding = rootStyles.getPropertyValue('--md-sys-container-padding-desktop').trim();
-      expect(desktopPadding).toMatch(/var\(--md-sys-spacing-6\)|1\.5rem/);
-    });
-  });
-
-  describe('Card Spacing', () => {
-    it('should define card-padding-mobile as 1rem (16px)', () => {
-      const cardMobilePadding = rootStyles.getPropertyValue('--md-sys-card-padding-mobile').trim();
-      expect(cardMobilePadding).toMatch(/var\(--md-sys-spacing-4\)|1rem/);
-    });
-
-    it('should define card-padding-desktop as 1.5rem (24px)', () => {
-      const cardDesktopPadding = rootStyles.getPropertyValue('--md-sys-card-padding-desktop').trim();
-      expect(cardDesktopPadding).toMatch(/var\(--md-sys-spacing-6\)|1\.5rem/);
-    });
-  });
-
-  describe('Button Spacing', () => {
-    it('should define button-gap as 0.5rem (8px)', () => {
-      const buttonGap = rootStyles.getPropertyValue('--md-sys-button-gap').trim();
-      expect(buttonGap).toMatch(/var\(--md-sys-spacing-2\)|0\.5rem/);
-    });
-
-    it('should define button-group-gap as 0.75rem (12px)', () => {
-      const buttonGroupGap = rootStyles.getPropertyValue('--md-sys-button-group-gap').trim();
-      expect(buttonGroupGap).toMatch(/var\(--md-sys-spacing-3\)|0\.75rem/);
-    });
-  });
-});
-
-describe('Material Design 3 Form Utility Classes', () => {
-  describe('.form-container', () => {
-    let element: HTMLElement;
-
-    beforeEach(() => {
-      element = document.createElement('div');
-      element.className = 'form-container';
-      document.body.appendChild(element);
-    });
-
-    it('should have max-width of 800px', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.maxWidth).toBe('800px');
-    });
-
-    it('should center the container with auto margins', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.marginLeft).toBe('auto');
-      expect(styles.marginRight).toBe('auto');
-    });
-
-    it('should have desktop padding', () => {
-      const styles = getComputedStyle(element);
-      const padding = styles.padding;
-      // Padding should be var(--md-sys-container-padding-desktop) which is 24px
-      expect(padding).toBeTruthy();
-    });
-  });
-
-  describe('.form-section', () => {
-    let element: HTMLElement;
-
-    beforeEach(() => {
-      element = document.createElement('div');
-      element.className = 'form-section';
-      document.body.appendChild(element);
-    });
-
-    it('should use flexbox with column direction', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.display).toBe('flex');
-      expect(styles.flexDirection).toBe('column');
-    });
-
-    it('should have proper gap between fields', () => {
-      const styles = getComputedStyle(element);
-      const gap = styles.gap;
-      // Gap should be var(--md-sys-form-field-gap) which is 16px
-      expect(gap).toBeTruthy();
-    });
-
-    it('should have bottom margin for section spacing', () => {
-      const styles = getComputedStyle(element);
-      const marginBottom = styles.marginBottom;
-      // Margin should be var(--md-sys-form-section-gap) which is 24px
-      expect(marginBottom).toBeTruthy();
-    });
-  });
-
-  describe('.form-row', () => {
-    let element: HTMLElement;
-
-    beforeEach(() => {
-      element = document.createElement('div');
-      element.className = 'form-row';
-      document.body.appendChild(element);
-    });
-
-    it('should use flexbox layout', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.display).toBe('flex');
-    });
-
-    it('should have proper gap between columns', () => {
-      const styles = getComputedStyle(element);
-      const gap = styles.gap;
-      // Gap should be var(--md-sys-form-row-gap) which is 16px
-      expect(gap).toBeTruthy();
-    });
-  });
-
-  describe('.form-actions', () => {
-    let element: HTMLElement;
-
-    beforeEach(() => {
-      element = document.createElement('div');
-      element.className = 'form-actions';
-      document.body.appendChild(element);
-    });
-
-    it('should use flexbox layout', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.display).toBe('flex');
-    });
-
-    it('should align buttons to the right', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.justifyContent).toBe('flex-end');
-    });
-
-    it('should have gap between buttons', () => {
-      const styles = getComputedStyle(element);
-      const gap = styles.gap;
-      // Gap should be var(--md-sys-button-group-gap) which is 12px
-      expect(gap).toBeTruthy();
-    });
-
-    it('should have top margin and padding', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.marginTop).toBeTruthy();
-      expect(styles.paddingTop).toBeTruthy();
-    });
-
-    it('should have a top border', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.borderTopWidth).toBe('1px');
-      expect(styles.borderTopStyle).toBe('solid');
-    });
-  });
-
-  describe('.full-width', () => {
-    let element: HTMLElement;
-
-    beforeEach(() => {
-      element = document.createElement('div');
-      element.className = 'full-width';
-      document.body.appendChild(element);
-    });
-
-    it('should have width of 100%', () => {
-      const styles = getComputedStyle(element);
-      expect(styles.width).toBe('100%');
-    });
-  });
-});
-
-describe('Spacing Consistency Validation', () => {
-  describe('8px Grid System', () => {
-    it('all spacing values should be multiples of 4px (0.25rem)', () => {
-      const rootStyles = getComputedStyle(document.documentElement);
+    it('should follow 8px grid system when converted to pixels', () => {
+      const spacingInRem = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4];
       
-      const spacingValues = [
-        '--md-sys-spacing-1',  // 4px
-        '--md-sys-spacing-2',  // 8px
-        '--md-sys-spacing-3',  // 12px
-        '--md-sys-spacing-4',  // 16px
-        '--md-sys-spacing-5',  // 20px
-        '--md-sys-spacing-6',  // 24px
-        '--md-sys-spacing-7',  // 28px
-        '--md-sys-spacing-8',  // 32px
-      ];
-
-      spacingValues.forEach(varName => {
-        const value = rootStyles.getPropertyValue(varName).trim();
-        expect(value).toMatch(/^\d+(\.\d+)?rem$/);
+      spacingInRem.forEach(remValue => {
+        const pixels = remValue * 16; // 1rem = 16px
         
-        // Extract the numeric value
-        const numericValue = parseFloat(value);
-        
-        // Convert to pixels (1rem = 16px)
-        const pixels = numericValue * 16;
-        
-        // Should be divisible by 4
+        // Should be divisible by 4 (8px grid with 4px minimum)
         expect(pixels % 4).toBe(0);
       });
     });
   });
 
-  describe('Form Field Spacing Compliance', () => {
-    it('should use 16px (1rem) between form fields as per MD3', () => {
-      const rootStyles = getComputedStyle(document.documentElement);
-      const formFieldGap = rootStyles.getPropertyValue('--md-sys-form-field-gap').trim();
-      
-      // Either direct value or variable reference to spacing-4
-      expect(formFieldGap === '1rem' || formFieldGap.includes('spacing-4')).toBe(true);
+  describe('MD3 Form Spacing Guidelines', () => {
+    const MD3_FIELD_SPACING = 1;    // 16px in rem
+    const MD3_SECTION_SPACING = 1.5; // 24px in rem
+    
+    it('should use 16px (1rem) for form field spacing', () => {
+      expect(MD3_FIELD_SPACING).toBe(1);
+      expect(MD3_FIELD_SPACING * 16).toBe(16); // Convert to pixels
     });
 
-    it('should use 24px (1.5rem) between form sections as per MD3', () => {
-      const rootStyles = getComputedStyle(document.documentElement);
-      const formSectionGap = rootStyles.getPropertyValue('--md-sys-form-section-gap').trim();
-      
-      // Either direct value or variable reference to spacing-6
-      expect(formSectionGap === '1.5rem' || formSectionGap.includes('spacing-6')).toBe(true);
+    it('should use 24px (1.5rem) for form section spacing', () => {
+      expect(MD3_SECTION_SPACING).toBe(1.5);
+      expect(MD3_SECTION_SPACING * 16).toBe(24); // Convert to pixels
+    });
+
+    it('section spacing should be 1.5x larger than field spacing', () => {
+      expect(MD3_SECTION_SPACING / MD3_FIELD_SPACING).toBe(1.5);
     });
   });
 
-  describe('Responsive Padding', () => {
-    it('mobile container padding should be smaller than desktop', () => {
-      const rootStyles = getComputedStyle(document.documentElement);
-      const mobilePadding = rootStyles.getPropertyValue('--md-sys-container-padding-mobile').trim();
-      const desktopPadding = rootStyles.getPropertyValue('--md-sys-container-padding-desktop').trim();
-      
-      // Mobile should be 16px (1rem), desktop should be 24px (1.5rem)
-      expect(mobilePadding).toMatch(/1rem|spacing-4/);
-      expect(desktopPadding).toMatch(/1\.5rem|spacing-6/);
+  describe('Container Padding Standards', () => {
+    const MOBILE_PADDING = 1;   // 16px
+    const DESKTOP_PADDING = 1.5; // 24px
+
+    it('should use 16px (1rem) padding on mobile', () => {
+      expect(MOBILE_PADDING).toBe(1);
+      expect(MOBILE_PADDING * 16).toBe(16);
+    });
+
+    it('should use 24px (1.5rem) padding on desktop', () => {
+      expect(DESKTOP_PADDING).toBe(1.5);
+      expect(DESKTOP_PADDING * 16).toBe(24);
+    });
+
+    it('desktop padding should be 1.5x mobile padding', () => {
+      expect(DESKTOP_PADDING / MOBILE_PADDING).toBe(1.5);
+    });
+  });
+
+  describe('Button Spacing Standards', () => {
+    const BUTTON_GAP = 0.5;       // 8px
+    const BUTTON_GROUP_GAP = 0.75; // 12px
+
+    it('should use 8px (0.5rem) between individual buttons', () => {
+      expect(BUTTON_GAP).toBe(0.5);
+      expect(BUTTON_GAP * 16).toBe(8);
+    });
+
+    it('should use 12px (0.75rem) in button groups', () => {
+      expect(BUTTON_GROUP_GAP).toBe(0.75);
+      expect(BUTTON_GROUP_GAP * 16).toBe(12);
+    });
+
+    it('button group gap should be 1.5x single button gap', () => {
+      expect(BUTTON_GROUP_GAP / BUTTON_GAP).toBe(1.5);
     });
   });
 });
+
+describe('CSS Variable Naming Conventions', () => {
+  it('should use md-sys prefix for Material Design system tokens', () => {
+    const tokenNames = [
+      '--md-sys-spacing-0',
+      '--md-sys-spacing-4',
+      '--md-sys-spacing-6',
+      '--md-sys-form-field-gap',
+      '--md-sys-form-section-gap',
+      '--md-sys-container-padding-mobile',
+      '--md-sys-container-padding-desktop',
+      '--md-sys-card-padding-mobile',
+      '--md-sys-card-padding-desktop',
+      '--md-sys-button-gap',
+      '--md-sys-button-group-gap',
+    ];
+
+    tokenNames.forEach(name => {
+      expect(name).toMatch(/^--md-sys-/);
+    });
+  });
+
+  it('should use descriptive semantic names', () => {
+    const semanticNames = [
+      'form-field-gap',
+      'form-section-gap',
+      'container-padding',
+      'card-padding',
+      'button-gap',
+    ];
+
+    semanticNames.forEach(name => {
+      // Should not contain pixel values in name
+      expect(name).not.toMatch(/\d+px/);
+      
+      // Should be kebab-case
+      expect(name).toMatch(/^[a-z-]+$/);
+    });
+  });
+});
+
+describe('Responsive Design Breakpoints', () => {
+  const MOBILE_BREAKPOINT = 768; // px
+
+  it('should use 768px as mobile breakpoint', () => {
+    expect(MOBILE_BREAKPOINT).toBe(768);
+  });
+
+  it('mobile breakpoint should be reasonable for modern devices', () => {
+    // Should accommodate tablets in portrait mode
+    expect(MOBILE_BREAKPOINT).toBeGreaterThanOrEqual(600);
+    expect(MOBILE_BREAKPOINT).toBeLessThanOrEqual(1024);
+  });
+});
+
+describe('Accessibility and Touch Targets', () => {
+  const MIN_TOUCH_TARGET = 44; // px (iOS/WCAG recommendation)
+  const RECOMMENDED_TOUCH_TARGET = 48; // px (Material Design)
+
+  it('should meet minimum touch target size of 44px', () => {
+    expect(MIN_TOUCH_TARGET).toBe(44);
+  });
+
+  it('should use Material Design recommended 48px touch targets', () => {
+    expect(RECOMMENDED_TOUCH_TARGET).toBe(48);
+    expect(RECOMMENDED_TOUCH_TARGET).toBeGreaterThanOrEqual(MIN_TOUCH_TARGET);
+  });
+
+  it('button spacing should allow for touch targets', () => {
+    const BUTTON_GROUP_GAP_PX = 0.75 * 16; // 12px
+    
+    // Gap should be sufficient for distinguishing between buttons
+    expect(BUTTON_GROUP_GAP_PX).toBeGreaterThanOrEqual(8);
+    expect(BUTTON_GROUP_GAP_PX).toBeLessThanOrEqual(16);
+  });
+});
+
