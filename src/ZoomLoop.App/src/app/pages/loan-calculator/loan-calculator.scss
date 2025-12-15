@@ -1,7 +1,11 @@
 .loan-calculator {
-  padding: 2rem;
+  padding: var(--md-sys-spacing-8);
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  
+  @media (max-width: 768px) {
+    padding: var(--md-sys-spacing-4);
+  }
 
   &__container {
     max-width: 800px;
@@ -9,32 +13,40 @@
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    padding: var(--md-sys-container-padding-desktop);
     position: relative;
+    
+    @media (max-width: 768px) {
+      padding: var(--md-sys-container-padding-mobile);
+    }
   }
 
   &__title {
     font-size: 2rem;
     font-weight: 700;
     color: #1a202c;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--md-sys-spacing-2);
     text-align: center;
     position: relative;
     z-index: 1101;
+    
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
   }
 
   &__subtitle {
     font-size: 1rem;
     color: #718096;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--md-sys-spacing-8);
   }
 }
 
 .loan-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--md-sys-form-field-gap);
 
   &__field-group {
     width: 100%;
@@ -46,9 +58,9 @@
 
   &__actions {
     display: flex;
-    gap: 1rem;
+    gap: var(--md-sys-button-group-gap);
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: var(--md-sys-spacing-4);
 
     button {
       min-width: 150px;
@@ -57,8 +69,8 @@
 }
 
 .loan-results {
-  margin-top: 2rem;
-  padding-top: 2rem;
+  margin-top: var(--md-sys-spacing-8);
+  padding-top: var(--md-sys-spacing-8);
   border-top: 2px solid #e2e8f0;
 
   &__valid {
@@ -69,21 +81,21 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: #2d3748;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--md-sys-form-section-gap);
     text-align: center;
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
+    gap: var(--md-sys-form-section-gap);
   }
 
   &__item {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1.25rem;
+    gap: var(--md-sys-spacing-2);
+    padding: var(--md-sys-spacing-5);
     background: #f7fafc;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
@@ -123,6 +135,10 @@
     &--large {
       font-size: 2.5rem;
       text-align: center;
+      
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
     }
   }
 
@@ -130,7 +146,7 @@
     background: #fff5f5;
     border: 2px solid #fc8181;
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: var(--md-sys-form-section-gap);
     animation: fadeIn 0.3s ease-in;
   }
 
@@ -138,7 +154,7 @@
     font-size: 1.25rem;
     font-weight: 600;
     color: #c53030;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--md-sys-spacing-2);
   }
 
   &__error-message {
@@ -159,27 +175,10 @@
   }
 }
 
-// Responsive styles
 @media (max-width: 768px) {
-  .loan-calculator {
-    padding: 1rem;
-
-    &__container {
-      padding: 1.5rem;
-    }
-
-    &__title {
-      font-size: 1.5rem;
-    }
-  }
-
   .loan-results {
     &__grid {
       grid-template-columns: 1fr;
-    }
-
-    &__value--large {
-      font-size: 2rem;
     }
   }
 }
@@ -200,6 +199,6 @@
 
   .mat-mdc-form-field-error {
     font-size: 0.875rem;
-    margin-top: 0.25rem;
+    margin-top: var(--md-sys-spacing-1);
   }
 }

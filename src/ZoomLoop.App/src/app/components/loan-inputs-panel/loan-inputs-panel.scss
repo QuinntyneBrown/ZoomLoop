@@ -2,15 +2,19 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 .loan-inputs-panel {
-  padding: 24px;
+  padding: var(--md-sys-card-padding-desktop);
   max-width: 600px;
   margin: 0 auto;
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  @media (max-width: 600px) {
+    padding: var(--md-sys-card-padding-mobile);
+  }
 
   &__title {
-    margin: 0 0 24px;
+    margin: 0 0 var(--md-sys-form-section-gap);
     font-size: 24px;
     font-weight: 600;
     color: #333;
@@ -20,12 +24,12 @@
 .loan-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--md-sys-spacing-5);
 
   &__field-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--md-sys-spacing-2);
   }
 
   &__field {
@@ -34,7 +38,7 @@
     // Ensure suffix buttons are aligned properly
     ::ng-deep .mat-mdc-form-field-icon-suffix {
       display: flex;
-      gap: 4px;
+      gap: var(--md-sys-spacing-1);
       align-items: center;
     }
 
@@ -47,7 +51,7 @@
   }
 
   &__slider {
-    padding: 0 12px;
+    padding: 0 var(--md-sys-spacing-3);
 
     ::ng-deep .mat-mdc-slider {
       width: 100%;
@@ -56,13 +60,17 @@
 }
 
 .loan-results {
-  margin-top: 32px;
-  padding: 24px;
+  margin-top: var(--md-sys-spacing-8);
+  padding: var(--md-sys-card-padding-desktop);
   background: #f5f5f5;
   border-radius: 8px;
+  
+  @media (max-width: 600px) {
+    padding: var(--md-sys-card-padding-mobile);
+  }
 
   &__title {
-    margin: 0 0 16px;
+    margin: 0 0 var(--md-sys-form-field-gap);
     font-size: 18px;
     font-weight: 600;
     color: #333;
@@ -71,14 +79,18 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 16px;
+    gap: var(--md-sys-form-field-gap);
+    
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
 .loan-result {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--md-sys-spacing-1);
 
   &__label {
     font-size: 12px;
@@ -95,25 +107,10 @@
     &--primary {
       font-size: 28px;
       color: #1976d2;
-    }
-  }
-}
-
-// Responsive design
-@media (max-width: 600px) {
-  .loan-inputs-panel {
-    padding: 16px;
-  }
-
-  .loan-results {
-    &__grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .loan-result {
-    &__value--primary {
-      font-size: 24px;
+      
+      @media (max-width: 600px) {
+        font-size: 24px;
+      }
     }
   }
 }
