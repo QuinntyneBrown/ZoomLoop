@@ -44,6 +44,41 @@ $zoomloop-theme: mat.define-theme((
 
 :root {
   @include mat.all-component-themes($zoomloop-theme);
+  
+  /* ========================================
+     Material Design 3 Design Tokens
+     ======================================== */
+  
+  /* Spacing Scale (8px base grid) */
+  --md-sys-spacing-0: 0;
+  --md-sys-spacing-1: 0.25rem;   /* 4px */
+  --md-sys-spacing-2: 0.5rem;    /* 8px */
+  --md-sys-spacing-3: 0.75rem;   /* 12px */
+  --md-sys-spacing-4: 1rem;      /* 16px - MD3 standard field spacing */
+  --md-sys-spacing-5: 1.25rem;   /* 20px */
+  --md-sys-spacing-6: 1.5rem;    /* 24px - MD3 section spacing */
+  --md-sys-spacing-7: 1.75rem;   /* 28px */
+  --md-sys-spacing-8: 2rem;      /* 32px */
+  --md-sys-spacing-10: 2.5rem;   /* 40px */
+  --md-sys-spacing-12: 3rem;     /* 48px */
+  --md-sys-spacing-16: 4rem;     /* 64px */
+  
+  /* Form Field Spacing (Material Design 3 Guidelines) */
+  --md-sys-form-field-gap: var(--md-sys-spacing-4);        /* 16px between fields */
+  --md-sys-form-section-gap: var(--md-sys-spacing-6);      /* 24px between sections */
+  --md-sys-form-row-gap: var(--md-sys-spacing-4);          /* 16px between columns */
+  
+  /* Container Padding */
+  --md-sys-container-padding-mobile: var(--md-sys-spacing-4);   /* 16px */
+  --md-sys-container-padding-desktop: var(--md-sys-spacing-6);  /* 24px */
+  
+  /* Card Spacing */
+  --md-sys-card-padding-mobile: var(--md-sys-spacing-4);   /* 16px */
+  --md-sys-card-padding-desktop: var(--md-sys-spacing-6);  /* 24px */
+  
+  /* Button Spacing */
+  --md-sys-button-gap: var(--md-sys-spacing-2);   /* 8px between buttons */
+  --md-sys-button-group-gap: var(--md-sys-spacing-3);   /* 12px for button groups */
 }
 
 /* ========================================
@@ -305,4 +340,83 @@ li {
 
 .grid--auto-fit {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* ========================================
+   Material Design 3 Form Patterns
+   ======================================== */
+
+/* Form Container - Standard max-width with responsive padding */
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--md-sys-container-padding-desktop);
+  
+  @media (max-width: 768px) {
+    padding: var(--md-sys-container-padding-mobile);
+  }
+}
+
+.form-container--narrow {
+  max-width: 600px;
+}
+
+.form-container--wide {
+  max-width: 1000px;
+}
+
+/* Form Section - Groups related fields with proper spacing */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-sys-form-field-gap);
+  margin-bottom: var(--md-sys-form-section-gap);
+}
+
+.form-section__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 var(--md-sys-spacing-2) 0;
+  color: var(--mat-sys-on-surface, #1a1a2e);
+}
+
+/* Form Row - Horizontal layout for multiple fields */
+.form-row {
+  display: flex;
+  gap: var(--md-sys-form-row-gap);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.form-row > * {
+  flex: 1;
+}
+
+/* Form Actions - Button group at form bottom */
+.form-actions {
+  display: flex;
+  gap: var(--md-sys-button-group-gap);
+  justify-content: flex-end;
+  margin-top: var(--md-sys-form-section-gap);
+  padding-top: var(--md-sys-spacing-4);
+  border-top: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
+  
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/* Full Width Form Field */
+.full-width {
+  width: 100%;
+}
+
+.form-field-flex {
+  flex: 1;
 }

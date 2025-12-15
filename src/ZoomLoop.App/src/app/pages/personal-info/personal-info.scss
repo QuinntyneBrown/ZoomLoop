@@ -3,13 +3,13 @@
 
 .personal-info-page {
   max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  margin: var(--md-sys-spacing-8) auto;
+  padding: 0 var(--md-sys-spacing-4);
 }
 
 .personal-info-card {
   mat-card-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--md-sys-form-section-gap);
 
     mat-card-title {
       font-size: 1.75rem;
@@ -18,7 +18,11 @@
   }
 
   mat-card-content {
-    padding: 1.5rem;
+    padding: var(--md-sys-card-padding-desktop);
+    
+    @media (max-width: 768px) {
+      padding: var(--md-sys-card-padding-mobile);
+    }
   }
 }
 
@@ -27,8 +31,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  gap: 1rem;
+  padding: var(--md-sys-spacing-12);
+  gap: var(--md-sys-spacing-4);
 
   p {
     color: rgba(0, 0, 0, 0.6);
@@ -36,20 +40,26 @@
 }
 
 .form-section {
-  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-sys-form-field-gap);
+  margin-bottom: var(--md-sys-form-section-gap);
 
   h3 {
     font-size: 1.25rem;
     font-weight: 500;
-    margin-bottom: 1rem;
+    margin-bottom: var(--md-sys-spacing-2);
     color: rgba(0, 0, 0, 0.87);
   }
 }
 
 .form-row {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: var(--md-sys-form-row-gap);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .form-field-flex {
@@ -58,23 +68,22 @@
 
 .full-width {
   width: 100%;
-  margin-bottom: 1rem;
 }
 
 .error-message {
   background-color: #ffebee;
   color: #c62828;
-  padding: 1rem;
+  padding: var(--md-sys-spacing-4);
   border-radius: 4px;
-  margin-bottom: 1rem;
+  margin-bottom: var(--md-sys-spacing-4);
 }
 
 .form-actions {
   display: flex;
-  gap: 1rem;
+  gap: var(--md-sys-button-group-gap);
   justify-content: flex-end;
-  margin-top: 2rem;
-  padding-top: 1rem;
+  margin-top: var(--md-sys-form-section-gap);
+  padding-top: var(--md-sys-spacing-4);
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 
   button {
@@ -83,25 +92,21 @@
     &[type='submit'] {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: var(--md-sys-spacing-2);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
     }
   }
 }
 
 @media (max-width: 768px) {
   .personal-info-page {
-    margin: 1rem auto;
-  }
-
-  .form-row {
-    flex-direction: column;
-  }
-
-  .form-actions {
-    flex-direction: column-reverse;
-
-    button {
-      width: 100%;
-    }
+    margin: var(--md-sys-spacing-4) auto;
   }
 }

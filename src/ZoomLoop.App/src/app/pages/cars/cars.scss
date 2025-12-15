@@ -1,16 +1,24 @@
 .cars-page {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--md-sys-spacing-8);
+  
+  @media (max-width: 768px) {
+    padding: var(--md-sys-spacing-4);
+  }
 
   .page-header {
-    margin-bottom: 2rem;
+    margin-bottom: var(--md-sys-spacing-8);
 
     h1 {
       font-size: 2rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: var(--md-sys-spacing-2);
       color: #333;
+      
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
     }
 
     .result-summary {
@@ -23,16 +31,6 @@
   .page-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .cars-page {
-    padding: 1rem;
-
-    .page-header h1 {
-      font-size: 1.5rem;
-    }
+    gap: var(--md-sys-spacing-8);
   }
 }
