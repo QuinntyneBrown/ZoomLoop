@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/car.png" alt="ZoomLoop" width="600"/>
+</p>
+
 # ZoomLoop
 
 A modern web application for vehicle management built with Angular and ASP.NET Core.
