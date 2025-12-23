@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"/c/projects/ZoomLoop\" status)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
