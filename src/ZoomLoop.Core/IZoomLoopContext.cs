@@ -13,6 +13,9 @@ public interface IZoomLoopContext
     DbSet<User> Users { get; }
     DbSet<Role> Roles { get; }
     DbSet<Privilege> Privileges { get; }
+    DbSet<Session> Sessions { get; }
+    DbSet<UserPreferences> UserPreferences { get; }
+    DbSet<UserAddress> UserAddresses { get; }
     DbSet<Dealer> Dealers { get; }
     DbSet<DealerLocation> DealerLocations { get; }
     DbSet<Vehicle> Vehicles { get; }

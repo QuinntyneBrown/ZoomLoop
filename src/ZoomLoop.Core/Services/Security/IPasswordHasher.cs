@@ -5,5 +5,6 @@ namespace ZoomLoop.Core.Services.Security;
 
 public interface IPasswordHasher
 {
-    string HashPassword(byte[] salt, string password);
+    string HashPassword(string password);
+    bool VerifyPassword(string password, string passwordHash);
 }

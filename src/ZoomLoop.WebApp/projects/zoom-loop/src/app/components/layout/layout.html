@@ -5,6 +5,8 @@
   [navItems]="navItems"
   [activeRoute]="activeRoute"
   [scrolled]="isScrolled"
+  [isLoggedIn]="isLoggedIn"
+  [userInitials]="userInitials"
   ctaText="Browse Cars"
   (signIn)="onSignIn()"
   (ctaClick)="onCtaClick()"
@@ -23,3 +25,15 @@
   [legalLinks]="legalLinks"
   (newsletterSubscribe)="onNewsletterSubscribe($event)"
 ></zl-footer>
+
+<zl-login-dialog
+  [isOpen]="isLoginDialogOpen"
+  [mode]="loginDialogMode"
+  [isLoading]="isAuthLoading"
+  [errorMessage]="authErrorMessage"
+  (closed)="onLoginDialogClose()"
+  (login)="onLogin($event)"
+  (register)="onRegister($event)"
+  (forgotPassword)="onForgotPassword($event)"
+  (modeChanged)="onLoginModeChange($event)"
+></zl-login-dialog>

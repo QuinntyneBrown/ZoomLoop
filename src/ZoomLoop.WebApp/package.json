@@ -39,6 +39,7 @@
     "@angular/build": "^21.0.4",
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.0",
+    "@playwright/test": "^1.57.0",
     "@storybook/angular": "^10.1.10",
     "jsdom": "^27.1.0",
     "ng-packagr": "^21.0.0",

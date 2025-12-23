@@ -1,25 +1,41 @@
-import { Component, inject, HostListener } from '@angular/core';
+import { Component, inject, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
+import { Subscription } from 'rxjs';
 import {
   HeaderComponent,
   FooterComponent,
   NavItem,
   FooterColumn,
-  SocialLink
+  SocialLink,
+  LoginDialog,
+  LoginDialogMode,
+  LoginData,
+  RegisterData,
+  ForgotPasswordData
 } from 'zoom-loop-components';
+import { AuthService } from '../../services';
+import { User } from '../../models';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, LoginDialog],
   templateUrl: './layout.html',
   styleUrl: './layout.scss'
 })
-export class Layout {
+export class Layout implements OnInit, OnDestroy {
   private router = inject(Router);
+  private authService = inject(AuthService);
+  private authSubscription?: Subscription;
 
   isScrolled = false;
+  isLoggedIn = false;
+  currentUser: User | null = null;
+  isLoginDialogOpen = false;
+  loginDialogMode: LoginDialogMode = 'login';
+  isAuthLoading = false;
+  authErrorMessage = '';
 
   navItems: NavItem[] = [
     { label: 'Buy', href: '/cars' },
@@ -63,6 +79,26 @@ export class Layout {
     { label: 'Terms', href: '/terms' }
   ];
 
+  get userInitials(): string {
+    if (this.currentUser) {
+      const first = this.currentUser.firstName.charAt(0).toUpperCase();
+      const last = this.currentUser.lastName.charAt(0).toUpperCase();
+      return `${first}${last}`;
+    }
+    return '';
+  }
+
+  ngOnInit(): void {
+    this.authSubscription = this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      this.isLoggedIn = !!user;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription?.unsubscribe();
+  }
+
   @HostListener('window:scroll')
   onScroll(): void {
     this.isScrolled = window.scrollY > 50;
@@ -73,7 +109,9 @@ export class Layout {
   }
 
   onSignIn(): void {
-    console.log('Sign in clicked');
+    this.isLoginDialogOpen = true;
+    this.loginDialogMode = 'login';
+    this.authErrorMessage = '';
   }
 
   onCtaClick(): void {
@@ -82,5 +120,74 @@ export class Layout {
 
   onNewsletterSubscribe(email: string): void {
     console.log('Newsletter:', email);
+  }
+
+  onLoginDialogClose(): void {
+    this.isLoginDialogOpen = false;
+    this.authErrorMessage = '';
+  }
+
+  onLoginModeChange(mode: LoginDialogMode): void {
+    this.loginDialogMode = mode;
+    this.authErrorMessage = '';
+  }
+
+  onLogin(data: LoginData): void {
+    this.isAuthLoading = true;
+    this.authErrorMessage = '';
+
+    this.authService.login({
+      email: data.email,
+      password: data.password,
+      rememberMe: data.rememberMe
+    }).subscribe({
+      next: () => {
+        this.isAuthLoading = false;
+        this.isLoginDialogOpen = false;
+      },
+      error: (error) => {
+        this.isAuthLoading = false;
+        this.authErrorMessage = error.error?.detail || 'Invalid email or password. Please try again.';
+      }
+    });
+  }
+
+  onRegister(data: RegisterData): void {
+    this.isAuthLoading = true;
+    this.authErrorMessage = '';
+
+    this.authService.register({
+      email: data.email,
+      password: data.password,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone,
+      marketingOptIn: data.marketingOptIn
+    }).subscribe({
+      next: () => {
+        this.isAuthLoading = false;
+        this.loginDialogMode = 'login';
+        this.authErrorMessage = '';
+      },
+      error: (error) => {
+        this.isAuthLoading = false;
+        this.authErrorMessage = error.error?.detail || 'Registration failed. Please try again.';
+      }
+    });
+  }
+
+  onForgotPassword(data: ForgotPasswordData): void {
+    this.isAuthLoading = true;
+    this.authErrorMessage = '';
+
+    this.authService.forgotPassword({ email: data.email }).subscribe({
+      next: () => {
+        this.isAuthLoading = false;
+        this.loginDialogMode = 'login';
+      },
+      error: () => {
+        this.isAuthLoading = false;
+      }
+    });
   }
 }

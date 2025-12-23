@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ZoomLoop.Core;
+using ZoomLoop.Core.Models;
 
 namespace ZoomLoop.Api.Features.Users;
 
@@ -19,11 +20,11 @@ public class GetUsersPageHandler : IRequestHandler<GetUsersPageRequest, GetUsers
     {
         var query = _context.Users
             .Include(x => x.Roles)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.Status != UserStatus.Deleted);
 
         var length = await query.CountAsync(cancellationToken);
         var users = await query
-            .OrderBy(x => x.Username)
+            .OrderBy(x => x.Email)
             .Skip(request.Index * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);

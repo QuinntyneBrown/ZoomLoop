@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ZoomLoop.Core;
@@ -32,7 +31,6 @@ public class SeedService : ISeedService
 
         await SeedRolesAndPrivilegesAsync();
         await SeedUsersAsync();
-        await SeedUserWithProfileAsync();
         await SeedMakesAndModelsAsync();
 
         _logger.LogInformation("Database seeding completed successfully.");
@@ -83,9 +81,10 @@ public class SeedService : ISeedService
             return;
         }
 
-        _logger.LogInformation("Seeding default admin user...");
+        _logger.LogInformation("Seeding default users...");
 
         var adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Administrator");
+        var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
 
         if (adminRole == null)
         {
@@ -93,87 +92,49 @@ public class SeedService : ISeedService
             return;
         }
 
-        var salt = RandomNumberGenerator.GetBytes(16);
-        var password = _passwordHasher.HashPassword(salt, "Admin123!");
+        var now = DateTime.UtcNow;
 
         var adminUser = new User
         {
             UserId = Guid.NewGuid(),
-            Username = "admin",
-            Password = password,
-            Salt = salt,
-            Roles = new List<Role> { adminRole }
+            Email = "admin@zoomloop.com",
+            PasswordHash = _passwordHasher.HashPassword("Admin123!"),
+            FirstName = "Admin",
+            LastName = "User",
+            EmailVerified = true,
+            EmailVerifiedAt = now,
+            Status = UserStatus.Active,
+            CreatedAt = now,
+            UpdatedAt = now,
+            Roles = [adminRole]
         };
 
         _context.Users.Add(adminUser);
 
-        await _context.SaveChangesAsync();
-
-        _logger.LogInformation("Admin user seeded successfully.");
-    }
-
-    private async Task SeedUserWithProfileAsync()
-    {
-        var existingUserWithProfile = await _context.Users
-            .FirstOrDefaultAsync(u => u.Username == "testuser");
-        
-        if (existingUserWithProfile != null)
+        if (userRole != null)
         {
-            _logger.LogInformation("Test user with profile already exists, skipping.");
-            return;
-        }
-
-        _logger.LogInformation("Seeding test user with profile...");
-
-        var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "User");
-
-        if (userRole == null)
-        {
-            _logger.LogWarning("User role not found, cannot create test user.");
-            return;
-        }
-
-        var salt = RandomNumberGenerator.GetBytes(16);
-        var password = _passwordHasher.HashPassword(salt, "Test123!");
-
-        var profileId = Guid.NewGuid();
-
-        var profile = new Profile
-        {
-            ProfileId = profileId,
-            FirstName = "Test",
-            LastName = "User",
-            PhoneNumber = "555-0100",
-            ProfileImageUrl = string.Empty,
-            DateOfBirth = new DateTime(1990, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-            HomeAddress = new Address
+            var testUser = new User
             {
-                Address1 = "123 Main St",
-                Address2 = "Apt 4B",
-                City = "Toronto",
-                Province = "ON",
-                PostalCode = "M5H 2N2"
-            }
-        };
+                UserId = Guid.NewGuid(),
+                Email = "test@zoomloop.com",
+                PasswordHash = _passwordHasher.HashPassword("Test123!"),
+                FirstName = "Test",
+                LastName = "User",
+                Phone = "555-0100",
+                EmailVerified = true,
+                EmailVerifiedAt = now,
+                Status = UserStatus.Active,
+                CreatedAt = now,
+                UpdatedAt = now,
+                Roles = [userRole]
+            };
 
-        _context.Profiles.Add(profile);
-
-        var testUser = new User
-        {
-            UserId = Guid.NewGuid(),
-            Username = "testuser",
-            Password = password,
-            Salt = salt,
-            Roles = new List<Role> { userRole },
-            CurrentProfileId = profileId,
-            DefaultProfileId = profileId
-        };
-
-        _context.Users.Add(testUser);
+            _context.Users.Add(testUser);
+        }
 
         await _context.SaveChangesAsync();
 
-        _logger.LogInformation("Test user with profile seeded successfully.");
+        _logger.LogInformation("Users seeded successfully.");
     }
 
     private async Task SeedMakesAndModelsAsync()
@@ -195,12 +156,12 @@ public class SeedService : ISeedService
                 LogoUrl = string.Empty,
                 IsActive = true,
                 DisplayOrder = 1,
-                VehicleModels = new List<VehicleModel>
-                {
+                VehicleModels =
+                [
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "Camry", Description = "Mid-size sedan", IsActive = true },
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "Corolla", Description = "Compact sedan", IsActive = true },
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "RAV4", Description = "Compact SUV", IsActive = true }
-                }
+                ]
             },
             new Make
             {
@@ -209,12 +170,12 @@ public class SeedService : ISeedService
                 LogoUrl = string.Empty,
                 IsActive = true,
                 DisplayOrder = 2,
-                VehicleModels = new List<VehicleModel>
-                {
+                VehicleModels =
+                [
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "Accord", Description = "Mid-size sedan", IsActive = true },
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "Civic", Description = "Compact sedan", IsActive = true },
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "CR-V", Description = "Compact SUV", IsActive = true }
-                }
+                ]
             },
             new Make
             {
@@ -223,12 +184,12 @@ public class SeedService : ISeedService
                 LogoUrl = string.Empty,
                 IsActive = true,
                 DisplayOrder = 3,
-                VehicleModels = new List<VehicleModel>
-                {
+                VehicleModels =
+                [
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "F-150", Description = "Full-size pickup truck", IsActive = true },
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "Escape", Description = "Compact SUV", IsActive = true },
                     new VehicleModel { VehicleModelId = Guid.NewGuid(), Name = "Explorer", Description = "Mid-size SUV", IsActive = true }
-                }
+                ]
             }
         };
 
