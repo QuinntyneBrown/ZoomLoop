@@ -97,6 +97,24 @@
           "options": {
             "tsConfig": "projects/zoom-loop-components/tsconfig.spec.json"
           }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": "projects/zoom-loop-components/.storybook",
+            "browserTarget": "zoom-loop:build",
+            "compodoc": false,
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": "projects/zoom-loop-components/.storybook",
+            "browserTarget": "zoom-loop:build",
+            "compodoc": false,
+            "outputDir": "dist/storybook"
+          }
         }
       }
     }
