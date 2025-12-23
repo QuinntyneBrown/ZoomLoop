@@ -36,22 +36,6 @@
     </div>
   </section>
 
-  <!-- Browse by Make -->
-  <section class="home__makes">
-    <div class="home__container">
-      <h2 class="home__section-title">Browse by Make</h2>
-
-      <div class="home__makes-grid">
-        @for (make of popularMakes; track make) {
-          <button class="home__make-card" (click)="onBrowseMake(make)">
-            <span class="home__make-logo">{{ make.charAt(0) }}</span>
-            <span class="home__make-name">{{ make }}</span>
-          </button>
-        }
-      </div>
-    </div>
-  </section>
-
   <!-- How It Works -->
   <section class="home__how-it-works">
     <zl-how-it-works
