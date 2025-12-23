@@ -1,0 +1,90 @@
+<header class="header" [class.header--scrolled]="scrolled">
+  <div class="header__container">
+    <a class="header__logo" [href]="logoHref">
+      <div class="header__logo-icon">{{ logoInitial }}</div>
+      <span class="header__logo-text">{{ logoText }}</span>
+    </a>
+
+    <nav class="header__nav" [class.header__nav--hidden]="isMobileMenuOpen">
+      <ul class="header__nav-list">
+        <li *ngFor="let item of navItems" class="header__nav-item">
+          <a
+            *ngIf="!item.children"
+            [href]="item.href"
+            class="header__nav-link"
+            [class.header__nav-link--active]="isActive(item.href)"
+          >
+            {{ item.label }}
+          </a>
+          <div *ngIf="item.children" class="header__dropdown">
+            <button
+              class="header__nav-link header__dropdown-trigger"
+              (click)="toggleDropdown(item.label)"
+              [attr.aria-expanded]="openDropdown === item.label"
+            >
+              {{ item.label }}
+              <svg class="header__chevron" [class.header__chevron--open]="openDropdown === item.label" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+            <ul *ngIf="openDropdown === item.label" class="header__dropdown-menu">
+              <li *ngFor="let child of item.children">
+                <a [href]="child.href" class="header__dropdown-link">{{ child.label }}</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <ng-content select="[headerActions]"></ng-content>
+      <button *ngIf="showAuthButtons && !isLoggedIn" class="header__sign-in" (click)="signIn.emit()">
+        Sign In
+      </button>
+      <button *ngIf="showAuthButtons && !isLoggedIn" class="header__cta" (click)="ctaClick.emit()">
+        {{ ctaText }}
+      </button>
+      <div *ngIf="isLoggedIn" class="header__user">
+        <button class="header__user-btn" (click)="toggleUserMenu()">
+          <div class="header__avatar">{{ userInitials }}</div>
+        </button>
+      </div>
+      <button class="header__mobile-toggle" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle menu">
+        <svg *ngIf="!isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg *ngIf="isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="isMobileMenuOpen" class="header__mobile-menu">
+    <nav class="header__mobile-nav">
+      <ul>
+        <li *ngFor="let item of navItems">
+          <a *ngIf="!item.children" [href]="item.href" class="header__mobile-link">{{ item.label }}</a>
+          <div *ngIf="item.children" class="header__mobile-accordion">
+            <button class="header__mobile-link" (click)="toggleDropdown(item.label)">
+              {{ item.label }}
+              <svg class="header__chevron" [class.header__chevron--open]="openDropdown === item.label" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+            <ul *ngIf="openDropdown === item.label" class="header__mobile-submenu">
+              <li *ngFor="let child of item.children">
+                <a [href]="child.href" class="header__mobile-sublink">{{ child.label }}</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

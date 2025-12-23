@@ -1,0 +1,134 @@
+<div class="gallery" [attr.role]="'region'" [attr.aria-label]="ariaLabel">
+  <!-- Main Image -->
+  <div class="gallery__main">
+    <img
+      *ngIf="images.length > 0"
+      [src]="images[currentIndex].src"
+      [alt]="images[currentIndex].alt"
+      class="gallery__image"
+      (click)="openFullscreen()"
+    />
+
+    <button
+      *ngIf="images.length > 1"
+      class="gallery__nav gallery__nav--prev"
+      (click)="prev()"
+      aria-label="Previous image"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <button
+      *ngIf="images.length > 1"
+      class="gallery__nav gallery__nav--next"
+      (click)="next()"
+      aria-label="Next image"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+
+    <div class="gallery__actions">
+      <button class="gallery__action" (click)="openFullscreen()" aria-label="View fullscreen">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="gallery__counter" aria-live="polite">
+      {{ currentIndex + 1 }} / {{ images.length }}
+    </div>
+  </div>
+
+  <!-- Thumbnails -->
+  <div *ngIf="showThumbnails && images.length > 1" class="gallery__thumbnails">
+    <button
+      *ngIf="thumbnailOffset > 0"
+      class="gallery__thumb-nav gallery__thumb-nav--prev"
+      (click)="scrollThumbnails('prev')"
+      aria-label="Scroll thumbnails left"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <div class="gallery__thumb-container">
+      <button
+        *ngFor="let image of visibleThumbnails; let i = index"
+        class="gallery__thumb"
+        [class.gallery__thumb--active]="thumbnailOffset + i === currentIndex"
+        (click)="goTo(thumbnailOffset + i)"
+        [attr.aria-label]="'View image ' + (thumbnailOffset + i + 1)"
+      >
+        <img [src]="image.thumbnail || image.src" [alt]="''" />
+      </button>
+    </div>
+
+    <button
+      *ngIf="thumbnailOffset + maxThumbnails < images.length"
+      class="gallery__thumb-nav gallery__thumb-nav--next"
+      (click)="scrollThumbnails('next')"
+      aria-label="Scroll thumbnails right"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Fullscreen Modal -->
+  <div *ngIf="isFullscreen" class="gallery__fullscreen" (click)="closeFullscreen()">
+    <button class="gallery__close" (click)="closeFullscreen()" aria-label="Close fullscreen">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="gallery__fullscreen-content" (click)="$event.stopPropagation()">
+      <button
+        class="gallery__fullscreen-nav gallery__fullscreen-nav--prev"
+        (click)="prev()"
+        aria-label="Previous image"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+
+      <img
+        [src]="images[currentIndex].src"
+        [alt]="images[currentIndex].alt"
+        class="gallery__fullscreen-image"
+      />
+
+      <button
+        class="gallery__fullscreen-nav gallery__fullscreen-nav--next"
+        (click)="next()"
+        aria-label="Next image"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="gallery__fullscreen-dots">
+      <span
+        *ngFor="let image of images; let i = index"
+        class="gallery__fullscreen-dot"
+        [class.gallery__fullscreen-dot--active]="i === currentIndex"
+        (click)="goTo(i); $event.stopPropagation()"
+      ></span>
+    </div>
+
+    <div class="gallery__fullscreen-counter">
+      {{ currentIndex + 1 }} / {{ images.length }}
+    </div>
+  </div>
+</div>

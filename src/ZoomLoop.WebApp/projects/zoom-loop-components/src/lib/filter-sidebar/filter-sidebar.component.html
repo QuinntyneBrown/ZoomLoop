@@ -1,0 +1,146 @@
+<aside class="filter-sidebar" [class.filter-sidebar--mobile]="isMobileDrawer" [attr.aria-label]="'Filter vehicles'">
+  <div class="filter-sidebar__header">
+    <h2 class="filter-sidebar__title">{{ title }}</h2>
+    <button *ngIf="appliedFilters.length > 0" class="filter-sidebar__clear" (click)="clearAll()">
+      Clear All
+    </button>
+  </div>
+
+  <!-- Applied Filters -->
+  <div *ngIf="appliedFilters.length > 0" class="filter-sidebar__applied">
+    <zl-badge
+      *ngFor="let filter of appliedFilters"
+      variant="info"
+      size="md"
+      [pill]="true"
+      [removable]="true"
+      [removeLabel]="filter.label"
+      (remove)="removeFilter(filter)"
+    >
+      {{ filter.label }}
+    </zl-badge>
+  </div>
+
+  <!-- Range Filters -->
+  <div *ngFor="let filter of rangeFilters" class="filter-sidebar__section">
+    <button
+      class="filter-sidebar__section-header"
+      (click)="toggleSection(filter.id)"
+      [attr.aria-expanded]="expandedSections.has(filter.id)"
+      [attr.aria-controls]="'section-' + filter.id"
+    >
+      <span class="filter-sidebar__section-title">{{ filter.label }}</span>
+      <svg class="filter-sidebar__chevron" [class.filter-sidebar__chevron--open]="expandedSections.has(filter.id)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </button>
+    <div *ngIf="expandedSections.has(filter.id)" [id]="'section-' + filter.id" class="filter-sidebar__section-content">
+      <div class="filter-sidebar__range">
+        <div class="filter-sidebar__range-labels">
+          <span>{{ formatValue(filter.currentMin, filter.format) }}</span>
+          <span>{{ formatValue(filter.currentMax, filter.format) }}</span>
+        </div>
+        <div class="filter-sidebar__range-sliders">
+          <input
+            type="range"
+            class="filter-sidebar__slider filter-sidebar__slider--min"
+            [min]="filter.min"
+            [max]="filter.max"
+            [step]="filter.step"
+            [(ngModel)]="filter.currentMin"
+            (ngModelChange)="onRangeChange(filter)"
+          />
+          <input
+            type="range"
+            class="filter-sidebar__slider filter-sidebar__slider--max"
+            [min]="filter.min"
+            [max]="filter.max"
+            [step]="filter.step"
+            [(ngModel)]="filter.currentMax"
+            (ngModelChange)="onRangeChange(filter)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkbox Filters -->
+  <div *ngFor="let filter of checkboxFilters" class="filter-sidebar__section">
+    <button
+      class="filter-sidebar__section-header"
+      (click)="toggleSection(filter.id)"
+      [attr.aria-expanded]="expandedSections.has(filter.id)"
+      [attr.aria-controls]="'section-' + filter.id"
+    >
+      <span class="filter-sidebar__section-title">{{ filter.label }}</span>
+      <svg class="filter-sidebar__chevron" [class.filter-sidebar__chevron--open]="expandedSections.has(filter.id)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </button>
+    <div *ngIf="expandedSections.has(filter.id)" [id]="'section-' + filter.id" class="filter-sidebar__section-content">
+      <div class="filter-sidebar__checkboxes">
+        <label
+          *ngFor="let option of getVisibleOptions(filter); let i = index"
+          class="filter-sidebar__checkbox"
+          [class.filter-sidebar__checkbox--disabled]="option.disabled"
+        >
+          <input
+            type="checkbox"
+            [value]="option.value"
+            [checked]="filter.selectedValues.includes(option.value)"
+            [disabled]="option.disabled"
+            (change)="onCheckboxChange(filter, option.value, $event)"
+          />
+          <span class="filter-sidebar__checkbox-mark"></span>
+          <span class="filter-sidebar__checkbox-label">{{ option.label }}</span>
+          <span *ngIf="option.count !== undefined" class="filter-sidebar__checkbox-count">({{ option.count }})</span>
+        </label>
+      </div>
+      <button
+        *ngIf="filter.options.length > (filter.maxVisible || 5)"
+        class="filter-sidebar__show-more"
+        (click)="toggleShowMore(filter)"
+      >
+        {{ filter.showMore ? 'Show less' : 'Show ' + (filter.options.length - (filter.maxVisible || 5)) + ' more' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Radio Filters -->
+  <div *ngFor="let filter of radioFilters" class="filter-sidebar__section">
+    <button
+      class="filter-sidebar__section-header"
+      (click)="toggleSection(filter.id)"
+      [attr.aria-expanded]="expandedSections.has(filter.id)"
+      [attr.aria-controls]="'section-' + filter.id"
+    >
+      <span class="filter-sidebar__section-title">{{ filter.label }}</span>
+      <svg class="filter-sidebar__chevron" [class.filter-sidebar__chevron--open]="expandedSections.has(filter.id)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </button>
+    <div *ngIf="expandedSections.has(filter.id)" [id]="'section-' + filter.id" class="filter-sidebar__section-content">
+      <div class="filter-sidebar__radios">
+        <label *ngFor="let option of filter.options" class="filter-sidebar__radio">
+          <input
+            type="radio"
+            [name]="filter.id"
+            [value]="option.value"
+            [checked]="filter.selectedValue === option.value"
+            (change)="onRadioChange(filter, option.value)"
+          />
+          <span class="filter-sidebar__radio-mark"></span>
+          <span class="filter-sidebar__radio-label">{{ option.label }}</span>
+          <span *ngIf="option.count !== undefined" class="filter-sidebar__radio-count">({{ option.count }})</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Apply Button (Mobile) -->
+  <div *ngIf="isMobileDrawer" class="filter-sidebar__footer">
+    <button class="filter-sidebar__apply" (click)="applyFilters()">
+      Show {{ resultCount }} Results
+    </button>
+  </div>
+</aside>

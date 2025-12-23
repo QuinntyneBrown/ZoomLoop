@@ -1,0 +1,39 @@
+<section class="hero" [style.background-image]="backgroundImage ? 'url(' + backgroundImage + ')' : null">
+  <div class="hero__overlay"></div>
+  <div class="hero__container">
+    <div class="hero__content">
+      <h1 class="hero__headline">{{ headline }}</h1>
+      <p class="hero__subheadline">{{ subheadline }}</p>
+
+      <div class="hero__search">
+        <zl-search-bar
+          [variant]="'hero'"
+          [placeholder]="searchPlaceholder"
+          [suggestions]="searchSuggestions"
+          [showFiltersButton]="showFiltersButton"
+          (search)="onSearch($event)"
+          (queryChange)="searchQueryChange.emit($event)"
+          (suggestionSelected)="searchSuggestionSelected.emit($event)"
+          (filtersClick)="filtersClick.emit()"
+        ></zl-search-bar>
+      </div>
+
+      <div class="hero__stats" *ngIf="stats.length > 0">
+        <div *ngFor="let stat of stats" class="hero__stat">
+          <span class="hero__stat-value">{{ stat.value }}</span>
+          <span class="hero__stat-label">{{ stat.label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promotional Banner -->
+  <div *ngIf="showPromo && promoText" class="hero__promo">
+    <span class="hero__promo-icon">{{ promoIcon }}</span>
+    <span class="hero__promo-text">{{ promoText }}</span>
+    <button *ngIf="promoButtonText" class="hero__promo-btn" (click)="promoClick.emit()">
+      {{ promoButtonText }}
+    </button>
+    <button class="hero__promo-close" (click)="dismissPromo()" aria-label="Dismiss promotion">×</button>
+  </div>
+</section>

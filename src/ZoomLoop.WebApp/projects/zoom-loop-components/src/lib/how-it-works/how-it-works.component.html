@@ -1,0 +1,56 @@
+<section class="how-it-works" [attr.aria-labelledby]="titleId">
+  <div class="how-it-works__container">
+    <div class="how-it-works__header">
+      <h2 [id]="titleId" class="how-it-works__title">{{ title }}</h2>
+      <p class="how-it-works__subtitle">{{ subtitle }}</p>
+    </div>
+
+    <ol class="how-it-works__steps">
+      <li *ngFor="let step of steps; let i = index; let last = last" class="how-it-works__step">
+        <div class="how-it-works__step-card">
+          <div class="how-it-works__icon">
+            <ng-container [ngSwitch]="step.icon">
+              <svg *ngSwitchCase="'search'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <svg *ngSwitchCase="'document'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              <svg *ngSwitchCase="'car'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="10" rx="2"/>
+                <line x1="2" y1="17" x2="5" y2="17"/>
+                <line x1="19" y1="17" x2="22" y2="17"/>
+                <circle cx="6" cy="17" r="2"/>
+                <circle cx="18" cy="17" r="2"/>
+                <path d="M5 7V5a2 2 0 012-2h10a2 2 0 012 2v2"/>
+              </svg>
+              <svg *ngSwitchCase="'check'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <svg *ngSwitchCase="'dollar'" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+              </svg>
+            </ng-container>
+          </div>
+
+          <span class="how-it-works__step-number">Step {{ step.number }}</span>
+          <h3 class="how-it-works__step-title">{{ step.title }}</h3>
+          <p class="how-it-works__step-desc">{{ step.description }}</p>
+        </div>
+
+        <div *ngIf="!last" class="how-it-works__connector">
+          <svg width="40" height="16" viewBox="0 0 40 16" fill="none">
+            <path d="M0 8H36M36 8L28 1M36 8L28 15" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>

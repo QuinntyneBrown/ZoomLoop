@@ -1,0 +1,221 @@
+// Hero Component - BEM Methodology
+// Block: .hero
+
+.hero {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(135deg, #1E40AF, #0F172A);
+  background-size: cover;
+  background-position: center;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.9), rgba(15, 23, 42, 0.95));
+    z-index: 1;
+  }
+
+  &__container {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    width: 100%;
+  }
+
+  &__content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__headline {
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 16px;
+    line-height: 1.1;
+    animation: fadeUp 600ms ease-out;
+  }
+
+  &__subheadline {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 32px;
+    line-height: 1.6;
+    animation: fadeUp 600ms ease-out 150ms backwards;
+  }
+
+  &__search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 48px;
+    animation: fadeUp 600ms ease-out 300ms backwards;
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    animation: fadeUp 600ms ease-out 450ms backwards;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__stat-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+
+  &__stat-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__promo {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: linear-gradient(90deg, #F59E0B, #D97706);
+    color: white;
+    z-index: 3;
+  }
+
+  &__promo-icon {
+    font-size: 18px;
+  }
+
+  &__promo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &__promo-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &__promo-close {
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    min-height: 500px;
+
+    &__headline {
+      font-size: 40px;
+    }
+
+    &__subheadline {
+      font-size: 18px;
+    }
+
+    &__stats {
+      gap: 32px;
+    }
+
+    &__stat-value {
+      font-size: 28px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    min-height: 450px;
+
+    &__container {
+      padding: 48px 16px;
+    }
+
+    &__headline {
+      font-size: 32px;
+    }
+
+    &__subheadline {
+      font-size: 16px;
+    }
+
+    &__stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    &__stat-value {
+      font-size: 24px;
+    }
+
+    &__stat-label {
+      font-size: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__headline,
+    &__subheadline,
+    &__search,
+    &__stats {
+      animation: none;
+    }
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
