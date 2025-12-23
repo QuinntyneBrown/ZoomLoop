@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" modified="2025-12-23T00:00:00.000Z" agent="Claude" version="21.0.0">
+  <diagram name="C4 Context - Home Search" id="c4-context-home-search">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="C4 Context Diagram - Home &amp; Search Feature" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Car Buyer (Person) -->
+        <mxCell id="person-buyer" value="Car Buyer&#xa;&#xa;[Person]&#xa;&#xa;A customer looking to&#xa;buy a used car online" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="520" y="80" width="160" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Clutch Clone System -->
+        <mxCell id="system-clutch" value="Clutch Clone Platform&#xa;&#xa;[Software System]&#xa;&#xa;Online used car marketplace&#xa;for buying, selling, and&#xa;financing vehicles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="480" y="280" width="240" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Search Engine -->
+        <mxCell id="system-search" value="Search Engine&#xa;&#xa;[External System]&#xa;&#xa;Elasticsearch for vehicle&#xa;search and discovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="120" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- CDN -->
+        <mxCell id="system-cdn" value="CDN&#xa;&#xa;[External System]&#xa;&#xa;Content delivery for&#xa;images and static assets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="900" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Analytics -->
+        <mxCell id="system-analytics" value="Analytics Platform&#xa;&#xa;[External System]&#xa;&#xa;Tracks search behavior&#xa;and user interactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="480" y="500" width="240" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        <mxCell id="rel-1" value="Searches for vehicles,&#xa;browses inventory" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#707070" edge="1" parent="1" source="person-buyer" target="system-clutch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-2" value="Indexes and queries&#xa;vehicle data" style="endArrow=classic;startArrow=classic;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#707070" edge="1" parent="1" source="system-clutch" target="system-search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-3" value="Serves images&#xa;and assets" style="endArrow=classic;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#707070" edge="1" parent="1" source="system-clutch" target="system-cdn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-4" value="Sends search and&#xa;interaction events" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#707070" edge="1" parent="1" source="system-clutch" target="system-analytics">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

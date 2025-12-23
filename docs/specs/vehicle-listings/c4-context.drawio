@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net" modified="2025-12-23T00:00:00.000Z" agent="Claude" version="21.0.0">
+  <diagram name="C4 Context - Vehicle Listings" id="c4-context-listings">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="C4 Context - Vehicle Listings Feature" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="person" value="Car Buyer&#xa;[Person]&#xa;&#xa;Browses and filters&#xa;vehicle inventory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;align=center" vertex="1" parent="1">
+          <mxGeometry x="520" y="80" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="system" value="Clutch Clone Platform&#xa;[Software System]&#xa;&#xa;Vehicle browsing, filtering,&#xa;and listing management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;align=center" vertex="1" parent="1">
+          <mxGeometry x="480" y="260" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="search" value="Elasticsearch&#xa;[External System]&#xa;&#xa;Full-text search and&#xa;faceted filtering" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;align=center" vertex="1" parent="1">
+          <mxGeometry x="120" y="260" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="cdn" value="CDN&#xa;[External System]&#xa;&#xa;Vehicle images and&#xa;static content" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;align=center" vertex="1" parent="1">
+          <mxGeometry x="900" y="260" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="inventory" value="Inventory System&#xa;[External System]&#xa;&#xa;Vehicle availability&#xa;and status updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;align=center" vertex="1" parent="1">
+          <mxGeometry x="520" y="460" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="rel1" value="Browses vehicles" style="endArrow=classic;html=1;strokeColor=#707070" edge="1" parent="1" source="person" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel2" value="Queries index" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#707070" edge="1" parent="1" source="system" target="search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel3" value="Loads images" style="endArrow=classic;html=1;strokeColor=#707070" edge="1" parent="1" source="system" target="cdn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel4" value="Syncs inventory" style="endArrow=classic;startArrow=classic;html=1;strokeColor=#707070" edge="1" parent="1" source="system" target="inventory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

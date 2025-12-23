@@ -1,0 +1,218 @@
+@startuml Home Search Class Diagram
+
+title Home & Search Domain Model
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam packageFontSize 14
+
+package "Search Domain" {
+
+    class SearchQuery {
+        +id: String
+        +userId: String
+        +sessionId: String
+        +query: String
+        +filters: SearchFilters
+        +sort: SortOption
+        +page: Integer
+        +limit: Integer
+        +createdAt: DateTime
+        +execute(): SearchResult
+    }
+
+    class SearchFilters {
+        +makes: List<String>
+        +models: List<String>
+        +priceMin: Integer
+        +priceMax: Integer
+        +yearMin: Integer
+        +yearMax: Integer
+        +mileageMax: Integer
+        +bodyTypes: List<String>
+        +transmission: String
+        +fuelTypes: List<String>
+        +colors: List<String>
+        +toQueryParams(): Map
+        +isEmpty(): Boolean
+    }
+
+    class SearchResult {
+        +searchId: String
+        +vehicles: List<VehicleSummary>
+        +totalCount: Integer
+        +page: Integer
+        +totalPages: Integer
+        +facets: SearchFacets
+        +responseTimeMs: Integer
+    }
+
+    class SearchFacets {
+        +makes: List<FacetItem>
+        +bodyTypes: List<FacetItem>
+        +priceRanges: List<RangeFacet>
+        +yearRanges: List<RangeFacet>
+    }
+
+    class FacetItem {
+        +name: String
+        +count: Integer
+    }
+
+    class RangeFacet {
+        +min: Integer
+        +max: Integer
+        +count: Integer
+    }
+
+    class SearchSuggestion {
+        +type: SuggestionType
+        +text: String
+        +slug: String
+        +count: Integer
+        +highlight: String
+    }
+
+    enum SuggestionType {
+        MAKE
+        MODEL
+        BODY_TYPE
+        RECENT
+    }
+
+    enum SortOption {
+        BEST_MATCH
+        PRICE_ASC
+        PRICE_DESC
+        MILEAGE_ASC
+        YEAR_DESC
+        RECENTLY_ADDED
+    }
+
+}
+
+package "Vehicle Domain" {
+
+    class VehicleSummary {
+        +id: String
+        +make: String
+        +model: String
+        +year: Integer
+        +trim: String
+        +price: Integer
+        +mileage: Integer
+        +location: Location
+        +primaryImage: String
+        +badges: List<String>
+        +isFavorite: Boolean
+    }
+
+    class Location {
+        +city: String
+        +province: String
+        +postalCode: String
+        +lat: Double
+        +lng: Double
+    }
+
+    class FeaturedVehicle {
+        +id: String
+        +vehicleId: String
+        +position: Integer
+        +startDate: DateTime
+        +endDate: DateTime
+        +selectionType: SelectionType
+        +isActive: Boolean
+    }
+
+    enum SelectionType {
+        MANUAL
+        AUTOMATIC
+    }
+
+}
+
+package "Content Domain" {
+
+    class HomepageContent {
+        +hero: HeroSection
+        +howItWorks: List<Step>
+        +valueProps: List<ValueProp>
+        +testimonials: List<Testimonial>
+    }
+
+    class HeroSection {
+        +title: String
+        +subtitle: String
+        +backgroundImage: ImageSet
+        +cta: CallToAction
+    }
+
+    class Step {
+        +stepNumber: Integer
+        +icon: String
+        +title: String
+        +description: String
+    }
+
+    class ValueProp {
+        +icon: String
+        +title: String
+        +description: String
+    }
+
+    class Testimonial {
+        +id: String
+        +quote: String
+        +author: String
+        +location: String
+        +vehicle: String
+        +rating: Integer
+    }
+
+}
+
+package "Services" {
+
+    class SearchService {
+        +search(query: SearchQuery): SearchResult
+        +getSuggestions(q: String): List<SearchSuggestion>
+        +getMakes(): List<FacetItem>
+        +getModels(make: String): List<FacetItem>
+    }
+
+    class FeaturedVehicleService {
+        +getFeatured(limit: Integer): List<VehicleSummary>
+        +setFeatured(vehicleId: String, position: Integer): void
+        +removeFeatured(vehicleId: String): void
+    }
+
+    class ContentService {
+        +getHomepageContent(): HomepageContent
+        +updateHeroSection(hero: HeroSection): void
+    }
+
+}
+
+SearchQuery --> SearchFilters
+SearchQuery --> SortOption
+SearchQuery ..> SearchResult : produces
+SearchResult --> VehicleSummary
+SearchResult --> SearchFacets
+SearchFacets --> FacetItem
+SearchFacets --> RangeFacet
+SearchSuggestion --> SuggestionType
+VehicleSummary --> Location
+FeaturedVehicle --> SelectionType
+HomepageContent --> HeroSection
+HomepageContent --> Step
+HomepageContent --> ValueProp
+HomepageContent --> Testimonial
+
+SearchService ..> SearchQuery : uses
+SearchService ..> SearchResult : returns
+SearchService ..> SearchSuggestion : returns
+FeaturedVehicleService ..> VehicleSummary : returns
+ContentService ..> HomepageContent : returns
+
+@enduml

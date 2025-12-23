@@ -1,0 +1,212 @@
+@startuml Vehicle Details Class Diagram
+
+title Vehicle Details Domain Model
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+
+package "Vehicle Domain" {
+
+    class VehicleDetail {
+        +id: String
+        +make: String
+        +model: String
+        +year: Integer
+        +trim: String
+        +vin: String
+        +pricing: Pricing
+        +specifications: Specifications
+        +location: Location
+        +description: String
+        +certification: Certification
+        +badges: List<String>
+        +getDisplayTitle(): String
+        +isPriceReduced(): Boolean
+    }
+
+    class Pricing {
+        +price: Integer
+        +originalPrice: Integer
+        +priceReduced: Boolean
+        +reducedAmount: Integer
+        +reducedPercentage: Double
+    }
+
+    class Specifications {
+        +mileage: Integer
+        +transmission: String
+        +fuelType: String
+        +bodyType: String
+        +drivetrain: String
+        +engineSize: String
+        +horsepower: Integer
+        +doors: Integer
+        +seats: Integer
+        +mpgCity: Integer
+        +mpgHighway: Integer
+        +exteriorColor: String
+        +interiorColor: String
+    }
+
+    class VehicleImage {
+        +id: String
+        +url: String
+        +thumbnailUrl: String
+        +alt: String
+        +position: Integer
+        +type: ImageType
+    }
+
+    class VehicleFeatures {
+        +safety: List<String>
+        +comfort: List<String>
+        +technology: List<String>
+        +exterior: List<String>
+    }
+
+    class Certification {
+        +status: CertificationStatus
+        +certifiedAt: DateTime
+        +certificationNumber: String
+    }
+
+    enum CertificationStatus {
+        CERTIFIED
+        PENDING
+        NOT_CERTIFIED
+    }
+
+    enum ImageType {
+        EXTERIOR
+        INTERIOR
+        DETAIL
+        DAMAGE
+    }
+
+}
+
+package "History Domain" {
+
+    class VehicleHistoryReport {
+        +vehicleId: String
+        +vin: String
+        +reportProvider: String
+        +reportGeneratedAt: DateTime
+        +summary: HistorySummary
+        +accidents: List<Accident>
+        +owners: List<Owner>
+        +serviceRecords: List<ServiceRecord>
+        +recalls: List<Recall>
+        +reportUrl: String
+    }
+
+    class HistorySummary {
+        +accidentCount: Integer
+        +ownerCount: Integer
+        +hasOpenRecalls: Boolean
+        +hasServiceRecords: Boolean
+        +titleStatus: String
+    }
+
+    class Owner {
+        +ownerNumber: Integer
+        +acquisitionDate: Date
+        +dispositionDate: Date
+        +location: String
+        +type: String
+    }
+
+    class ServiceRecord {
+        +date: Date
+        +mileage: Integer
+        +description: String
+        +location: String
+    }
+
+}
+
+package "Inspection Domain" {
+
+    class InspectionReport {
+        +vehicleId: String
+        +inspectionId: String
+        +inspectedAt: DateTime
+        +inspectorId: String
+        +summary: InspectionSummary
+        +categories: List<InspectionCategory>
+        +reportUrl: String
+    }
+
+    class InspectionSummary {
+        +totalPoints: Integer
+        +passedPoints: Integer
+        +failedPoints: Integer
+        +status: InspectionStatus
+    }
+
+    class InspectionCategory {
+        +name: String
+        +totalPoints: Integer
+        +passedPoints: Integer
+        +items: List<InspectionItem>
+    }
+
+    class InspectionItem {
+        +name: String
+        +status: String
+        +notes: String
+    }
+
+    enum InspectionStatus {
+        PASSED
+        FAILED
+        PENDING
+    }
+
+}
+
+package "Services" {
+
+    class VehicleDetailService {
+        +getById(id: String): VehicleDetail
+        +getImages(id: String): List<VehicleImage>
+        +getFeatures(id: String): VehicleFeatures
+        +getSimilar(id: String): List<VehicleSummary>
+        +trackView(id: String, userId: String): void
+    }
+
+    class HistoryReportService {
+        +getReport(vehicleId: String): VehicleHistoryReport
+        +generatePdf(vehicleId: String): String
+        +refreshReport(vehicleId: String): void
+    }
+
+    class InspectionService {
+        +getReport(vehicleId: String): InspectionReport
+        +getInspectionDetails(inspectionId: String): InspectionReport
+    }
+
+}
+
+VehicleDetail --> Pricing
+VehicleDetail --> Specifications
+VehicleDetail --> Certification
+VehicleDetail "1" --> "*" VehicleImage
+VehicleDetail --> VehicleFeatures
+Certification --> CertificationStatus
+VehicleImage --> ImageType
+
+VehicleHistoryReport --> HistorySummary
+VehicleHistoryReport "1" --> "*" Owner
+VehicleHistoryReport "1" --> "*" ServiceRecord
+
+InspectionReport --> InspectionSummary
+InspectionReport "1" --> "*" InspectionCategory
+InspectionCategory "1" --> "*" InspectionItem
+InspectionSummary --> InspectionStatus
+
+VehicleDetailService ..> VehicleDetail : returns
+HistoryReportService ..> VehicleHistoryReport : returns
+InspectionService ..> InspectionReport : returns
+
+@enduml

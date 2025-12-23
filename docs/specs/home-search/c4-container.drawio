@@ -1,0 +1,92 @@
+<mxfile host="app.diagrams.net" modified="2025-12-23T00:00:00.000Z" agent="Claude" version="21.0.0">
+  <diagram name="C4 Container - Home Search" id="c4-container-home-search">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="C4 Container Diagram - Home &amp; Search Feature" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- System Boundary -->
+        <mxCell id="boundary" value="Clutch Clone Platform [Software System]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#1168BD;strokeWidth=2;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="200" y="200" width="1000" height="500" as="geometry" />
+        </mxCell>
+
+        <!-- Person -->
+        <mxCell id="person" value="Car Buyer&#xa;[Person]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;align=center" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Web Application -->
+        <mxCell id="web-app" value="Web Application&#xa;&#xa;[Container: React]&#xa;&#xa;Single-page application&#xa;for browsing and searching&#xa;vehicles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="240" y="240" width="180" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- API Gateway -->
+        <mxCell id="api-gateway" value="API Gateway&#xa;&#xa;[Container: Node.js]&#xa;&#xa;Routes requests, handles&#xa;auth, rate limiting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="610" y="240" width="180" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Search Service -->
+        <mxCell id="search-service" value="Search Service&#xa;&#xa;[Container: Node.js]&#xa;&#xa;Handles vehicle search,&#xa;suggestions, filters" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="420" y="450" width="180" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Content Service -->
+        <mxCell id="content-service" value="Content Service&#xa;&#xa;[Container: Node.js]&#xa;&#xa;Manages homepage content,&#xa;featured vehicles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="800" y="450" width="180" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Database -->
+        <mxCell id="database" value="PostgreSQL&#xa;&#xa;[Container: Database]&#xa;&#xa;Stores vehicle listings,&#xa;search analytics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="240" y="450" width="140" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Redis Cache -->
+        <mxCell id="redis" value="Redis&#xa;&#xa;[Container: Cache]&#xa;&#xa;Caches search results,&#xa;suggestions, sessions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="1020" y="240" width="140" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- External: Elasticsearch -->
+        <mxCell id="elasticsearch" value="Elasticsearch&#xa;&#xa;[External System]&#xa;&#xa;Full-text search engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;verticalAlign=top;align=center" vertex="1" parent="1">
+          <mxGeometry x="620" y="660" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        <mxCell id="rel-1" value="Uses" style="endArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#707070" edge="1" parent="1" source="person" target="web-app">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="rel-2" value="API calls" style="endArrow=classic;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#707070" edge="1" parent="1" source="web-app" target="api-gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-3" value="Routes to" style="endArrow=classic;html=1;exitX=0.25;exitY=1;entryX=0.5;entryY=0;strokeColor=#707070" edge="1" parent="1" source="api-gateway" target="search-service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-4" value="Routes to" style="endArrow=classic;html=1;exitX=0.75;exitY=1;entryX=0.5;entryY=0;strokeColor=#707070" edge="1" parent="1" source="api-gateway" target="content-service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-5" value="Reads/Writes" style="endArrow=classic;startArrow=classic;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#707070" edge="1" parent="1" source="search-service" target="database">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-6" value="Caches" style="endArrow=classic;startArrow=classic;html=1;exitX=1;exitY=0.5;entryX=0.5;entryY=1;strokeColor=#707070" edge="1" parent="1" source="api-gateway" target="redis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel-7" value="Searches" style="endArrow=classic;startArrow=classic;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#707070" edge="1" parent="1" source="search-service" target="elasticsearch">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
