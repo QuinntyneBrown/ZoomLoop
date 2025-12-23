@@ -101,58 +101,48 @@ describe('AuthService', () => {
       req.flush(mockLoginResponse);
     });
 
-    it('should update currentUser$ after successful login', (done) => {
+    it('should update currentUser$ after successful login', async () => {
       const loginRequest: LoginRequest = {
         email: 'test@example.com',
         password: 'password123',
         rememberMe: false
       };
 
-      service.login(loginRequest).subscribe(() => {
-        service.currentUser$.subscribe(user => {
-          expect(user).toEqual(mockUser);
-          done();
-        });
-      });
-
+      const loginPromise = service.login(loginRequest).toPromise();
       const req = httpMock.expectOne(`${baseUrl}/api/v1/auth/login`);
       req.flush(mockLoginResponse);
+
+      await loginPromise;
+      expect(service.currentUser).toEqual(mockUser);
     });
 
-    it('should update isAuthenticated$ to true after successful login', (done) => {
+    it('should update isAuthenticated$ to true after successful login', async () => {
       const loginRequest: LoginRequest = {
         email: 'test@example.com',
         password: 'password123',
         rememberMe: false
       };
 
-      service.login(loginRequest).subscribe(() => {
-        service.isAuthenticated$.subscribe(isAuth => {
-          expect(isAuth).toBe(true);
-          done();
-        });
-      });
-
+      const loginPromise = service.login(loginRequest).toPromise();
       const req = httpMock.expectOne(`${baseUrl}/api/v1/auth/login`);
       req.flush(mockLoginResponse);
+
+      await loginPromise;
+      expect(service.isAuthenticated).toBe(true);
     });
 
-    it('should propagate error on login failure', (done) => {
+    it('should propagate error on login failure', async () => {
       const loginRequest: LoginRequest = {
         email: 'test@example.com',
         password: 'wrongpassword',
         rememberMe: false
       };
 
-      service.login(loginRequest).subscribe({
-        error: (error) => {
-          expect(error.status).toBe(401);
-          done();
-        }
-      });
-
+      const loginPromise = service.login(loginRequest).toPromise();
       const req = httpMock.expectOne(`${baseUrl}/api/v1/auth/login`);
       req.flush({ detail: 'Invalid credentials' }, { status: 401, statusText: 'Unauthorized' });
+
+      await expect(loginPromise).rejects.toMatchObject({ status: 401 });
     });
   });
 
@@ -195,7 +185,7 @@ describe('AuthService', () => {
       req.flush(mockRegisterResponse);
     });
 
-    it('should propagate error when email already exists', (done) => {
+    it('should propagate error when email already exists', async () => {
       const registerRequest: RegisterRequest = {
         email: 'existing@example.com',
         password: 'Password123!',
@@ -204,15 +194,11 @@ describe('AuthService', () => {
         marketingOptIn: false
       };
 
-      service.register(registerRequest).subscribe({
-        error: (error) => {
-          expect(error.status).toBe(409);
-          done();
-        }
-      });
-
+      const registerPromise = service.register(registerRequest).toPromise();
       const req = httpMock.expectOne(`${baseUrl}/api/v1/auth/register`);
       req.flush({ detail: 'Email already registered' }, { status: 409, statusText: 'Conflict' });
+
+      await expect(registerPromise).rejects.toMatchObject({ status: 409 });
     });
   });
 
@@ -241,16 +227,13 @@ describe('AuthService', () => {
       req.flush({});
     });
 
-    it('should update currentUser$ to null after logout', (done) => {
-      service.logout().subscribe(() => {
-        service.currentUser$.subscribe(user => {
-          expect(user).toBeNull();
-          done();
-        });
-      });
-
+    it('should update currentUser$ to null after logout', async () => {
+      const logoutPromise = service.logout().toPromise();
       const req = httpMock.expectOne(`${baseUrl}/api/v1/auth/logout`);
       req.flush({});
+
+      await logoutPromise;
+      expect(service.currentUser).toBeNull();
     });
 
     it('should clear storage even on logout error', () => {
@@ -287,28 +270,24 @@ describe('AuthService', () => {
       req.flush({ accessToken: 'new-access-token', expiresIn: 900 });
     });
 
-    it('should throw error when no refresh token exists', (done) => {
+    it('should throw error when no refresh token exists', async () => {
       localStorage.removeItem('zoomloop_refresh_token');
 
-      service.refreshToken().subscribe({
-        error: (error) => {
-          expect(error.message).toBe('No refresh token');
-          done();
-        }
-      });
+      await expect(service.refreshToken().toPromise()).rejects.toMatchObject({ message: 'No refresh token' });
     });
 
-    it('should clear storage on refresh token failure', (done) => {
-      service.refreshToken().subscribe({
-        error: () => {
-          expect(service.getAccessToken()).toBeNull();
-          expect(service.getRefreshToken()).toBeNull();
-          done();
-        }
-      });
-
+    it('should clear storage on refresh token failure', async () => {
+      const refreshPromise = service.refreshToken().toPromise();
       const req = httpMock.expectOne(`${baseUrl}/api/v1/auth/refresh`);
       req.flush({ detail: 'Invalid refresh token' }, { status: 401, statusText: 'Unauthorized' });
+
+      try {
+        await refreshPromise;
+      } catch {
+        // Expected to fail
+      }
+      expect(service.getAccessToken()).toBeNull();
+      expect(service.getRefreshToken()).toBeNull();
     });
   });
 
@@ -367,16 +346,13 @@ describe('AuthService', () => {
       req.flush(mockUser);
     });
 
-    it('should update currentUser$ with fetched user', (done) => {
-      service.getCurrentUser().subscribe(() => {
-        service.currentUser$.subscribe(user => {
-          expect(user).toEqual(mockUser);
-          done();
-        });
-      });
-
+    it('should update currentUser$ with fetched user', async () => {
+      const getUserPromise = service.getCurrentUser().toPromise();
       const req = httpMock.expectOne(`${baseUrl}/api/v1/users/me`);
       req.flush(mockUser);
+
+      await getUserPromise;
+      expect(service.currentUser).toEqual(mockUser);
     });
   });
 
@@ -509,8 +485,19 @@ describe('AuthService', () => {
     });
 
     it('should load user from localStorage on init', () => {
+      // Reset TestBed to test initialization behavior
       localStorage.setItem('zoomloop_user', JSON.stringify(mockUser));
       localStorage.setItem('zoomloop_access_token', 'test-token');
+
+      // Create a new test bed configuration to get a fresh service instance
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [
+          provideHttpClient(),
+          provideHttpClientTesting(),
+          AuthService
+        ]
+      });
 
       const newService = TestBed.inject(AuthService);
       expect(newService.currentUser).toEqual(mockUser);
