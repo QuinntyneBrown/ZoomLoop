@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -19,7 +19,6 @@ import { Vehicle, SearchFilters, SearchResult } from '../../models';
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     SearchBarComponent,
     VehicleCardComponent,
     ButtonComponent
