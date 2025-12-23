@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works Section - All States</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffffff;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .component-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* How It Works Section */
+        .hiw {
+            padding: 80px 24px;
+            background: #F9FAFB;
+        }
+
+        .hiw__container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hiw__header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .hiw__title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .hiw__subtitle {
+            font-size: 18px;
+            color: #6B7280;
+        }
+
+        .hiw__steps {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            position: relative;
+        }
+
+        .hiw__connector {
+            position: absolute;
+            top: 48px;
+            left: calc(16.67% + 60px);
+            right: calc(16.67% + 60px);
+            height: 2px;
+            background: repeating-linear-gradient(
+                90deg,
+                #E5E7EB,
+                #E5E7EB 8px,
+                transparent 8px,
+                transparent 16px
+            );
+        }
+
+        .hiw__step {
+            flex: 1;
+            max-width: 320px;
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hiw__icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: #EFF6FF;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .hiw__step-number {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #EFF6FF;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1E40AF;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .hiw__step-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .hiw__step-desc {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #6B7280;
+        }
+
+        .hiw__arrow {
+            position: absolute;
+            top: 48px;
+            right: -24px;
+            width: 24px;
+            height: 24px;
+            color: #D1D5DB;
+            z-index: 2;
+        }
+
+        /* Mobile Layout */
+        .hiw--mobile {
+            padding: 48px 16px;
+        }
+
+        .hiw--mobile .hiw__header {
+            margin-bottom: 32px;
+        }
+
+        .hiw--mobile .hiw__title {
+            font-size: 28px;
+        }
+
+        .hiw--mobile .hiw__subtitle {
+            font-size: 16px;
+        }
+
+        .hiw--mobile .hiw__steps {
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .hiw--mobile .hiw__step {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .hiw--mobile .hiw__connector {
+            display: none;
+        }
+
+        .hiw__mobile-connector {
+            display: none;
+        }
+
+        .hiw--mobile .hiw__mobile-connector {
+            display: block;
+            width: 2px;
+            height: 32px;
+            background: repeating-linear-gradient(
+                180deg,
+                #D1D5DB,
+                #D1D5DB 4px,
+                transparent 4px,
+                transparent 8px
+            );
+            margin: 0 auto;
+        }
+
+        .hiw--mobile .hiw__mobile-connector::after {
+            content: '▼';
+            display: block;
+            text-align: center;
+            color: #D1D5DB;
+            font-size: 10px;
+            margin-top: -4px;
+        }
+
+        /* Alternative: Numbered Circles */
+        .hiw--circles .hiw__steps {
+            counter-reset: step;
+        }
+
+        .hiw--circles .hiw__step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #1E40AF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .hiw--circles .hiw__step {
+            padding-top: 48px;
+        }
+
+        .hiw--circles .hiw__step-number {
+            display: none;
+        }
+
+        /* CTA */
+        .hiw__cta {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .hiw__cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 48px;
+            padding: 0 32px;
+            background: #1E40AF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .hiw__cta-btn:hover {
+            background: #1E3A8A;
+        }
+    </style>
+</head>
+<body>
+    <!-- Desktop Layout -->
+    <section class="component-section">
+        <h2 class="section-title">Desktop Layout</h2>
+        <div class="component-wrapper">
+            <section class="hiw">
+                <div class="hiw__container">
+                    <header class="hiw__header">
+                        <h2 class="hiw__title">How It Works</h2>
+                        <p class="hiw__subtitle">Buy your next car in 3 simple steps</p>
+                    </header>
+
+                    <div class="hiw__steps">
+                        <div class="hiw__connector"></div>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon">🔍</div>
+                            <span class="hiw__step-number">Step 1</span>
+                            <h3 class="hiw__step-title">Browse & Choose</h3>
+                            <p class="hiw__step-desc">
+                                Search our inventory of 1,000+ quality used vehicles. Every car comes with a detailed inspection report and CARFAX history.
+                            </p>
+                        </article>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon">📋</div>
+                            <span class="hiw__step-number">Step 2</span>
+                            <h3 class="hiw__step-title">Finance Online</h3>
+                            <p class="hiw__step-desc">
+                                Get pre-approved for financing in minutes with no impact to your credit. See transparent pricing with no hidden fees.
+                            </p>
+                        </article>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon">🚗</div>
+                            <span class="hiw__step-number">Step 3</span>
+                            <h3 class="hiw__step-title">Get It Delivered</h3>
+                            <p class="hiw__step-desc">
+                                We deliver your car right to your door. Enjoy a 10-day/750km money-back guarantee to make sure you love it.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="hiw__cta">
+                        <button class="hiw__cta-btn">
+                            Start Shopping
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- With Numbered Circles -->
+    <section class="component-section">
+        <h2 class="section-title">Alternative: Numbered Circles</h2>
+        <div class="component-wrapper">
+            <section class="hiw hiw--circles" style="padding-top: 100px;">
+                <div class="hiw__container">
+                    <header class="hiw__header">
+                        <h2 class="hiw__title">How It Works</h2>
+                        <p class="hiw__subtitle">Buy your next car in 3 simple steps</p>
+                    </header>
+
+                    <div class="hiw__steps">
+                        <div class="hiw__connector"></div>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon">🔍</div>
+                            <span class="hiw__step-number">Step 1</span>
+                            <h3 class="hiw__step-title">Browse & Choose</h3>
+                            <p class="hiw__step-desc">
+                                Search our inventory of 1,000+ quality used vehicles.
+                            </p>
+                        </article>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon">📋</div>
+                            <span class="hiw__step-number">Step 2</span>
+                            <h3 class="hiw__step-title">Finance Online</h3>
+                            <p class="hiw__step-desc">
+                                Get pre-approved in minutes with transparent pricing.
+                            </p>
+                        </article>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon">🚗</div>
+                            <span class="hiw__step-number">Step 3</span>
+                            <h3 class="hiw__step-title">Get It Delivered</h3>
+                            <p class="hiw__step-desc">
+                                We deliver to your door with a 10-day guarantee.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Mobile Layout -->
+    <section class="component-section">
+        <h2 class="section-title">Mobile Layout</h2>
+        <div class="component-wrapper">
+            <div style="max-width: 375px; margin: 0 auto;">
+                <section class="hiw hiw--mobile">
+                    <div class="hiw__container">
+                        <header class="hiw__header">
+                            <h2 class="hiw__title">How It Works</h2>
+                            <p class="hiw__subtitle">Buy your next car in 3 simple steps</p>
+                        </header>
+
+                        <div class="hiw__steps">
+                            <article class="hiw__step">
+                                <div class="hiw__icon">🔍</div>
+                                <span class="hiw__step-number">Step 1</span>
+                                <h3 class="hiw__step-title">Browse & Choose</h3>
+                                <p class="hiw__step-desc">
+                                    Search our inventory of 1,000+ quality used vehicles. Every car comes with a detailed inspection report.
+                                </p>
+                            </article>
+
+                            <div class="hiw__mobile-connector"></div>
+
+                            <article class="hiw__step">
+                                <div class="hiw__icon">📋</div>
+                                <span class="hiw__step-number">Step 2</span>
+                                <h3 class="hiw__step-title">Finance Online</h3>
+                                <p class="hiw__step-desc">
+                                    Get pre-approved for financing in minutes with no impact to your credit.
+                                </p>
+                            </article>
+
+                            <div class="hiw__mobile-connector"></div>
+
+                            <article class="hiw__step">
+                                <div class="hiw__icon">🚗</div>
+                                <span class="hiw__step-number">Step 3</span>
+                                <h3 class="hiw__step-title">Get It Delivered</h3>
+                                <p class="hiw__step-desc">
+                                    We deliver your car right to your door with a 10-day guarantee.
+                                </p>
+                            </article>
+                        </div>
+
+                        <div class="hiw__cta">
+                            <button class="hiw__cta-btn" style="width: 100%;">
+                                Start Shopping
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <!-- Different Icons -->
+    <section class="component-section">
+        <h2 class="section-title">Selling Process Variant</h2>
+        <div class="component-wrapper">
+            <section class="hiw" style="background: linear-gradient(135deg, #0F172A, #1E293B);">
+                <div class="hiw__container">
+                    <header class="hiw__header">
+                        <h2 class="hiw__title" style="color: white;">Sell Your Car in Minutes</h2>
+                        <p class="hiw__subtitle" style="color: rgba(255,255,255,0.7);">Get a competitive offer without leaving home</p>
+                    </header>
+
+                    <div class="hiw__steps">
+                        <article class="hiw__step">
+                            <div class="hiw__icon" style="background: rgba(59, 130, 246, 0.2);">📝</div>
+                            <span class="hiw__step-number">Step 1</span>
+                            <h3 class="hiw__step-title">Enter Details</h3>
+                            <p class="hiw__step-desc">
+                                Tell us about your vehicle. It only takes 2 minutes to get an instant offer.
+                            </p>
+                        </article>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon" style="background: rgba(34, 197, 94, 0.2);">💰</div>
+                            <span class="hiw__step-number">Step 2</span>
+                            <h3 class="hiw__step-title">Get Your Offer</h3>
+                            <p class="hiw__step-desc">
+                                Receive a competitive cash offer based on real market data.
+                            </p>
+                        </article>
+
+                        <article class="hiw__step">
+                            <div class="hiw__icon" style="background: rgba(168, 85, 247, 0.2);">🎉</div>
+                            <span class="hiw__step-number">Step 3</span>
+                            <h3 class="hiw__step-title">Get Paid</h3>
+                            <p class="hiw__step-desc">
+                                We'll pick up your car and deposit payment directly to your account.
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="hiw__cta">
+                        <button class="hiw__cta-btn" style="background: #22C55E;">
+                            Get My Offer
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</body>
+</html>

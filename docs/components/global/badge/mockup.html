@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge Component - All Variants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .component-section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .badge-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .row-label {
+            min-width: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        /* Badge Base */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: 0.02em;
+            border-radius: 6px;
+        }
+
+        /* Sizes */
+        .badge--sm {
+            height: 20px;
+            padding: 0 6px;
+            font-size: 11px;
+            border-radius: 4px;
+        }
+
+        .badge--md {
+            height: 24px;
+            padding: 0 8px;
+            font-size: 12px;
+        }
+
+        .badge--lg {
+            height: 28px;
+            padding: 0 10px;
+            font-size: 13px;
+        }
+
+        /* Variants */
+        .badge--primary {
+            background: #1E40AF;
+            color: #FFFFFF;
+        }
+
+        .badge--secondary {
+            background: #F3F4F6;
+            color: #374151;
+        }
+
+        .badge--success {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge--warning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge--danger {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .badge--info {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .badge--outline {
+            background: transparent;
+            color: #374151;
+            border: 1px solid #D1D5DB;
+        }
+
+        /* Dot indicator */
+        .badge--dot::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 2px;
+        }
+
+        .badge--dot.badge--success::before {
+            background: #22C55E;
+        }
+
+        .badge--dot.badge--warning::before {
+            background: #F59E0B;
+        }
+
+        .badge--dot.badge--danger::before {
+            background: #EF4444;
+        }
+
+        /* Badge icon */
+        .badge__icon {
+            width: 12px;
+            height: 12px;
+        }
+
+        .badge--md .badge__icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .badge--lg .badge__icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Removable badge */
+        .badge--removable {
+            padding-right: 4px;
+        }
+
+        .badge__remove {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: inherit;
+            font-size: 10px;
+            cursor: pointer;
+            margin-left: 2px;
+            transition: background 0.2s;
+        }
+
+        .badge__remove:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Status badges */
+        .badge--new {
+            background: #1E40AF;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .badge--sold {
+            background: #374151;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .badge--reserved {
+            background: #FEF3C7;
+            color: #92400E;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .badge--certified {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge--featured {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+        }
+
+        /* Count badge */
+        .badge--count {
+            min-width: 20px;
+            border-radius: 10px;
+            padding: 0 6px;
+        }
+
+        .badge--count.badge--md {
+            min-width: 24px;
+            border-radius: 12px;
+        }
+
+        /* Pill badge */
+        .badge--pill {
+            border-radius: 999px;
+        }
+
+        /* Vehicle card demo */
+        .vehicle-card-demo {
+            width: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .vehicle-image {
+            position: relative;
+            height: 180px;
+            background: linear-gradient(135deg, #E5E7EB, #D1D5DB);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .vehicle-badges {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .vehicle-info {
+            padding: 16px;
+            background: white;
+        }
+
+        .vehicle-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .vehicle-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 12px;
+        }
+
+        .vehicle-specs {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Filter demo */
+        .filter-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 16px;
+            background: #F9FAFB;
+            border-radius: 8px;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+            margin-right: 8px;
+        }
+
+        .clear-all {
+            color: #1E40AF;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Basic Variants -->
+    <section class="component-section">
+        <h2 class="section-title">Badge Variants</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Variants:</span>
+                <span class="badge badge--md badge--primary">Primary</span>
+                <span class="badge badge--md badge--secondary">Secondary</span>
+                <span class="badge badge--md badge--success">Success</span>
+                <span class="badge badge--md badge--warning">Warning</span>
+                <span class="badge badge--md badge--danger">Danger</span>
+                <span class="badge badge--md badge--info">Info</span>
+                <span class="badge badge--md badge--outline">Outline</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sizes -->
+    <section class="component-section">
+        <h2 class="section-title">Badge Sizes</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Small:</span>
+                <span class="badge badge--sm badge--primary">Small</span>
+                <span class="badge badge--sm badge--secondary">Small</span>
+                <span class="badge badge--sm badge--success">Small</span>
+            </div>
+            <div class="badge-row">
+                <span class="row-label">Medium:</span>
+                <span class="badge badge--md badge--primary">Medium</span>
+                <span class="badge badge--md badge--secondary">Medium</span>
+                <span class="badge badge--md badge--success">Medium</span>
+            </div>
+            <div class="badge-row">
+                <span class="row-label">Large:</span>
+                <span class="badge badge--lg badge--primary">Large</span>
+                <span class="badge badge--lg badge--secondary">Large</span>
+                <span class="badge badge--lg badge--success">Large</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- With Icons -->
+    <section class="component-section">
+        <h2 class="section-title">Badges with Icons</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Icon Left:</span>
+                <span class="badge badge--md badge--success">
+                    <svg class="badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Verified
+                </span>
+                <span class="badge badge--md badge--featured">
+                    <svg class="badge__icon" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    Featured
+                </span>
+                <span class="badge badge--md badge--info">
+                    <svg class="badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    Electric
+                </span>
+                <span class="badge badge--md badge--warning">
+                    <svg class="badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Pending
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dot Indicators -->
+    <section class="component-section">
+        <h2 class="section-title">Status with Dot Indicators</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Status:</span>
+                <span class="badge badge--md badge--success badge--dot">Available</span>
+                <span class="badge badge--md badge--warning badge--dot">Reserved</span>
+                <span class="badge badge--md badge--danger badge--dot">Sold</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Count Badges -->
+    <section class="component-section">
+        <h2 class="section-title">Count Badges</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Counts:</span>
+                <span class="badge badge--sm badge--primary badge--count">3</span>
+                <span class="badge badge--md badge--primary badge--count">12</span>
+                <span class="badge badge--md badge--danger badge--count">99+</span>
+                <span class="badge badge--lg badge--info badge--count">256</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Removable Tags -->
+    <section class="component-section">
+        <h2 class="section-title">Removable Tags</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Removable:</span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    SUV
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    Honda
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    2020-2023
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    Under $30K
+                    <button class="badge__remove">✕</button>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Badges -->
+    <section class="component-section">
+        <h2 class="section-title">Vehicle Status Badges</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Status:</span>
+                <span class="badge badge--sm badge--new">New Arrival</span>
+                <span class="badge badge--sm badge--reserved">Reserved</span>
+                <span class="badge badge--sm badge--sold">Sold</span>
+                <span class="badge badge--sm badge--certified">
+                    <svg class="badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Certified
+                </span>
+                <span class="badge badge--sm badge--featured">
+                    <svg class="badge__icon" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    Featured
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pill Badges -->
+    <section class="component-section">
+        <h2 class="section-title">Pill Badges</h2>
+        <div class="component-wrapper">
+            <div class="badge-row">
+                <span class="row-label">Pills:</span>
+                <span class="badge badge--md badge--secondary badge--pill">45,000 km</span>
+                <span class="badge badge--md badge--secondary badge--pill">Automatic</span>
+                <span class="badge badge--md badge--secondary badge--pill">AWD</span>
+                <span class="badge badge--md badge--secondary badge--pill">Leather</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vehicle Card Example -->
+    <section class="component-section">
+        <h2 class="section-title">Vehicle Card Context</h2>
+        <div class="component-wrapper">
+            <div class="vehicle-card-demo">
+                <div class="vehicle-image">
+                    🚗
+                    <div class="vehicle-badges">
+                        <span class="badge badge--sm badge--new">New Arrival</span>
+                        <span class="badge badge--sm badge--certified">
+                            <svg class="badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Certified
+                        </span>
+                    </div>
+                </div>
+                <div class="vehicle-info">
+                    <h3 class="vehicle-title">2021 Honda Civic EX</h3>
+                    <p class="vehicle-price">$24,500</p>
+                    <div class="vehicle-specs">
+                        <span class="badge badge--sm badge--secondary badge--pill">45K km</span>
+                        <span class="badge badge--sm badge--secondary badge--pill">Automatic</span>
+                        <span class="badge badge--sm badge--secondary badge--pill">FWD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Context -->
+    <section class="component-section">
+        <h2 class="section-title">Active Filters Context</h2>
+        <div class="component-wrapper">
+            <div class="filter-demo">
+                <span class="filter-label">Active Filters:</span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    SUV
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    Honda
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    2020-2023
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    Under $30,000
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="badge badge--md badge--info badge--pill badge--removable">
+                    Under 50K km
+                    <button class="badge__remove">✕</button>
+                </span>
+                <span class="clear-all">Clear All</span>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

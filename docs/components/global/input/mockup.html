@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Component - All States & Variants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .component-section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .input-example {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .example-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Input Group Styles */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .input-label--required::after {
+            content: ' *';
+            color: #EF4444;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px;
+            background: #ffffff;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #1F2937;
+            outline: none;
+            transition: all 150ms ease-out;
+        }
+
+        .input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .input:hover:not(:disabled):not(:focus) {
+            border-color: #9CA3AF;
+        }
+
+        .input:focus {
+            border-color: #1E40AF;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+        }
+
+        .input:disabled {
+            background: #F9FAFB;
+            border-color: #E5E7EB;
+            color: #9CA3AF;
+            cursor: not-allowed;
+        }
+
+        .input--error {
+            background: #FEF2F2;
+            border-color: #EF4444;
+        }
+
+        .input--error:focus {
+            border-color: #EF4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        }
+
+        .input--success {
+            background: #F0FDF4;
+            border-color: #22C55E;
+        }
+
+        .input--success:focus {
+            border-color: #22C55E;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+        }
+
+        .input--readonly {
+            background: #F3F4F6;
+            border-color: #E5E7EB;
+            color: #374151;
+        }
+
+        .input--with-icon-left {
+            padding-left: 42px;
+        }
+
+        .input--with-icon-right {
+            padding-right: 42px;
+        }
+
+        .input-icon {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            color: #9CA3AF;
+            pointer-events: none;
+        }
+
+        .input-icon--left {
+            left: 12px;
+        }
+
+        .input-icon--right {
+            right: 12px;
+        }
+
+        .input-icon--clickable {
+            pointer-events: auto;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .input-icon--clickable:hover {
+            color: #374151;
+        }
+
+        .input-icon--success {
+            color: #22C55E;
+        }
+
+        .input-icon--error {
+            color: #EF4444;
+        }
+
+        .input-helper {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .input-error {
+            font-size: 12px;
+            color: #EF4444;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .input-success {
+            font-size: 12px;
+            color: #22C55E;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Textarea */
+        .textarea {
+            min-height: 120px;
+            padding: 12px 14px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .textarea-counter {
+            font-size: 12px;
+            color: #9CA3AF;
+            text-align: right;
+        }
+
+        /* Select */
+        .select {
+            appearance: none;
+            padding-right: 42px;
+            cursor: pointer;
+        }
+
+        .select-icon {
+            right: 12px;
+            pointer-events: none;
+        }
+
+        /* Input with Prefix/Suffix */
+        .input-addon {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-prefix,
+        .input-suffix {
+            height: 44px;
+            padding: 0 14px;
+            background: #F3F4F6;
+            border: 1px solid #D1D5DB;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .input-prefix {
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .input-suffix {
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .input-addon .input {
+            border-radius: 0;
+        }
+
+        .input-addon .input:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .input-addon .input:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .input-addon .input-prefix + .input {
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Compact Input */
+        .input--compact {
+            height: 36px;
+            padding: 0 12px;
+            font-size: 13px;
+            border-radius: 6px;
+        }
+
+        /* Search Input */
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 12px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #E5E7EB;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #6B7280;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .search-clear:hover {
+            background: #D1D5DB;
+            color: #374151;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 24px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Input States -->
+    <section class="component-section">
+        <h2 class="section-title">Input States</h2>
+        <div class="component-wrapper">
+            <div class="input-grid">
+                <div class="input-example">
+                    <span class="example-label">Default</span>
+                    <div class="input-group">
+                        <label class="input-label">Email Address</label>
+                        <input type="email" class="input" placeholder="Enter your email">
+                        <span class="input-helper">We'll never share your email</span>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Filled</span>
+                    <div class="input-group">
+                        <label class="input-label">Email Address</label>
+                        <input type="email" class="input" value="john.doe@example.com">
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Focused</span>
+                    <div class="input-group">
+                        <label class="input-label">Email Address</label>
+                        <input type="email" class="input" placeholder="Enter your email" style="border-color: #1E40AF; box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);">
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Disabled</span>
+                    <div class="input-group">
+                        <label class="input-label">Email Address</label>
+                        <input type="email" class="input" value="john.doe@example.com" disabled>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Read Only</span>
+                    <div class="input-group">
+                        <label class="input-label">Email Address</label>
+                        <input type="email" class="input input--readonly" value="john.doe@example.com" readonly>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Required</span>
+                    <div class="input-group">
+                        <label class="input-label input-label--required">Email Address</label>
+                        <input type="email" class="input" placeholder="Enter your email" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Validation States -->
+    <section class="component-section">
+        <h2 class="section-title">Validation States</h2>
+        <div class="component-wrapper">
+            <div class="input-grid">
+                <div class="input-example">
+                    <span class="example-label">Error State</span>
+                    <div class="input-group">
+                        <label class="input-label input-label--required">Email Address</label>
+                        <div class="input-wrapper">
+                            <input type="email" class="input input--error" value="invalid-email">
+                            <svg class="input-icon input-icon--right input-icon--error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <span class="input-error">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            Please enter a valid email address
+                        </span>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Success State</span>
+                    <div class="input-group">
+                        <label class="input-label input-label--required">Email Address</label>
+                        <div class="input-wrapper">
+                            <input type="email" class="input input--success" value="john.doe@example.com">
+                            <svg class="input-icon input-icon--right input-icon--success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <span class="input-success">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Email verified
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inputs with Icons -->
+    <section class="component-section">
+        <h2 class="section-title">Inputs with Icons</h2>
+        <div class="component-wrapper">
+            <div class="input-grid">
+                <div class="input-example">
+                    <span class="example-label">Icon Left</span>
+                    <div class="input-group">
+                        <label class="input-label">Search</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon input-icon--left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" class="input input--with-icon-left" placeholder="Search for vehicles...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Icon Right (Clickable)</span>
+                    <div class="input-group">
+                        <label class="input-label">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" class="input input--with-icon-right" value="mypassword123">
+                            <svg class="input-icon input-icon--right input-icon--clickable" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Both Icons</span>
+                    <div class="input-group">
+                        <label class="input-label">Email</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon input-icon--left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            <input type="email" class="input input--with-icon-left input--with-icon-right input--success" value="verified@example.com">
+                            <svg class="input-icon input-icon--right input-icon--success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Search with Clear</span>
+                    <div class="input-group">
+                        <label class="input-label">Search</label>
+                        <div class="input-wrapper search-wrapper">
+                            <svg class="input-icon input-icon--left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" class="input input--with-icon-left" value="Honda Civic" style="padding-right: 42px;">
+                            <button class="search-clear">✕</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Input with Prefix/Suffix -->
+    <section class="component-section">
+        <h2 class="section-title">Inputs with Prefix/Suffix</h2>
+        <div class="component-wrapper">
+            <div class="input-grid">
+                <div class="input-example">
+                    <span class="example-label">Prefix</span>
+                    <div class="input-group">
+                        <label class="input-label">Price</label>
+                        <div class="input-addon">
+                            <span class="input-prefix">$</span>
+                            <input type="number" class="input" placeholder="0.00">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Suffix</span>
+                    <div class="input-group">
+                        <label class="input-label">Mileage</label>
+                        <div class="input-addon">
+                            <input type="number" class="input" placeholder="0">
+                            <span class="input-suffix">km</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Prefix + Suffix</span>
+                    <div class="input-group">
+                        <label class="input-label">Website</label>
+                        <div class="input-addon">
+                            <span class="input-prefix">https://</span>
+                            <input type="text" class="input" placeholder="example">
+                            <span class="input-suffix">.com</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Phone Number</span>
+                    <div class="input-group">
+                        <label class="input-label">Phone</label>
+                        <div class="input-addon">
+                            <span class="input-prefix">+1</span>
+                            <input type="tel" class="input" placeholder="(416) 555-0123">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Select Dropdown -->
+    <section class="component-section">
+        <h2 class="section-title">Select Dropdown</h2>
+        <div class="component-wrapper">
+            <div class="input-grid">
+                <div class="input-example">
+                    <span class="example-label">Default Select</span>
+                    <div class="input-group">
+                        <label class="input-label input-label--required">Province</label>
+                        <div class="input-wrapper">
+                            <select class="input select">
+                                <option value="" disabled selected>Select a province</option>
+                                <option value="ON">Ontario</option>
+                                <option value="QC">Quebec</option>
+                                <option value="BC">British Columbia</option>
+                                <option value="AB">Alberta</option>
+                            </select>
+                            <svg class="input-icon select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Selected Value</span>
+                    <div class="input-group">
+                        <label class="input-label input-label--required">Province</label>
+                        <div class="input-wrapper">
+                            <select class="input select">
+                                <option value="" disabled>Select a province</option>
+                                <option value="ON" selected>Ontario</option>
+                                <option value="QC">Quebec</option>
+                                <option value="BC">British Columbia</option>
+                            </select>
+                            <svg class="input-icon select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Disabled Select</span>
+                    <div class="input-group">
+                        <label class="input-label">Province</label>
+                        <div class="input-wrapper">
+                            <select class="input select" disabled>
+                                <option value="ON" selected>Ontario</option>
+                            </select>
+                            <svg class="input-icon select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Textarea -->
+    <section class="component-section">
+        <h2 class="section-title">Textarea</h2>
+        <div class="component-wrapper">
+            <div class="input-grid">
+                <div class="input-example">
+                    <span class="example-label">Default Textarea</span>
+                    <div class="input-group">
+                        <label class="input-label">Message</label>
+                        <textarea class="input textarea" placeholder="Type your message here..."></textarea>
+                        <span class="input-helper">Max 500 characters</span>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">With Character Count</span>
+                    <div class="input-group">
+                        <label class="input-label">Message</label>
+                        <textarea class="input textarea">I'm interested in scheduling a test drive for the 2021 Honda Civic. What times are available this weekend?</textarea>
+                        <span class="textarea-counter">103 / 500</span>
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Error State</span>
+                    <div class="input-group">
+                        <label class="input-label input-label--required">Message</label>
+                        <textarea class="input textarea input--error"></textarea>
+                        <span class="input-error">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            Please enter a message
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compact Inputs -->
+    <section class="component-section">
+        <h2 class="section-title">Size Variants</h2>
+        <div class="component-wrapper">
+            <div class="input-grid">
+                <div class="input-example">
+                    <span class="example-label">Compact (36px)</span>
+                    <div class="input-group">
+                        <label class="input-label" style="font-size: 13px;">Filter by year</label>
+                        <input type="text" class="input input--compact" placeholder="e.g. 2020">
+                    </div>
+                </div>
+
+                <div class="input-example">
+                    <span class="example-label">Default (44px)</span>
+                    <div class="input-group">
+                        <label class="input-label">Filter by year</label>
+                        <input type="text" class="input" placeholder="e.g. 2020">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Section Component - All States</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .component-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* Hero Styles */
+        .hero {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F172A 100%);
+            padding: 80px 24px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></svg>');
+            background-size: 200px 200px;
+            opacity: 0.5;
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero__headline {
+            font-size: 56px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .hero__subheadline {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Search Bar */
+        .hero__search {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 8px 8px 8px 16px;
+            max-width: 720px;
+            margin: 0 auto 48px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero__search-icon {
+            width: 24px;
+            height: 24px;
+            color: #6B7280;
+            flex-shrink: 0;
+        }
+
+        .hero__search-input {
+            flex: 1;
+            height: 48px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #1F2937;
+            padding: 0 16px;
+            outline: none;
+        }
+
+        .hero__search-input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .hero__search-divider {
+            width: 1px;
+            height: 32px;
+            background: #E5E7EB;
+        }
+
+        .hero__search-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 48px;
+            padding: 0 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .hero__search-btn:hover {
+            background: #F3F4F6;
+        }
+
+        .hero__search-btn--primary {
+            background: #1E40AF;
+            color: white;
+            margin-left: 8px;
+        }
+
+        .hero__search-btn--primary:hover {
+            background: #1E3A8A;
+        }
+
+        /* Stats */
+        .hero__stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+        }
+
+        .hero__stat {
+            text-align: center;
+        }
+
+        .hero__stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .hero__stat-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Promo Banner */
+        .hero__promo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 12px 24px;
+            background: linear-gradient(90deg, #F59E0B, #D97706);
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .hero__promo-link {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .hero__promo-close {
+            position: absolute;
+            right: 16px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Mobile Hero */
+        .hero--mobile {
+            min-height: 450px;
+            padding: 48px 16px;
+        }
+
+        .hero--mobile .hero__headline {
+            font-size: 32px;
+        }
+
+        .hero--mobile .hero__subheadline {
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hero--mobile .hero__search {
+            flex-direction: column;
+            padding: 16px;
+            gap: 12px;
+        }
+
+        .hero--mobile .hero__search-input {
+            width: 100%;
+            height: 44px;
+            padding: 0;
+        }
+
+        .hero--mobile .hero__search-btn--primary {
+            width: 100%;
+            justify-content: center;
+            margin-left: 0;
+        }
+
+        .hero--mobile .hero__stats {
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .hero--mobile .hero__stat-value {
+            font-size: 24px;
+        }
+
+        .hero--mobile .hero__stat-label {
+            font-size: 12px;
+        }
+
+        /* Quick Filters */
+        .hero__filters {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .hero__filter {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 36px;
+            padding: 0 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .hero__filter:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- State 1: Default Hero -->
+    <section class="component-section">
+        <h2 class="section-title">State: Default Hero</h2>
+        <div class="component-wrapper">
+            <section class="hero">
+                <div class="hero__content">
+                    <h1 class="hero__headline">Find Your Perfect Car</h1>
+                    <p class="hero__subheadline">
+                        Browse 1,000+ quality used vehicles with free delivery and a 10-day money-back guarantee
+                    </p>
+
+                    <div class="hero__search">
+                        <svg class="hero__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input type="text" class="hero__search-input" placeholder="Search for make, model, or keyword...">
+                        <div class="hero__search-divider"></div>
+                        <button class="hero__search-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>
+                            </svg>
+                            Filters
+                        </button>
+                        <button class="hero__search-btn hero__search-btn--primary">Search</button>
+                    </div>
+
+                    <div class="hero__stats">
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">1,000+</div>
+                            <div class="hero__stat-label">Vehicles</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">4.8★</div>
+                            <div class="hero__stat-label">Customer Rating</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">210-pt</div>
+                            <div class="hero__stat-label">Inspection</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">10-Day</div>
+                            <div class="hero__stat-label">Money-Back</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- State 2: With Promotional Banner -->
+    <section class="component-section">
+        <h2 class="section-title">State: With Promotional Banner</h2>
+        <div class="component-wrapper">
+            <section class="hero" style="padding-top: 120px;">
+                <div class="hero__promo">
+                    <span>🎄</span>
+                    <span>Holiday Sale: Up to $2,000 off select vehicles. Ends Dec 31.</span>
+                    <a href="#" class="hero__promo-link">Shop Now →</a>
+                    <button class="hero__promo-close">✕</button>
+                </div>
+
+                <div class="hero__content">
+                    <h1 class="hero__headline">Find Your Perfect Car</h1>
+                    <p class="hero__subheadline">
+                        Browse 1,000+ quality used vehicles with free delivery and a 10-day money-back guarantee
+                    </p>
+
+                    <div class="hero__search">
+                        <svg class="hero__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input type="text" class="hero__search-input" placeholder="Search for make, model, or keyword...">
+                        <button class="hero__search-btn hero__search-btn--primary">Search</button>
+                    </div>
+
+                    <div class="hero__stats">
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">1,000+</div>
+                            <div class="hero__stat-label">Vehicles</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">4.8★</div>
+                            <div class="hero__stat-label">Customer Rating</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">210-pt</div>
+                            <div class="hero__stat-label">Inspection</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">10-Day</div>
+                            <div class="hero__stat-label">Money-Back</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- State 3: With Quick Filters -->
+    <section class="component-section">
+        <h2 class="section-title">State: With Quick Filters</h2>
+        <div class="component-wrapper">
+            <section class="hero" style="min-height: 650px;">
+                <div class="hero__content">
+                    <h1 class="hero__headline">Find Your Perfect Car</h1>
+                    <p class="hero__subheadline">
+                        Browse 1,000+ quality used vehicles with free delivery and a 10-day money-back guarantee
+                    </p>
+
+                    <div class="hero__search">
+                        <svg class="hero__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <input type="text" class="hero__search-input" placeholder="Search for make, model, or keyword...">
+                        <button class="hero__search-btn hero__search-btn--primary">Search</button>
+                    </div>
+
+                    <div class="hero__filters">
+                        <button class="hero__filter">
+                            <span>🚙</span> SUVs
+                        </button>
+                        <button class="hero__filter">
+                            <span>⚡</span> Electric
+                        </button>
+                        <button class="hero__filter">
+                            <span>💰</span> Under $25K
+                        </button>
+                        <button class="hero__filter">
+                            <span>🔄</span> Low Mileage
+                        </button>
+                        <button class="hero__filter">
+                            <span>✨</span> Luxury
+                        </button>
+                    </div>
+
+                    <div class="hero__stats" style="margin-top: 48px;">
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">1,000+</div>
+                            <div class="hero__stat-label">Vehicles</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">4.8★</div>
+                            <div class="hero__stat-label">Customer Rating</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">210-pt</div>
+                            <div class="hero__stat-label">Inspection</div>
+                        </div>
+                        <div class="hero__stat">
+                            <div class="hero__stat-value">10-Day</div>
+                            <div class="hero__stat-label">Money-Back</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- State 4: Mobile Hero -->
+    <section class="component-section">
+        <h2 class="section-title">State: Mobile Hero</h2>
+        <div class="component-wrapper">
+            <div style="max-width: 375px; margin: 0 auto;">
+                <section class="hero hero--mobile">
+                    <div class="hero__content">
+                        <h1 class="hero__headline">Find Your Perfect Car</h1>
+                        <p class="hero__subheadline">
+                            Browse 1,000+ quality used vehicles with free delivery
+                        </p>
+
+                        <div class="hero__search">
+                            <div style="display: flex; align-items: center; width: 100%;">
+                                <svg class="hero__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="M21 21l-4.35-4.35"/>
+                                </svg>
+                                <input type="text" class="hero__search-input" placeholder="Search vehicles...">
+                            </div>
+                            <button class="hero__search-btn hero__search-btn--primary">Search</button>
+                        </div>
+
+                        <div class="hero__stats">
+                            <div class="hero__stat">
+                                <div class="hero__stat-value">1,000+</div>
+                                <div class="hero__stat-label">Vehicles</div>
+                            </div>
+                            <div class="hero__stat">
+                                <div class="hero__stat-value">4.8★</div>
+                                <div class="hero__stat-label">Rating</div>
+                            </div>
+                            <div class="hero__stat">
+                                <div class="hero__stat-value">210-pt</div>
+                                <div class="hero__stat-label">Inspection</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
