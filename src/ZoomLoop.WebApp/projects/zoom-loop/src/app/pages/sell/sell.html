@@ -1,0 +1,127 @@
+<div class="sell">
+  <section class="sell__hero">
+    <h1 class="sell__hero-title">Sell or Trade-In Your Car</h1>
+    <p class="sell__hero-subtitle">Get an instant cash offer in minutes</p>
+  </section>
+
+  <div class="sell__content">
+    <div class="sell__form-container">
+      <!-- Step 1: Vehicle Info -->
+      @if (step === 1) {
+        <div class="sell__step">
+          <h2 class="sell__step-title">Tell us about your vehicle</h2>
+
+          <div class="sell__form">
+            <div class="sell__row">
+              <div class="sell__field">
+                <label class="sell__label">Year</label>
+                <select class="sell__select" [(ngModel)]="vehicle.year">
+                  <option value="">Select year</option>
+                  @for (y of years; track y) {
+                    <option [value]="y">{{ y }}</option>
+                  }
+                </select>
+              </div>
+              <div class="sell__field">
+                <label class="sell__label">Make</label>
+                <select class="sell__select" [(ngModel)]="vehicle.make">
+                  <option value="">Select make</option>
+                  @for (m of makes; track m) {
+                    <option [value]="m">{{ m }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="sell__row">
+              <div class="sell__field">
+                <label class="sell__label">Model</label>
+                <input class="sell__input" [(ngModel)]="vehicle.model" placeholder="e.g., Civic">
+              </div>
+              <div class="sell__field">
+                <label class="sell__label">Mileage (km)</label>
+                <input class="sell__input" type="number" [(ngModel)]="vehicle.mileage" placeholder="e.g., 50000">
+              </div>
+            </div>
+
+            <div class="sell__field">
+              <label class="sell__label">Condition</label>
+              <div class="sell__conditions">
+                @for (c of conditions; track c) {
+                  <label class="sell__condition" [class.sell__condition--selected]="vehicle.condition === c">
+                    <input type="radio" [(ngModel)]="vehicle.condition" [value]="c">
+                    <span>{{ c | titlecase }}</span>
+                  </label>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="sell__actions">
+            <zl-button variant="primary" size="lg" (click)="nextStep()" [disabled]="!vehicle.year || !vehicle.make || !vehicle.model || !vehicle.mileage">
+              Continue
+            </zl-button>
+          </div>
+        </div>
+      }
+
+      <!-- Step 2: Contact -->
+      @if (step === 2) {
+        <div class="sell__step">
+          <h2 class="sell__step-title">Your contact information</h2>
+
+          <div class="sell__form">
+            <div class="sell__row">
+              <div class="sell__field">
+                <label class="sell__label">First Name</label>
+                <input class="sell__input" [(ngModel)]="contact.firstName" placeholder="John">
+              </div>
+              <div class="sell__field">
+                <label class="sell__label">Last Name</label>
+                <input class="sell__input" [(ngModel)]="contact.lastName" placeholder="Doe">
+              </div>
+            </div>
+            <div class="sell__field">
+              <label class="sell__label">Email</label>
+              <input class="sell__input" type="email" [(ngModel)]="contact.email" placeholder="john@example.com">
+            </div>
+          </div>
+
+          <div class="sell__actions sell__actions--dual">
+            <zl-button variant="outline" size="lg" (click)="prevStep()">Back</zl-button>
+            <zl-button variant="primary" size="lg" (click)="submit()" [disabled]="!contact.firstName || !contact.lastName || !contact.email || isLoading">
+              {{ isLoading ? 'Getting Offer...' : 'Get My Offer' }}
+            </zl-button>
+          </div>
+        </div>
+      }
+
+      <!-- Step 3: Result -->
+      @if (step === 3 && valuation) {
+        <div class="sell__step sell__step--result">
+          <h2 class="sell__step-title">Your Estimated Offer</h2>
+
+          <div class="sell__valuation">
+            <span class="sell__valuation-amount">{{ formatCurrency(valuation.value) }}</span>
+            <span class="sell__valuation-range">Range: {{ formatCurrency(valuation.low) }} - {{ formatCurrency(valuation.high) }}</span>
+          </div>
+
+          <p class="sell__valuation-note">A specialist will contact you within 24 hours to finalize your offer.</p>
+
+          <div class="sell__actions sell__actions--dual">
+            <zl-button variant="outline" size="lg" (click)="startOver()">Get Another Offer</zl-button>
+            <zl-button variant="primary" size="lg" (click)="browseCars()">Browse Cars</zl-button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <section class="sell__how-it-works">
+    <zl-how-it-works title="How Selling Works" subtitle="Get cash for your car in 3 easy steps" [steps]="howItWorksSteps"></zl-how-it-works>
+  </section>
+
+  <section class="sell__trust">
+    <zl-trust-badges [showDividers]="true"></zl-trust-badges>
+  </section>
+</div>
