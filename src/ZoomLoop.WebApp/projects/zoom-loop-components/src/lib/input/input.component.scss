@@ -1,32 +1,34 @@
 // Input Component - BEM Methodology
 // Block: .input
 
+@import '../styles/index';
+
 .input {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: $spacing-2;
   width: 100%;
 
   // Compact Modifier
   &--compact {
     .input__field {
       height: 36px;
-      padding: 0 12px;
+      padding: 0 $spacing-3;
       font-size: 13px;
-      border-radius: 6px;
+      border-radius: $radius-base;
     }
   }
 
   // Elements
   &__label {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-700;
   }
 
   &__required {
-    color: #EF4444;
+    color: $color-error-500;
     margin-left: 2px;
   }
 
@@ -38,22 +40,22 @@
     // State Modifiers
     &--error {
       .input__field {
-        background: #FEF2F2;
-        border-color: #EF4444;
+        background: $color-error-50;
+        border-color: $color-error-500;
 
         &:focus {
-          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+          @include focus-ring-danger;
         }
       }
     }
 
     &--success {
       .input__field {
-        background: #F0FDF4;
-        border-color: #22C55E;
+        background: $color-success-50;
+        border-color: $color-success;
 
         &:focus {
-          box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+          @include focus-ring-success;
         }
       }
     }
@@ -75,39 +77,39 @@
     width: 100%;
     height: 44px;
     padding: 0 14px;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #1F2937;
-    background: #FFFFFF;
-    border: 1px solid #D1D5DB;
-    border-radius: 8px;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background: $color-white;
+    border: 1px solid $color-border-secondary;
+    border-radius: $radius-md;
     outline: none;
-    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
 
     &::placeholder {
-      color: #9CA3AF;
+      color: $color-text-muted;
     }
 
     &:hover:not(:disabled):not(:focus) {
-      border-color: #9CA3AF;
+      border-color: $color-neutral-400;
     }
 
     &:focus {
-      border-color: #1E40AF;
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
+      border-color: $color-border-focus;
+      @include focus-ring-primary;
     }
 
     &:disabled {
-      background: #F9FAFB;
-      border-color: #E5E7EB;
-      color: #9CA3AF;
+      background: $color-neutral-50;
+      border-color: $color-border-primary;
+      color: $color-text-muted;
       cursor: not-allowed;
     }
 
     &:read-only {
-      background: #F3F4F6;
-      border-color: #E5E7EB;
-      color: #374151;
+      background: $color-neutral-100;
+      border-color: $color-border-primary;
+      color: $color-neutral-700;
     }
   }
 
@@ -116,18 +118,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #6B7280;
+    color: $color-text-secondary;
 
     &--leading {
-      left: 12px;
+      left: $spacing-3;
     }
 
     &--trailing {
-      right: 12px;
+      right: $spacing-3;
     }
 
     &--success {
-      color: #22C55E;
+      color: $color-success;
     }
   }
 
@@ -138,32 +140,32 @@
     justify-content: center;
     background: none;
     border: none;
-    padding: 4px;
+    padding: $spacing-1;
     cursor: pointer;
-    color: #6B7280;
-    border-radius: 4px;
-    transition: color 0.2s, background 0.2s;
+    color: $color-text-secondary;
+    border-radius: $radius-sm;
+    transition: color $transition-base, background $transition-base;
 
     &:hover {
-      color: #374151;
-      background: #F3F4F6;
+      color: $color-neutral-700;
+      background: $color-neutral-100;
     }
   }
 
   &__helper {
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    color: #6B7280;
+    gap: $spacing-1;
+    font-family: $font-family-primary;
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
 
     &--error {
-      color: #EF4444;
+      color: $color-error-500;
     }
 
     &--success {
-      color: #22C55E;
+      color: $color-success;
     }
   }
 }

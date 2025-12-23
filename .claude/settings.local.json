@@ -5,7 +5,12 @@
       "Bash(test:*)",
       "Bash(npm install)",
       "Bash(npm run build-storybook:*)",
-      "Bash(npm run storybook:*)"
+      "Bash(npm run storybook:*)",
+      "Bash(npm run build-storybook:zoom-loop-components:*)",
+      "Bash(npm run)",
+      "Bash(rm:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run storybook:zoom-loop-components:*)"
     ],
     "deny": [],
     "ask": []

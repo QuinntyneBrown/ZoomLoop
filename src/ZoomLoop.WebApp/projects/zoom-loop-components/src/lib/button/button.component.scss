@@ -1,6 +1,8 @@
 // Button Component - BEM Methodology
 // Block: .btn
 
+@import '../styles/index';
+
 :host {
   display: inline-flex;
 }
@@ -9,12 +11,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 600;
+  gap: $spacing-2;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-semibold;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all 150ms ease-out;
+  transition: all $transition-fast;
   text-decoration: none;
   white-space: nowrap;
   position: relative;
@@ -26,115 +28,77 @@
   // Size Modifiers
   &--sm {
     height: 32px;
-    padding: 0 12px;
+    padding: 0 $spacing-3;
     font-size: 13px;
-    border-radius: 6px;
+    border-radius: $radius-base;
   }
 
   &--md {
     height: 40px;
-    padding: 0 16px;
-    font-size: 14px;
-    border-radius: 8px;
+    padding: 0 $spacing-4;
+    font-size: $font-size-sm;
+    border-radius: $radius-md;
   }
 
   &--lg {
     height: 48px;
-    padding: 0 24px;
-    font-size: 16px;
+    padding: 0 $spacing-6;
+    font-size: $font-size-base;
     border-radius: 10px;
   }
 
   &--xl {
     height: 56px;
-    padding: 0 32px;
-    font-size: 18px;
-    border-radius: 12px;
+    padding: 0 $spacing-8;
+    font-size: $font-size-lg;
+    border-radius: $radius-lg;
   }
 
   // Primary Variant
   &--primary {
-    background: #1E40AF;
-    border-color: #1E40AF;
-    color: #ffffff;
-
-    &:hover:not(:disabled) {
-      background: #1E3A8A;
-      border-color: #1E3A8A;
-    }
-
-    &:active:not(:disabled) {
-      background: #1E3A7A;
-      border-color: #1E3A7A;
-    }
-
-    &:focus {
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.4);
-    }
-
-    &:disabled {
-      background: #9CA3AF;
-      border-color: #9CA3AF;
-      cursor: not-allowed;
-    }
+    @include button-variant($color-primary, $color-primary-hover, $color-primary-active);
   }
 
   // Secondary Variant
   &--secondary {
-    background: #F3F4F6;
-    border-color: #F3F4F6;
-    color: #374151;
+    @include button-variant($color-neutral-100, $color-neutral-200, $color-neutral-300, $color-neutral-700);
 
     &:hover:not(:disabled) {
-      background: #E5E7EB;
-      border-color: #E5E7EB;
-      color: #1F2937;
-    }
-
-    &:active:not(:disabled) {
-      background: #D1D5DB;
-      border-color: #D1D5DB;
+      color: $color-neutral-800;
     }
 
     &:focus {
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
+      @include focus-ring-primary;
     }
 
     &:disabled {
-      background: #F9FAFB;
-      border-color: #F9FAFB;
-      color: #9CA3AF;
-      cursor: not-allowed;
+      background: $color-neutral-50;
+      border-color: $color-neutral-50;
+      color: $color-neutral-400;
     }
   }
 
   // Outline Variant
   &--outline {
-    background: transparent;
-    border-color: #D1D5DB;
-    color: #374151;
+    @include button-outline-variant($color-neutral-700, $color-neutral-50, $color-neutral-100);
 
     &:hover:not(:disabled) {
-      background: #F9FAFB;
-      border-color: #9CA3AF;
-      color: #1F2937;
+      border-color: $color-neutral-400;
+      color: $color-neutral-800;
     }
 
     &:active:not(:disabled) {
-      background: #F3F4F6;
-      border-color: #6B7280;
+      border-color: $color-neutral-500;
     }
 
     &:focus {
-      border-color: #1E40AF;
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
+      border-color: $color-primary;
+      @include focus-ring-primary;
     }
 
     &:disabled {
-      background: transparent;
-      border-color: #E5E7EB;
-      color: #9CA3AF;
-      cursor: not-allowed;
+      border-color: $color-border-primary;
+      color: $color-neutral-400;
     }
   }
 
@@ -142,78 +106,44 @@
   &--ghost {
     background: transparent;
     border-color: transparent;
-    color: #374151;
+    color: $color-neutral-700;
 
     &:hover:not(:disabled) {
-      background: #F3F4F6;
-      color: #1F2937;
+      background: $color-neutral-100;
+      color: $color-neutral-800;
     }
 
     &:active:not(:disabled) {
-      background: #E5E7EB;
+      background: $color-neutral-200;
     }
 
     &:focus {
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
+      @include focus-ring-primary;
     }
 
     &:disabled {
-      color: #9CA3AF;
+      color: $color-neutral-400;
       cursor: not-allowed;
     }
   }
 
   // Danger Variant
   &--danger {
-    background: #DC2626;
-    border-color: #DC2626;
-    color: #ffffff;
-
-    &:hover:not(:disabled) {
-      background: #B91C1C;
-      border-color: #B91C1C;
-    }
-
-    &:active:not(:disabled) {
-      background: #991B1B;
-      border-color: #991B1B;
-    }
-
-    &:focus {
-      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.4);
-    }
+    @include button-variant($color-danger, $color-danger-hover, $color-danger-active);
 
     &:disabled {
-      background: #FCA5A5;
-      border-color: #FCA5A5;
-      cursor: not-allowed;
+      background: $color-error-300;
+      border-color: $color-error-300;
     }
   }
 
   // Success Variant
   &--success {
-    background: #059669;
-    border-color: #059669;
-    color: #ffffff;
-
-    &:hover:not(:disabled) {
-      background: #047857;
-      border-color: #047857;
-    }
-
-    &:active:not(:disabled) {
-      background: #065F46;
-      border-color: #065F46;
-    }
-
-    &:focus {
-      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.4);
-    }
+    @include button-variant($color-success-600, $color-success-700, $color-success-800);
 
     &:disabled {
-      background: #6EE7B7;
-      border-color: #6EE7B7;
-      cursor: not-allowed;
+      background: $color-success-300;
+      border-color: $color-success-300;
     }
   }
 
@@ -236,7 +166,7 @@
   &__content {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: $spacing-2;
 
     &--loading {
       opacity: 0;
@@ -244,18 +174,7 @@
   }
 
   &__spinner {
+    @include spinner(18px);
     position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 2px solid currentColor;
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: btn-spin 0.75s linear infinite;
-  }
-}
-
-@keyframes btn-spin {
-  to {
-    transform: rotate(360deg);
   }
 }

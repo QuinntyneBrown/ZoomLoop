@@ -1,16 +1,18 @@
 // Trust Badges Component - BEM Methodology
 // Block: .trust-badges
 
+@import '../styles/index';
+
 .trust-badges {
-  background: #FFFFFF;
-  padding: 48px 24px;
+  background: $color-white;
+  padding: $spacing-12 $spacing-6;
 
   &__container {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
+    gap: $spacing-8;
   }
 
   &__item {
@@ -27,10 +29,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #EFF6FF;
-    border-radius: 12px;
-    color: #1E40AF;
-    margin-bottom: 16px;
+    background: $color-primary-50;
+    border-radius: $radius-lg;
+    color: $color-primary;
+    margin-bottom: $spacing-4;
   }
 
   &__content {
@@ -38,20 +40,20 @@
   }
 
   &__title {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: #1F2937;
-    margin: 0 0 8px;
+    font-family: $font-family-primary;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-2;
   }
 
   &__desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    color: #6B7280;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-normal;
+    color: $color-text-secondary;
     margin: 0;
-    line-height: 1.5;
+    line-height: $line-height-normal;
   }
 
   &--with-dividers &__container {
@@ -63,8 +65,8 @@
   &--with-dividers &__item {
     flex-direction: row;
     text-align: left;
-    gap: 12px;
-    padding: 0 32px;
+    gap: $spacing-3;
+    padding: 0 $spacing-8;
   }
 
   &--with-dividers &__icon {
@@ -78,13 +80,13 @@
     transform: translateY(-50%);
     width: 1px;
     height: 40px;
-    background: #E5E7EB;
+    background: $color-border-primary;
   }
 
-  @media (max-width: 992px) {
+  @include max-lg {
     &__container {
       grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+      gap: $spacing-6;
     }
 
     &--with-dividers &__container {
@@ -98,7 +100,7 @@
     }
 
     &--with-dividers &__icon {
-      margin-bottom: 16px;
+      margin-bottom: $spacing-4;
     }
 
     &__divider {
@@ -106,11 +108,11 @@
     }
   }
 
-  @media (max-width: 768px) {
-    padding: 32px 16px;
+  @include max-md {
+    padding: $spacing-8 $spacing-4;
 
     &__container {
-      gap: 20px;
+      gap: $spacing-5;
     }
 
     &__icon {
@@ -119,7 +121,7 @@
     }
 
     &__title {
-      font-size: 14px;
+      font-size: $font-size-sm;
     }
 
     &__desc {

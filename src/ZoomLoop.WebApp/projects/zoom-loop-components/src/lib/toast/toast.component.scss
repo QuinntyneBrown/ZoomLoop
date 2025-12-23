@@ -1,127 +1,114 @@
 // Toast Component - BEM Methodology
 // Block: .toast
 
+@import '../styles/index';
+
 .toast {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: $spacing-3;
   min-width: 320px;
   max-width: 420px;
-  padding: 16px;
-  border-radius: 12px;
+  padding: $spacing-4;
+  border-radius: $radius-lg;
   border: 1px solid;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: $shadow-lg;
   position: relative;
   overflow: hidden;
-  animation: toastEnter 300ms ease-out;
+  animation: toastEnter $transition-slow;
 
   &--exiting {
-    animation: toastExit 300ms ease-in forwards;
+    animation: toastExit $transition-slow forwards;
   }
 
   // Types
   &--success {
-    background: #F0FDF4;
-    border-color: #22C55E;
+    background: $color-success-50;
+    border-color: $color-success;
 
     .toast__icon {
-      color: #16A34A;
+      color: $color-success-600;
     }
 
-    .toast__title {
-      color: #166534;
-    }
-
+    .toast__title,
     .toast__message {
-      color: #166534;
+      color: $color-success-800;
     }
 
     .toast__progress-bar {
-      background: #22C55E;
+      background: $color-success;
     }
   }
 
   &--error {
-    background: #FEF2F2;
-    border-color: #EF4444;
+    background: $color-error-50;
+    border-color: $color-error-500;
 
     .toast__icon {
-      color: #DC2626;
+      color: $color-danger;
     }
 
-    .toast__title {
-      color: #991B1B;
-    }
-
+    .toast__title,
     .toast__message {
-      color: #991B1B;
+      color: $color-error-800;
     }
 
     .toast__progress-bar {
-      background: #EF4444;
+      background: $color-error-500;
     }
   }
 
   &--warning {
-    background: #FFFBEB;
-    border-color: #F59E0B;
+    background: $color-warning-50;
+    border-color: $color-warning;
 
     .toast__icon {
-      color: #D97706;
+      color: $color-warning-600;
     }
 
-    .toast__title {
-      color: #92400E;
-    }
-
+    .toast__title,
     .toast__message {
-      color: #92400E;
+      color: $color-warning-800;
     }
 
     .toast__progress-bar {
-      background: #F59E0B;
+      background: $color-warning;
     }
   }
 
   &--info {
-    background: #EFF6FF;
-    border-color: #3B82F6;
+    background: $color-primary-50;
+    border-color: $color-primary-500;
 
     .toast__icon {
-      color: #2563EB;
+      color: $color-primary-600;
     }
 
-    .toast__title {
-      color: #1E40AF;
-    }
-
+    .toast__title,
     .toast__message {
-      color: #1E40AF;
+      color: $color-primary;
     }
 
     .toast__progress-bar {
-      background: #3B82F6;
+      background: $color-primary-500;
     }
   }
 
   &--neutral {
-    background: #F9FAFB;
-    border-color: #D1D5DB;
+    background: $color-neutral-50;
+    border-color: $color-border-secondary;
 
     .toast__icon {
-      color: #6B7280;
+      color: $color-neutral-500;
     }
 
-    .toast__title {
-      color: #374151;
-    }
-
+    .toast__title,
     .toast__message {
-      color: #374151;
+      color: $color-neutral-700;
     }
 
     .toast__progress-bar {
-      background: #6B7280;
+      background: $color-neutral-500;
     }
   }
 
@@ -138,31 +125,31 @@
   }
 
   &__title {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0 0 4px;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    margin: 0 0 $spacing-1;
   }
 
   &__message {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-normal;
     margin: 0;
-    line-height: 1.5;
+    line-height: $line-height-normal;
   }
 
   &__actions {
     display: flex;
-    gap: 12px;
-    margin-top: 12px;
+    gap: $spacing-3;
+    margin-top: $spacing-3;
   }
 
   &__action {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #1E40AF;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
     background: none;
     border: none;
     padding: 0;
@@ -170,7 +157,7 @@
     text-decoration: underline;
 
     &:hover {
-      color: #1E3A8A;
+      color: $color-primary-active;
     }
   }
 
@@ -183,11 +170,11 @@
     height: 24px;
     background: none;
     border: none;
-    border-radius: 4px;
+    border-radius: $radius-sm;
     color: inherit;
     opacity: 0.6;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: opacity $transition-base;
 
     &:hover {
       opacity: 1;
