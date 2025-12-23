@@ -1,0 +1,64 @@
+<div class="cars">
+  <!-- Search Header -->
+  <div class="cars__header">
+    <div class="cars__container">
+      <zl-search-bar
+        variant="inline"
+        placeholder="Search by make, model, or keyword..."
+        (search)="onSearch($event)"
+      ></zl-search-bar>
+    </div>
+  </div>
+
+  <div class="cars__content">
+    <!-- Filters Sidebar -->
+    <aside class="cars__sidebar">
+      <h3 class="cars__filter-title">Filters</h3>
+
+      <div class="cars__filter-section">
+        <h4 class="cars__filter-label">Make</h4>
+        <div class="cars__filter-options">
+          @for (make of makes; track make) {
+            <label class="cars__filter-option">
+              <input
+                type="checkbox"
+                [checked]="isMakeSelected(make)"
+                (change)="onMakeFilter(make)"
+              />
+              <span>{{ make }}</span>
+            </label>
+          }
+        </div>
+      </div>
+
+      @if (filters.query || filters.makes?.length) {
+        <button class="cars__clear-btn" (click)="clearFilters()">
+          Clear All Filters
+        </button>
+      }
+    </aside>
+
+    <!-- Results -->
+    <main class="cars__results">
+      <div class="cars__results-header">
+        <span class="cars__results-count">{{ total }} vehicles found</span>
+      </div>
+
+      <div class="cars__grid">
+        @for (vehicle of vehicles; track vehicle.id) {
+          <zl-vehicle-card
+            [vehicle]="toVehicleCard(vehicle)"
+            [href]="'/cars/' + vehicle.id"
+            [isFavorite]="isFavorite(vehicle.id)"
+            (favoriteToggle)="onFavoriteToggle($event)"
+          ></zl-vehicle-card>
+        } @empty {
+          <div class="cars__empty">
+            <p>No vehicles found</p>
+            <zl-button variant="primary" (click)="clearFilters()">Clear Filters</zl-button>
+          </div>
+        }
+      </div>
+    </main>
+  </div>
+</div>

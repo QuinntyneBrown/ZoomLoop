@@ -1,0 +1,25 @@
+<zl-header
+  logoText="Clutch"
+  logoInitial="C"
+  logoHref="/"
+  [navItems]="navItems"
+  [activeRoute]="activeRoute"
+  [scrolled]="isScrolled"
+  ctaText="Browse Cars"
+  (signIn)="onSignIn()"
+  (ctaClick)="onCtaClick()"
+></zl-header>
+
+<main class="layout__main">
+  <router-outlet />
+</main>
+
+<zl-footer
+  logoText="Clutch"
+  logoInitial="C"
+  tagline="Canada's #1 online car retailer"
+  [columns]="footerColumns"
+  [socialLinks]="socialLinks"
+  [legalLinks]="legalLinks"
+  (newsletterSubscribe)="onNewsletterSubscribe($event)"
+></zl-footer>

@@ -1,0 +1,113 @@
+@if (vehicle) {
+  <div class="vehicle-detail">
+    <!-- Breadcrumb -->
+    <nav class="vehicle-detail__breadcrumb">
+      <a routerLink="/">Home</a>
+      <span>/</span>
+      <a routerLink="/cars">Cars</a>
+      <span>/</span>
+      <span>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</span>
+    </nav>
+
+    <div class="vehicle-detail__content">
+      <!-- Left Column -->
+      <div class="vehicle-detail__main">
+        <div class="vehicle-detail__gallery">
+          <zl-image-gallery
+            [images]="galleryImages"
+            [showThumbnails]="true"
+          ></zl-image-gallery>
+        </div>
+
+        <div class="vehicle-detail__specs">
+          <h3 class="vehicle-detail__specs-title">Vehicle Details</h3>
+          <div class="vehicle-detail__specs-grid">
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Mileage</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.mileage | number }} km</span>
+            </div>
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Exterior</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.exteriorColor }}</span>
+            </div>
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Interior</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.interiorColor }}</span>
+            </div>
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Transmission</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.transmission | titlecase }}</span>
+            </div>
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Drivetrain</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.drivetrain }}</span>
+            </div>
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Fuel Type</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.fuelType | titlecase }}</span>
+            </div>
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Engine</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.engine }}</span>
+            </div>
+            <div class="vehicle-detail__spec">
+              <span class="vehicle-detail__spec-label">Location</span>
+              <span class="vehicle-detail__spec-value">{{ vehicle.location }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <aside class="vehicle-detail__sidebar">
+        <div class="vehicle-detail__card">
+          <h1 class="vehicle-detail__title">{{ vehicle.title }}</h1>
+
+          <div class="vehicle-detail__badges">
+            @for (badge of vehicle.badges; track badge) {
+              <zl-badge variant="primary" size="sm">{{ badge }}</zl-badge>
+            }
+            @if (vehicle.isCertified) {
+              <zl-badge variant="success" size="sm">Certified</zl-badge>
+            }
+          </div>
+
+          <div class="vehicle-detail__price">
+            <span class="vehicle-detail__price-amount">{{ formatPrice(vehicle.price) }}</span>
+            @if (vehicle.monthlyPayment) {
+              <span class="vehicle-detail__price-monthly">
+                Est. {{ formatPrice(vehicle.monthlyPayment) }}/mo
+              </span>
+            }
+          </div>
+
+          <div class="vehicle-detail__actions">
+            <zl-button variant="primary" size="lg" [fullWidth]="true" (click)="onPreApproval()">
+              Get Pre-Approved
+            </zl-button>
+            <button class="vehicle-detail__favorite-btn" [class.vehicle-detail__favorite-btn--active]="isFavorite" (click)="toggleFavorite()">
+              {{ isFavorite ? 'Saved' : 'Save' }}
+            </button>
+          </div>
+
+          <div class="vehicle-detail__delivery">
+            <strong>Free Delivery</strong>
+            <span>Delivered to your door</span>
+          </div>
+        </div>
+
+        <div class="vehicle-detail__calculator">
+          <zl-finance-calculator
+            title="Estimate Your Payment"
+            [vehiclePrice]="vehicle.price"
+            (preApprovalClick)="onPreApproval()"
+          ></zl-finance-calculator>
+        </div>
+      </aside>
+    </div>
+
+    <section class="vehicle-detail__trust">
+      <zl-trust-badges [showDividers]="true"></zl-trust-badges>
+    </section>
+  </div>
+}

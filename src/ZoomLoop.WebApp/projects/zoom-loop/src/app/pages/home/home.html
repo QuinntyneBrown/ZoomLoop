@@ -1,0 +1,75 @@
+<div class="home">
+  <!-- Hero -->
+  <zl-hero
+    headline="Find Your Perfect Car"
+    subheadline="Browse 1,000+ quality used vehicles with free delivery and a 10-day money-back guarantee"
+    (search)="onSearch($event)"
+  ></zl-hero>
+
+  <!-- Trust Badges -->
+  <section class="home__trust">
+    <zl-trust-badges [showDividers]="true"></zl-trust-badges>
+  </section>
+
+  <!-- Featured Vehicles -->
+  <section class="home__featured">
+    <div class="home__container">
+      <h2 class="home__section-title">Featured Vehicles</h2>
+      <p class="home__section-subtitle">Hand-picked cars that offer exceptional value</p>
+
+      <div class="home__vehicle-grid">
+        @for (vehicle of featuredVehicles$ | async; track vehicle.id) {
+          <zl-vehicle-card
+            [vehicle]="toVehicleCard(vehicle)"
+            [href]="'/cars/' + vehicle.id"
+            [isFavorite]="isFavorite(vehicle.id)"
+            (favoriteToggle)="onFavoriteToggle($event)"
+          ></zl-vehicle-card>
+        }
+      </div>
+
+      <div class="home__cta">
+        <a routerLink="/cars">
+          <zl-button variant="outline" size="lg">View All Vehicles</zl-button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse by Make -->
+  <section class="home__makes">
+    <div class="home__container">
+      <h2 class="home__section-title">Browse by Make</h2>
+
+      <div class="home__makes-grid">
+        @for (make of popularMakes; track make) {
+          <button class="home__make-card" (click)="onBrowseMake(make)">
+            <span class="home__make-logo">{{ make.charAt(0) }}</span>
+            <span class="home__make-name">{{ make }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="home__how-it-works">
+    <zl-how-it-works
+      title="How It Works"
+      subtitle="Buy your next car in 3 simple steps"
+    ></zl-how-it-works>
+  </section>
+
+  <!-- Sell CTA -->
+  <section class="home__sell">
+    <div class="home__container">
+      <div class="home__sell-content">
+        <h2 class="home__sell-title">Ready to Sell Your Car?</h2>
+        <p class="home__sell-text">Get an instant cash offer in minutes. No haggling, no hassle.</p>
+        <a routerLink="/sell">
+          <zl-button variant="primary" size="xl">Get Your Offer</zl-button>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
