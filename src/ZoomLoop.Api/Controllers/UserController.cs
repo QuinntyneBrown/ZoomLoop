@@ -30,11 +30,15 @@ public class UserController
     [ProducesResponseType(typeof(GetUserByIdResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<GetUserByIdResponse>> GetById([FromRoute] GetUserByIdRequest request)
     {
+        _logger.LogInformation("Getting user by ID: {UserId}", request.UserId);
+
         var response = await _mediator.Send(request);
         if (response.User == null)
         {
+            _logger.LogWarning("User not found: {UserId}", request.UserId);
             return new NotFoundObjectResult(request.UserId);
         }
+
         return response;
     }
 
@@ -66,7 +70,12 @@ public class UserController
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(CreateUserResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<CreateUserResponse>> Create([FromBody] CreateUserRequest request)
-        => await _mediator.Send(request);
+    {
+        _logger.LogInformation("Creating new user: {Username}", request.Username);
+        var response = await _mediator.Send(request);
+        _logger.LogInformation("User created successfully: {UserId}", response.User?.UserId);
+        return response;
+    }
 
     [HttpGet("page/{pageSize}/{index}", Name = "GetUsersPageRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -87,7 +96,12 @@ public class UserController
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(RemoveUserResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<RemoveUserResponse>> Remove([FromRoute] RemoveUserRequest request)
-        => await _mediator.Send(request);
+    {
+        _logger.LogInformation("Removing user: {UserId}", request.UserId);
+        var response = await _mediator.Send(request);
+        _logger.LogInformation("User removed successfully: {UserId}", request.UserId);
+        return response;
+    }
 
     [AllowAnonymous]
     [HttpPost("token", Name = "AuthenticateRoute")]
@@ -97,11 +111,16 @@ public class UserController
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     public async Task<ActionResult<AuthenticateResponse>> Authenticate([FromBody] AuthenticateRequest request)
     {
+        _logger.LogInformation("Authentication attempt for user: {Username}", request.Username);
+
         var response = await _mediator.Send(request);
         if (response == null)
         {
+            _logger.LogWarning("Authentication failed for user: {Username}", request.Username);
             return new NotFoundObjectResult(request.Username);
         }
+
+        _logger.LogInformation("Authentication successful for user: {Username}", request.Username);
         return response;
     }
 }

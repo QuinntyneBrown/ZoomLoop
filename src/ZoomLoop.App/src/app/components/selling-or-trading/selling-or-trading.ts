@@ -53,7 +53,9 @@ export class SellingOrTrading implements OnInit {
   constructor(private valuationService: VehicleValuationService) {}
 
   ngOnInit(): void {
-    // Component initialization
+    // Lifecycle hook required by OnInit interface
+    // Future initialization logic can be added here
+    return;
   }
 
   handleGetInstantOffer(): void {

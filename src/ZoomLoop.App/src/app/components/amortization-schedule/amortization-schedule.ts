@@ -31,7 +31,7 @@ export class AmortizationSchedule implements OnChanges {
   totalPrincipal = signal(0);
   totalInterest = signal(0);
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_changes: SimpleChanges): void {
     if (this.loanAmount > 0 && this.interestRate >= 0 && this.loanTermMonths > 0) {
       this.calculateSchedule();
     }

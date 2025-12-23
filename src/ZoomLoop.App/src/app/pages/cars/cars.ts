@@ -57,7 +57,6 @@ export class Cars implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // Watch for result changes to update the title
     if (this.searchResults) {
-      const results = this.searchResults.results;
       // Use effect to watch for changes in results
       const updateInterval = setInterval(() => {
         const count = this.searchResults?.totalResults();
@@ -85,7 +84,7 @@ export class Cars implements OnInit, AfterViewInit {
           });
           this.updatePageTitle();
         },
-        (error) => {
+        (_error) => {
           // Default location if geolocation fails
           this.userLocation.set(DEFAULT_LOCATION);
           this.updatePageTitle();

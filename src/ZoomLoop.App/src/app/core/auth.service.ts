@@ -5,7 +5,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from './local-storage.service';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { accessTokenKey, baseUrl, usernameKey } from './constants';
+import { accessTokenKey, usernameKey } from './constants';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { User, AccessRight } from '../models';
 
@@ -60,19 +60,16 @@ export class AuthService {
     )
   }
 
-  private hasPrivilege(user: User, aggregate: string, accessRight: AccessRight):boolean {
-    let hasPrivilege = false;
-
-    for(let i = 0; i < user.roles.length; i++) {
-      const privileges = user.roles[i].privileges || [];
-      for(let j = 0; j < privileges.length; j++) {
-        let privilege = privileges[j];
-        if(privilege.accessRight === accessRight && privilege.aggregate === aggregate) {
-          hasPrivilege = true;
+  private hasPrivilege(user: User, aggregate: string, accessRight: AccessRight): boolean {
+    for (const role of user.roles) {
+      const privileges = role.privileges || [];
+      for (const privilege of privileges) {
+        if (privilege.accessRight === accessRight && privilege.aggregate === aggregate) {
+          return true;
         }
       }
     }
 
-    return hasPrivilege;
+    return false;
   }
 }
