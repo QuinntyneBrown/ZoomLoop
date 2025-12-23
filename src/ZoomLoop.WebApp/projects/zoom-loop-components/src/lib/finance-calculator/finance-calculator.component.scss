@@ -1,0 +1,241 @@
+// Finance Calculator Component - BEM Methodology
+// Block: .finance-calc
+
+.finance-calc {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  &__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0 0 20px;
+  }
+
+  &__result {
+    text-align: center;
+    padding: 24px;
+    background: #F9FAFB;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+
+  &__monthly {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #1E40AF;
+  }
+
+  &__period {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 8px;
+  }
+
+  &__total {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #9CA3AF;
+  }
+
+  &__divider {
+    height: 1px;
+    background: #E5E7EB;
+    margin: 24px 0;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  &__value {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  &__prefix,
+  &__suffix {
+    padding: 0 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #6B7280;
+    background: #F9FAFB;
+    height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__input {
+    flex: 1;
+    height: 44px;
+    padding: 0 12px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1F2937;
+    outline: none;
+
+    &--rate {
+      text-align: right;
+    }
+  }
+
+  &__slider {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #E5E7EB;
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #1E40AF;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    &::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #1E40AF;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+  }
+
+  &__slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-top: 4px;
+  }
+
+  &__breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__breakdown-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0;
+  }
+
+  &__breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+
+    span:first-child {
+      color: #6B7280;
+    }
+
+    span:last-child {
+      font-weight: 600;
+      color: #1F2937;
+    }
+
+    &--total {
+      padding-top: 12px;
+      border-top: 1px solid #E5E7EB;
+    }
+  }
+
+  &__cta {
+    text-align: center;
+  }
+
+  &__btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    background: #1E40AF;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #1E3A8A;
+    }
+  }
+
+  &__benefits {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #059669;
+    }
+  }
+}

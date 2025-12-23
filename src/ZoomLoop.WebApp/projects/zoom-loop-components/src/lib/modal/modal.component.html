@@ -1,0 +1,47 @@
+<div
+  *ngIf="isOpen"
+  class="modal__overlay"
+  (click)="onOverlayClick($event)"
+  role="presentation"
+>
+  <div
+    class="modal"
+    [class]="modalClasses"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="titleId"
+    [attr.aria-describedby]="descriptionId"
+  >
+    <div class="modal__header" *ngIf="showHeader">
+      <h2 [id]="titleId" class="modal__title">{{ title }}</h2>
+      <button
+        *ngIf="showCloseButton"
+        class="modal__close"
+        (click)="close()"
+        aria-label="Close modal"
+        type="button"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal__body" [id]="descriptionId">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="modal__footer" *ngIf="showFooter">
+      <ng-content select="[modalFooter]"></ng-content>
+      <div *ngIf="!hasCustomFooter" class="modal__footer-actions">
+        <button *ngIf="showCancelButton" class="modal__btn modal__btn--secondary" (click)="onCancel()" type="button">
+          {{ cancelText }}
+        </button>
+        <button *ngIf="showConfirmButton" class="modal__btn modal__btn--primary" (click)="onConfirm()" type="button">
+          {{ confirmText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

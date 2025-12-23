@@ -1,0 +1,142 @@
+// How It Works Component - BEM Methodology
+// Block: .how-it-works
+
+.how-it-works {
+  background: #F9FAFB;
+  padding: 80px 24px;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  &__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0 0 12px;
+  }
+
+  &__subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  &__steps {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__step {
+    display: flex;
+    align-items: center;
+  }
+
+  &__step-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 32px 24px;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EFF6FF;
+    border-radius: 16px;
+    color: #1E40AF;
+    margin: 0 auto 20px;
+  }
+
+  &__step-number {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E40AF;
+    margin-bottom: 8px;
+  }
+
+  &__step-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0 0 12px;
+  }
+
+  &__step-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #6B7280;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  &__connector {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    color: #E5E7EB;
+  }
+
+  @media (max-width: 992px) {
+    padding: 48px 24px;
+
+    &__steps {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    &__step {
+      flex-direction: column;
+    }
+
+    &__step-card {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    &__connector {
+      transform: rotate(90deg);
+      padding: 8px 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__title {
+      font-size: 28px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
+    }
+  }
+}

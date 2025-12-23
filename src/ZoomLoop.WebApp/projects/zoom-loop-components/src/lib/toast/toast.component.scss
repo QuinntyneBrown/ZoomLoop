@@ -1,0 +1,247 @@
+// Toast Component - BEM Methodology
+// Block: .toast
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 320px;
+  max-width: 420px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  animation: toastEnter 300ms ease-out;
+
+  &--exiting {
+    animation: toastExit 300ms ease-in forwards;
+  }
+
+  // Types
+  &--success {
+    background: #F0FDF4;
+    border-color: #22C55E;
+
+    .toast__icon {
+      color: #16A34A;
+    }
+
+    .toast__title {
+      color: #166534;
+    }
+
+    .toast__message {
+      color: #166534;
+    }
+
+    .toast__progress-bar {
+      background: #22C55E;
+    }
+  }
+
+  &--error {
+    background: #FEF2F2;
+    border-color: #EF4444;
+
+    .toast__icon {
+      color: #DC2626;
+    }
+
+    .toast__title {
+      color: #991B1B;
+    }
+
+    .toast__message {
+      color: #991B1B;
+    }
+
+    .toast__progress-bar {
+      background: #EF4444;
+    }
+  }
+
+  &--warning {
+    background: #FFFBEB;
+    border-color: #F59E0B;
+
+    .toast__icon {
+      color: #D97706;
+    }
+
+    .toast__title {
+      color: #92400E;
+    }
+
+    .toast__message {
+      color: #92400E;
+    }
+
+    .toast__progress-bar {
+      background: #F59E0B;
+    }
+  }
+
+  &--info {
+    background: #EFF6FF;
+    border-color: #3B82F6;
+
+    .toast__icon {
+      color: #2563EB;
+    }
+
+    .toast__title {
+      color: #1E40AF;
+    }
+
+    .toast__message {
+      color: #1E40AF;
+    }
+
+    .toast__progress-bar {
+      background: #3B82F6;
+    }
+  }
+
+  &--neutral {
+    background: #F9FAFB;
+    border-color: #D1D5DB;
+
+    .toast__icon {
+      color: #6B7280;
+    }
+
+    .toast__title {
+      color: #374151;
+    }
+
+    .toast__message {
+      color: #374151;
+    }
+
+    .toast__progress-bar {
+      background: #6B7280;
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+
+  &__message {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  &__action {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1E40AF;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      color: #1E3A8A;
+    }
+  }
+
+  &__close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  &__progress-bar {
+    height: 100%;
+    animation: progressDecrease linear forwards;
+  }
+
+  @media (max-width: 480px) {
+    min-width: 0;
+    width: calc(100% - 32px);
+    margin: 0 16px;
+  }
+}
+
+@keyframes toastEnter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastExit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes progressDecrease {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

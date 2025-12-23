@@ -1,0 +1,179 @@
+// Modal Component - BEM Methodology
+// Block: .modal
+
+.modal {
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  animation: modalIn 200ms ease-out;
+  z-index: 1050;
+
+  // Sizes
+  &--sm {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  &--md {
+    width: 100%;
+    max-width: 560px;
+  }
+
+  &--lg {
+    width: 100%;
+    max-width: 720px;
+  }
+
+  &--xl {
+    width: 100%;
+    max-width: 900px;
+  }
+
+  &--full {
+    width: calc(100% - 48px);
+    max-width: none;
+    height: calc(100vh - 48px);
+  }
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1040;
+    animation: overlayIn 200ms ease-out;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  &__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0;
+  }
+
+  &__close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #F3F4F6;
+      color: #1F2937;
+    }
+  }
+
+  &__body {
+    padding: 24px;
+    overflow-y: auto;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.6;
+  }
+
+  &__footer {
+    padding: 16px 24px 24px;
+    border-top: 1px solid #E5E7EB;
+  }
+
+  &__footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  &__btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease-out;
+
+    &--primary {
+      background: #1E40AF;
+      border: 1px solid #1E40AF;
+      color: #FFFFFF;
+
+      &:hover {
+        background: #1E3A8A;
+        border-color: #1E3A8A;
+      }
+    }
+
+    &--secondary {
+      background: #F3F4F6;
+      border: 1px solid #F3F4F6;
+      color: #374151;
+
+      &:hover {
+        background: #E5E7EB;
+        border-color: #E5E7EB;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__overlay {
+      padding: 16px;
+    }
+
+    width: 100%;
+    max-width: none;
+    max-height: calc(100vh - 32px);
+
+    &--full {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+  }
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

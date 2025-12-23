@@ -1,0 +1,96 @@
+<article class="vehicle-card" [class.vehicle-card--featured]="vehicle.isFeatured" [class.vehicle-card--loading]="loading">
+  <a [href]="href" class="vehicle-card__link" [attr.aria-label]="vehicle.title + ' - ' + formatPrice(vehicle.price)">
+    <div class="vehicle-card__image-container">
+      <img
+        *ngIf="!loading && vehicle.images.length > 0"
+        [src]="vehicle.images[currentImageIndex]"
+        [alt]="vehicle.title"
+        class="vehicle-card__image"
+      />
+      <div *ngIf="loading" class="vehicle-card__skeleton"></div>
+
+      <!-- Status Overlay -->
+      <div *ngIf="vehicle.status === 'sold'" class="vehicle-card__status-overlay">
+        <span class="vehicle-card__status-badge">SOLD</span>
+      </div>
+      <div *ngIf="vehicle.status === 'reserved'" class="vehicle-card__status-overlay vehicle-card__status-overlay--reserved">
+        <span class="vehicle-card__status-badge">RESERVED</span>
+      </div>
+
+      <!-- Badges -->
+      <div class="vehicle-card__badges">
+        <zl-badge *ngIf="vehicle.isFeatured" variant="warning" size="sm">
+          Featured
+        </zl-badge>
+        <zl-badge *ngIf="vehicle.isCertified" variant="success" size="sm">
+          Certified
+        </zl-badge>
+        <zl-badge *ngFor="let badge of vehicle.badges" variant="primary" size="sm">
+          {{ badge }}
+        </zl-badge>
+      </div>
+
+      <!-- Navigation -->
+      <button
+        *ngIf="vehicle.images.length > 1"
+        class="vehicle-card__nav vehicle-card__nav--prev"
+        (click)="prevImage($event)"
+        aria-label="Previous image"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button
+        *ngIf="vehicle.images.length > 1"
+        class="vehicle-card__nav vehicle-card__nav--next"
+        (click)="nextImage($event)"
+        aria-label="Next image"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+
+      <!-- Image Indicators -->
+      <div *ngIf="vehicle.images.length > 1 && vehicle.images.length <= 5" class="vehicle-card__dots">
+        <span
+          *ngFor="let img of vehicle.images; let i = index"
+          class="vehicle-card__dot"
+          [class.vehicle-card__dot--active]="i === currentImageIndex"
+        ></span>
+      </div>
+      <div *ngIf="vehicle.images.length > 5" class="vehicle-card__counter">
+        {{ currentImageIndex + 1 }}/{{ vehicle.images.length }}
+      </div>
+    </div>
+
+    <div class="vehicle-card__content">
+      <h3 class="vehicle-card__title">{{ vehicle.title }}</h3>
+      <div class="vehicle-card__pricing">
+        <span class="vehicle-card__price">{{ formatPrice(vehicle.price) }}</span>
+        <span *ngIf="vehicle.monthlyPayment" class="vehicle-card__monthly">{{ formatPrice(vehicle.monthlyPayment) }}/mo</span>
+      </div>
+      <div class="vehicle-card__specs">
+        <zl-badge *ngFor="let spec of vehicle.specs" variant="secondary" size="sm" [pill]="true">
+          {{ spec.value }}
+        </zl-badge>
+      </div>
+    </div>
+  </a>
+
+  <button
+    class="vehicle-card__favorite"
+    [class.vehicle-card__favorite--active]="isFavorite"
+    (click)="toggleFavorite($event)"
+    [attr.aria-label]="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+    [attr.aria-pressed]="isFavorite"
+  >
+    <svg *ngIf="!isFavorite" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+    </svg>
+    <svg *ngIf="isFavorite" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+    </svg>
+  </button>
+</article>

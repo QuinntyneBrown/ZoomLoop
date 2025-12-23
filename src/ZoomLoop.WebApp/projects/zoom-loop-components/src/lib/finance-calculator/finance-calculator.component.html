@@ -1,0 +1,139 @@
+<div class="finance-calc" [attr.role]="'region'" [attr.aria-labelledby]="titleId">
+  <h3 [id]="titleId" class="finance-calc__title">{{ title }}</h3>
+
+  <div class="finance-calc__result" aria-live="polite" aria-atomic="true">
+    <span class="finance-calc__monthly">{{ formatCurrency(breakdown.monthlyPayment) }}</span>
+    <span class="finance-calc__period">per month</span>
+    <span class="finance-calc__total">Total: {{ formatCurrency(breakdown.totalCost) }} over {{ loanTerm }} months</span>
+  </div>
+
+  <div class="finance-calc__divider"></div>
+
+  <div class="finance-calc__form">
+    <!-- Vehicle Price -->
+    <div class="finance-calc__field">
+      <label class="finance-calc__label">Vehicle Price</label>
+      <div class="finance-calc__input-wrapper">
+        <span class="finance-calc__prefix">$</span>
+        <input
+          type="text"
+          class="finance-calc__input"
+          [value]="formatNumber(vehiclePrice)"
+          (input)="onPriceChange($event)"
+          inputmode="numeric"
+        />
+      </div>
+    </div>
+
+    <!-- Down Payment -->
+    <div class="finance-calc__field">
+      <div class="finance-calc__label-row">
+        <label class="finance-calc__label">Down Payment</label>
+        <span class="finance-calc__value">{{ formatCurrency(downPayment) }} ({{ downPaymentPercent }}%)</span>
+      </div>
+      <input
+        type="range"
+        class="finance-calc__slider"
+        [min]="0"
+        [max]="maxDownPayment"
+        [step]="500"
+        [(ngModel)]="downPayment"
+        (ngModelChange)="calculate()"
+        [attr.aria-valuetext]="formatCurrency(downPayment)"
+      />
+      <div class="finance-calc__slider-labels">
+        <span>$0</span>
+        <span>{{ formatCurrency(maxDownPayment) }}</span>
+      </div>
+    </div>
+
+    <!-- Loan Term -->
+    <div class="finance-calc__field">
+      <div class="finance-calc__label-row">
+        <label class="finance-calc__label">Loan Term</label>
+        <span class="finance-calc__value">{{ loanTerm }} months</span>
+      </div>
+      <input
+        type="range"
+        class="finance-calc__slider"
+        [min]="24"
+        [max]="84"
+        [step]="12"
+        [(ngModel)]="loanTerm"
+        (ngModelChange)="calculate()"
+        [attr.aria-valuetext]="loanTerm + ' months'"
+      />
+      <div class="finance-calc__slider-labels">
+        <span>24 mo</span>
+        <span>84 mo</span>
+      </div>
+    </div>
+
+    <!-- Interest Rate -->
+    <div class="finance-calc__field">
+      <label class="finance-calc__label">Interest Rate</label>
+      <div class="finance-calc__input-wrapper">
+        <input
+          type="text"
+          class="finance-calc__input finance-calc__input--rate"
+          [value]="interestRate"
+          (input)="onRateChange($event)"
+          inputmode="decimal"
+        />
+        <span class="finance-calc__suffix">%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="finance-calc__divider"></div>
+
+  <!-- Breakdown -->
+  <div class="finance-calc__breakdown">
+    <h4 class="finance-calc__breakdown-title">Breakdown</h4>
+    <div class="finance-calc__breakdown-row">
+      <span>Principal</span>
+      <span>{{ formatCurrency(breakdown.principal) }}</span>
+    </div>
+    <div class="finance-calc__breakdown-row">
+      <span>Interest</span>
+      <span>{{ formatCurrency(breakdown.totalInterest) }}</span>
+    </div>
+    <div class="finance-calc__breakdown-row finance-calc__breakdown-row--total">
+      <span>Total Cost</span>
+      <span>{{ formatCurrency(breakdown.totalCost) }}</span>
+    </div>
+  </div>
+
+  <div class="finance-calc__divider"></div>
+
+  <!-- CTA -->
+  <div class="finance-calc__cta">
+    <button class="finance-calc__btn" (click)="onPreApprovalClick()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2"/>
+        <path d="M7 11V7a5 5 0 0110 0v4"/>
+      </svg>
+      {{ ctaText }}
+    </button>
+    <ul class="finance-calc__benefits">
+      <li>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        No impact to credit score
+      </li>
+      <li>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Results in seconds
+      </li>
+      <li>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Know your rate before you shop
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<span
+  [class]="badgeClasses"
+  [attr.role]="role"
+  [attr.aria-label]="ariaLabel"
+>
+  <span *ngIf="showDot" class="badge__dot"></span>
+  <ng-content></ng-content>
+  <button
+    *ngIf="removable"
+    class="badge__remove"
+    (click)="onRemove($event)"
+    [attr.aria-label]="'Remove ' + removeLabel"
+    type="button"
+  >
+    ×
+  </button>
+</span>

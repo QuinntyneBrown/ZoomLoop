@@ -1,0 +1,40 @@
+<section class="trust-badges" [class.trust-badges--with-dividers]="showDividers">
+  <div class="trust-badges__container">
+    <div *ngFor="let badge of badges; let last = last" class="trust-badges__item">
+      <div class="trust-badges__icon">
+        <ng-container [ngSwitch]="badge.icon">
+          <svg *ngSwitchCase="'check'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <svg *ngSwitchCase="'truck'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <svg *ngSwitchCase="'lock'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+          <svg *ngSwitchCase="'return'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+          </svg>
+          <svg *ngSwitchCase="'shield'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+          <svg *ngSwitchCase="'star'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </ng-container>
+      </div>
+      <div class="trust-badges__content">
+        <h3 class="trust-badges__title">{{ badge.title }}</h3>
+        <p class="trust-badges__desc">{{ badge.description }}</p>
+      </div>
+      <div *ngIf="showDividers && !last" class="trust-badges__divider"></div>
+    </div>
+  </div>
+</section>
