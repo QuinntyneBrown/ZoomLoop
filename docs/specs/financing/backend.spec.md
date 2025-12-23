@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Financing
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** B
 
 ---
 
@@ -18,6 +19,7 @@ Backend services for financing handle loan applications, credit checks, lender i
 ### REQ-FN-B-001: Payment Calculation
 **Description:** Calculate loan payments based on inputs
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Calculate monthly payment using standard amortization
@@ -28,6 +30,7 @@ Backend services for financing handle loan applications, credit checks, lender i
 ### REQ-FN-B-002: Credit Check Integration
 **Description:** Integrate with credit bureaus for checks
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Soft pull for pre-qualification (Equifax, TransUnion)
@@ -38,6 +41,7 @@ Backend services for financing handle loan applications, credit checks, lender i
 ### REQ-FN-B-003: Lender Integration
 **Description:** Connect with financing partners
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Submit applications to multiple lenders

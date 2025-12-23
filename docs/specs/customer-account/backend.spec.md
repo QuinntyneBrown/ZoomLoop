@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Customer Account Management
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP) - Core auth; B - Enhanced features
 
 ---
 

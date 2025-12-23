@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Detail Page
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP)
 
 ---
 
@@ -18,6 +19,7 @@ The Vehicle Details page provides comprehensive information about a specific veh
 ### REQ-VD-F-001: Image Gallery
 **Description:** Display high-quality vehicle photos with interactive gallery
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Main image displays prominently (800x600 desktop)
@@ -32,6 +34,7 @@ The Vehicle Details page provides comprehensive information about a specific veh
 ### REQ-VD-F-002: Key Details Card
 **Description:** Show essential vehicle information prominently
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Display: Price, Mileage, Location, Transmission, Fuel Type
@@ -43,6 +46,7 @@ The Vehicle Details page provides comprehensive information about a specific veh
 ### REQ-VD-F-003: Call-to-Action Buttons
 **Description:** Prominent purchase/inquiry buttons
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] "Get Started" primary CTA (initiates purchase)
@@ -55,6 +59,7 @@ The Vehicle Details page provides comprehensive information about a specific veh
 ### REQ-VD-F-004: Tabbed Content
 **Description:** Organize detailed information in tabs
 **Priority:** Medium
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Tabs: Overview, Features, Specifications, Vehicle History
@@ -65,6 +70,7 @@ The Vehicle Details page provides comprehensive information about a specific veh
 ### REQ-VD-F-005: Similar Vehicles
 **Description:** Recommend related vehicles
 **Priority:** Medium
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Show 4-6 similar vehicles
@@ -75,6 +81,7 @@ The Vehicle Details page provides comprehensive information about a specific veh
 ### REQ-VD-F-006: Vehicle History
 **Description:** Display comprehensive vehicle history
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Free CARFAX/vehicle history report access

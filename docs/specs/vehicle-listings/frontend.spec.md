@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Browse & Listings
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP)
 
 ---
 
@@ -19,6 +20,7 @@ The Vehicle Listings feature provides the primary browsing experience where cust
 **Description:** Display vehicles in a responsive grid layout
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Vehicles displayed in 3-column grid (desktop), 2-column (tablet), 1-column (mobile)
@@ -31,6 +33,7 @@ The Vehicle Listings feature provides the primary browsing experience where cust
 **Description:** Enable comprehensive filtering of vehicle inventory
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Filter by: Make, Model, Price Range, Year, Mileage, Body Type, Transmission, Fuel Type, Color
@@ -45,6 +48,7 @@ The Vehicle Listings feature provides the primary browsing experience where cust
 **Description:** Allow sorting of search results
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Sort options: Best Match, Price Low-High, Price High-Low, Mileage Low-High, Year New-Old, Recently Added
@@ -55,6 +59,7 @@ The Vehicle Listings feature provides the primary browsing experience where cust
 **Description:** Navigate through pages of results
 **Priority:** Medium
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Show 24 vehicles per page (configurable)
@@ -68,6 +73,7 @@ The Vehicle Listings feature provides the primary browsing experience where cust
 **Description:** Switch between grid and list view
 **Priority:** Low
 **Type:** Functional
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Grid view (default): Card layout with image prominently
@@ -79,6 +85,7 @@ The Vehicle Listings feature provides the primary browsing experience where cust
 **Description:** Allow users to save vehicles to favorites
 **Priority:** Medium
 **Type:** Functional
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Heart icon on each vehicle card

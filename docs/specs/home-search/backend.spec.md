@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Home Page & Vehicle Search
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP)
 
 ---
 
@@ -19,6 +20,7 @@ The backend services for Home & Search provide vehicle discovery, search suggest
 **Description:** Maintain searchable index of all listed vehicles
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] All active vehicle listings are indexed within 60 seconds of creation/update
@@ -31,6 +33,7 @@ The backend services for Home & Search provide vehicle discovery, search suggest
 **Description:** Provide real-time search suggestions
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Suggestions returned within 100ms
@@ -43,6 +46,7 @@ The backend services for Home & Search provide vehicle discovery, search suggest
 **Description:** Curate and serve featured vehicles
 **Priority:** Medium
 **Type:** Functional
+**Phase:** A (automatic selection), B (manual curation & A/B testing)
 
 **Acceptance Criteria:**
 - [ ] Support manual curation by admin users
@@ -55,6 +59,7 @@ The backend services for Home & Search provide vehicle discovery, search suggest
 **Description:** Track and analyze search patterns
 **Priority:** Medium
 **Type:** Non-Functional
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Log all search queries with timestamps

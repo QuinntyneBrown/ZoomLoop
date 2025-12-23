@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Test Ownership & Returns
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** C
 
 ---
 
@@ -18,6 +19,7 @@ The Test Ownership feature provides customers with a 10-day/750km trial period d
 ### REQ-TO-F-001: Trial Period Dashboard
 **Description:** Display trial period status and options
 **Priority:** High
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Show days remaining in trial
@@ -29,6 +31,7 @@ The Test Ownership feature provides customers with a 10-day/750km trial period d
 ### REQ-TO-F-002: Return Process
 **Description:** Initiate and complete vehicle return
 **Priority:** High
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Return request form
@@ -41,6 +44,7 @@ The Test Ownership feature provides customers with a 10-day/750km trial period d
 ### REQ-TO-F-003: Exchange Process
 **Description:** Exchange for different vehicle
 **Priority:** Medium
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Browse available vehicles
@@ -52,6 +56,7 @@ The Test Ownership feature provides customers with a 10-day/750km trial period d
 ### REQ-TO-F-004: Trial Completion
 **Description:** Finalize purchase after trial
 **Priority:** High
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Auto-completion after 10 days/750km
