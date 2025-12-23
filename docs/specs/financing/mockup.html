@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financing - Get Pre-Approved</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1A1F36; background: #F5F7FA; }
+        .header { background: #FFFFFF; padding: 16px 120px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #0066FF; }
+        .nav a { text-decoration: none; color: #1A1F36; font-weight: 500; margin-left: 32px; }
+        .hero { background: linear-gradient(135deg, #0066FF 0%, #1A1F36 100%); color: white; padding: 64px 120px; }
+        .hero h1 { font-size: 48px; font-weight: 700; margin-bottom: 16px; }
+        .hero p { font-size: 18px; opacity: 0.9; margin-bottom: 24px; }
+        .hero-badges { display: flex; gap: 24px; }
+        .hero-badge { background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 8px; font-size: 14px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 48px 24px; display: grid; grid-template-columns: 1fr 400px; gap: 48px; }
+        .form-card { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .form-title { font-size: 20px; font-weight: 600; margin-bottom: 24px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 14px 16px; border: 1px solid #E1E4E8; border-radius: 8px; font-size: 16px; }
+        .form-input:focus { outline: none; border-color: #0066FF; }
+        .slider-container { margin: 24px 0; }
+        .slider-labels { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .slider-value { font-size: 24px; font-weight: 700; color: #0066FF; }
+        .slider { width: 100%; height: 8px; border-radius: 4px; background: #E1E4E8; appearance: none; cursor: pointer; }
+        .slider::-webkit-slider-thumb { appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #0066FF; cursor: pointer; }
+        .term-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+        .term-option { padding: 16px; border: 2px solid #E1E4E8; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .term-option:hover { border-color: #0066FF; }
+        .term-option.selected { border-color: #0066FF; background: #F0F7FF; }
+        .term-option .months { font-size: 24px; font-weight: 700; }
+        .term-option .label { font-size: 12px; color: #8B95A5; }
+        .btn-primary { background: #0066FF; color: white; border: none; padding: 18px 32px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.2s; }
+        .btn-primary:hover { background: #0052CC; }
+        .calculator-card { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 24px; }
+        .calc-title { font-size: 20px; font-weight: 600; margin-bottom: 24px; }
+        .monthly-payment { text-align: center; padding: 32px; background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%); border-radius: 12px; color: white; margin-bottom: 24px; }
+        .monthly-label { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
+        .monthly-amount { font-size: 48px; font-weight: 700; }
+        .monthly-term { font-size: 16px; opacity: 0.9; margin-top: 8px; }
+        .calc-breakdown { margin-bottom: 24px; }
+        .calc-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #E1E4E8; }
+        .calc-row:last-child { border-bottom: none; }
+        .calc-row .label { color: #8B95A5; }
+        .rate-badge { background: #F0FFF4; color: #00C853; padding: 4px 12px; border-radius: 4px; font-size: 14px; font-weight: 600; }
+        .disclaimer { font-size: 12px; color: #8B95A5; text-align: center; margin-top: 16px; }
+        .credit-score-display { background: #F5F7FA; border-radius: 12px; padding: 24px; margin-bottom: 24px; text-align: center; }
+        .score-value { font-size: 48px; font-weight: 700; color: #00C853; margin-bottom: 8px; }
+        .score-label { font-size: 14px; color: #8B95A5; }
+        .score-bar { height: 8px; background: linear-gradient(to right, #E53935, #FF6B00, #00C853); border-radius: 4px; margin-top: 16px; position: relative; }
+        .score-indicator { position: absolute; top: -6px; width: 20px; height: 20px; background: white; border: 3px solid #00C853; border-radius: 50%; left: 75%; transform: translateX(-50%); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">ZoomLoop</div>
+        <nav class="nav">
+            <a href="#">Buy</a>
+            <a href="#">Sell</a>
+            <a href="#" style="color: #0066FF; font-weight: 600;">Financing</a>
+            <a href="#">Sign In</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Get Pre-Approved in Minutes</h1>
+        <p>No impact to your credit score. Shop with confidence.</p>
+        <div class="hero-badges">
+            <span class="hero-badge">&#10003; Rates from 4.99% APR</span>
+            <span class="hero-badge">&#10003; Terms up to 84 months</span>
+            <span class="hero-badge">&#10003; No hidden fees</span>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="forms">
+            <div class="form-card">
+                <h2 class="form-title">Loan Details</h2>
+
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span class="form-label">Vehicle Price</span>
+                        <span class="slider-value">$32,450</span>
+                    </div>
+                    <input type="range" class="slider" min="10000" max="100000" value="32450">
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span class="form-label">Down Payment</span>
+                        <span class="slider-value">$5,000</span>
+                    </div>
+                    <input type="range" class="slider" min="0" max="20000" value="5000">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Loan Term</label>
+                    <div class="term-options">
+                        <div class="term-option">
+                            <div class="months">36</div>
+                            <div class="label">months</div>
+                        </div>
+                        <div class="term-option">
+                            <div class="months">48</div>
+                            <div class="label">months</div>
+                        </div>
+                        <div class="term-option selected">
+                            <div class="months">60</div>
+                            <div class="label">months</div>
+                        </div>
+                        <div class="term-option">
+                            <div class="months">72</div>
+                            <div class="label">months</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 class="form-title">Personal Information</h2>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input" placeholder="John">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-input" placeholder="Smith">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" placeholder="john@example.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Annual Income</label>
+                        <input type="text" class="form-input" placeholder="$75,000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Employment Status</label>
+                        <select class="form-input">
+                            <option>Employed Full-Time</option>
+                            <option>Self-Employed</option>
+                            <option>Part-Time</option>
+                            <option>Retired</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Check My Rate</button>
+            </div>
+        </div>
+
+        <aside class="calculator-card">
+            <h3 class="calc-title">Your Estimated Payment</h3>
+
+            <div class="monthly-payment">
+                <div class="monthly-label">Monthly Payment</div>
+                <div class="monthly-amount">$475</div>
+                <div class="monthly-term">for 60 months</div>
+            </div>
+
+            <div class="credit-score-display">
+                <div class="score-value">720</div>
+                <div class="score-label">Estimated Credit Score (Good)</div>
+                <div class="score-bar">
+                    <div class="score-indicator"></div>
+                </div>
+            </div>
+
+            <div class="calc-breakdown">
+                <div class="calc-row">
+                    <span class="label">Vehicle Price</span>
+                    <span>$32,450</span>
+                </div>
+                <div class="calc-row">
+                    <span class="label">Down Payment</span>
+                    <span>-$5,000</span>
+                </div>
+                <div class="calc-row">
+                    <span class="label">Amount Financed</span>
+                    <span>$27,450</span>
+                </div>
+                <div class="calc-row">
+                    <span class="label">Est. APR</span>
+                    <span class="rate-badge">5.99%</span>
+                </div>
+                <div class="calc-row">
+                    <span class="label">Total Interest</span>
+                    <span>$4,050</span>
+                </div>
+                <div class="calc-row" style="font-weight: 600;">
+                    <span>Total Cost</span>
+                    <span>$31,500</span>
+                </div>
+            </div>
+
+            <p class="disclaimer">
+                *Estimated payment based on credit score range. Actual rate may vary. Does not include taxes, registration, or fees.
+            </p>
+        </aside>
+    </main>
+</body>
+</html>

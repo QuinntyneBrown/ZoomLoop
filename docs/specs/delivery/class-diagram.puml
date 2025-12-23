@@ -1,0 +1,118 @@
+@startuml Delivery Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Delivery Domain" {
+
+    class Delivery {
+        +id: String
+        +purchaseId: String
+        +vehicleId: String
+        +customerId: String
+        +confirmationNumber: String
+        +method: DeliveryMethod
+        +status: DeliveryStatus
+        +scheduledDate: DateTime
+        +timeWindow: TimeWindow
+        +driverId: String
+        +fee: Decimal
+        +createdAt: DateTime
+    }
+
+    enum DeliveryMethod {
+        HOME_DELIVERY
+        PICKUP
+    }
+
+    enum DeliveryStatus {
+        SCHEDULED
+        ASSIGNED
+        PREPARING
+        IN_TRANSIT
+        ARRIVING
+        ARRIVED
+        DELIVERED
+        CANCELLED
+    }
+
+    class TimeWindow {
+        +id: String
+        +start: DateTime
+        +end: DateTime
+    }
+
+    class DeliveryAddress {
+        +street: String
+        +unit: String
+        +city: String
+        +province: String
+        +postalCode: String
+        +lat: Decimal
+        +lng: Decimal
+        +instructions: String
+        +verified: Boolean
+    }
+
+    class Driver {
+        +id: String
+        +userId: String
+        +name: String
+        +phone: String
+        +photo: String
+        +status: DriverStatus
+        +rating: Decimal
+    }
+
+    enum DriverStatus {
+        AVAILABLE
+        ON_DELIVERY
+        OFFLINE
+    }
+
+    class DriverVehicle {
+        +make: String
+        +model: String
+        +color: String
+        +licensePlate: String
+    }
+
+    class DeliveryTracking {
+        +deliveryId: String
+        +driverId: String
+        +status: DeliveryStatus
+        +currentLocation: GeoPoint
+        +eta: DateTime
+        +lastUpdated: DateTime
+    }
+
+    class GeoPoint {
+        +lat: Decimal
+        +lng: Decimal
+        +heading: Decimal
+        +speed: Decimal
+    }
+
+    class HandoverData {
+        +photos: List
+        +conditionAccepted: Boolean
+        +conditionNotes: String
+        +documentsReceived: List
+        +keysReceived: Boolean
+        +signature: String
+        +signedAt: DateTime
+    }
+
+    Delivery "1" --> "1" TimeWindow : scheduled for
+    Delivery "1" --> "0..1" DeliveryAddress : delivered to
+    Delivery "1" --> "0..1" Driver : assigned to
+    Delivery "1" --> "0..1" DeliveryTracking : tracked by
+    Delivery "1" --> "0..1" HandoverData : confirmed by
+    Driver "1" --> "1" DriverVehicle : drives
+    DeliveryTracking --> GeoPoint : current location
+    Delivery --> DeliveryMethod
+    Delivery --> DeliveryStatus
+    Driver --> DriverStatus
+}
+
+@enduml

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1A1F36; background: #F5F7FA; }
+        .header { background: #1A1F36; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 20px; font-weight: 700; color: white; }
+        .header-nav { display: flex; gap: 24px; }
+        .header-nav a { text-decoration: none; color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 500; }
+        .header-nav a.active { color: white; }
+        .user-info { display: flex; align-items: center; gap: 12px; color: white; }
+        .user-avatar { width: 36px; height: 36px; background: #0066FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+        .container { padding: 32px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .page-title { font-size: 28px; font-weight: 700; }
+        .header-actions { display: flex; gap: 16px; }
+        .btn { padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
+        .btn-primary { background: #0066FF; color: white; }
+        .btn-secondary { background: white; color: #1A1F36; border: 1px solid #E1E4E8; }
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; margin-bottom: 32px; }
+        .stat-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .stat-label { font-size: 14px; color: #8B95A5; margin-bottom: 8px; }
+        .stat-value { font-size: 28px; font-weight: 700; }
+        .stat-value.blue { color: #0066FF; }
+        .stat-value.green { color: #00C853; }
+        .stat-value.orange { color: #FF6B00; }
+        .filters-bar { background: white; border-radius: 12px; padding: 16px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; display: flex; gap: 16px; align-items: center; }
+        .search-input { flex: 1; padding: 12px 16px; border: 1px solid #E1E4E8; border-radius: 8px; font-size: 14px; }
+        .filter-select { padding: 12px 16px; border: 1px solid #E1E4E8; border-radius: 8px; font-size: 14px; background: white; min-width: 150px; }
+        .inventory-table { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        .table-header { display: grid; grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr 120px; padding: 16px 24px; background: #F5F7FA; font-size: 12px; font-weight: 600; color: #8B95A5; text-transform: uppercase; letter-spacing: 0.5px; }
+        .table-row { display: grid; grid-template-columns: 80px 2fr 1fr 1fr 1fr 1fr 120px; padding: 16px 24px; border-bottom: 1px solid #E1E4E8; align-items: center; transition: background 0.2s; cursor: pointer; }
+        .table-row:hover { background: #F5F7FA; }
+        .table-row:last-child { border-bottom: none; }
+        .vehicle-thumb { width: 60px; height: 45px; background: linear-gradient(135deg, #E1E4E8 0%, #F5F7FA 100%); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .vehicle-info { }
+        .vehicle-name { font-weight: 600; margin-bottom: 4px; }
+        .vehicle-vin { font-size: 12px; color: #8B95A5; font-family: monospace; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .status-badge.available { background: #F0FFF4; color: #00C853; }
+        .status-badge.pending { background: #FFF8E7; color: #FF6B00; }
+        .status-badge.sold { background: #F0F7FF; color: #0066FF; }
+        .status-badge.reserved { background: #F5F0FF; color: #8B5CF6; }
+        .price { font-weight: 600; font-size: 16px; }
+        .days-in-stock { display: flex; align-items: center; gap: 8px; }
+        .days-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .days-badge.good { background: #F0FFF4; color: #00C853; }
+        .days-badge.warning { background: #FFF8E7; color: #FF6B00; }
+        .days-badge.critical { background: #FFF0F0; color: #E53935; }
+        .action-menu { display: flex; gap: 8px; }
+        .action-btn { width: 32px; height: 32px; border: 1px solid #E1E4E8; border-radius: 6px; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+        .action-btn:hover { background: #F5F7FA; }
+        .pagination { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: white; border-top: 1px solid #E1E4E8; }
+        .pagination-info { font-size: 14px; color: #8B95A5; }
+        .pagination-controls { display: flex; gap: 8px; }
+        .page-btn { width: 36px; height: 36px; border: 1px solid #E1E4E8; border-radius: 6px; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+        .page-btn.active { background: #0066FF; color: white; border-color: #0066FF; }
+        .sidebar { position: fixed; right: 0; top: 0; width: 400px; height: 100vh; background: white; box-shadow: -4px 0 12px rgba(0,0,0,0.1); padding: 24px; transform: translateX(100%); transition: transform 0.3s; z-index: 100; }
+        .sidebar.open { transform: translateX(0); }
+        .chart-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 24px; }
+        .chart-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+        .chart-placeholder { height: 200px; background: linear-gradient(135deg, #F5F7FA 0%, #E1E4E8 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #8B95A5; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">ZoomLoop Admin</div>
+        <nav class="header-nav">
+            <a href="#">Dashboard</a>
+            <a href="#">Reconditioning</a>
+            <a href="#" class="active">Inventory</a>
+            <a href="#">Orders</a>
+            <a href="#">Reports</a>
+        </nav>
+        <div class="user-info">
+            <span>Lisa M.</span>
+            <div class="user-avatar">LM</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title">Inventory Management</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary">Export</button>
+                <button class="btn btn-secondary">Bulk Edit</button>
+                <button class="btn btn-primary">+ Add Listing</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Vehicles</div>
+                <div class="stat-value">1,247</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Available</div>
+                <div class="stat-value green">892</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Pending Sale</div>
+                <div class="stat-value blue">156</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Value</div>
+                <div class="stat-value">$38.2M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg. Days in Stock</div>
+                <div class="stat-value orange">23</div>
+            </div>
+        </div>
+
+        <div class="filters-bar">
+            <input type="text" class="search-input" placeholder="Search by VIN, make, model...">
+            <select class="filter-select">
+                <option>All Status</option>
+                <option>Available</option>
+                <option>Pending</option>
+                <option>Sold</option>
+                <option>Reserved</option>
+            </select>
+            <select class="filter-select">
+                <option>All Makes</option>
+                <option>Toyota</option>
+                <option>Honda</option>
+                <option>Ford</option>
+            </select>
+            <select class="filter-select">
+                <option>All Years</option>
+                <option>2024</option>
+                <option>2023</option>
+                <option>2022</option>
+            </select>
+            <select class="filter-select">
+                <option>Sort: Newest</option>
+                <option>Sort: Oldest</option>
+                <option>Sort: Price Low</option>
+                <option>Sort: Price High</option>
+            </select>
+        </div>
+
+        <div class="inventory-table">
+            <div class="table-header">
+                <span></span>
+                <span>Vehicle</span>
+                <span>Status</span>
+                <span>Price</span>
+                <span>Mileage</span>
+                <span>Days</span>
+                <span>Actions</span>
+            </div>
+
+            <div class="table-row">
+                <div class="vehicle-thumb">&#128663;</div>
+                <div class="vehicle-info">
+                    <div class="vehicle-name">2023 Toyota Camry SE</div>
+                    <div class="vehicle-vin">4T1B11HK5NU123456</div>
+                </div>
+                <span class="status-badge available">Available</span>
+                <span class="price">$28,990</span>
+                <span>12,450 mi</span>
+                <div class="days-in-stock">
+                    <span class="days-badge good">5</span>
+                </div>
+                <div class="action-menu">
+                    <button class="action-btn">&#9998;</button>
+                    <button class="action-btn">&#128065;</button>
+                    <button class="action-btn">&#8942;</button>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="vehicle-thumb">&#128663;</div>
+                <div class="vehicle-info">
+                    <div class="vehicle-name">2022 Honda CR-V EX-L</div>
+                    <div class="vehicle-vin">7FARW2H87NE012345</div>
+                </div>
+                <span class="status-badge pending">Pending Sale</span>
+                <span class="price">$32,450</span>
+                <span>28,900 mi</span>
+                <div class="days-in-stock">
+                    <span class="days-badge warning">18</span>
+                </div>
+                <div class="action-menu">
+                    <button class="action-btn">&#9998;</button>
+                    <button class="action-btn">&#128065;</button>
+                    <button class="action-btn">&#8942;</button>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="vehicle-thumb">&#128663;</div>
+                <div class="vehicle-info">
+                    <div class="vehicle-name">2021 Toyota RAV4 XLE</div>
+                    <div class="vehicle-vin">2T3W1RFV1MW123456</div>
+                </div>
+                <span class="status-badge available">Available</span>
+                <span class="price">$29,750</span>
+                <span>35,600 mi</span>
+                <div class="days-in-stock">
+                    <span class="days-badge critical">45</span>
+                </div>
+                <div class="action-menu">
+                    <button class="action-btn">&#9998;</button>
+                    <button class="action-btn">&#128065;</button>
+                    <button class="action-btn">&#8942;</button>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="vehicle-thumb">&#128663;</div>
+                <div class="vehicle-info">
+                    <div class="vehicle-name">2023 Honda Accord Sport</div>
+                    <div class="vehicle-vin">1HGCV1F31PA123456</div>
+                </div>
+                <span class="status-badge reserved">Reserved</span>
+                <span class="price">$31,990</span>
+                <span>8,200 mi</span>
+                <div class="days-in-stock">
+                    <span class="days-badge good">3</span>
+                </div>
+                <div class="action-menu">
+                    <button class="action-btn">&#9998;</button>
+                    <button class="action-btn">&#128065;</button>
+                    <button class="action-btn">&#8942;</button>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="vehicle-thumb">&#128663;</div>
+                <div class="vehicle-info">
+                    <div class="vehicle-name">2020 Honda Civic EX</div>
+                    <div class="vehicle-vin">19XFC2F53LE123456</div>
+                </div>
+                <span class="status-badge sold">Sold</span>
+                <span class="price">$22,450</span>
+                <span>42,300 mi</span>
+                <div class="days-in-stock">
+                    <span class="days-badge warning">28</span>
+                </div>
+                <div class="action-menu">
+                    <button class="action-btn">&#9998;</button>
+                    <button class="action-btn">&#128065;</button>
+                    <button class="action-btn">&#8942;</button>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <span class="pagination-info">Showing 1-5 of 1,247 vehicles</span>
+                <div class="pagination-controls">
+                    <button class="page-btn">&#8592;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">250</button>
+                    <button class="page-btn">&#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-title">Inventory Trends (Last 30 Days)</div>
+            <div class="chart-placeholder">&#128200; Inventory Analytics Chart</div>
+        </div>
+    </main>
+</body>
+</html>

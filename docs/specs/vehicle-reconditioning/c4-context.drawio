@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-12-23T00:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="c4-context-reconditioning" name="C4 Context - Vehicle Reconditioning System">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="C4 Context Diagram - Vehicle Reconditioning System" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="280" y="20" width="540" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="inspector" value="Vehicle Inspector&#xa;[Person]&#xa;&#xa;Staff performing 210-point&#xa;inspections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="technician" value="Technician&#xa;[Person]&#xa;&#xa;Staff performing repairs&#xa;and reconditioning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="manager" value="Quality Manager&#xa;[Person]&#xa;&#xa;Staff approving vehicles&#xa;for retail sale" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="800" y="100" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="system" value="Vehicle Reconditioning System&#xa;[Software System]&#xa;&#xa;Manages 210-point inspections,&#xa;repairs, detailing, and&#xa;certification workflow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="430" y="300" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="acquisition" value="Vehicle Acquisition&#xa;[Software System]&#xa;&#xa;Sends purchased vehicles&#xa;for reconditioning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="100" y="520" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="inventory" value="Inventory System&#xa;[Software System]&#xa;&#xa;Receives certified vehicles&#xa;for listing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="800" y="520" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="history" value="Vehicle History Service&#xa;[External System]&#xa;&#xa;Provides vehicle history&#xa;reports for certification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="450" y="520" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="Performs inspections" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666" edge="1" parent="1" source="inspector" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="Completes repairs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666" edge="1" parent="1" source="technician" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" value="Approves for sale" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666" edge="1" parent="1" source="manager" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" value="Sends vehicles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="acquisition" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" value="Sends certified vehicles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="inventory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6" value="Gets history report" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="history">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,154 @@
+@startuml Vehicle Reconditioning Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Vehicle Reconditioning Domain" {
+
+    class ProductionJob {
+        +id: String
+        +vehicleId: String
+        +facilityId: String
+        +purchaseId: String
+        +stage: ProductionStage
+        +priority: JobPriority
+        +mileageIn: Integer
+        +receivedAt: DateTime
+        +startedAt: DateTime
+        +completedAt: DateTime
+        +assignedTeam: String
+    }
+
+    enum ProductionStage {
+        RECEIVED
+        INSPECTION
+        REPAIRS
+        DETAILING
+        PHOTOS
+        CERTIFICATION
+        APPROVED
+        LISTED
+    }
+
+    enum JobPriority {
+        NORMAL
+        HIGH
+        URGENT
+    }
+
+    class Inspection {
+        +id: String
+        +vehicleId: String
+        +productionJobId: String
+        +totalPoints: Integer
+        +completedPoints: Integer
+        +passedPoints: Integer
+        +failedPoints: Integer
+        +status: InspectionStatus
+        +startedAt: DateTime
+        +completedAt: DateTime
+    }
+
+    enum InspectionStatus {
+        IN_PROGRESS
+        COMPLETED
+    }
+
+    class InspectionPoint {
+        +id: String
+        +inspectionId: String
+        +number: Integer
+        +category: String
+        +item: String
+        +description: String
+        +status: PointStatus
+        +notes: String
+        +photos: List
+        +requiresRepair: Boolean
+    }
+
+    enum PointStatus {
+        PENDING
+        PASS
+        FAIL
+        NOTE
+    }
+
+    class RepairWorkOrder {
+        +id: String
+        +vehicleId: String
+        +productionJobId: String
+        +status: WorkOrderStatus
+        +totalEstimate: Decimal
+        +totalActual: Decimal
+        +createdAt: DateTime
+        +completedAt: DateTime
+    }
+
+    enum WorkOrderStatus {
+        PENDING
+        IN_PROGRESS
+        COMPLETED
+    }
+
+    class RepairItem {
+        +id: String
+        +workOrderId: String
+        +category: String
+        +description: String
+        +severity: Severity
+        +estimatedHours: Decimal
+        +estimatedParts: Decimal
+        +actualHours: Decimal
+        +actualParts: Decimal
+        +status: ItemStatus
+        +assignedTo: String
+    }
+
+    enum Severity {
+        MINOR
+        MODERATE
+        MAJOR
+    }
+
+    enum ItemStatus {
+        PENDING
+        IN_PROGRESS
+        COMPLETED
+    }
+
+    class Certification {
+        +id: String
+        +vehicleId: String
+        +productionJobId: String
+        +status: CertStatus
+        +qualityScore: Integer
+        +recommendation: String
+        +decision: String
+        +certificationNumber: String
+        +approvedBy: String
+        +certifiedAt: DateTime
+    }
+
+    enum CertStatus {
+        PENDING
+        APPROVED
+        REJECTED
+    }
+
+    ProductionJob "1" --> "1" Inspection : has
+    ProductionJob "1" --> "0..1" RepairWorkOrder : may have
+    ProductionJob "1" --> "0..1" Certification : may have
+    Inspection "1" --> "*" InspectionPoint : contains
+    RepairWorkOrder "1" --> "*" RepairItem : contains
+    ProductionJob --> ProductionStage
+    ProductionJob --> JobPriority
+    Inspection --> InspectionStatus
+    InspectionPoint --> PointStatus
+    RepairWorkOrder --> WorkOrderStatus
+    RepairItem --> Severity
+    RepairItem --> ItemStatus
+    Certification --> CertStatus
+}
+
+@enduml

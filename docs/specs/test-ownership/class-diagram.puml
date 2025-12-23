@@ -1,0 +1,119 @@
+@startuml Test Ownership Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Test Ownership Domain" {
+
+    class TrialPeriod {
+        +id: String
+        +purchaseId: String
+        +vehicleId: String
+        +customerId: String
+        +status: TrialStatus
+        +startDate: DateTime
+        +endDate: DateTime
+        +maxDays: Integer
+        +maxMileage: Integer
+        +startMileage: Integer
+        +currentMileage: Integer
+        +endedAt: DateTime
+        +endReason: String
+    }
+
+    enum TrialStatus {
+        ACTIVE
+        ENDED
+        RETURNED
+        EXCHANGED
+        KEPT
+    }
+
+    class ReturnRequest {
+        +id: String
+        +trialId: String
+        +purchaseId: String
+        +vehicleId: String
+        +customerId: String
+        +status: ReturnStatus
+        +reason: ReturnReason
+        +reasonDetails: String
+        +photos: List
+        +createdAt: DateTime
+        +completedAt: DateTime
+    }
+
+    enum ReturnStatus {
+        REQUESTED
+        APPROVED
+        REJECTED
+        PICKUP_SCHEDULED
+        COLLECTED
+        REFUND_PROCESSING
+        COMPLETED
+        CANCELLED
+    }
+
+    enum ReturnReason {
+        NOT_RIGHT_FIT
+        UNMET_EXPECTATIONS
+        FOUND_BETTER
+        FINANCIAL
+        OTHER
+    }
+
+    class ConditionStatement {
+        +noAccidents: Boolean
+        +noModifications: Boolean
+        +sameCondition: Boolean
+    }
+
+    class ReturnPickup {
+        +scheduledDate: DateTime
+        +timeWindow: String
+        +address: Address
+        +driverId: String
+    }
+
+    class ReturnRefund {
+        +purchaseAmount: Decimal
+        +feesDeducted: Decimal
+        +refundAmount: Decimal
+        +status: String
+        +processedAt: DateTime
+    }
+
+    class ExchangeRequest {
+        +id: String
+        +trialId: String
+        +purchaseId: String
+        +currentVehicleId: String
+        +targetVehicleId: String
+        +customerId: String
+        +status: ExchangeStatus
+        +priceDifference: Decimal
+        +createdAt: DateTime
+    }
+
+    enum ExchangeStatus {
+        REQUESTED
+        CONFIRMED
+        RETURN_SCHEDULED
+        RETURNED
+        NEW_VEHICLE_READY
+        COMPLETED
+        CANCELLED
+    }
+
+    TrialPeriod "1" --> "0..1" ReturnRequest : may have
+    TrialPeriod "1" --> "0..1" ExchangeRequest : may have
+    ReturnRequest "1" --> "1" ConditionStatement : includes
+    ReturnRequest "1" --> "0..1" ReturnPickup : scheduled for
+    ReturnRequest "1" --> "0..1" ReturnRefund : results in
+    TrialPeriod --> TrialStatus
+    ReturnRequest --> ReturnStatus
+    ReturnRequest --> ReturnReason
+    ExchangeRequest --> ExchangeStatus
+}
+
+@enduml

@@ -1,0 +1,125 @@
+@startuml Vehicle Acquisition Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Vehicle Acquisition Domain" {
+
+    class Offer {
+        +id: String
+        +requestId: String
+        +vehicleId: String
+        +customerId: String
+        +amount: Decimal
+        +currency: String
+        +status: OfferStatus
+        +validUntil: DateTime
+        +createdAt: DateTime
+        +acceptedAt: DateTime
+        +rejectedAt: DateTime
+    }
+
+    enum OfferStatus {
+        PENDING
+        ACCEPTED
+        REJECTED
+        EXPIRED
+    }
+
+    class AcquisitionVehicle {
+        +id: String
+        +vin: String
+        +make: String
+        +model: String
+        +year: Integer
+        +trim: String
+        +mileage: Integer
+        +declaredCondition: Condition
+        +actualCondition: Condition
+        +photos: List
+        +createdAt: DateTime
+    }
+
+    enum Condition {
+        EXCELLENT
+        GOOD
+        FAIR
+        POOR
+    }
+
+    class Appraisal {
+        +id: String
+        +offerId: String
+        +vehicleId: String
+        +customerId: String
+        +inspectorId: String
+        +scheduledDate: DateTime
+        +locationType: String
+        +location: Address
+        +status: AppraisalStatus
+        +confirmationNumber: String
+    }
+
+    enum AppraisalStatus {
+        SCHEDULED
+        IN_PROGRESS
+        COMPLETED
+        CANCELLED
+    }
+
+    class Inspection {
+        +id: String
+        +appraisalId: String
+        +vehicleId: String
+        +inspectorId: String
+        +checkpoints: List
+        +discrepancies: List
+        +finalCondition: Condition
+        +mileageReading: Integer
+        +startedAt: DateTime
+        +completedAt: DateTime
+    }
+
+    class Purchase {
+        +id: String
+        +offerId: String
+        +vehicleId: String
+        +sellerId: String
+        +amount: Decimal
+        +currency: String
+        +status: PurchaseStatus
+        +agreementId: String
+        +paymentId: String
+        +createdAt: DateTime
+    }
+
+    enum PurchaseStatus {
+        PENDING_SIGNATURE
+        PENDING_PAYMENT
+        PAYMENT_PROCESSING
+        PENDING_PICKUP
+        COMPLETED
+    }
+
+    class Address {
+        +street: String
+        +unit: String
+        +city: String
+        +province: String
+        +postalCode: String
+        +lat: Decimal
+        +lng: Decimal
+    }
+
+    Offer "1" --> "1" AcquisitionVehicle : for
+    Offer "1" --> "0..1" Appraisal : triggers
+    Appraisal "1" --> "0..1" Inspection : results in
+    Offer "1" --> "0..1" Purchase : converts to
+    Appraisal --> Address : location
+    Offer --> OfferStatus
+    Appraisal --> AppraisalStatus
+    Purchase --> PurchaseStatus
+    AcquisitionVehicle --> Condition
+}
+
+@enduml

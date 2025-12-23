@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1A1F36; background: #F5F7FA; }
+        .header { background: #FFFFFF; padding: 16px 120px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #0066FF; }
+        .nav { display: flex; gap: 32px; }
+        .nav a { text-decoration: none; color: #1A1F36; font-weight: 500; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 48px 24px; }
+        .page-title { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .page-subtitle { font-size: 16px; color: #8B95A5; margin-bottom: 32px; }
+        .tracking-card { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .tracking-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+        .order-info h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .order-info p { font-size: 14px; color: #8B95A5; }
+        .eta-badge { background: #F0FFF4; border: 1px solid #00C853; color: #00C853; padding: 12px 24px; border-radius: 8px; text-align: center; }
+        .eta-badge .label { font-size: 12px; margin-bottom: 4px; }
+        .eta-badge .date { font-size: 18px; font-weight: 600; }
+        .progress-track { position: relative; padding: 24px 0; }
+        .progress-bar { position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: #E1E4E8; transform: translateY(-50%); border-radius: 2px; }
+        .progress-fill { position: absolute; top: 0; left: 0; height: 100%; background: #0066FF; border-radius: 2px; width: 60%; }
+        .progress-steps { display: flex; justify-content: space-between; position: relative; z-index: 1; }
+        .step { text-align: center; width: 120px; }
+        .step-dot { width: 24px; height: 24px; border-radius: 50%; background: #E1E4E8; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; }
+        .step.completed .step-dot { background: #00C853; }
+        .step.active .step-dot { background: #0066FF; box-shadow: 0 0 0 4px rgba(0,102,255,0.2); }
+        .step-label { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+        .step-date { font-size: 11px; color: #8B95A5; }
+        .map-container { background: linear-gradient(135deg, #E1E4E8 0%, #F5F7FA 100%); height: 300px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-top: 24px; position: relative; overflow: hidden; }
+        .map-placeholder { color: #8B95A5; font-size: 18px; }
+        .driver-info { position: absolute; bottom: 16px; left: 16px; right: 16px; background: white; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .driver-avatar { width: 48px; height: 48px; background: #0066FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+        .driver-details { flex: 1; }
+        .driver-name { font-weight: 600; margin-bottom: 4px; }
+        .driver-vehicle { font-size: 14px; color: #8B95A5; }
+        .driver-contact { display: flex; gap: 8px; }
+        .contact-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #E1E4E8; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .details-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 24px; }
+        .detail-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .detail-icon { font-size: 32px; margin-bottom: 12px; }
+        .detail-label { font-size: 14px; color: #8B95A5; margin-bottom: 4px; }
+        .detail-value { font-size: 16px; font-weight: 600; }
+        .car-summary { display: flex; gap: 24px; padding: 24px; background: #F5F7FA; border-radius: 12px; margin-bottom: 24px; }
+        .car-image { width: 200px; height: 120px; background: linear-gradient(135deg, #E1E4E8 0%, #FFFFFF 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+        .car-details h4 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .car-details p { font-size: 14px; color: #8B95A5; margin-bottom: 4px; }
+        .vin-number { font-family: 'SF Mono', Consolas, monospace; font-size: 12px; background: white; padding: 8px 12px; border-radius: 4px; margin-top: 8px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">ZoomLoop</div>
+        <nav class="nav">
+            <a href="#">My Orders</a>
+            <a href="#">Support</a>
+            <a href="#">Account</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Delivery Tracking</h1>
+        <p class="page-subtitle">Order #ZL-2024-78543</p>
+
+        <div class="tracking-card">
+            <div class="tracking-header">
+                <div class="order-info">
+                    <h3>Your vehicle is on its way!</h3>
+                    <p>Last updated: December 23, 2024 at 2:45 PM</p>
+                </div>
+                <div class="eta-badge">
+                    <div class="label">Estimated Arrival</div>
+                    <div class="date">Dec 26, 2-4 PM</div>
+                </div>
+            </div>
+
+            <div class="progress-track">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step completed">
+                        <div class="step-dot">&#10003;</div>
+                        <div class="step-label">Order Placed</div>
+                        <div class="step-date">Dec 20</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-dot">&#10003;</div>
+                        <div class="step-label">Preparing</div>
+                        <div class="step-date">Dec 21</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-dot"></div>
+                        <div class="step-label">In Transit</div>
+                        <div class="step-date">Dec 23</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-dot"></div>
+                        <div class="step-label">Out for Delivery</div>
+                        <div class="step-date">Dec 26</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-dot"></div>
+                        <div class="step-label">Delivered</div>
+                        <div class="step-date">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <span class="map-placeholder">&#128506; Live Tracking Map</span>
+                <div class="driver-info">
+                    <div class="driver-avatar">MK</div>
+                    <div class="driver-details">
+                        <div class="driver-name">Michael K.</div>
+                        <div class="driver-vehicle">Transport Carrier - Unit T-428</div>
+                    </div>
+                    <div class="driver-contact">
+                        <button class="contact-btn">&#128222;</button>
+                        <button class="contact-btn">&#128172;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="car-summary">
+            <div class="car-image">&#128663;</div>
+            <div class="car-details">
+                <h4>2022 Honda CR-V EX-L</h4>
+                <p>1.5L Turbo, CVT, AWD</p>
+                <p>28,900 miles | Crystal Black Pearl</p>
+                <span class="vin-number">VIN: 7FARW2H87NE012345</span>
+            </div>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <div class="detail-icon">&#128205;</div>
+                <div class="detail-label">Delivery Address</div>
+                <div class="detail-value">123 Main Street<br>Toronto, ON M5V 2H1</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-icon">&#128197;</div>
+                <div class="detail-label">Delivery Window</div>
+                <div class="detail-value">December 26, 2024<br>2:00 PM - 4:00 PM</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-icon">&#128100;</div>
+                <div class="detail-label">Contact</div>
+                <div class="detail-value">John Smith<br>(555) 123-4567</div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

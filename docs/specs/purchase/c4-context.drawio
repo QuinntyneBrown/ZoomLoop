@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-12-23T00:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="c4-context-purchase" name="C4 Context - Purchase System">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="C4 Context Diagram - Purchase System" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="buyer" value="Car Buyer&#xa;[Person]&#xa;&#xa;A customer purchasing&#xa;a vehicle from the platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="advisor" value="Sales Advisor&#xa;[Person]&#xa;&#xa;Staff member who assists&#xa;customers with purchases" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="800" y="100" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="system" value="Purchase System&#xa;[Software System]&#xa;&#xa;Handles vehicle reservations,&#xa;financing, documentation,&#xa;and payment processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="430" y="280" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="financing" value="Lender Partners&#xa;[External System]&#xa;&#xa;Third-party lenders for&#xa;vehicle financing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="100" y="500" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="payment" value="Payment Gateway&#xa;[External System]&#xa;&#xa;Processes deposits and&#xa;final payments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="450" y="500" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="esign" value="E-Signature Service&#xa;[External System]&#xa;&#xa;Handles electronic document&#xa;signing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="800" y="500" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="Reserves vehicles,&#xa;makes payments" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666" edge="1" parent="1" source="buyer" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="Assists with&#xa;purchases" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666" edge="1" parent="1" source="advisor" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" value="Submits loan&#xa;applications" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="financing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" value="Processes&#xa;payments" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="payment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" value="Sends documents&#xa;for signing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="esign">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
