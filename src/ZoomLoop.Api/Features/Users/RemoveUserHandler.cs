@@ -4,6 +4,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ZoomLoop.Core;
+using ZoomLoop.Core.Models;
 
 namespace ZoomLoop.Api.Features.Users;
 
@@ -17,7 +18,8 @@ public class RemoveUserHandler : IRequestHandler<RemoveUserRequest, RemoveUserRe
     public async Task<RemoveUserResponse> Handle(RemoveUserRequest request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.SingleAsync(x => x.UserId == request.UserId, cancellationToken);
-        user.IsDeleted = true;
+        user.Status = UserStatus.Deleted;
+        user.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync(cancellationToken);
         return new RemoveUserResponse { User = user.ToDto() };
     }

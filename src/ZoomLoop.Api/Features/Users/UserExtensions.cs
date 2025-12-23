@@ -13,10 +13,15 @@ public static class UserExtensions
         return new UserDto
         {
             UserId = user.UserId,
-            Username = user.Username,
-            CurrentProfileId = user.CurrentProfileId,
-            DefaultProfileId = user.DefaultProfileId,
-            IsDeleted = user.IsDeleted,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Phone = user.Phone,
+            EmailVerified = user.EmailVerified,
+            PhoneVerified = user.PhoneVerified,
+            Status = user.Status,
+            CreatedAt = user.CreatedAt,
+            LastLoginAt = user.LastLoginAt,
             Roles = user.Roles.Select(x => x.ToDto()).ToList()
         };
     }

@@ -31,3 +31,6 @@ export * from './lib/image-gallery/image-gallery.component';
 
 // Feedback Components
 export * from './lib/toast/toast.component';
+
+// Auth Components
+export * from './lib/login-dialog';

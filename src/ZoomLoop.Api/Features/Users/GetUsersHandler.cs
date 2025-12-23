@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ZoomLoop.Core;
+using ZoomLoop.Core.Models;
 
 namespace ZoomLoop.Api.Features.Users;
 
@@ -19,7 +20,7 @@ public class GetUsersHandler : IRequestHandler<GetUsersRequest, GetUsersResponse
     {
         var users = await _context.Users
             .Include(x => x.Roles)
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.Status != UserStatus.Deleted)
             .ToListAsync(cancellationToken);
 
         return new GetUsersResponse { Users = users.Select(x => x.ToDto()).ToList() };

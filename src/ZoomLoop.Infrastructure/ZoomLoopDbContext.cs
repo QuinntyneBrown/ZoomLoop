@@ -17,6 +17,9 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
     public DbSet<User> Users { get; set; } = default!;
     public DbSet<Role> Roles { get; set; } = default!;
     public DbSet<Privilege> Privileges { get; set; } = default!;
+    public DbSet<Session> Sessions { get; set; } = default!;
+    public DbSet<UserPreferences> UserPreferences { get; set; } = default!;
+    public DbSet<UserAddress> UserAddresses { get; set; } = default!;
     public DbSet<Dealer> Dealers { get; set; } = default!;
     public DbSet<DealerLocation> DealerLocations { get; set; } = default!;
     public DbSet<Vehicle> Vehicles { get; set; } = default!;
@@ -42,12 +45,21 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.UserId);
+            entity.HasIndex(e => e.Email).IsUnique();
             entity.HasMany(e => e.Roles)
                 .WithMany(r => r.Users);
-            entity.HasOne<Profile>()
-                .WithOne()
-                .HasForeignKey<User>(u => u.CurrentProfileId)
-                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(e => e.Sessions)
+                .WithOne(s => s.User)
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(e => e.Addresses)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Preferences)
+                .WithOne(p => p.User)
+                .HasForeignKey<UserPreferences>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -61,6 +73,35 @@ public class ZoomLoopDbContext : DbContext, IZoomLoopContext
         modelBuilder.Entity<Privilege>(entity =>
         {
             entity.HasKey(e => e.PrivilegeId);
+        });
+
+        modelBuilder.Entity<Session>(entity =>
+        {
+            entity.HasKey(e => e.SessionId);
+            entity.HasIndex(e => e.RefreshToken);
+        });
+
+        modelBuilder.Entity<UserPreferences>(entity =>
+        {
+            entity.HasKey(e => e.UserPreferencesId);
+            entity.OwnsOne(e => e.Notifications, nb =>
+            {
+                nb.OwnsOne(n => n.Email);
+                nb.OwnsOne(n => n.Sms);
+                nb.OwnsOne(n => n.Push);
+            });
+            entity.OwnsOne(e => e.Search, sb =>
+            {
+                sb.Property(s => s.PreferredMakes)
+                    .HasConversion(
+                        v => string.Join(',', v),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+            });
+        });
+
+        modelBuilder.Entity<UserAddress>(entity =>
+        {
+            entity.HasKey(e => e.UserAddressId);
         });
 
         modelBuilder.Entity<Dealer>(entity =>
