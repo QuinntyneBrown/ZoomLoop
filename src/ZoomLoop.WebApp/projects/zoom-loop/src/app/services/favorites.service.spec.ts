@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { FavoritesService } from './favorites.service';
 
 describe('FavoritesService', () => {
@@ -43,56 +45,44 @@ describe('FavoritesService', () => {
   });
 
   describe('isFavorite', () => {
-    it('should emit false for non-favorites', (done) => {
-      service.isFavorite('unknown').subscribe(result => {
-        expect(result).toBe(false);
-        done();
-      });
+    it('should emit false for non-favorites', async () => {
+      const result = await firstValueFrom(service.isFavorite('unknown'));
+      expect(result).toBe(false);
     });
 
-    it('should emit true for favorites', (done) => {
+    it('should emit true for favorites', async () => {
       service.toggle('1');
-      service.isFavorite('1').subscribe(result => {
-        expect(result).toBe(true);
-        done();
-      });
+      const result = await firstValueFrom(service.isFavorite('1'));
+      expect(result).toBe(true);
     });
   });
 
   describe('getFavorites', () => {
-    it('should return empty array initially', (done) => {
-      service.getFavorites().subscribe(favorites => {
-        expect(favorites).toEqual([]);
-        done();
-      });
+    it('should return empty array initially', async () => {
+      const favorites = await firstValueFrom(service.getFavorites());
+      expect(favorites).toEqual([]);
     });
 
-    it('should return all favorites', (done) => {
+    it('should return all favorites', async () => {
       service.toggle('1');
       service.toggle('2');
-      service.getFavorites().subscribe(favorites => {
-        expect(favorites).toContain('1');
-        expect(favorites).toContain('2');
-        done();
-      });
+      const favorites = await firstValueFrom(service.getFavorites());
+      expect(favorites).toContain('1');
+      expect(favorites).toContain('2');
     });
   });
 
   describe('getCount', () => {
-    it('should return 0 initially', (done) => {
-      service.getCount().subscribe(count => {
-        expect(count).toBe(0);
-        done();
-      });
+    it('should return 0 initially', async () => {
+      const count = await firstValueFrom(service.getCount());
+      expect(count).toBe(0);
     });
 
-    it('should return correct count', (done) => {
+    it('should return correct count', async () => {
       service.toggle('1');
       service.toggle('2');
-      service.getCount().subscribe(count => {
-        expect(count).toBe(2);
-        done();
-      });
+      const count = await firstValueFrom(service.getCount());
+      expect(count).toBe(2);
     });
   });
 
