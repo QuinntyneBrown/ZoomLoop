@@ -35,7 +35,7 @@ export class Tabs {
     return idx >= 0 ? idx : 0;
   }
 
-  selectTab(tab: TabItem, index: number) {
+  selectTab(tab: TabItem, _index: number) {
     if (tab.disabled) return;
     this.value = tab.value;
     this.valueChange.emit(tab.value);

@@ -165,7 +165,7 @@ export class LoanCalculatorService {
         totalCost: this.roundToTwoDecimals(totalPaid + input.downPayment),
         isValid: true
       };
-    } catch (error) {
+    } catch {
       return {
         monthlyPayment: 0,
         totalLoanAmount: 0,
