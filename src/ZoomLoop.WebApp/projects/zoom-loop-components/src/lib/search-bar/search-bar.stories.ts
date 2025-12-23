@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { SearchBarComponent, SearchSuggestion } from './search-bar.component';
 
 const sampleSuggestions: SearchSuggestion[] = [
-  { type: 'recent', text: 'Honda Civic 2022', icon: 'clock' },
-  { type: 'recent', text: 'Toyota Camry', icon: 'clock' },
-  { type: 'popular', text: 'SUV under $30,000', icon: 'trending' },
-  { type: 'popular', text: 'Electric vehicles', icon: 'trending' },
-  { type: 'make', text: 'BMW', icon: 'car' },
-  { type: 'make', text: 'Mercedes-Benz', icon: 'car' },
+  { id: '1', type: 'popular', label: 'SUV under $30,000' },
+  { id: '2', type: 'popular', label: 'Electric vehicles' },
+  { id: '3', type: 'make', label: 'BMW' },
+  { id: '4', type: 'make', label: 'Mercedes-Benz' },
+  { id: '5', type: 'model', label: 'Honda Civic', sublabel: '2022' },
+  { id: '6', type: 'model', label: 'Toyota Camry' },
 ];
 
 const meta: Meta<SearchBarComponent> = {
@@ -17,7 +17,7 @@ const meta: Meta<SearchBarComponent> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'hero', 'compact'],
+      options: ['hero', 'inline'],
     },
     showFiltersButton: {
       control: 'boolean',
@@ -31,7 +31,7 @@ type Story = StoryObj<SearchBarComponent>;
 export const Default: Story = {
   args: {
     placeholder: 'Search for make, model, or keyword...',
-    variant: 'default',
+    variant: 'inline',
     showFiltersButton: true,
     suggestions: sampleSuggestions,
   },
@@ -59,7 +59,7 @@ export const Hero: Story = {
 export const Compact: Story = {
   args: {
     placeholder: 'Search...',
-    variant: 'compact',
+    variant: 'inline',
     showFiltersButton: false,
     suggestions: sampleSuggestions,
   },
@@ -68,7 +68,7 @@ export const Compact: Story = {
 export const WithoutFiltersButton: Story = {
   args: {
     placeholder: 'Search for vehicles...',
-    variant: 'default',
+    variant: 'inline',
     showFiltersButton: false,
     suggestions: sampleSuggestions,
   },
@@ -77,7 +77,7 @@ export const WithoutFiltersButton: Story = {
 export const WithCustomPlaceholder: Story = {
   args: {
     placeholder: 'Find your dream car...',
-    variant: 'default',
+    variant: 'inline',
     showFiltersButton: true,
     suggestions: [],
   },
@@ -86,7 +86,7 @@ export const WithCustomPlaceholder: Story = {
 export const NoSuggestions: Story = {
   args: {
     placeholder: 'Search for make, model, or keyword...',
-    variant: 'default',
+    variant: 'inline',
     showFiltersButton: true,
     suggestions: [],
   },

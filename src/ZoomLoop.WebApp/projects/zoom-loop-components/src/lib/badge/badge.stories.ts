@@ -8,7 +8,7 @@ const meta: Meta<BadgeComponent> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'success', 'warning', 'error', 'info'],
+      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'outline'],
     },
     size: {
       control: 'select',
@@ -72,14 +72,14 @@ export const Warning: Story = {
   }),
 };
 
-export const Error: Story = {
+export const Danger: Story = {
   args: {
-    variant: 'error',
+    variant: 'danger',
     size: 'md',
   },
   render: (args) => ({
     props: args,
-    template: `<zl-badge [variant]="variant" [size]="size">Error</zl-badge>`,
+    template: `<zl-badge [variant]="variant" [size]="size">Danger</zl-badge>`,
   }),
 };
 

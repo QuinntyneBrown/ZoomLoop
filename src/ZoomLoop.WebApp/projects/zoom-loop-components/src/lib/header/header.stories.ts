@@ -13,17 +13,13 @@ const meta: Meta<HeaderComponent> = {
   component: HeaderComponent,
   tags: ['autodocs'],
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['default', 'transparent', 'minimal'],
-    },
-    sticky: {
-      control: 'boolean',
-    },
-    showSearch: {
+    scrolled: {
       control: 'boolean',
     },
     isLoggedIn: {
+      control: 'boolean',
+    },
+    showAuthButtons: {
       control: 'boolean',
     },
   },
@@ -37,44 +33,20 @@ export const Default: Story = {
     logoText: 'ZoomLoop',
     logoInitial: 'Z',
     navItems: sampleNavItems,
-    variant: 'default',
-    sticky: false,
-    showSearch: true,
+    scrolled: false,
     isLoggedIn: false,
+    showAuthButtons: true,
   },
 };
 
-export const Transparent: Story = {
+export const Scrolled: Story = {
   args: {
     logoText: 'ZoomLoop',
     logoInitial: 'Z',
     navItems: sampleNavItems,
-    variant: 'transparent',
-    sticky: false,
-    showSearch: true,
+    scrolled: true,
     isLoggedIn: false,
-  },
-  decorators: [
-    (story) => ({
-      template: `
-        <div style="background: linear-gradient(135deg, #1E40AF, #0F172A); padding: 20px; min-height: 200px;">
-          ${story().template || '<ng-container *ngComponentOutlet="story"></ng-container>'}
-        </div>
-      `,
-      props: story().props,
-    }),
-  ],
-};
-
-export const Minimal: Story = {
-  args: {
-    logoText: 'ZoomLoop',
-    logoInitial: 'Z',
-    navItems: sampleNavItems,
-    variant: 'minimal',
-    sticky: false,
-    showSearch: false,
-    isLoggedIn: false,
+    showAuthButtons: true,
   },
 };
 
@@ -83,37 +55,20 @@ export const LoggedIn: Story = {
     logoText: 'ZoomLoop',
     logoInitial: 'Z',
     navItems: sampleNavItems,
-    variant: 'default',
-    sticky: false,
-    showSearch: true,
+    scrolled: false,
     isLoggedIn: true,
-    userName: 'John Doe',
+    userInitials: 'JD',
+    showAuthButtons: false,
   },
 };
 
-export const Sticky: Story = {
+export const WithoutAuthButtons: Story = {
   args: {
     logoText: 'ZoomLoop',
     logoInitial: 'Z',
     navItems: sampleNavItems,
-    variant: 'default',
-    sticky: true,
-    showSearch: true,
+    scrolled: false,
     isLoggedIn: false,
-  },
-};
-
-export const WithPromoBar: Story = {
-  args: {
-    logoText: 'ZoomLoop',
-    logoInitial: 'Z',
-    navItems: sampleNavItems,
-    variant: 'default',
-    sticky: false,
-    showSearch: true,
-    isLoggedIn: false,
-    showPromoBar: true,
-    promoText: 'Holiday Sale! Save up to $2,000 on select vehicles',
-    promoIcon: '🎄',
+    showAuthButtons: false,
   },
 };

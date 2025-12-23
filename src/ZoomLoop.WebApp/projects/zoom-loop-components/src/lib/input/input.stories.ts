@@ -8,11 +8,11 @@ const meta: Meta<InputComponent> = {
   argTypes: {
     type: {
       control: 'select',
-      options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
+      options: ['text', 'email', 'password', 'number', 'tel', 'search'],
     },
-    size: {
+    state: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['default', 'error', 'success'],
     },
     disabled: {
       control: 'boolean',
@@ -20,11 +20,11 @@ const meta: Meta<InputComponent> = {
     readonly: {
       control: 'boolean',
     },
-    error: {
-      control: 'text',
+    required: {
+      control: 'boolean',
     },
-    hint: {
-      control: 'text',
+    compact: {
+      control: 'boolean',
     },
   },
 };
@@ -37,7 +37,6 @@ export const Default: Story = {
     label: 'Email',
     placeholder: 'Enter your email',
     type: 'email',
-    size: 'md',
   },
 };
 
@@ -46,8 +45,7 @@ export const WithHint: Story = {
     label: 'Password',
     placeholder: 'Enter your password',
     type: 'password',
-    hint: 'Must be at least 8 characters',
-    size: 'md',
+    helperText: 'Must be at least 8 characters',
   },
 };
 
@@ -56,8 +54,8 @@ export const WithError: Story = {
     label: 'Email',
     placeholder: 'Enter your email',
     type: 'email',
-    error: 'Please enter a valid email address',
-    size: 'md',
+    state: 'error',
+    errorText: 'Please enter a valid email address',
   },
 };
 
@@ -66,7 +64,6 @@ export const Disabled: Story = {
     label: 'Disabled Input',
     placeholder: 'This is disabled',
     disabled: true,
-    size: 'md',
   },
 };
 
@@ -75,7 +72,6 @@ export const Readonly: Story = {
     label: 'Readonly Input',
     placeholder: 'This is readonly',
     readonly: true,
-    size: 'md',
   },
 };
 
@@ -84,40 +80,25 @@ export const Required: Story = {
     label: 'Required Field',
     placeholder: 'This field is required',
     required: true,
-    size: 'md',
   },
 };
 
-export const WithPrefix: Story = {
+export const Compact: Story = {
   args: {
-    label: 'Price',
-    placeholder: '0.00',
-    type: 'number',
-    prefix: '$',
-    size: 'md',
+    label: 'Compact Input',
+    placeholder: 'Compact variant',
+    compact: true,
   },
 };
 
-export const WithSuffix: Story = {
+export const WithSuccess: Story = {
   args: {
-    label: 'Weight',
-    placeholder: '0',
-    type: 'number',
-    suffix: 'kg',
-    size: 'md',
+    label: 'Email',
+    placeholder: 'Enter your email',
+    type: 'email',
+    state: 'success',
+    helperText: 'Email is valid',
   },
-};
-
-export const AllSizes: Story = {
-  render: () => ({
-    template: `
-      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 400px;">
-        <zl-input label="Small" placeholder="Small input" size="sm"></zl-input>
-        <zl-input label="Medium" placeholder="Medium input" size="md"></zl-input>
-        <zl-input label="Large" placeholder="Large input" size="lg"></zl-input>
-      </div>
-    `,
-  }),
 };
 
 export const AllTypes: Story = {

@@ -10,10 +10,10 @@ const sampleStats: HeroStat[] = [
 ];
 
 const sampleSuggestions: SearchSuggestion[] = [
-  { type: 'popular', text: 'SUV under $30,000', icon: 'trending' },
-  { type: 'popular', text: 'Electric vehicles', icon: 'trending' },
-  { type: 'make', text: 'Toyota', icon: 'car' },
-  { type: 'make', text: 'Honda', icon: 'car' },
+  { id: '1', type: 'popular', label: 'SUV under $30,000' },
+  { id: '2', type: 'popular', label: 'Electric vehicles' },
+  { id: '3', type: 'make', label: 'Toyota' },
+  { id: '4', type: 'make', label: 'Honda' },
 ];
 
 const meta: Meta<HeroComponent> = {
