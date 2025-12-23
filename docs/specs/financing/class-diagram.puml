@@ -1,0 +1,127 @@
+@startuml Financing Class Diagram
+
+title Financing Domain Model
+
+skinparam classAttributeIconSize 0
+
+package "Financing Domain" {
+
+    class FinancingApplication {
+        +id: String
+        +vehicleId: String
+        +userId: String
+        +status: ApplicationStatus
+        +personalInfo: PersonalInfo
+        +employmentInfo: EmploymentInfo
+        +financialInfo: FinancialInfo
+        +requestedAmount: Integer
+        +downPayment: Integer
+        +term: Integer
+        +creditScore: Integer
+        +createdAt: DateTime
+        +submit(): void
+        +approve(amount: Integer): void
+        +deny(reason: String): void
+    }
+
+    class PersonalInfo {
+        +firstName: String
+        +lastName: String
+        +dateOfBirth: Date
+        +email: String
+        +phone: String
+        +address: Address
+    }
+
+    class EmploymentInfo {
+        +status: EmploymentStatus
+        +employer: String
+        +jobTitle: String
+        +monthsEmployed: Integer
+        +monthlyIncome: Integer
+    }
+
+    class FinancialInfo {
+        +monthlyHousingPayment: Integer
+        +monthlyDebtPayments: Integer
+        +bankAccount: String
+    }
+
+    class FinancingOption {
+        +id: String
+        +applicationId: String
+        +lender: String
+        +apr: Double
+        +term: Integer
+        +monthlyPayment: Integer
+        +loanAmount: Integer
+        +totalCost: Integer
+        +totalInterest: Integer
+        +isBestRate: Boolean
+        +expiresAt: DateTime
+    }
+
+    class LoanAgreement {
+        +id: String
+        +applicationId: String
+        +optionId: String
+        +signedAt: DateTime
+        +signatureHash: String
+        +documentUrl: String
+    }
+
+    enum ApplicationStatus {
+        DRAFT
+        SUBMITTED
+        CREDIT_CHECK_PENDING
+        UNDER_REVIEW
+        APPROVED
+        DENIED
+        EXPIRED
+        COMPLETED
+    }
+
+    enum EmploymentStatus {
+        EMPLOYED
+        SELF_EMPLOYED
+        RETIRED
+        STUDENT
+        UNEMPLOYED
+    }
+
+}
+
+package "Services" {
+
+    class FinancingService {
+        +calculatePayment(params: CalculateParams): PaymentEstimate
+        +submitApplication(app: FinancingApplication): void
+        +getOptions(applicationId: String): List<FinancingOption>
+        +selectOption(applicationId: String, optionId: String): void
+    }
+
+    class CreditCheckService {
+        +performSoftPull(userId: String): CreditScore
+        +performHardPull(applicationId: String): CreditReport
+    }
+
+    class LenderIntegrationService {
+        +submitToLenders(application: FinancingApplication): List<FinancingOption>
+        +getLenderResponse(applicationId: String): LenderResponse
+    }
+
+}
+
+FinancingApplication --> ApplicationStatus
+FinancingApplication --> PersonalInfo
+FinancingApplication --> EmploymentInfo
+FinancingApplication --> FinancialInfo
+FinancingApplication "1" --> "*" FinancingOption
+FinancingApplication "1" --> "0..1" LoanAgreement
+EmploymentInfo --> EmploymentStatus
+
+FinancingService --> FinancingApplication
+CreditCheckService --> FinancingApplication
+LenderIntegrationService --> FinancingOption
+
+@enduml

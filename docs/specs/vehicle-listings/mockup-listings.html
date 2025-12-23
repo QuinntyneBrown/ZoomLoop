@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Listings - Mockup</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0066FF;
+            --text: #1A1F36;
+            --text-secondary: #8B95A5;
+            --bg: #FFFFFF;
+            --bg-secondary: #F5F7FA;
+            --border: #E1E4E8;
+            --success: #00C853;
+        }
+        body { font-family: "Inter", -apple-system, sans-serif; color: var(--text); }
+
+        .header {
+            height: 80px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 120px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 28px; font-weight: 700; color: var(--primary); }
+
+        .main { margin-top: 80px; display: flex; min-height: calc(100vh - 80px); }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        .sidebar h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+        .filter-group { margin-bottom: 24px; }
+        .filter-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+        .filter-group select, .filter-group input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 16px;
+        }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .checkbox-group input { width: 20px; height: 20px; }
+        .btn-apply {
+            width: 100%;
+            height: 48px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .content { flex: 1; padding: 24px 48px; }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .results-count { font-size: 16px; color: var(--text-secondary); }
+        .results-actions { display: flex; gap: 16px; align-items: center; }
+        .results-actions select {
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 14px;
+        }
+        .view-toggle { display: flex; gap: 4px; }
+        .view-toggle button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .view-toggle button.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .chip {
+            height: 32px;
+            padding: 0 12px;
+            background: #E6F0FF;
+            border: 1px solid var(--primary);
+            border-radius: 16px;
+            font-size: 14px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chip button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .vehicle-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 200ms;
+        }
+        .vehicle-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        .vehicle-image {
+            position: relative;
+            padding-top: 75%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        .vehicle-image .placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 64px;
+        }
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .favorite {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .photo-count {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .vehicle-content { padding: 16px; }
+        .vehicle-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .vehicle-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .vehicle-meta {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .btn-details {
+            width: 100%;
+            height: 44px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-details:hover { background: var(--primary); color: white; }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 48px;
+        }
+        .pagination button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .pagination button.active { background: var(--primary); color: white; border-color: var(--primary); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">ClutchClone</div>
+    </header>
+
+    <main class="main">
+        <aside class="sidebar">
+            <h3>Filters</h3>
+
+            <div class="filter-group">
+                <label>Make</label>
+                <select><option>All Makes</option><option>Honda</option><option>Toyota</option><option>Ford</option></select>
+            </div>
+
+            <div class="filter-group">
+                <label>Model</label>
+                <select><option>All Models</option></select>
+            </div>
+
+            <div class="filter-group">
+                <label>Price Range</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" placeholder="Min" style="width: 50%;">
+                    <input type="number" placeholder="Max" style="width: 50%;">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Year</label>
+                <div style="display: flex; gap: 8px;">
+                    <select style="width: 50%;"><option>2015</option><option>2016</option><option>2017</option></select>
+                    <select style="width: 50%;"><option>2024</option><option>2023</option><option>2022</option></select>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Body Type</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox"> Sedan</label>
+                    <label><input type="checkbox"> SUV</label>
+                    <label><input type="checkbox"> Truck</label>
+                    <label><input type="checkbox"> Coupe</label>
+                    <label><input type="checkbox"> Hatchback</label>
+                    <label><input type="checkbox"> Van</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Transmission</label>
+                <div class="checkbox-group">
+                    <label><input type="radio" name="trans" checked> All</label>
+                    <label><input type="radio" name="trans"> Automatic</label>
+                    <label><input type="radio" name="trans"> Manual</label>
+                </div>
+            </div>
+
+            <button class="btn-apply">Apply Filters</button>
+        </aside>
+
+        <section class="content">
+            <div class="results-header">
+                <span class="results-count">1,247 vehicles found</span>
+                <div class="results-actions">
+                    <select>
+                        <option>Sort by: Best Match</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Mileage: Low to High</option>
+                        <option>Year: Newest First</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="active">&#9783;</button>
+                        <button>&#9776;</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-chips">
+                <span class="chip">Honda <button>&times;</button></span>
+                <span class="chip">$15k - $30k <button>&times;</button></span>
+                <span class="chip">2020+ <button>&times;</button></span>
+                <span class="chip" style="background: transparent; border-style: dashed;">Clear All</span>
+            </div>
+
+            <div class="vehicle-grid">
+                <!-- Card 1 -->
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <span class="placeholder">&#128663;</span>
+                        <span class="badge">CERTIFIED</span>
+                        <span class="favorite">&#9825;</span>
+                        <span class="photo-count">1/12</span>
+                    </div>
+                    <div class="vehicle-content">
+                        <h3 class="vehicle-title">2021 Honda Civic LX</h3>
+                        <div class="vehicle-price">$24,999</div>
+                        <div class="vehicle-meta">35,420 km &bull; Toronto, ON</div>
+                        <button class="btn-details">View Details</button>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="vehicle-card">
+                    <div class="vehicle-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                        <span class="placeholder">&#128663;</span>
+                        <span class="badge">CERTIFIED</span>
+                        <span class="favorite">&#9825;</span>
+                        <span class="photo-count">1/15</span>
+                    </div>
+                    <div class="vehicle-content">
+                        <h3 class="vehicle-title">2020 Toyota RAV4 XLE</h3>
+                        <div class="vehicle-price">$28,500</div>
+                        <div class="vehicle-meta">42,100 km &bull; Mississauga, ON</div>
+                        <button class="btn-details">View Details</button>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="vehicle-card">
+                    <div class="vehicle-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                        <span class="placeholder">&#128663;</span>
+                        <span class="badge">CERTIFIED</span>
+                        <span class="favorite">&#9825;</span>
+                        <span class="photo-count">1/10</span>
+                    </div>
+                    <div class="vehicle-content">
+                        <h3 class="vehicle-title">2022 Mazda CX-5 GS</h3>
+                        <div class="vehicle-price">$32,750</div>
+                        <div class="vehicle-meta">18,500 km &bull; Vancouver, BC</div>
+                        <button class="btn-details">View Details</button>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="vehicle-card">
+                    <div class="vehicle-image" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+                        <span class="placeholder">&#128663;</span>
+                        <span class="badge" style="background: #FF6B00;">SALE</span>
+                        <span class="favorite">&#9829;</span>
+                        <span class="photo-count">1/8</span>
+                    </div>
+                    <div class="vehicle-content">
+                        <h3 class="vehicle-title">2019 Ford Escape SE</h3>
+                        <div class="vehicle-price">$22,900</div>
+                        <div class="vehicle-meta">55,200 km &bull; Ottawa, ON</div>
+                        <button class="btn-details">View Details</button>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="vehicle-card">
+                    <div class="vehicle-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
+                        <span class="placeholder">&#128663;</span>
+                        <span class="badge">CERTIFIED</span>
+                        <span class="favorite">&#9825;</span>
+                        <span class="photo-count">1/14</span>
+                    </div>
+                    <div class="vehicle-content">
+                        <h3 class="vehicle-title">2021 Hyundai Tucson</h3>
+                        <div class="vehicle-price">$27,400</div>
+                        <div class="vehicle-meta">28,900 km &bull; Calgary, AB</div>
+                        <button class="btn-details">View Details</button>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="vehicle-card">
+                    <div class="vehicle-image" style="background: linear-gradient(135deg, #d299c2, #fef9d7);">
+                        <span class="placeholder">&#128663;</span>
+                        <span class="badge">CERTIFIED</span>
+                        <span class="favorite">&#9825;</span>
+                        <span class="photo-count">1/11</span>
+                    </div>
+                    <div class="vehicle-content">
+                        <h3 class="vehicle-title">2020 Volkswagen Jetta</h3>
+                        <div class="vehicle-price">$21,500</div>
+                        <div class="vehicle-meta">39,800 km &bull; Montreal, QC</div>
+                        <button class="btn-details">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <button>&larr;</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>...</button>
+                <button>52</button>
+                <button>&rarr;</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

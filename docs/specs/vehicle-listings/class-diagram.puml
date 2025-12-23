@@ -1,0 +1,166 @@
+@startuml Vehicle Listings Class Diagram
+
+title Vehicle Listings Domain Model
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+
+package "Listing Domain" {
+
+    class VehicleListing {
+        +id: String
+        +vehicleId: String
+        +vin: String
+        +make: String
+        +model: String
+        +year: Integer
+        +trim: String
+        +price: Integer
+        +originalPrice: Integer
+        +mileage: Integer
+        +status: ListingStatus
+        +certificationStatus: String
+        +listedAt: DateTime
+        +getDisplayTitle(): String
+        +getDaysOnMarket(): Integer
+        +isPriceReduced(): Boolean
+    }
+
+    class ListingFilters {
+        +makes: List<String>
+        +models: List<String>
+        +priceMin: Integer
+        +priceMax: Integer
+        +yearMin: Integer
+        +yearMax: Integer
+        +mileageMax: Integer
+        +bodyTypes: List<String>
+        +transmission: String
+        +fuelTypes: List<String>
+        +toQueryString(): String
+        +isEmpty(): Boolean
+    }
+
+    class ListingSearchResult {
+        +vehicles: List<VehicleListing>
+        +pagination: Pagination
+        +facets: SearchFacets
+        +appliedFilters: ListingFilters
+    }
+
+    class Pagination {
+        +page: Integer
+        +limit: Integer
+        +totalCount: Integer
+        +totalPages: Integer
+        +hasNextPage: Boolean
+        +hasPreviousPage: Boolean
+    }
+
+    class SearchFacets {
+        +makes: List<FacetItem>
+        +models: List<FacetItem>
+        +bodyTypes: List<FacetItem>
+        +priceRanges: List<RangeFacet>
+        +yearRanges: List<RangeFacet>
+    }
+
+    class FacetItem {
+        +value: String
+        +count: Integer
+        +selected: Boolean
+    }
+
+    class RangeFacet {
+        +min: Integer
+        +max: Integer
+        +count: Integer
+    }
+
+    class VehicleImage {
+        +id: String
+        +url: String
+        +thumbnailUrl: String
+        +alt: String
+        +position: Integer
+        +type: ImageType
+    }
+
+    class PriceHistory {
+        +id: String
+        +listingId: String
+        +oldPrice: Integer
+        +newPrice: Integer
+        +changedAt: DateTime
+        +reason: String
+    }
+
+    enum ListingStatus {
+        AVAILABLE
+        RESERVED
+        PENDING_SALE
+        SOLD
+        REMOVED
+    }
+
+    enum ImageType {
+        EXTERIOR
+        INTERIOR
+        DETAIL
+        DAMAGE
+    }
+
+    enum SortOption {
+        BEST_MATCH
+        PRICE_ASC
+        PRICE_DESC
+        MILEAGE_ASC
+        YEAR_DESC
+        RECENTLY_ADDED
+    }
+
+}
+
+package "Services" {
+
+    class ListingService {
+        +search(filters: ListingFilters, sort: SortOption, page: Integer): ListingSearchResult
+        +getById(id: String): VehicleListing
+        +getFilterOptions(): FilterOptions
+        +updatePrice(id: String, newPrice: Integer): void
+        +updateStatus(id: String, status: ListingStatus): void
+    }
+
+    class ListingRepository {
+        +findAll(filters: ListingFilters, sort: SortOption, pagination: Pagination): List<VehicleListing>
+        +findById(id: String): VehicleListing
+        +count(filters: ListingFilters): Integer
+        +getFacets(filters: ListingFilters): SearchFacets
+        +save(listing: VehicleListing): void
+    }
+
+    class FacetCalculator {
+        +calculateMakeFacets(filters: ListingFilters): List<FacetItem>
+        +calculateModelFacets(make: String, filters: ListingFilters): List<FacetItem>
+        +calculatePriceRanges(filters: ListingFilters): List<RangeFacet>
+    }
+
+}
+
+VehicleListing --> ListingStatus
+VehicleListing "1" --> "*" VehicleImage
+VehicleListing "1" --> "*" PriceHistory
+VehicleImage --> ImageType
+ListingSearchResult --> Pagination
+ListingSearchResult --> SearchFacets
+ListingSearchResult --> ListingFilters
+ListingSearchResult --> VehicleListing
+SearchFacets --> FacetItem
+SearchFacets --> RangeFacet
+
+ListingService --> ListingRepository
+ListingService --> FacetCalculator
+ListingService ..> ListingSearchResult : returns
+ListingRepository ..> VehicleListing : manages
+
+@enduml

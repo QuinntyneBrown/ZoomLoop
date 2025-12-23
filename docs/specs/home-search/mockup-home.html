@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clutch Clone - Home Page Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #0066FF;
+            --color-primary-dark: #0052CC;
+            --color-text-primary: #1A1F36;
+            --color-text-secondary: #8B95A5;
+            --color-bg-primary: #FFFFFF;
+            --color-bg-secondary: #F5F7FA;
+            --color-border: #E1E4E8;
+            --color-success: #00C853;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--color-text-primary);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: var(--color-bg-primary);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            padding: 0 120px;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-right: 40px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--color-text-primary);
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .nav a:hover {
+            color: var(--color-primary);
+        }
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-bar {
+            width: 320px;
+            height: 44px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 0 16px 0 44px;
+            font-size: 16px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%238B95A5' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='m21 21-4.35-4.35'%3E%3C/path%3E%3C/svg%3E") no-repeat 12px center;
+        }
+
+        .btn-outline {
+            padding: 12px 24px;
+            border: 2px solid var(--color-primary);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Hero */
+        .hero {
+            margin-top: 80px;
+            height: 600px;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.9) 0%, rgba(26, 31, 54, 0.85) 100%),
+                        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%231A1F36' width='100' height='100'/%3E%3C/svg%3E");
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .search-widget {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .search-widget select {
+            flex: 1;
+            height: 48px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 0 16px;
+            font-size: 16px;
+            color: var(--color-text-primary);
+            cursor: pointer;
+        }
+
+        .search-widget .btn-primary {
+            width: 180px;
+            height: 48px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .search-widget .btn-primary:hover {
+            background: var(--color-primary-dark);
+        }
+
+        /* Featured Section */
+        .section {
+            padding: 64px 120px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+        }
+
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .vehicle-card {
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 200ms ease;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-color: var(--color-primary);
+        }
+
+        .vehicle-image {
+            position: relative;
+            padding-top: 75%; /* 4:3 aspect ratio */
+            background: var(--color-bg-secondary);
+        }
+
+        .vehicle-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--color-success);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .favorite-icon {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .vehicle-content {
+            padding: 20px;
+        }
+
+        .vehicle-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .vehicle-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+
+        .vehicle-meta {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: 16px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .vehicle-card .btn-outline {
+            width: 100%;
+            padding: 12px;
+        }
+
+        /* How It Works */
+        .section-alt {
+            background: var(--color-bg-secondary);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .step-icon svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        .step h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .step p {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Value Props */
+        .value-props-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .value-prop {
+            text-align: center;
+            padding: 32px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+        }
+
+        .value-prop-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(0, 102, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--color-primary);
+        }
+
+        .value-prop h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .value-prop p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-text-primary);
+            color: white;
+            padding: 64px 120px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .footer h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">ClutchClone</div>
+        <nav class="nav">
+            <a href="#">Buy</a>
+            <a href="#">Sell</a>
+            <a href="#">Finance</a>
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+        </nav>
+        <div class="header-right">
+            <input type="text" class="search-bar" placeholder="Search make, model, keyword...">
+            <button class="btn-outline">Sell My Car</button>
+            <button class="btn-outline" style="padding: 12px;">Login</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Find Your Perfect Car</h1>
+        <p>Shop thousands of certified used vehicles with our 10-day money-back guarantee. Free delivery to your door.</p>
+        <div class="search-widget">
+            <select>
+                <option>Any Make</option>
+                <option>Honda</option>
+                <option>Toyota</option>
+                <option>Ford</option>
+                <option>Mazda</option>
+            </select>
+            <select>
+                <option>Any Model</option>
+                <option>Civic</option>
+                <option>Accord</option>
+                <option>CR-V</option>
+            </select>
+            <select>
+                <option>Any Price</option>
+                <option>$0 - $15,000</option>
+                <option>$15,000 - $25,000</option>
+                <option>$25,000 - $35,000</option>
+                <option>$35,000+</option>
+            </select>
+            <button class="btn-primary">Search Now</button>
+        </div>
+    </section>
+
+    <!-- Featured Vehicles -->
+    <section class="section">
+        <div class="section-header">
+            <h2>Featured Vehicles</h2>
+            <p>Browse our hand-picked selection of certified used cars</p>
+        </div>
+        <div class="vehicle-grid">
+            <!-- Vehicle Card 1 -->
+            <div class="vehicle-card">
+                <div class="vehicle-image">
+                    <div style="background: linear-gradient(45deg, #4a90d9, #357abd); position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">&#128663;</div>
+                    <span class="badge">CERTIFIED</span>
+                    <span class="favorite-icon">&#9825;</span>
+                </div>
+                <div class="vehicle-content">
+                    <h3 class="vehicle-title">2021 Honda Civic LX</h3>
+                    <div class="vehicle-price">$24,999</div>
+                    <div class="vehicle-meta">
+                        <span>35,420 km</span>
+                        <span>Toronto, ON</span>
+                    </div>
+                    <button class="btn-outline">View Details</button>
+                </div>
+            </div>
+            <!-- Vehicle Card 2 -->
+            <div class="vehicle-card">
+                <div class="vehicle-image">
+                    <div style="background: linear-gradient(45deg, #e74c3c, #c0392b); position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">&#128663;</div>
+                    <span class="badge">CERTIFIED</span>
+                    <span class="favorite-icon">&#9825;</span>
+                </div>
+                <div class="vehicle-content">
+                    <h3 class="vehicle-title">2020 Toyota RAV4 XLE</h3>
+                    <div class="vehicle-price">$28,500</div>
+                    <div class="vehicle-meta">
+                        <span>42,100 km</span>
+                        <span>Mississauga, ON</span>
+                    </div>
+                    <button class="btn-outline">View Details</button>
+                </div>
+            </div>
+            <!-- Vehicle Card 3 -->
+            <div class="vehicle-card">
+                <div class="vehicle-image">
+                    <div style="background: linear-gradient(45deg, #2ecc71, #27ae60); position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">&#128663;</div>
+                    <span class="badge">CERTIFIED</span>
+                    <span class="favorite-icon">&#9825;</span>
+                </div>
+                <div class="vehicle-content">
+                    <h3 class="vehicle-title">2022 Mazda CX-5 GS</h3>
+                    <div class="vehicle-price">$32,750</div>
+                    <div class="vehicle-meta">
+                        <span>18,500 km</span>
+                        <span>Vancouver, BC</span>
+                    </div>
+                    <button class="btn-outline">View Details</button>
+                </div>
+            </div>
+            <!-- Vehicle Card 4 -->
+            <div class="vehicle-card">
+                <div class="vehicle-image">
+                    <div style="background: linear-gradient(45deg, #9b59b6, #8e44ad); position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">&#128663;</div>
+                    <span class="badge">SALE</span>
+                    <span class="favorite-icon">&#9825;</span>
+                </div>
+                <div class="vehicle-content">
+                    <h3 class="vehicle-title">2019 Ford Escape SE</h3>
+                    <div class="vehicle-price">$22,900</div>
+                    <div class="vehicle-meta">
+                        <span>55,200 km</span>
+                        <span>Ottawa, ON</span>
+                    </div>
+                    <button class="btn-outline">View Details</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section section-alt">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Buy a car in 3 simple steps from the comfort of your home</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8" stroke-width="2"/>
+                        <path d="m21 21-4.35-4.35" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h3>1. Search</h3>
+                <p>Browse thousands of certified used vehicles online. Filter by make, model, price, and more.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3>2. Choose</h3>
+                <p>Review vehicle details, history reports, and complete your purchase securely online.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-width="2" d="M8 7h8m-8 5h4m-2 7l4-4m0 0l4 4m-4-4v12"/>
+                    </svg>
+                </div>
+                <h3>3. Get It Delivered</h3>
+                <p>We deliver to your door with a 10-day money-back guarantee. Love it or return it!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Propositions -->
+    <section class="section">
+        <div class="section-header">
+            <h2>Why Choose ClutchClone?</h2>
+            <p>We make buying a used car hassle-free</p>
+        </div>
+        <div class="value-props-grid">
+            <div class="value-prop">
+                <div class="value-prop-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h4>210-Point Inspection</h4>
+                <p>Every vehicle thoroughly inspected and certified</p>
+            </div>
+            <div class="value-prop">
+                <div class="value-prop-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                </div>
+                <h4>10-Day Money Back</h4>
+                <p>Love it or return it, no questions asked</p>
+            </div>
+            <div class="value-prop">
+                <div class="value-prop-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 7h8m-8 5h4m-2 7l4-4m0 0l4 4m-4-4v12"/>
+                    </svg>
+                </div>
+                <h4>Free Delivery</h4>
+                <p>Delivered to your door within days</p>
+            </div>
+            <div class="value-prop">
+                <div class="value-prop-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h4>No-Haggle Pricing</h4>
+                <p>Our best price, always. No negotiation needed.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo">ClutchClone</div>
+                <p style="color: rgba(255,255,255,0.7); margin-bottom: 24px; max-width: 300px;">Canada's largest online used car marketplace. Buy, sell, or trade with confidence.</p>
+                <div style="display: flex; gap: 16px;">
+                    <span style="font-size: 24px;">&#128247;</span>
+                    <span style="font-size: 24px;">&#128247;</span>
+                    <span style="font-size: 24px;">&#128247;</span>
+                </div>
+            </div>
+            <div>
+                <h5>Quick Links</h5>
+                <a href="#">Browse Cars</a>
+                <a href="#">Sell Your Car</a>
+                <a href="#">Financing</a>
+                <a href="#">Trade-In</a>
+                <a href="#">FAQs</a>
+            </div>
+            <div>
+                <h5>Company</h5>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </div>
+            <div>
+                <h5>Support</h5>
+                <a href="#">Help Center</a>
+                <a href="#">Warranty</a>
+                <a href="#">Returns</a>
+                <a href="#">Delivery Info</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2025 ClutchClone. All rights reserved.</span>
+            <div style="display: flex; gap: 24px;">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
