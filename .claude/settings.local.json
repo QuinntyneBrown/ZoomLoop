@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C \"/c/projects/ZoomLoop\" status)"
+      "Bash(git -C \"/c/projects/ZoomLoop\" status)",
+      "Bash(test:*)",
+      "Bash(npm install)",
+      "Bash(npm run build-storybook:*)",
+      "Bash(npm run storybook:*)"
     ],
     "deny": [],
     "ask": []
