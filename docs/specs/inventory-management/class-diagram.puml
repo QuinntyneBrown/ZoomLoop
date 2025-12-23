@@ -1,0 +1,118 @@
+@startuml Inventory Management Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Inventory Management Domain" {
+
+    class Listing {
+        +id: String
+        +vehicleId: String
+        +price: Decimal
+        +originalPrice: Decimal
+        +status: ListingStatus
+        +visibility: Visibility
+        +locationId: String
+        +description: String
+        +highlights: List
+        +featured: Boolean
+        +featuredUntil: DateTime
+        +views: Integer
+        +favorites: Integer
+        +inquiries: Integer
+        +listedAt: DateTime
+        +soldAt: DateTime
+        +soldPrice: Decimal
+    }
+
+    enum ListingStatus {
+        DRAFT
+        AVAILABLE
+        RESERVED
+        PENDING
+        SOLD
+        REMOVED
+    }
+
+    enum Visibility {
+        DRAFT
+        PUBLISHED
+    }
+
+    class ListingPhoto {
+        +id: String
+        +listingId: String
+        +url: String
+        +thumbnailUrl: String
+        +caption: String
+        +order: Integer
+        +uploadedAt: DateTime
+    }
+
+    class PriceHistory {
+        +id: String
+        +listingId: String
+        +previousPrice: Decimal
+        +newPrice: Decimal
+        +reason: PriceChangeReason
+        +changedBy: String
+        +changedAt: DateTime
+    }
+
+    enum PriceChangeReason {
+        MARKET_ADJUSTMENT
+        DEMAND
+        TIME_ON_LOT
+        PROMOTIONAL
+        OTHER
+    }
+
+    class Reservation {
+        +id: String
+        +listingId: String
+        +vehicleId: String
+        +customerId: String
+        +depositId: String
+        +status: ReservationStatus
+        +reservedAt: DateTime
+        +expiresAt: DateTime
+    }
+
+    enum ReservationStatus {
+        ACTIVE
+        EXPIRED
+        CONVERTED
+        CANCELLED
+    }
+
+    class InventoryLocation {
+        +id: String
+        +name: String
+        +address: String
+        +city: String
+        +province: String
+        +capacity: Integer
+        +currentCount: Integer
+    }
+
+    class InventoryMetrics {
+        +period: String
+        +totalInventory: Integer
+        +newListings: Integer
+        +sold: Integer
+        +turnoverRate: Decimal
+        +averageDaysOnMarket: Integer
+        +averagePrice: Decimal
+    }
+
+    Listing "1" --> "*" ListingPhoto : has
+    Listing "1" --> "*" PriceHistory : tracks
+    Listing "1" --> "0..1" Reservation : may have
+    Listing "*" --> "1" InventoryLocation : located at
+    Listing --> ListingStatus
+    Listing --> Visibility
+    PriceHistory --> PriceChangeReason
+    Reservation --> ReservationStatus
+}
+
+@enduml

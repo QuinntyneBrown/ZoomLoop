@@ -1,0 +1,100 @@
+@startuml Customer Account Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Customer Account Domain" {
+
+    class User {
+        +id: String
+        +email: String
+        +emailVerified: Boolean
+        +phone: String
+        +phoneVerified: Boolean
+        +passwordHash: String
+        +firstName: String
+        +lastName: String
+        +dateOfBirth: Date
+        +twoFactorEnabled: Boolean
+        +status: UserStatus
+        +createdAt: DateTime
+        +lastLoginAt: DateTime
+    }
+
+    enum UserStatus {
+        ACTIVE
+        SUSPENDED
+        DELETED
+    }
+
+    class Session {
+        +id: String
+        +userId: String
+        +refreshToken: String
+        +device: String
+        +ipAddress: String
+        +userAgent: String
+        +location: String
+        +createdAt: DateTime
+        +expiresAt: DateTime
+        +lastActiveAt: DateTime
+    }
+
+    class UserPreferences {
+        +userId: String
+        +updatedAt: DateTime
+    }
+
+    class NotificationPreferences {
+        +purchaseUpdates: Boolean
+        +deliveryNotifications: Boolean
+        +priceAlerts: Boolean
+        +newsletter: Boolean
+        +smsDeliveryDay: Boolean
+        +pushTracking: Boolean
+    }
+
+    class SearchPreferences {
+        +defaultLocation: String
+        +defaultRadius: Integer
+        +preferredMakes: List
+    }
+
+    class SavedAddress {
+        +id: String
+        +userId: String
+        +label: String
+        +street: String
+        +city: String
+        +province: String
+        +postalCode: String
+        +isDefault: Boolean
+    }
+
+    class PaymentMethod {
+        +id: String
+        +userId: String
+        +type: PaymentType
+        +last4: String
+        +brand: String
+        +expiryMonth: Integer
+        +expiryYear: Integer
+        +isDefault: Boolean
+    }
+
+    enum PaymentType {
+        CARD
+        BANK_ACCOUNT
+    }
+
+    User "1" --> "*" Session : has
+    User "1" --> "1" UserPreferences : has
+    UserPreferences "1" --> "1" NotificationPreferences : includes
+    UserPreferences "1" --> "1" SearchPreferences : includes
+    User "1" --> "*" SavedAddress : has
+    User "1" --> "*" PaymentMethod : has
+    User --> UserStatus
+    PaymentMethod --> PaymentType
+}
+
+@enduml

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-12-23T00:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="c4-context-inventory" name="C4 Context - Inventory Management System">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="C4 Context Diagram - Inventory Management System" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="280" y="20" width="540" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="manager" value="Inventory Manager&#xa;[Person]&#xa;&#xa;Staff managing vehicle&#xa;listings and pricing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="system" value="Inventory Management System&#xa;[Software System]&#xa;&#xa;Manages vehicle listings,&#xa;pricing, availability, and&#xa;inventory analytics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="430" y="280" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="reconditioning" value="Reconditioning System&#xa;[Software System]&#xa;&#xa;Sends certified vehicles&#xa;for listing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="100" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="search" value="Search System&#xa;[Software System]&#xa;&#xa;Indexes listings for&#xa;customer discovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="800" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="pricing" value="Pricing Engine&#xa;[External System]&#xa;&#xa;Market data and pricing&#xa;recommendations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="100" y="520" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="cdn" value="CDN&#xa;[External System]&#xa;&#xa;Stores and delivers&#xa;vehicle photos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="450" y="520" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="analytics" value="Analytics Service&#xa;[External System]&#xa;&#xa;Inventory performance&#xa;metrics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="800" y="520" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="Manages listings&#xa;and pricing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666" edge="1" parent="1" source="manager" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="Sends certified vehicles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="reconditioning" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" value="Syncs listings" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" value="Gets pricing data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="pricing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" value="Stores photos" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="cdn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6" value="Sends metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="analytics">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

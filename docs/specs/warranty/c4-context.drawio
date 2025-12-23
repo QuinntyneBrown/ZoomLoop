@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-12-23T00:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="c4-context-warranty" name="C4 Context - Warranty System">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="C4 Context Diagram - Warranty System" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="500" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="owner" value="Vehicle Owner&#xa;[Person]&#xa;&#xa;Customer managing warranty&#xa;and filing claims" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="system" value="Warranty System&#xa;[Software System]&#xa;&#xa;Manages warranty coverage,&#xa;extended warranties, and&#xa;claim processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="430" y="280" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="service" value="Service Centers&#xa;[External System]&#xa;&#xa;Authorized repair facilities&#xa;for warranty work" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="100" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="payment" value="Payment Gateway&#xa;[External System]&#xa;&#xa;Processes extended warranty&#xa;purchases" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#666666;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="800" y="280" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="purchase" value="Purchase System&#xa;[Software System]&#xa;&#xa;Activates included warranty&#xa;on vehicle purchase" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#ffffff;verticalAlign=top;align=center;spacing=8" vertex="1" parent="1">
+          <mxGeometry x="450" y="520" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" value="Views coverage,&#xa;files claims" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666" edge="1" parent="1" source="owner" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="Schedules service,&#xa;authorizes repairs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" value="Processes warranty&#xa;purchases" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="system" target="payment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" value="Receives purchase&#xa;notification" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1" edge="1" parent="1" source="purchase" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

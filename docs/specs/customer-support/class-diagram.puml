@@ -1,0 +1,120 @@
+@startuml Customer Support Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Customer Support Domain" {
+
+    class SupportTicket {
+        +id: String
+        +ticketNumber: String
+        +customerId: String
+        +vehicleId: String
+        +purchaseId: String
+        +topic: String
+        +subject: String
+        +status: TicketStatus
+        +priority: Priority
+        +assignedTo: String
+        +preferredContact: String
+        +createdAt: DateTime
+        +resolvedAt: DateTime
+    }
+
+    enum TicketStatus {
+        OPEN
+        AWAITING_RESPONSE
+        IN_PROGRESS
+        RESOLVED
+        CLOSED
+    }
+
+    enum Priority {
+        LOW
+        NORMAL
+        HIGH
+        URGENT
+    }
+
+    class TicketMessage {
+        +id: String
+        +ticketId: String
+        +from: MessageSender
+        +senderId: String
+        +senderName: String
+        +message: String
+        +attachments: List
+        +sentAt: DateTime
+        +readAt: DateTime
+    }
+
+    enum MessageSender {
+        CUSTOMER
+        ADVISOR
+        SYSTEM
+    }
+
+    class Callback {
+        +id: String
+        +customerId: String
+        +phone: String
+        +preferredTime: String
+        +preferredDate: DateTime
+        +topic: String
+        +status: CallbackStatus
+        +scheduledFor: DateTime
+    }
+
+    enum CallbackStatus {
+        SCHEDULED
+        COMPLETED
+        MISSED
+        CANCELLED
+    }
+
+    class CustomerFeedback {
+        +id: String
+        +customerId: String
+        +purchaseId: String
+        +nps: Integer
+        +comments: String
+        +allowPublish: Boolean
+        +submittedAt: DateTime
+    }
+
+    class FeedbackRatings {
+        +overall: Integer
+        +vehicleQuality: Integer
+        +deliveryExperience: Integer
+        +customerService: Integer
+        +value: Integer
+    }
+
+    class Review {
+        +id: String
+        +customerId: String
+        +purchaseId: String
+        +rating: Integer
+        +title: String
+        +review: String
+        +displayName: String
+        +status: ReviewStatus
+        +createdAt: DateTime
+    }
+
+    enum ReviewStatus {
+        PENDING_REVIEW
+        APPROVED
+        REJECTED
+    }
+
+    SupportTicket "1" --> "*" TicketMessage : has
+    SupportTicket --> TicketStatus
+    SupportTicket --> Priority
+    TicketMessage --> MessageSender
+    Callback --> CallbackStatus
+    CustomerFeedback "1" --> "1" FeedbackRatings : includes
+    Review --> ReviewStatus
+}
+
+@enduml

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1A1F36; background: #F5F7FA; }
+        .header { background: #FFFFFF; padding: 16px 120px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #0066FF; }
+        .nav a { text-decoration: none; color: #1A1F36; font-weight: 500; margin-left: 32px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 48px 24px; display: grid; grid-template-columns: 280px 1fr; gap: 32px; }
+        .sidebar { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); height: fit-content; }
+        .profile-header { text-align: center; padding-bottom: 24px; border-bottom: 1px solid #E1E4E8; margin-bottom: 24px; }
+        .avatar { width: 80px; height: 80px; background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: 600; }
+        .profile-name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+        .profile-email { font-size: 14px; color: #8B95A5; }
+        .nav-menu { list-style: none; }
+        .nav-menu li { margin-bottom: 4px; }
+        .nav-menu a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; text-decoration: none; color: #1A1F36; font-weight: 500; transition: background 0.2s; }
+        .nav-menu a:hover { background: #F5F7FA; }
+        .nav-menu a.active { background: #F0F7FF; color: #0066FF; }
+        .nav-menu .icon { font-size: 18px; }
+        .main-content { }
+        .page-title { font-size: 28px; font-weight: 700; margin-bottom: 32px; }
+        .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .card-title { font-size: 18px; font-weight: 600; }
+        .edit-btn { color: #0066FF; font-weight: 500; text-decoration: none; font-size: 14px; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .info-item { }
+        .info-label { font-size: 12px; color: #8B95A5; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-value { font-size: 16px; font-weight: 500; }
+        .vehicle-card { display: flex; gap: 24px; padding: 24px; background: #F5F7FA; border-radius: 12px; margin-bottom: 16px; }
+        .vehicle-image { width: 160px; height: 100px; background: linear-gradient(135deg, #E1E4E8 0%, #FFFFFF 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+        .vehicle-info { flex: 1; }
+        .vehicle-name { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .vehicle-meta { font-size: 14px; color: #8B95A5; margin-bottom: 4px; }
+        .vehicle-status { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-top: 8px; }
+        .vehicle-status.active { background: #F0FFF4; color: #00C853; }
+        .vehicle-actions { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+        .action-btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; text-align: center; text-decoration: none; }
+        .action-btn.primary { background: #0066FF; color: white; border: none; }
+        .action-btn.secondary { background: white; color: #1A1F36; border: 1px solid #E1E4E8; }
+        .activity-list { }
+        .activity-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #E1E4E8; }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon { width: 40px; height: 40px; border-radius: 50%; background: #F5F7FA; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .activity-content { flex: 1; }
+        .activity-title { font-weight: 500; margin-bottom: 4px; }
+        .activity-desc { font-size: 14px; color: #8B95A5; }
+        .activity-time { font-size: 12px; color: #8B95A5; }
+        .preferences-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .preference-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #F5F7FA; border-radius: 8px; }
+        .preference-label { font-weight: 500; }
+        .preference-desc { font-size: 14px; color: #8B95A5; }
+        .toggle { width: 48px; height: 24px; background: #E1E4E8; border-radius: 12px; position: relative; cursor: pointer; }
+        .toggle.on { background: #0066FF; }
+        .toggle::after { content: ''; position: absolute; width: 20px; height: 20px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s; }
+        .toggle.on::after { left: 26px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">ZoomLoop</div>
+        <nav class="nav">
+            <a href="#">Buy</a>
+            <a href="#">Sell</a>
+            <a href="#" style="color: #0066FF; font-weight: 600;">Account</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <aside class="sidebar">
+            <div class="profile-header">
+                <div class="avatar">JS</div>
+                <div class="profile-name">John Smith</div>
+                <div class="profile-email">john.smith@email.com</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="#" class="active"><span class="icon">&#128100;</span> Profile</a></li>
+                <li><a href="#"><span class="icon">&#128663;</span> My Vehicles</a></li>
+                <li><a href="#"><span class="icon">&#128230;</span> Orders</a></li>
+                <li><a href="#"><span class="icon">&#128274;</span> Security</a></li>
+                <li><a href="#"><span class="icon">&#128276;</span> Notifications</a></li>
+                <li><a href="#"><span class="icon">&#9881;</span> Preferences</a></li>
+            </ul>
+        </aside>
+
+        <section class="main-content">
+            <h1 class="page-title">My Profile</h1>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Personal Information</h2>
+                    <a href="#" class="edit-btn">Edit</a>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value">John Smith</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">john.smith@email.com</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">(555) 123-4567</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">January 15, 1985</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">My Vehicles</h2>
+                    <a href="#" class="edit-btn">View All</a>
+                </div>
+
+                <div class="vehicle-card">
+                    <div class="vehicle-image">&#128663;</div>
+                    <div class="vehicle-info">
+                        <div class="vehicle-name">2022 Honda CR-V EX-L</div>
+                        <div class="vehicle-meta">VIN: 7FARW2H87NE012345</div>
+                        <div class="vehicle-meta">Purchased: Dec 15, 2024</div>
+                        <span class="vehicle-status active">Delivery In Progress</span>
+                    </div>
+                    <div class="vehicle-actions">
+                        <a href="#" class="action-btn primary">Track Delivery</a>
+                        <a href="#" class="action-btn secondary">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Activity</h2>
+                </div>
+
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">&#128230;</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Order Confirmed</div>
+                            <div class="activity-desc">2022 Honda CR-V EX-L - Order #ZL-2024-78543</div>
+                        </div>
+                        <div class="activity-time">2 days ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">&#128179;</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Payment Processed</div>
+                            <div class="activity-desc">Down payment of $5,000 received</div>
+                        </div>
+                        <div class="activity-time">2 days ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">&#128269;</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Search Saved</div>
+                            <div class="activity-desc">SUVs under $40,000 in Toronto</div>
+                        </div>
+                        <div class="activity-time">5 days ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Communication Preferences</h2>
+                </div>
+
+                <div class="preferences-grid">
+                    <div class="preference-item">
+                        <div>
+                            <div class="preference-label">Email Notifications</div>
+                            <div class="preference-desc">Order updates and promotions</div>
+                        </div>
+                        <div class="toggle on"></div>
+                    </div>
+                    <div class="preference-item">
+                        <div>
+                            <div class="preference-label">SMS Notifications</div>
+                            <div class="preference-desc">Delivery and appointment alerts</div>
+                        </div>
+                        <div class="toggle on"></div>
+                    </div>
+                    <div class="preference-item">
+                        <div>
+                            <div class="preference-label">Marketing Emails</div>
+                            <div class="preference-desc">Special offers and new inventory</div>
+                        </div>
+                        <div class="toggle"></div>
+                    </div>
+                    <div class="preference-item">
+                        <div>
+                            <div class="preference-label">Price Drop Alerts</div>
+                            <div class="preference-desc">Saved vehicle price changes</div>
+                        </div>
+                        <div class="toggle on"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

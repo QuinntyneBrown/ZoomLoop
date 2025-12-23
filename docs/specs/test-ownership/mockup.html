@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-Day Test Ownership</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1A1F36; background: #F5F7FA; }
+        .header { background: #FFFFFF; padding: 16px 120px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #0066FF; }
+        .nav a { text-decoration: none; color: #1A1F36; font-weight: 500; margin-left: 32px; }
+        .hero { background: linear-gradient(135deg, #0066FF 0%, #00C853 100%); color: white; padding: 64px 120px; }
+        .hero h1 { font-size: 48px; font-weight: 700; margin-bottom: 16px; }
+        .hero p { font-size: 18px; opacity: 0.9; margin-bottom: 32px; max-width: 600px; }
+        .hero-badges { display: flex; gap: 24px; }
+        .hero-badge { background: rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 48px 24px; }
+        .status-card { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .status-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+        .status-info h2 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+        .status-info p { color: #8B95A5; }
+        .countdown-box { text-align: center; background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%); color: white; padding: 24px 32px; border-radius: 12px; }
+        .countdown-label { font-size: 12px; opacity: 0.9; margin-bottom: 8px; }
+        .countdown-value { font-size: 36px; font-weight: 700; }
+        .countdown-unit { font-size: 14px; opacity: 0.9; }
+        .timeline { display: flex; justify-content: space-between; position: relative; margin: 32px 0; padding: 0 20px; }
+        .timeline::before { content: ''; position: absolute; top: 20px; left: 60px; right: 60px; height: 4px; background: #E1E4E8; }
+        .timeline::after { content: ''; position: absolute; top: 20px; left: 60px; height: 4px; background: #00C853; width: 70%; }
+        .timeline-day { text-align: center; position: relative; z-index: 1; }
+        .day-dot { width: 40px; height: 40px; border-radius: 50%; background: #E1E4E8; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; }
+        .timeline-day.completed .day-dot { background: #00C853; color: white; }
+        .timeline-day.current .day-dot { background: #0066FF; color: white; box-shadow: 0 0 0 4px rgba(0,102,255,0.2); }
+        .day-label { font-size: 12px; color: #8B95A5; }
+        .day-date { font-size: 11px; color: #8B95A5; }
+        .vehicle-summary { display: flex; gap: 32px; padding: 24px; background: #F5F7FA; border-radius: 12px; }
+        .vehicle-image { width: 240px; height: 160px; background: linear-gradient(135deg, #E1E4E8 0%, #FFFFFF 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 64px; }
+        .vehicle-details { flex: 1; }
+        .vehicle-details h3 { font-size: 24px; font-weight: 600; margin-bottom: 12px; }
+        .vehicle-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+        .spec-item { font-size: 14px; color: #8B95A5; }
+        .spec-item strong { color: #1A1F36; display: block; }
+        .vin-number { font-family: 'SF Mono', Consolas, monospace; font-size: 12px; background: white; padding: 8px 12px; border-radius: 4px; display: inline-block; }
+        .actions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 24px; }
+        .action-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
+        .action-card:hover { border-color: #0066FF; transform: translateY(-2px); }
+        .action-card.danger:hover { border-color: #E53935; }
+        .action-icon { font-size: 48px; margin-bottom: 16px; }
+        .action-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .action-desc { font-size: 14px; color: #8B95A5; }
+        .feedback-section { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; }
+        .section-title { font-size: 20px; font-weight: 600; margin-bottom: 24px; }
+        .rating-row { display: flex; align-items: center; gap: 24px; padding: 16px 0; border-bottom: 1px solid #E1E4E8; }
+        .rating-row:last-child { border-bottom: none; }
+        .rating-label { width: 200px; font-weight: 500; }
+        .rating-stars { display: flex; gap: 8px; }
+        .star { font-size: 24px; cursor: pointer; color: #E1E4E8; }
+        .star.active { color: #FFD700; }
+        .rating-value { font-size: 14px; color: #8B95A5; margin-left: auto; }
+        .notes-input { width: 100%; padding: 16px; border: 1px solid #E1E4E8; border-radius: 8px; font-size: 14px; min-height: 100px; resize: vertical; margin-top: 16px; }
+        .notes-input:focus { outline: none; border-color: #0066FF; }
+        .btn { padding: 16px 32px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; border: none; }
+        .btn-primary { background: #0066FF; color: white; }
+        .btn-success { background: #00C853; color: white; }
+        .btn-danger { background: #E53935; color: white; }
+        .btn-secondary { background: white; color: #1A1F36; border: 1px solid #E1E4E8; }
+        .decision-section { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .decision-card { padding: 32px; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .decision-card.keep { background: linear-gradient(135deg, #F0FFF4 0%, #E8F5E9 100%); border: 2px solid #00C853; }
+        .decision-card.return { background: #F5F7FA; border: 2px solid #E1E4E8; }
+        .decision-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .decision-icon { font-size: 64px; margin-bottom: 16px; }
+        .decision-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+        .decision-desc { font-size: 14px; color: #8B95A5; margin-bottom: 16px; }
+        .decision-card.keep .decision-title { color: #00C853; }
+        .mileage-tracker { background: #F5F7FA; border-radius: 12px; padding: 24px; margin: 24px 0; }
+        .mileage-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+        .mileage-label { font-weight: 500; }
+        .mileage-value { font-weight: 600; }
+        .mileage-bar { height: 12px; background: #E1E4E8; border-radius: 6px; overflow: hidden; }
+        .mileage-fill { height: 100%; background: linear-gradient(to right, #00C853, #0066FF); width: 35%; }
+        .mileage-limit { font-size: 12px; color: #8B95A5; margin-top: 8px; text-align: right; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">ZoomLoop</div>
+        <nav class="nav">
+            <a href="#">My Vehicles</a>
+            <a href="#" style="color: #0066FF; font-weight: 600;">Test Ownership</a>
+            <a href="#">Support</a>
+            <a href="#">Account</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>7-Day Test Ownership</h1>
+        <p>Experience your new car with peace of mind. Return it for a full refund if it's not right for you.</p>
+        <div class="hero-badges">
+            <span class="hero-badge">&#10003; No Questions Asked</span>
+            <span class="hero-badge">&#10003; Free Pickup</span>
+            <span class="hero-badge">&#10003; Full Refund</span>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="status-card">
+            <div class="status-header">
+                <div class="status-info">
+                    <h2>Your Test Ownership Period</h2>
+                    <p>Started December 20, 2024 | Ends December 27, 2024</p>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-label">Time Remaining</div>
+                    <div class="countdown-value">2</div>
+                    <div class="countdown-unit">days left</div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-day completed">
+                    <div class="day-dot">&#10003;</div>
+                    <div class="day-label">Day 1</div>
+                    <div class="day-date">Dec 20</div>
+                </div>
+                <div class="timeline-day completed">
+                    <div class="day-dot">&#10003;</div>
+                    <div class="day-label">Day 2</div>
+                    <div class="day-date">Dec 21</div>
+                </div>
+                <div class="timeline-day completed">
+                    <div class="day-dot">&#10003;</div>
+                    <div class="day-label">Day 3</div>
+                    <div class="day-date">Dec 22</div>
+                </div>
+                <div class="timeline-day completed">
+                    <div class="day-dot">&#10003;</div>
+                    <div class="day-label">Day 4</div>
+                    <div class="day-date">Dec 23</div>
+                </div>
+                <div class="timeline-day current">
+                    <div class="day-dot">5</div>
+                    <div class="day-label">Day 5</div>
+                    <div class="day-date">Dec 24</div>
+                </div>
+                <div class="timeline-day">
+                    <div class="day-dot">6</div>
+                    <div class="day-label">Day 6</div>
+                    <div class="day-date">Dec 25</div>
+                </div>
+                <div class="timeline-day">
+                    <div class="day-dot">7</div>
+                    <div class="day-label">Day 7</div>
+                    <div class="day-date">Dec 26</div>
+                </div>
+            </div>
+
+            <div class="vehicle-summary">
+                <div class="vehicle-image">&#128663;</div>
+                <div class="vehicle-details">
+                    <h3>2022 Honda CR-V EX-L</h3>
+                    <div class="vehicle-specs">
+                        <div class="spec-item"><strong>28,900 mi</strong>Mileage at delivery</div>
+                        <div class="spec-item"><strong>AWD</strong>Drivetrain</div>
+                        <div class="spec-item"><strong>Crystal Black Pearl</strong>Exterior</div>
+                        <div class="spec-item"><strong>Black Leather</strong>Interior</div>
+                    </div>
+                    <span class="vin-number">VIN: 7FARW2H87NE012345</span>
+                </div>
+            </div>
+
+            <div class="mileage-tracker">
+                <div class="mileage-header">
+                    <span class="mileage-label">Miles Driven</span>
+                    <span class="mileage-value">87 of 250 miles</span>
+                </div>
+                <div class="mileage-bar">
+                    <div class="mileage-fill"></div>
+                </div>
+                <div class="mileage-limit">163 miles remaining within limit</div>
+            </div>
+        </div>
+
+        <div class="feedback-section">
+            <h2 class="section-title">How's the Vehicle?</h2>
+            <p style="color: #8B95A5; margin-bottom: 24px;">Share your experience to help us improve</p>
+
+            <div class="rating-row">
+                <span class="rating-label">Overall Satisfaction</span>
+                <div class="rating-stars">
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <span class="rating-value">4 out of 5</span>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">Vehicle Condition</span>
+                <div class="rating-stars">
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                </div>
+                <span class="rating-value">5 out of 5</span>
+            </div>
+            <div class="rating-row">
+                <span class="rating-label">Matches Description</span>
+                <div class="rating-stars">
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star active">&#9733;</span>
+                    <span class="star">&#9733;</span>
+                </div>
+                <span class="rating-value">4 out of 5</span>
+            </div>
+
+            <textarea class="notes-input" placeholder="Any additional notes or concerns? (Optional)"></textarea>
+        </div>
+
+        <div class="decision-section">
+            <h2 class="section-title">Ready to Decide?</h2>
+
+            <div class="decision-grid">
+                <div class="decision-card keep">
+                    <div class="decision-icon">&#128151;</div>
+                    <div class="decision-title">Keep It!</div>
+                    <div class="decision-desc">Love the car? Finalize your purchase and it's officially yours.</div>
+                    <button class="btn btn-success">Confirm Purchase</button>
+                </div>
+                <div class="decision-card return">
+                    <div class="decision-icon">&#128260;</div>
+                    <div class="decision-title">Return It</div>
+                    <div class="decision-desc">Not the right fit? Schedule a free pickup for a full refund.</div>
+                    <button class="btn btn-secondary">Schedule Return</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

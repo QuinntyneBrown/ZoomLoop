@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Search - Browse Cars</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1A1F36; background: #F5F7FA; }
+        .header { background: #FFFFFF; padding: 16px 120px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 700; color: #0066FF; }
+        .nav { display: flex; gap: 32px; }
+        .nav a { text-decoration: none; color: #1A1F36; font-weight: 500; }
+        .nav a:hover { color: #0066FF; }
+        .search-bar { display: flex; align-items: center; gap: 16px; background: #F5F7FA; padding: 12px 24px; border-radius: 9999px; }
+        .search-bar input { border: none; background: transparent; font-size: 16px; width: 300px; outline: none; }
+        .container { max-width: 1440px; margin: 0 auto; padding: 32px 120px; display: grid; grid-template-columns: 280px 1fr; gap: 32px; }
+        .filters { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); height: fit-content; position: sticky; top: 100px; }
+        .filter-title { font-size: 18px; font-weight: 600; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+        .clear-btn { font-size: 14px; color: #0066FF; cursor: pointer; font-weight: 500; }
+        .filter-section { margin-bottom: 24px; border-bottom: 1px solid #E1E4E8; padding-bottom: 24px; }
+        .filter-section:last-child { border-bottom: none; }
+        .filter-label { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: block; }
+        .filter-input { width: 100%; padding: 10px 12px; border: 1px solid #E1E4E8; border-radius: 8px; font-size: 14px; }
+        .price-range { display: flex; gap: 8px; align-items: center; }
+        .price-range input { width: 100px; }
+        .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .checkbox-item input { width: 16px; height: 16px; accent-color: #0066FF; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .results-count { font-size: 16px; color: #8B95A5; }
+        .results-count strong { color: #1A1F36; }
+        .sort-select { padding: 10px 16px; border: 1px solid #E1E4E8; border-radius: 8px; font-size: 14px; background: white; }
+        .car-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .car-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: box-shadow 0.2s, transform 0.2s; cursor: pointer; }
+        .car-card:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .car-image { width: 100%; height: 200px; background: linear-gradient(135deg, #E1E4E8 0%, #F5F7FA 100%); display: flex; align-items: center; justify-content: center; color: #8B95A5; font-size: 48px; position: relative; }
+        .car-badge { position: absolute; top: 12px; left: 12px; background: #00C853; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .car-details { padding: 20px; }
+        .car-year-make { font-size: 14px; color: #8B95A5; margin-bottom: 4px; }
+        .car-model { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .car-trim { font-size: 14px; color: #8B95A5; margin-bottom: 16px; }
+        .car-specs { display: flex; gap: 16px; margin-bottom: 16px; }
+        .car-spec { font-size: 12px; color: #8B95A5; display: flex; align-items: center; gap: 4px; }
+        .car-price { font-size: 24px; font-weight: 700; color: #0066FF; }
+        .car-payment { font-size: 14px; color: #8B95A5; }
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 48px; }
+        .page-btn { width: 40px; height: 40px; border: 1px solid #E1E4E8; border-radius: 8px; background: white; cursor: pointer; font-weight: 500; }
+        .page-btn.active { background: #0066FF; color: white; border-color: #0066FF; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">ZoomLoop</div>
+        <div class="search-bar">
+            <span>&#128269;</span>
+            <input type="text" placeholder="Search make, model, or keyword...">
+        </div>
+        <nav class="nav">
+            <a href="#" style="color: #0066FF; font-weight: 600;">Buy</a>
+            <a href="#">Sell</a>
+            <a href="#">Sign In</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <aside class="filters">
+            <div class="filter-title">
+                Filters
+                <span class="clear-btn">Clear all</span>
+            </div>
+
+            <div class="filter-section">
+                <label class="filter-label">Price Range</label>
+                <div class="price-range">
+                    <input type="text" class="filter-input" placeholder="$0" value="$15,000">
+                    <span>to</span>
+                    <input type="text" class="filter-input" placeholder="Any" value="$40,000">
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <label class="filter-label">Make</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" checked> Toyota</label>
+                    <label class="checkbox-item"><input type="checkbox" checked> Honda</label>
+                    <label class="checkbox-item"><input type="checkbox"> Ford</label>
+                    <label class="checkbox-item"><input type="checkbox"> Chevrolet</label>
+                    <label class="checkbox-item"><input type="checkbox"> BMW</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <label class="filter-label">Year</label>
+                <div class="price-range">
+                    <input type="text" class="filter-input" placeholder="Min" value="2020">
+                    <span>to</span>
+                    <input type="text" class="filter-input" placeholder="Max" value="2024">
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <label class="filter-label">Mileage</label>
+                <select class="filter-input">
+                    <option>Under 50,000 miles</option>
+                    <option>Under 75,000 miles</option>
+                    <option>Under 100,000 miles</option>
+                </select>
+            </div>
+
+            <div class="filter-section">
+                <label class="filter-label">Body Type</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" checked> SUV</label>
+                    <label class="checkbox-item"><input type="checkbox" checked> Sedan</label>
+                    <label class="checkbox-item"><input type="checkbox"> Truck</label>
+                    <label class="checkbox-item"><input type="checkbox"> Coupe</label>
+                </div>
+            </div>
+        </aside>
+
+        <section class="results">
+            <div class="results-header">
+                <span class="results-count"><strong>1,247</strong> vehicles found</span>
+                <select class="sort-select">
+                    <option>Sort by: Best Match</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Mileage: Low to High</option>
+                    <option>Year: Newest First</option>
+                </select>
+            </div>
+
+            <div class="car-grid">
+                <div class="car-card">
+                    <div class="car-image">
+                        <div class="car-badge">Great Price</div>
+                        &#128663;
+                    </div>
+                    <div class="car-details">
+                        <div class="car-year-make">2023 Toyota</div>
+                        <div class="car-model">Camry SE</div>
+                        <div class="car-trim">2.5L 4-Cyl, Automatic</div>
+                        <div class="car-specs">
+                            <span class="car-spec">&#128338; 12,450 mi</span>
+                            <span class="car-spec">&#9981; FWD</span>
+                        </div>
+                        <div class="car-price">$28,990</div>
+                        <div class="car-payment">$425/mo est.</div>
+                    </div>
+                </div>
+
+                <div class="car-card">
+                    <div class="car-image">
+                        <div class="car-badge" style="background: #0066FF;">New Arrival</div>
+                        &#128663;
+                    </div>
+                    <div class="car-details">
+                        <div class="car-year-make">2022 Honda</div>
+                        <div class="car-model">CR-V EX-L</div>
+                        <div class="car-trim">1.5L Turbo, CVT</div>
+                        <div class="car-specs">
+                            <span class="car-spec">&#128338; 28,900 mi</span>
+                            <span class="car-spec">&#9981; AWD</span>
+                        </div>
+                        <div class="car-price">$32,450</div>
+                        <div class="car-payment">$475/mo est.</div>
+                    </div>
+                </div>
+
+                <div class="car-card">
+                    <div class="car-image">&#128663;</div>
+                    <div class="car-details">
+                        <div class="car-year-make">2023 Honda</div>
+                        <div class="car-model">Accord Sport</div>
+                        <div class="car-trim">1.5L Turbo, CVT</div>
+                        <div class="car-specs">
+                            <span class="car-spec">&#128338; 8,200 mi</span>
+                            <span class="car-spec">&#9981; FWD</span>
+                        </div>
+                        <div class="car-price">$31,990</div>
+                        <div class="car-payment">$465/mo est.</div>
+                    </div>
+                </div>
+
+                <div class="car-card">
+                    <div class="car-image">
+                        <div class="car-badge">Great Price</div>
+                        &#128663;
+                    </div>
+                    <div class="car-details">
+                        <div class="car-year-make">2021 Toyota</div>
+                        <div class="car-model">RAV4 XLE</div>
+                        <div class="car-trim">2.5L 4-Cyl, Automatic</div>
+                        <div class="car-specs">
+                            <span class="car-spec">&#128338; 35,600 mi</span>
+                            <span class="car-spec">&#9981; AWD</span>
+                        </div>
+                        <div class="car-price">$29,750</div>
+                        <div class="car-payment">$435/mo est.</div>
+                    </div>
+                </div>
+
+                <div class="car-card">
+                    <div class="car-image">&#128663;</div>
+                    <div class="car-details">
+                        <div class="car-year-make">2022 Toyota</div>
+                        <div class="car-model">Highlander Limited</div>
+                        <div class="car-trim">3.5L V6, Automatic</div>
+                        <div class="car-specs">
+                            <span class="car-spec">&#128338; 22,100 mi</span>
+                            <span class="car-spec">&#9981; AWD</span>
+                        </div>
+                        <div class="car-price">$42,990</div>
+                        <div class="car-payment">$625/mo est.</div>
+                    </div>
+                </div>
+
+                <div class="car-card">
+                    <div class="car-image">
+                        <div class="car-badge" style="background: #FF6B00;">Price Drop</div>
+                        &#128663;
+                    </div>
+                    <div class="car-details">
+                        <div class="car-year-make">2020 Honda</div>
+                        <div class="car-model">Civic EX</div>
+                        <div class="car-trim">2.0L 4-Cyl, CVT</div>
+                        <div class="car-specs">
+                            <span class="car-spec">&#128338; 42,300 mi</span>
+                            <span class="car-spec">&#9981; FWD</span>
+                        </div>
+                        <div class="car-price">$22,450</div>
+                        <div class="car-payment">$328/mo est.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <button class="page-btn">5</button>
+                <button class="page-btn">...</button>
+                <button class="page-btn">42</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

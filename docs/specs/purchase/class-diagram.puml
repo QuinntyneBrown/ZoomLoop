@@ -1,0 +1,136 @@
+@startuml Purchase Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+package "Purchase Domain" {
+
+    class Reservation {
+        +id: String
+        +vehicleId: String
+        +customerId: String
+        +confirmationNumber: String
+        +status: ReservationStatus
+        +depositAmount: Decimal
+        +depositTransactionId: String
+        +expiresAt: DateTime
+        +advisorId: String
+        +createdAt: DateTime
+    }
+
+    enum ReservationStatus {
+        ACTIVE
+        EXPIRED
+        CONVERTED
+        CANCELLED
+    }
+
+    class FinancingApplication {
+        +id: String
+        +reservationId: String
+        +customerId: String
+        +vehicleId: String
+        +vehiclePrice: Decimal
+        +status: FinancingStatus
+        +creditScore: Integer
+        +submittedAt: DateTime
+        +decidedAt: DateTime
+    }
+
+    enum FinancingStatus {
+        DRAFT
+        SUBMITTED
+        UNDER_REVIEW
+        APPROVED
+        DECLINED
+        COMPLETED
+    }
+
+    class FinancingOption {
+        +id: String
+        +applicationId: String
+        +lenderId: String
+        +lenderName: String
+        +apr: Decimal
+        +term: Integer
+        +monthlyPayment: Decimal
+        +downPayment: Decimal
+        +totalInterest: Decimal
+        +totalCost: Decimal
+        +isRecommended: Boolean
+    }
+
+    class Purchase {
+        +id: String
+        +reservationId: String
+        +vehicleId: String
+        +customerId: String
+        +advisorId: String
+        +vehiclePrice: Decimal
+        +totalAmount: Decimal
+        +status: PurchaseStatus
+        +completedAt: DateTime
+    }
+
+    enum PurchaseStatus {
+        PENDING_DOCUMENTS
+        PENDING_INSURANCE
+        PENDING_PAYMENT
+        COMPLETED
+        CANCELLED
+    }
+
+    class PurchaseDocument {
+        +id: String
+        +purchaseId: String
+        +type: DocumentType
+        +title: String
+        +pdfUrl: String
+        +signedPdfUrl: String
+        +status: DocumentStatus
+        +signedAt: DateTime
+    }
+
+    enum DocumentType {
+        PURCHASE_AGREEMENT
+        FINANCING_CONTRACT
+        DISCLOSURE
+        ODOMETER_STATEMENT
+    }
+
+    enum DocumentStatus {
+        PENDING
+        SIGNED
+        REJECTED
+    }
+
+    class Loan {
+        +id: String
+        +applicationId: String
+        +customerId: String
+        +vehicleId: String
+        +principal: Decimal
+        +apr: Decimal
+        +term: Integer
+        +monthlyPayment: Decimal
+        +status: LoanStatus
+    }
+
+    enum LoanStatus {
+        PENDING_SIGNATURE
+        SIGNED
+        DISBURSED
+        ACTIVE
+    }
+
+    Reservation "1" --> "0..1" FinancingApplication : may have
+    Reservation "1" --> "0..1" Purchase : converts to
+    FinancingApplication "1" --> "*" FinancingOption : generates
+    FinancingApplication "1" --> "0..1" Loan : results in
+    Purchase "1" --> "*" PurchaseDocument : has
+    Reservation --> ReservationStatus
+    FinancingApplication --> FinancingStatus
+    Purchase --> PurchaseStatus
+}
+
+@enduml
