@@ -7,9 +7,12 @@
   [scrolled]="isScrolled"
   [isLoggedIn]="isLoggedIn"
   [userInitials]="userInitials"
+  [userName]="userName"
   ctaText="Browse Cars"
   (signIn)="onSignIn()"
   (ctaClick)="onCtaClick()"
+  (myProfileClick)="onMyProfile()"
+  (signOutClick)="onSignOut()"
 ></zl-header>
 
 <main class="layout__main">

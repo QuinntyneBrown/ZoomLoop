@@ -88,6 +88,10 @@ export class Layout implements OnInit, OnDestroy {
     return '';
   }
 
+  get userName(): string {
+    return this.currentUser?.firstName || '';
+  }
+
   ngOnInit(): void {
     this.authSubscription = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
@@ -187,6 +191,18 @@ export class Layout implements OnInit, OnDestroy {
       },
       error: () => {
         this.isAuthLoading = false;
+      }
+    });
+  }
+
+  onMyProfile(): void {
+    this.router.navigate(['/my-dashboard']);
+  }
+
+  onSignOut(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/']);
       }
     });
   }

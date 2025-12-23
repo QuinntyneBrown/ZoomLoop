@@ -191,6 +191,29 @@
     padding: 0;
   }
 
+  &__user-menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #F3F4F6;
+    }
+  }
+
+  &__user-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+
   &__mobile-toggle {
     display: none;
     background: none;

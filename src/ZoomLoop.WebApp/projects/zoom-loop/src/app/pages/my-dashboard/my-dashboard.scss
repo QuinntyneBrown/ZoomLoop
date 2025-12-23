@@ -1,0 +1,183 @@
+.my-dashboard {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
+  &__header {
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1E293B;
+    margin: 0 0 8px;
+  }
+
+  &__welcome {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #64748B;
+    margin: 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  &__card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s, transform 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+    }
+
+    mat-card-header {
+      padding: 20px 20px 0;
+    }
+
+    mat-card-content {
+      padding: 16px 20px;
+    }
+
+    mat-card-actions {
+      padding: 0 12px 16px;
+    }
+  }
+
+  &__card-icon {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 24px !important;
+    background: linear-gradient(135deg, #3B82F6, #1E40AF);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__card-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #64748B;
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+
+  &__card-details {
+    margin-top: 12px;
+  }
+
+  &__detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #E2E8F0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__detail-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748B;
+  }
+
+  &__detail-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #1E293B;
+  }
+
+  &__card-empty {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #94A3B8;
+    text-align: center;
+    padding: 16px 0;
+    margin: 0;
+  }
+
+  &__toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #1E293B;
+  }
+
+  &__toggle-status {
+    font-size: 12px;
+    font-weight: 500;
+    color: #94A3B8;
+    padding: 4px 8px;
+    background: #F1F5F9;
+    border-radius: 4px;
+
+    &--on {
+      color: #059669;
+      background: #D1FAE5;
+    }
+  }
+
+  &__rewards-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+  }
+
+  &__rewards-points {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__rewards-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1E40AF;
+  }
+
+  &__rewards-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #64748B;
+  }
+
+  &__rewards-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1E40AF;
+    background: #DBEAFE;
+    padding: 6px 12px;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 767px) {
+    padding: 16px;
+
+    &__title {
+      font-size: 24px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+}

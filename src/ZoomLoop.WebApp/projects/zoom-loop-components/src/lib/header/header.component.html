@@ -46,9 +46,22 @@
         {{ ctaText }}
       </button>
       <div *ngIf="isLoggedIn" class="header__user">
-        <button class="header__user-btn" (click)="toggleUserMenu()">
-          <div class="header__avatar">{{ userInitials }}</div>
+        <button class="header__user-menu-btn" [matMenuTriggerFor]="userMenu">
+          <span class="header__user-name">{{ userName }}</span>
+          <svg class="header__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
         </button>
+        <mat-menu #userMenu="matMenu" class="header__mat-menu">
+          <button mat-menu-item (click)="onMyProfile()">
+            <mat-icon>person</mat-icon>
+            <span>My Profile</span>
+          </button>
+          <button mat-menu-item (click)="onSignOut()">
+            <mat-icon>logout</mat-icon>
+            <span>Sign out</span>
+          </button>
+        </mat-menu>
       </div>
       <button class="header__mobile-toggle" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle menu">
         <svg *ngIf="!isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
