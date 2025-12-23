@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Detail Page
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP)
 
 ---
 
@@ -18,6 +19,7 @@ Backend services for the Vehicle Details feature provide comprehensive vehicle i
 ### REQ-VD-B-001: Vehicle Detail Retrieval
 **Description:** Return complete vehicle information
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Return all vehicle specifications and metadata
@@ -29,6 +31,7 @@ Backend services for the Vehicle Details feature provide comprehensive vehicle i
 ### REQ-VD-B-002: Vehicle History Report
 **Description:** Provide vehicle history information
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Integrate with CARFAX or similar provider
@@ -39,6 +42,7 @@ Backend services for the Vehicle Details feature provide comprehensive vehicle i
 ### REQ-VD-B-003: Similar Vehicles
 **Description:** Recommend related vehicles
 **Priority:** Medium
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Find vehicles similar by make/model/price

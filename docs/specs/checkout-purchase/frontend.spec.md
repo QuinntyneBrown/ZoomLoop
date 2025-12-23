@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Purchase Flow
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP) - Core purchase; B - Enhanced flow
 
 ---
 
@@ -18,6 +19,7 @@ The Checkout & Purchase feature enables customers to complete the vehicle purcha
 ### REQ-CP-F-001: Vehicle Reservation
 **Description:** Reserve vehicle with refundable deposit
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] $100 refundable deposit to reserve
@@ -29,6 +31,7 @@ The Checkout & Purchase feature enables customers to complete the vehicle purcha
 ### REQ-CP-F-002: Purchase Flow
 **Description:** Multi-step checkout process
 **Priority:** High
+**Phase:** A (basic steps), B (trade-in integration)
 
 **Acceptance Criteria:**
 - [ ] Step 1: Contact Information
@@ -43,6 +46,7 @@ The Checkout & Purchase feature enables customers to complete the vehicle purcha
 ### REQ-CP-F-003: Payment Processing
 **Description:** Handle various payment methods
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Credit/Debit card
@@ -55,6 +59,7 @@ The Checkout & Purchase feature enables customers to complete the vehicle purcha
 ### REQ-CP-F-004: Documentation
 **Description:** Digital document signing
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Purchase agreement generation
@@ -66,6 +71,7 @@ The Checkout & Purchase feature enables customers to complete the vehicle purcha
 ### REQ-CP-F-005: Order Confirmation
 **Description:** Confirm purchase and next steps
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Order confirmation page

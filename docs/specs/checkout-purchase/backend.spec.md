@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Purchase Flow
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP) - Core purchase; B - Enhanced flow
 
 ---
 
@@ -18,6 +19,7 @@ Backend services for the checkout and purchase flow handle reservations, payment
 ### REQ-CP-B-001: Reservation Management
 **Description:** Handle vehicle reservations
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Process $100 refundable deposit
@@ -29,6 +31,7 @@ Backend services for the checkout and purchase flow handle reservations, payment
 ### REQ-CP-B-002: Payment Processing
 **Description:** Handle various payment methods
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] PCI-DSS compliant payment handling
@@ -40,6 +43,7 @@ Backend services for the checkout and purchase flow handle reservations, payment
 ### REQ-CP-B-003: Document Generation
 **Description:** Generate purchase documents
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Purchase agreement generation (PDF)

@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Home Page & Vehicle Search
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP)
 
 ---
 
@@ -19,6 +20,7 @@ The Home page serves as the primary landing page for the platform, featuring a h
 **Description:** Display an engaging hero section with search widget
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Hero section displays full-width background image with gradient overlay
@@ -31,6 +33,7 @@ The Home page serves as the primary landing page for the platform, featuring a h
 **Description:** Enable users to quickly search for vehicles
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Make dropdown displays all available makes alphabetically
@@ -44,6 +47,7 @@ The Home page serves as the primary landing page for the platform, featuring a h
 **Description:** Provide persistent search in navigation
 **Priority:** High
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Search bar visible in header on all pages
@@ -58,6 +62,7 @@ The Home page serves as the primary landing page for the platform, featuring a h
 **Description:** Showcase hand-picked vehicles on homepage
 **Priority:** Medium
 **Type:** Functional
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Display 4-8 featured vehicles in responsive grid
@@ -71,6 +76,7 @@ The Home page serves as the primary landing page for the platform, featuring a h
 **Description:** Explain the buying process
 **Priority:** Medium
 **Type:** Functional
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Display 3-step process: Search, Choose, Get It Delivered
@@ -83,6 +89,7 @@ The Home page serves as the primary landing page for the platform, featuring a h
 **Description:** Highlight key platform benefits
 **Priority:** Medium
 **Type:** Functional
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Display key benefits: 210-Point Inspection, 10-Day Guarantee, Free Delivery, No Haggle Pricing
@@ -94,6 +101,7 @@ The Home page serves as the primary landing page for the platform, featuring a h
 **Description:** Display customer reviews
 **Priority:** Low
 **Type:** Functional
+**Phase:** D
 
 **Acceptance Criteria:**
 - [ ] Carousel of customer testimonials

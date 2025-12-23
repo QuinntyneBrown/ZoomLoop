@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Browse & Listings
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP)
 
 ---
 
@@ -18,6 +19,7 @@ Backend services for the Vehicle Listings feature handle inventory queries, filt
 ### REQ-VL-B-001: Paginated Vehicle Listing
 **Description:** Return paginated list of vehicles with filters
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Support pagination with configurable page size (default 24)
@@ -29,6 +31,7 @@ Backend services for the Vehicle Listings feature handle inventory queries, filt
 ### REQ-VL-B-002: Faceted Search
 **Description:** Return filter facets with result counts
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Return counts for each filter option
@@ -39,6 +42,7 @@ Backend services for the Vehicle Listings feature handle inventory queries, filt
 ### REQ-VL-B-003: Filter Validation
 **Description:** Validate and sanitize filter inputs
 **Priority:** Medium
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Validate price ranges (min < max)

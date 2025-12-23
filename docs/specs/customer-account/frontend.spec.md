@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Customer Account Management
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** A (MVP) - Core auth; B - Enhanced features
 
 ---
 
@@ -18,6 +19,7 @@ The Customer Account feature provides user registration, authentication, profile
 ### REQ-CA-F-001: Registration
 **Description:** New user account creation
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Email/password registration
@@ -29,6 +31,7 @@ The Customer Account feature provides user registration, authentication, profile
 ### REQ-CA-F-002: Authentication
 **Description:** User login functionality
 **Priority:** High
+**Phase:** A
 
 **Acceptance Criteria:**
 - [ ] Email/password login
@@ -41,6 +44,7 @@ The Customer Account feature provides user registration, authentication, profile
 ### REQ-CA-F-003: Profile Management
 **Description:** User profile editing
 **Priority:** Medium
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Update personal information
@@ -52,6 +56,7 @@ The Customer Account feature provides user registration, authentication, profile
 ### REQ-CA-F-004: Dashboard
 **Description:** Account overview and quick actions
 **Priority:** High
+**Phase:** A (basic), B (full features)
 
 **Acceptance Criteria:**
 - [ ] Order status overview
@@ -64,6 +69,7 @@ The Customer Account feature provides user registration, authentication, profile
 ### REQ-CA-F-005: Order History
 **Description:** View past and current orders
 **Priority:** Medium
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] List all orders with status

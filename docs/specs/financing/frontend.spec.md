@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Financing
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** B
 
 ---
 
@@ -18,6 +19,7 @@ The Financing feature enables customers to apply for vehicle financing, get pre-
 ### REQ-FN-F-001: Financing Calculator
 **Description:** Interactive payment calculator on vehicle pages
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Calculate monthly payments based on price, down payment, term, rate
@@ -30,6 +32,7 @@ The Financing feature enables customers to apply for vehicle financing, get pre-
 ### REQ-FN-F-002: Pre-Approval Application
 **Description:** Online financing pre-approval application
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Multi-step application form
@@ -44,6 +47,7 @@ The Financing feature enables customers to apply for vehicle financing, get pre-
 ### REQ-FN-F-003: Financing Options Display
 **Description:** Present approved financing options
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Show multiple lender options
@@ -56,6 +60,7 @@ The Financing feature enables customers to apply for vehicle financing, get pre-
 ### REQ-FN-F-004: Financing Selection
 **Description:** Allow customer to select and confirm financing
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Select preferred financing option

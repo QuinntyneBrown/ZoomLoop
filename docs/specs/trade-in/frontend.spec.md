@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Trade-In
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** C
 
 ---
 
@@ -18,6 +19,7 @@ The Trade-In feature allows customers to get an instant offer for their current 
 ### REQ-TI-F-001: Instant Offer Form
 **Description:** Quick vehicle valuation form
 **Priority:** High
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Enter license plate OR VIN to start
@@ -30,6 +32,7 @@ The Trade-In feature allows customers to get an instant offer for their current 
 ### REQ-TI-F-002: Condition Assessment
 **Description:** Self-assessment of vehicle condition
 **Priority:** High
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Exterior condition rating (Excellent/Good/Fair/Poor)
@@ -42,6 +45,7 @@ The Trade-In feature allows customers to get an instant offer for their current 
 ### REQ-TI-F-003: Offer Presentation
 **Description:** Display and explain the offer
 **Priority:** High
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Clear offer amount displayed
@@ -54,6 +58,7 @@ The Trade-In feature allows customers to get an instant offer for their current 
 ### REQ-TI-F-004: Appraisal Scheduling
 **Description:** Book in-person inspection
 **Priority:** Medium
+**Phase:** C
 
 **Acceptance Criteria:**
 - [ ] Select appraisal location (home or facility)

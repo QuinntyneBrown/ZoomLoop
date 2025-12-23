@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Delivery & Logistics
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** B
 
 ---
 
@@ -18,6 +19,7 @@ The Delivery feature enables customers to schedule vehicle delivery or pickup, t
 ### REQ-DL-F-001: Delivery Method Selection
 **Description:** Choose between delivery and pickup
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Option for home delivery
@@ -29,6 +31,7 @@ The Delivery feature enables customers to schedule vehicle delivery or pickup, t
 ### REQ-DL-F-002: Delivery Scheduling
 **Description:** Schedule delivery date and time
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Calendar view for date selection
@@ -40,6 +43,7 @@ The Delivery feature enables customers to schedule vehicle delivery or pickup, t
 ### REQ-DL-F-003: Delivery Tracking
 **Description:** Track vehicle delivery in real-time
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Order status timeline
@@ -51,6 +55,7 @@ The Delivery feature enables customers to schedule vehicle delivery or pickup, t
 ### REQ-DL-F-004: Delivery Completion
 **Description:** Complete handover process
 **Priority:** High
+**Phase:** B
 
 **Acceptance Criteria:**
 - [ ] Digital signature for receipt

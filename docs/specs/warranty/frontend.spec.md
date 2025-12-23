@@ -4,6 +4,7 @@
 **Date:** December 23, 2025
 **Feature:** Vehicle Warranty & Protection Plans
 **Platform:** Clutch Clone - Online Used Car Marketplace
+**Phase:** D
 
 ---
 
@@ -18,6 +19,7 @@ The Warranty feature provides customers with included warranty coverage on all v
 ### REQ-WR-F-001: Warranty Information Display
 **Description:** Display included warranty coverage
 **Priority:** High
+**Phase:** D
 
 **Acceptance Criteria:**
 - [ ] Show standard 90-day warranty details
@@ -29,6 +31,7 @@ The Warranty feature provides customers with included warranty coverage on all v
 ### REQ-WR-F-002: Extended Warranty Options
 **Description:** Present extended coverage plans
 **Priority:** Medium
+**Phase:** D
 
 **Acceptance Criteria:**
 - [ ] Multiple coverage levels (1yr, 2yr, 3yr+)
@@ -40,6 +43,7 @@ The Warranty feature provides customers with included warranty coverage on all v
 ### REQ-WR-F-003: Warranty Claims
 **Description:** Submit and track warranty claims
 **Priority:** High
+**Phase:** D
 
 **Acceptance Criteria:**
 - [ ] Claim submission form
