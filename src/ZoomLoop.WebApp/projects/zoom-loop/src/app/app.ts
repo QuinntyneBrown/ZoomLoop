@@ -9,5 +9,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  title = 'Clutch';
+  title = 'ZoomLoop';
 }

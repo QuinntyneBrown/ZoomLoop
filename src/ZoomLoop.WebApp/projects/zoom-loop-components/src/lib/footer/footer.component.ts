@@ -20,8 +20,8 @@ export interface SocialLink {
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-  @Input() logoText = 'Clutch';
-  @Input() logoInitial = 'C';
+  @Input() logoText = 'ZoomLoop';
+  @Input() logoInitial = 'Z';
   @Input() logoHref = '/';
   @Input() tagline = "Canada's #1 online car marketplace. Buy and sell quality used vehicles with confidence.";
   @Input() columns: FooterColumn[] = [];
@@ -32,7 +32,7 @@ export class FooterComponent {
   @Input() newsletterPlaceholder = 'Enter your email';
   @Input() newsletterButtonText = 'Subscribe';
   @Input() newsletterSuccessMessage = 'Thanks for subscribing!';
-  @Input() copyright = '© 2024 Clutch Technologies Inc. All rights reserved.';
+  @Input() copyright = '© 2024 ZoomLoop Technologies Inc. All rights reserved.';
   @Input() legalLinks: { label: string; href: string }[] = [];
   @Input() compact = false;
 

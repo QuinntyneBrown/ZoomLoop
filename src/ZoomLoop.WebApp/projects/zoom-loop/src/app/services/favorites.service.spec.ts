@@ -99,7 +99,7 @@ describe('FavoritesService', () => {
   describe('persistence', () => {
     it('should persist favorites to localStorage', () => {
       service.toggle('1');
-      const stored = localStorage.getItem('clutch_favorites');
+      const stored = localStorage.getItem('zoomloop_favorites');
       expect(stored).toContain('1');
     });
   });

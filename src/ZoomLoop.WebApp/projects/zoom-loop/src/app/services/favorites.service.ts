@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const FAVORITES_KEY = 'clutch_favorites';
+const FAVORITES_KEY = 'zoomloop_favorites';
 
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {

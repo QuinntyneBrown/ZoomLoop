@@ -15,8 +15,8 @@ export interface NavItem {
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  @Input() logoText = 'Clutch';
-  @Input() logoInitial = 'C';
+  @Input() logoText = 'ZoomLoop';
+  @Input() logoInitial = 'Z';
   @Input() logoHref = '/';
   @Input() navItems: NavItem[] = [];
   @Input() activeRoute = '';
