@@ -8,7 +8,10 @@ import {
   SearchBarComponent,
   VehicleCardComponent,
   ButtonComponent,
-  VehicleData
+  VehicleData,
+  FilterSidebarComponent,
+  CheckboxFilter,
+  AppliedFilter
 } from 'zoom-loop-components';
 import { VehicleService, FavoritesService } from '../../services';
 import { Vehicle, SearchFilters, SearchResult } from '../../models';
@@ -21,7 +24,8 @@ import { Vehicle, SearchFilters, SearchResult } from '../../models';
     FormsModule,
     SearchBarComponent,
     VehicleCardComponent,
-    ButtonComponent
+    ButtonComponent,
+    FilterSidebarComponent
   ],
   templateUrl: './cars.html',
   styleUrl: './cars.scss'
@@ -38,7 +42,25 @@ export class Cars implements OnInit, OnDestroy {
   page = 1;
   pageSize = 12;
   filters: SearchFilters = {};
-  makes = ['Honda', 'Toyota', 'Ford', 'Hyundai', 'BMW', 'Tesla', 'Kia', 'Mazda'];
+
+  makeFilter: CheckboxFilter = {
+    id: 'make',
+    label: 'Make',
+    options: [
+      { value: 'Honda', label: 'Honda' },
+      { value: 'Toyota', label: 'Toyota' },
+      { value: 'Ford', label: 'Ford' },
+      { value: 'Hyundai', label: 'Hyundai' },
+      { value: 'BMW', label: 'BMW' },
+      { value: 'Tesla', label: 'Tesla' },
+      { value: 'Kia', label: 'Kia' },
+      { value: 'Mazda', label: 'Mazda' }
+    ],
+    selectedValues: [],
+    maxVisible: 5
+  };
+
+  appliedFilters: AppliedFilter[] = [];
 
   ngOnInit(): void {
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
@@ -46,6 +68,8 @@ export class Cars implements OnInit, OnDestroy {
         query: params['q'] || undefined,
         makes: params['make'] ? [params['make']] : undefined
       };
+      this.makeFilter.selectedValues = this.filters.makes || [];
+      this.updateAppliedFilters();
       this.search();
     });
   }
@@ -71,28 +95,37 @@ export class Cars implements OnInit, OnDestroy {
     this.search();
   }
 
-  onMakeFilter(make: string): void {
-    if (this.filters.makes?.includes(make)) {
-      this.filters.makes = this.filters.makes.filter(m => m !== make);
-      if (this.filters.makes.length === 0) {
-        this.filters.makes = undefined;
-      }
-    } else {
-      this.filters.makes = [...(this.filters.makes || []), make];
-    }
+  onFiltersChange(): void {
+    this.filters.makes = this.makeFilter.selectedValues.length > 0
+      ? [...this.makeFilter.selectedValues]
+      : undefined;
+    this.updateAppliedFilters();
     this.page = 1;
     this.search();
   }
 
-  isMakeSelected(make: string): boolean {
-    return this.filters.makes?.includes(make) || false;
+  onFilterRemove(filter: AppliedFilter): void {
+    if (filter.id === 'make') {
+      this.makeFilter.selectedValues = this.makeFilter.selectedValues.filter(v => v !== filter.value);
+      this.onFiltersChange();
+    }
   }
 
   clearFilters(): void {
     this.filters = {};
+    this.makeFilter.selectedValues = [];
+    this.appliedFilters = [];
     this.page = 1;
     this.updateUrl();
     this.search();
+  }
+
+  private updateAppliedFilters(): void {
+    this.appliedFilters = this.makeFilter.selectedValues.map(make => ({
+      id: 'make',
+      label: make,
+      value: make
+    }));
   }
 
   onFavoriteToggle(event: { id: string }): void {
