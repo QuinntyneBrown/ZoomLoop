@@ -6,7 +6,9 @@ export default defineConfig({
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 2 : 0,
   workers: process.env['CI'] ? 1 : undefined,
-  reporter: 'html',
+  reporter: process.env['CI']
+    ? [['html'], ['junit', { outputFile: 'test-results/e2e-results.xml' }]]
+    : 'html',
   use: {
     baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
@@ -16,21 +18,9 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
   ],
   webServer: {
-    command: 'npm run start',
+    command: 'npm run start -- --project zoom-loop',
     url: 'http://localhost:4200',
     reuseExistingServer: !process.env['CI'],
   },

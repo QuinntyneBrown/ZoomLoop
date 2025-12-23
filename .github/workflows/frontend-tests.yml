@@ -15,25 +15,46 @@ jobs:
     permissions:
       contents: read
       checks: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: src/ZoomLoop.App/package-lock.json
-      
+          cache-dependency-path: src/ZoomLoop.WebApp/package-lock.json
+
       - name: Install dependencies
-        working-directory: src/ZoomLoop.App
+        working-directory: src/ZoomLoop.WebApp
         run: npm ci
-      
+
+      - name: Build components library
+        working-directory: src/ZoomLoop.WebApp
+        run: npm run build -- --project zoom-loop-components
+
       - name: Run unit tests
-        working-directory: src/ZoomLoop.App
-        run: npm test
+        working-directory: src/ZoomLoop.WebApp
+        run: npm test -- --project zoom-loop --reporter=junit --outputFile=test-results/junit.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-unit-test-results
+          path: src/ZoomLoop.WebApp/test-results/
+          retention-days: 7
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1.9.1
+        if: always()
+        with:
+          name: Frontend Unit Tests
+          path: 'src/ZoomLoop.WebApp/test-results/junit.xml'
+          reporter: jest-junit
+          fail-on-error: true
 
   e2e-tests:
     name: Run Playwright E2E Tests
@@ -41,34 +62,47 @@ jobs:
     permissions:
       contents: read
       checks: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: src/ZoomLoop.App/package-lock.json
-      
+          cache-dependency-path: src/ZoomLoop.WebApp/package-lock.json
+
       - name: Install dependencies
-        working-directory: src/ZoomLoop.App
+        working-directory: src/ZoomLoop.WebApp
         run: npm ci
-      
+
+      - name: Build components library
+        working-directory: src/ZoomLoop.WebApp
+        run: npm run build -- --project zoom-loop-components
+
       - name: Install Playwright browsers
-        working-directory: src/ZoomLoop.App
+        working-directory: src/ZoomLoop.WebApp
         run: npx playwright install --with-deps chromium
-      
+
       - name: Run Playwright tests
-        working-directory: src/ZoomLoop.App
+        working-directory: src/ZoomLoop.WebApp
         run: npm run e2e
-      
+
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: playwright-report
-          path: src/ZoomLoop.App/playwright-report/
+          path: src/ZoomLoop.WebApp/projects/zoom-loop/playwright-report/
           retention-days: 7
+
+      - name: Publish E2E test results
+        uses: dorny/test-reporter@v1.9.1
+        if: always()
+        with:
+          name: Playwright E2E Tests
+          path: 'src/ZoomLoop.WebApp/projects/zoom-loop/test-results/*.xml'
+          reporter: java-junit
+          fail-on-error: true

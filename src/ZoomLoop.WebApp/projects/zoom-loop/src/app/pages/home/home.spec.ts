@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
+import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { Home } from './home';
 import { VehicleService, FavoritesService } from '../../services';
 import { of } from 'rxjs';
@@ -7,8 +8,8 @@ import { of } from 'rxjs';
 describe('Home', () => {
   let component: Home;
   let fixture: ComponentFixture<Home>;
-  let vehicleServiceSpy: jasmine.SpyObj<VehicleService>;
-  let favoritesServiceSpy: jasmine.SpyObj<FavoritesService>;
+  let vehicleServiceSpy: { getFeaturedVehicles: Mock };
+  let favoritesServiceSpy: { toggle: Mock; isFavoriteSync: Mock };
 
   const mockVehicles = [
     {
@@ -35,15 +36,19 @@ describe('Home', () => {
   ];
 
   beforeEach(async () => {
-    vehicleServiceSpy = jasmine.createSpyObj('VehicleService', ['getFeaturedVehicles']);
-    vehicleServiceSpy.getFeaturedVehicles.and.returnValue(of(mockVehicles));
+    vehicleServiceSpy = {
+      getFeaturedVehicles: vi.fn().mockReturnValue(of(mockVehicles))
+    };
 
-    favoritesServiceSpy = jasmine.createSpyObj('FavoritesService', ['toggle', 'isFavoriteSync']);
-    favoritesServiceSpy.isFavoriteSync.and.returnValue(false);
+    favoritesServiceSpy = {
+      toggle: vi.fn(),
+      isFavoriteSync: vi.fn().mockReturnValue(false)
+    };
 
     await TestBed.configureTestingModule({
-      imports: [Home, RouterTestingModule],
+      imports: [Home],
       providers: [
+        provideRouter([]),
         { provide: VehicleService, useValue: vehicleServiceSpy },
         { provide: FavoritesService, useValue: favoritesServiceSpy }
       ]
