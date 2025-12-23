@@ -21,7 +21,7 @@ export class LocalStorageService {
     return this._items;
   }
 
-  public set items(value: Array<any> | null | undefined) {
+  public set items(value: any[] | null | undefined) {
     this._items = value;
   }
 

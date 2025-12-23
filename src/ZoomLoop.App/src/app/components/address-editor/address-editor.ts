@@ -3,13 +3,12 @@
 
 import { Component, Input as InputDecorator, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  ControlValueAccessor, 
-  FormBuilder, 
-  FormGroup, 
-  ReactiveFormsModule, 
-  NG_VALUE_ACCESSOR,
-  Validators 
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';

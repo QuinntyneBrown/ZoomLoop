@@ -30,11 +30,16 @@ public class VehicleController
     [ProducesResponseType(typeof(GetVehicleByIdResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<GetVehicleByIdResponse>> GetById([FromRoute] GetVehicleByIdRequest request)
     {
+        _logger.LogInformation("Getting vehicle by ID: {VehicleId}", request.VehicleId);
+
         var response = await _mediator.Send(request);
         if (response.Vehicle == null)
         {
+            _logger.LogWarning("Vehicle not found: {VehicleId}", request.VehicleId);
             return new NotFoundObjectResult(request.VehicleId);
         }
+
+        _logger.LogInformation("Vehicle retrieved successfully: {VehicleId}", request.VehicleId);
         return response;
     }
 
@@ -57,7 +62,12 @@ public class VehicleController
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(CreateVehicleResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<CreateVehicleResponse>> Create([FromBody] CreateVehicleRequest request)
-        => await _mediator.Send(request);
+    {
+        _logger.LogInformation("Creating new vehicle: {Make} {Model} {Year}", request.Make, request.Model, request.Year);
+        var response = await _mediator.Send(request);
+        _logger.LogInformation("Vehicle created successfully: {VehicleId}", response.Vehicle?.VehicleId);
+        return response;
+    }
 
     [HttpPut(Name = "UpdateVehicleRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -71,7 +81,12 @@ public class VehicleController
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(DeleteVehicleResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<DeleteVehicleResponse>> Delete([FromRoute] DeleteVehicleRequest request)
-        => await _mediator.Send(request);
+    {
+        _logger.LogInformation("Deleting vehicle: {VehicleId}", request.VehicleId);
+        var response = await _mediator.Send(request);
+        _logger.LogInformation("Vehicle deleted successfully: {VehicleId}", request.VehicleId);
+        return response;
+    }
 
     [HttpPost("{vehicleId}/images", Name = "UploadVehicleImagesRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]

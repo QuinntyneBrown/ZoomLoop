@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ZoomLoop.Api.Behaviours;
 using ZoomLoop.Core;
 using ZoomLoop.Core.Services.Email;
 using ZoomLoop.Core.Services.Financing;
@@ -23,7 +24,12 @@ public static class ConfigureServices
     {
         services.AddHttpContextAccessor();
 
-        services.AddMediatR(typeof(Program));
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(typeof(Program).Assembly);
+            config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
+            config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+        });
 
         // Database configuration
         var connectionString = configuration.GetConnectionString("DefaultConnection");

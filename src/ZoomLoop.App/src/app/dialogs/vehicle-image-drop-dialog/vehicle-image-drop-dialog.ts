@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { firstValueFrom } from 'rxjs';
 import { VehicleService } from '../../core';
-import { Vehicle } from '../../models';
 
 @Component({
   selector: 'zl-vehicle-image-drop-dialog',
