@@ -12,31 +12,15 @@
 
   <div class="cars__content">
     <!-- Filters Sidebar -->
-    <aside class="cars__sidebar">
-      <h3 class="cars__filter-title">Filters</h3>
-
-      <div class="cars__filter-section">
-        <h4 class="cars__filter-label">Make</h4>
-        <div class="cars__filter-options">
-          @for (make of makes; track make) {
-            <label class="cars__filter-option">
-              <input
-                type="checkbox"
-                [checked]="isMakeSelected(make)"
-                (change)="onMakeFilter(make)"
-              />
-              <span>{{ make }}</span>
-            </label>
-          }
-        </div>
-      </div>
-
-      @if (filters.query || filters.makes?.length) {
-        <button class="cars__clear-btn" (click)="clearFilters()">
-          Clear All Filters
-        </button>
-      }
-    </aside>
+    <zl-filter-sidebar
+      title="Filters"
+      [checkboxFilters]="[makeFilter]"
+      [appliedFilters]="appliedFilters"
+      [resultCount]="total"
+      (filtersChange)="onFiltersChange()"
+      (filterRemove)="onFilterRemove($event)"
+      (filtersClear)="clearFilters()"
+    ></zl-filter-sidebar>
 
     <!-- Results -->
     <main class="cars__results">
