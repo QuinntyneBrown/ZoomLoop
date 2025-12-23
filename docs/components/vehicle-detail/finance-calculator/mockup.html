@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Calculator Component - All States</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .component-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            background: #F3F4F6;
+            padding: 32px;
+            border-radius: 12px;
+        }
+
+        /* Calculator Card */
+        .calc {
+            width: 400px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .calc__header {
+            padding: 24px 24px 0;
+        }
+
+        .calc__title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 20px;
+        }
+
+        .calc__payment-box {
+            background: #EFF6FF;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .calc__payment {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1E40AF;
+        }
+
+        .calc__payment-label {
+            font-size: 14px;
+            color: #6B7280;
+            margin-top: 4px;
+        }
+
+        .calc__total {
+            font-size: 13px;
+            color: #6B7280;
+            margin-top: 12px;
+        }
+
+        .calc__divider {
+            height: 1px;
+            background: #E5E7EB;
+            margin: 24px 0;
+        }
+
+        .calc__body {
+            padding: 0 24px;
+        }
+
+        /* Input Group */
+        .calc__input-group {
+            margin-bottom: 24px;
+        }
+
+        .calc__input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .calc__label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        .calc__value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .calc__input {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1F2937;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .calc__input:focus {
+            border-color: #1E40AF;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+        }
+
+        /* Range Slider */
+        .calc__slider-container {
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .calc__slider-track {
+            position: relative;
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+        }
+
+        .calc__slider-fill {
+            position: absolute;
+            height: 100%;
+            background: #1E40AF;
+            border-radius: 2px;
+            width: 20%;
+        }
+
+        .calc__slider-handle {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid #1E40AF;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            left: 20%;
+        }
+
+        .calc__slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #9CA3AF;
+            margin-top: 8px;
+        }
+
+        /* Term Buttons */
+        .calc__term-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .calc__term-btn {
+            flex: 1;
+            height: 40px;
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6B7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calc__term-btn--active {
+            background: #EFF6FF;
+            border-color: #1E40AF;
+            color: #1E40AF;
+        }
+
+        .calc__term-btn:hover:not(.calc__term-btn--active) {
+            background: #E5E7EB;
+        }
+
+        /* Breakdown */
+        .calc__breakdown {
+            padding: 0 24px 24px;
+        }
+
+        .calc__breakdown-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .calc__breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .calc__breakdown-row:not(:last-child) {
+            border-bottom: 1px dashed #E5E7EB;
+        }
+
+        .calc__breakdown-label {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .calc__breakdown-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .calc__breakdown-value--highlight {
+            color: #1E40AF;
+        }
+
+        /* CTA */
+        .calc__cta {
+            padding: 24px;
+            background: #F9FAFB;
+        }
+
+        .calc__cta-btn {
+            width: 100%;
+            height: 48px;
+            background: #1E40AF;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .calc__cta-btn:hover {
+            background: #1E3A8A;
+        }
+
+        .calc__cta-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #6B7280;
+        }
+
+        .calc__cta-note svg {
+            color: #22C55E;
+        }
+
+        /* Features List */
+        .calc__features {
+            padding: 0 24px 24px;
+        }
+
+        .calc__feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #4B5563;
+        }
+
+        .calc__feature-icon {
+            width: 20px;
+            height: 20px;
+            background: #D1FAE5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #059669;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Default Calculator -->
+    <section class="component-section">
+        <h2 class="section-title">Default Finance Calculator</h2>
+        <div class="component-wrapper">
+            <div class="calc">
+                <div class="calc__header">
+                    <h3 class="calc__title">Estimate Your Payment</h3>
+                    <div class="calc__payment-box">
+                        <div class="calc__payment">$398</div>
+                        <div class="calc__payment-label">per month</div>
+                        <div class="calc__total">Total: $23,880 over 60 months</div>
+                    </div>
+                </div>
+
+                <div class="calc__divider"></div>
+
+                <div class="calc__body">
+                    <div class="calc__input-group">
+                        <label class="calc__label">Vehicle Price</label>
+                        <input type="text" class="calc__input" value="$24,500">
+                    </div>
+
+                    <div class="calc__input-group">
+                        <div class="calc__input-header">
+                            <label class="calc__label">Down Payment</label>
+                            <span class="calc__value">$2,450 (10%)</span>
+                        </div>
+                        <div class="calc__slider-container">
+                            <div class="calc__slider-track">
+                                <div class="calc__slider-fill" style="width: 20%;"></div>
+                                <div class="calc__slider-handle" style="left: 20%;"></div>
+                            </div>
+                            <div class="calc__slider-labels">
+                                <span>$0</span>
+                                <span>$12,250</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calc__input-group">
+                        <label class="calc__label">Loan Term</label>
+                        <div class="calc__term-buttons">
+                            <button class="calc__term-btn">36 mo</button>
+                            <button class="calc__term-btn">48 mo</button>
+                            <button class="calc__term-btn calc__term-btn--active">60 mo</button>
+                            <button class="calc__term-btn">72 mo</button>
+                            <button class="calc__term-btn">84 mo</button>
+                        </div>
+                    </div>
+
+                    <div class="calc__input-group">
+                        <div class="calc__input-header">
+                            <label class="calc__label">Interest Rate</label>
+                            <span class="calc__value">6.99%</span>
+                        </div>
+                        <div class="calc__slider-container">
+                            <div class="calc__slider-track">
+                                <div class="calc__slider-fill" style="width: 35%;"></div>
+                                <div class="calc__slider-handle" style="left: 35%;"></div>
+                            </div>
+                            <div class="calc__slider-labels">
+                                <span>0%</span>
+                                <span>20%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calc__divider" style="margin: 0;"></div>
+
+                <div class="calc__breakdown">
+                    <h4 class="calc__breakdown-title">Breakdown</h4>
+                    <div class="calc__breakdown-row">
+                        <span class="calc__breakdown-label">Principal</span>
+                        <span class="calc__breakdown-value">$22,050</span>
+                    </div>
+                    <div class="calc__breakdown-row">
+                        <span class="calc__breakdown-label">Interest</span>
+                        <span class="calc__breakdown-value">$1,830</span>
+                    </div>
+                    <div class="calc__breakdown-row">
+                        <span class="calc__breakdown-label">Total Cost</span>
+                        <span class="calc__breakdown-value calc__breakdown-value--highlight">$23,880</span>
+                    </div>
+                </div>
+
+                <div class="calc__cta">
+                    <button class="calc__cta-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                        Get Pre-Approved
+                    </button>
+                    <div class="calc__cta-note">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        No impact to your credit score
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- With Pre-Approval Features -->
+    <section class="component-section">
+        <h2 class="section-title">With Pre-Approval Benefits</h2>
+        <div class="component-wrapper">
+            <div class="calc">
+                <div class="calc__header">
+                    <h3 class="calc__title">Financing Options</h3>
+                    <div class="calc__payment-box">
+                        <div class="calc__payment">$398</div>
+                        <div class="calc__payment-label">per month</div>
+                    </div>
+                </div>
+
+                <div class="calc__features">
+                    <div class="calc__feature">
+                        <span class="calc__feature-icon">✓</span>
+                        No impact to your credit score
+                    </div>
+                    <div class="calc__feature">
+                        <span class="calc__feature-icon">✓</span>
+                        Get approved in minutes
+                    </div>
+                    <div class="calc__feature">
+                        <span class="calc__feature-icon">✓</span>
+                        Know your rate before you shop
+                    </div>
+                    <div class="calc__feature">
+                        <span class="calc__feature-icon">✓</span>
+                        Competitive rates from top lenders
+                    </div>
+                </div>
+
+                <div class="calc__cta">
+                    <button class="calc__cta-btn">
+                        Get Pre-Approved Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compact Inline -->
+    <section class="component-section">
+        <h2 class="section-title">Compact Inline (for listings)</h2>
+        <div class="component-wrapper">
+            <div style="background: white; padding: 16px; border-radius: 12px; max-width: 320px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
+                    <span style="font-size: 24px; font-weight: 700; color: #1E40AF;">$398</span>
+                    <span style="font-size: 13px; color: #6B7280;">/month</span>
+                </div>
+                <div style="display: flex; gap: 8px; font-size: 12px; color: #6B7280; margin-bottom: 16px;">
+                    <span>$2,450 down</span>
+                    <span>•</span>
+                    <span>60 mo</span>
+                    <span>•</span>
+                    <span>6.99% APR</span>
+                </div>
+                <button style="width: 100%; height: 40px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; color: #1E40AF; font-size: 14px; font-weight: 600; cursor: pointer;">
+                    Calculate Payment
+                </button>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

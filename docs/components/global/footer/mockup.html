@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Component - All States</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f3f4f6;
+            padding: 40px;
+        }
+
+        .component-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #0F172A;
+            padding: 64px 24px 32px;
+        }
+
+        .footer__container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer__main {
+            display: grid;
+            grid-template-columns: 240px repeat(3, 1fr) 280px;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer__brand {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer__logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer__logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3B82F6, #1E40AF);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .footer__logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .footer__tagline {
+            font-size: 14px;
+            color: #94A3B8;
+            line-height: 1.6;
+        }
+
+        .footer__social {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .footer__social-link {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1E293B;
+            border-radius: 8px;
+            color: #94A3B8;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .footer__social-link:hover {
+            background: #334155;
+            color: #ffffff;
+        }
+
+        .footer__column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer__column-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer__links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer__link {
+            font-size: 14px;
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer__link:hover {
+            color: #3B82F6;
+        }
+
+        .footer__newsletter {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer__newsletter-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer__newsletter-desc {
+            font-size: 14px;
+            color: #94A3B8;
+            line-height: 1.5;
+        }
+
+        .footer__newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer__newsletter-input {
+            height: 44px;
+            padding: 0 14px;
+            background: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .footer__newsletter-input::placeholder {
+            color: #64748B;
+        }
+
+        .footer__newsletter-input:focus {
+            border-color: #3B82F6;
+        }
+
+        .footer__newsletter-btn {
+            height: 44px;
+            background: #3B82F6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .footer__newsletter-btn:hover {
+            background: #2563EB;
+        }
+
+        .footer__newsletter-success {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            color: #22C55E;
+            font-size: 14px;
+        }
+
+        .footer__divider {
+            height: 1px;
+            background: #334155;
+            margin: 32px 0 24px;
+        }
+
+        .footer__bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer__copyright {
+            font-size: 13px;
+            color: #64748B;
+        }
+
+        .footer__legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer__legal-link {
+            font-size: 13px;
+            color: #64748B;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer__legal-link:hover {
+            color: #94A3B8;
+        }
+
+        /* Mobile Footer */
+        .footer--mobile {
+            padding: 40px 16px 24px;
+        }
+
+        .footer--mobile .footer__main {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .footer__accordion {
+            border-top: 1px solid #334155;
+        }
+
+        .footer__accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            cursor: pointer;
+        }
+
+        .footer__accordion-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .footer__accordion-icon {
+            width: 20px;
+            height: 20px;
+            color: #94A3B8;
+            transition: transform 0.2s;
+        }
+
+        .footer__accordion-icon--open {
+            transform: rotate(180deg);
+        }
+
+        .footer__accordion-content {
+            display: none;
+            padding-bottom: 16px;
+        }
+
+        .footer__accordion-content--open {
+            display: block;
+        }
+
+        .footer--mobile .footer__bottom {
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+        }
+
+        .footer--mobile .footer__legal {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- State 1: Desktop Footer -->
+    <section class="component-section">
+        <h2 class="section-title">State: Desktop Footer</h2>
+        <div class="component-wrapper">
+            <footer class="footer">
+                <div class="footer__container">
+                    <div class="footer__main">
+                        <div class="footer__brand">
+                            <div class="footer__logo">
+                                <div class="footer__logo-icon">C</div>
+                                <span class="footer__logo-text">Clutch</span>
+                            </div>
+                            <p class="footer__tagline">
+                                Canada's #1 online car marketplace. Buy and sell quality used vehicles with confidence.
+                            </p>
+                            <div class="footer__social">
+                                <a href="#" class="footer__social-link" aria-label="Facebook">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="footer__social-link" aria-label="Instagram">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                        <circle cx="12" cy="12" r="4"/>
+                                        <circle cx="17.5" cy="6.5" r="1.5"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="footer__social-link" aria-label="YouTube">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
+                                        <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#0F172A"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="footer__column">
+                            <h3 class="footer__column-title">Browse</h3>
+                            <nav class="footer__links">
+                                <a href="#" class="footer__link">All Vehicles</a>
+                                <a href="#" class="footer__link">SUVs & Crossovers</a>
+                                <a href="#" class="footer__link">Sedans & Coupes</a>
+                                <a href="#" class="footer__link">Trucks & Vans</a>
+                                <a href="#" class="footer__link">Electric Vehicles</a>
+                                <a href="#" class="footer__link">Luxury Vehicles</a>
+                            </nav>
+                        </div>
+
+                        <div class="footer__column">
+                            <h3 class="footer__column-title">Company</h3>
+                            <nav class="footer__links">
+                                <a href="#" class="footer__link">About Us</a>
+                                <a href="#" class="footer__link">Careers</a>
+                                <a href="#" class="footer__link">Press</a>
+                                <a href="#" class="footer__link">Investors</a>
+                                <a href="#" class="footer__link">Blog</a>
+                                <a href="#" class="footer__link">Partners</a>
+                            </nav>
+                        </div>
+
+                        <div class="footer__column">
+                            <h3 class="footer__column-title">Support</h3>
+                            <nav class="footer__links">
+                                <a href="#" class="footer__link">Help Center</a>
+                                <a href="#" class="footer__link">FAQ</a>
+                                <a href="#" class="footer__link">Contact Us</a>
+                                <a href="#" class="footer__link">Returns</a>
+                                <a href="#" class="footer__link">Warranty</a>
+                                <a href="#" class="footer__link">Financing</a>
+                            </nav>
+                        </div>
+
+                        <div class="footer__newsletter">
+                            <h3 class="footer__newsletter-title">Stay Connected</h3>
+                            <p class="footer__newsletter-desc">
+                                Get the latest deals, news, and updates delivered to your inbox.
+                            </p>
+                            <form class="footer__newsletter-form">
+                                <input type="email" class="footer__newsletter-input" placeholder="Enter your email">
+                                <button type="submit" class="footer__newsletter-btn">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="footer__divider"></div>
+
+                    <div class="footer__bottom">
+                        <p class="footer__copyright">© 2024 Clutch Technologies Inc. All rights reserved.</p>
+                        <nav class="footer__legal">
+                            <a href="#" class="footer__legal-link">Privacy Policy</a>
+                            <a href="#" class="footer__legal-link">Terms of Service</a>
+                            <a href="#" class="footer__legal-link">Accessibility</a>
+                            <a href="#" class="footer__legal-link">Cookie Settings</a>
+                        </nav>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+
+    <!-- State 2: Newsletter Success -->
+    <section class="component-section">
+        <h2 class="section-title">State: Newsletter Subscribed</h2>
+        <div class="component-wrapper">
+            <div style="background: #0F172A; padding: 40px 24px;">
+                <div style="max-width: 280px;">
+                    <h3 class="footer__newsletter-title" style="margin-bottom: 16px;">Stay Connected</h3>
+                    <div class="footer__newsletter-success">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        Thanks for subscribing!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- State 3: Mobile Footer -->
+    <section class="component-section">
+        <h2 class="section-title">State: Mobile Footer</h2>
+        <div class="component-wrapper">
+            <div style="max-width: 375px; margin: 0 auto;">
+                <footer class="footer footer--mobile">
+                    <div class="footer__container">
+                        <div class="footer__main">
+                            <div class="footer__brand">
+                                <div class="footer__logo">
+                                    <div class="footer__logo-icon">C</div>
+                                    <span class="footer__logo-text">Clutch</span>
+                                </div>
+                                <p class="footer__tagline">
+                                    Canada's #1 online car marketplace.
+                                </p>
+                                <div class="footer__social">
+                                    <a href="#" class="footer__social-link" aria-label="Facebook">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="footer__social-link" aria-label="Instagram">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                            <circle cx="12" cy="12" r="4"/>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="footer__social-link" aria-label="YouTube">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
+                                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#0F172A"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="footer__accordion">
+                                <div class="footer__accordion-header">
+                                    <span class="footer__accordion-title">Browse</span>
+                                    <svg class="footer__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9l6 6 6-6"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="footer__accordion">
+                                <div class="footer__accordion-header">
+                                    <span class="footer__accordion-title">Company</span>
+                                    <svg class="footer__accordion-icon footer__accordion-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9l6 6 6-6"/>
+                                    </svg>
+                                </div>
+                                <div class="footer__accordion-content footer__accordion-content--open">
+                                    <nav class="footer__links">
+                                        <a href="#" class="footer__link">About Us</a>
+                                        <a href="#" class="footer__link">Careers</a>
+                                        <a href="#" class="footer__link">Press</a>
+                                        <a href="#" class="footer__link">Blog</a>
+                                    </nav>
+                                </div>
+                            </div>
+
+                            <div class="footer__accordion">
+                                <div class="footer__accordion-header">
+                                    <span class="footer__accordion-title">Support</span>
+                                    <svg class="footer__accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9l6 6 6-6"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="footer__newsletter">
+                                <h3 class="footer__newsletter-title">Stay Connected</h3>
+                                <form class="footer__newsletter-form">
+                                    <input type="email" class="footer__newsletter-input" placeholder="Enter your email">
+                                    <button type="submit" class="footer__newsletter-btn">Subscribe</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="footer__divider"></div>
+
+                        <div class="footer__bottom">
+                            <p class="footer__copyright">© 2024 Clutch Technologies Inc.</p>
+                            <nav class="footer__legal">
+                                <a href="#" class="footer__legal-link">Privacy</a>
+                                <a href="#" class="footer__legal-link">Terms</a>
+                                <a href="#" class="footer__legal-link">Accessibility</a>
+                            </nav>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

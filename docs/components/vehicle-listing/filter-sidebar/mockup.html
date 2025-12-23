@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Sidebar Component - All States</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .component-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            background: #F3F4F6;
+            padding: 32px;
+            border-radius: 12px;
+        }
+
+        /* Filter Sidebar */
+        .filter-sidebar {
+            width: 280px;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .filter-header__title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .filter-header__clear {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1E40AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-header__clear:hover {
+            text-decoration: underline;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .filter-section__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .filter-section__header:hover {
+            background: #F9FAFB;
+        }
+
+        .filter-section__title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .filter-section__toggle {
+            width: 20px;
+            height: 20px;
+            color: #6B7280;
+            transition: transform 0.2s;
+        }
+
+        .filter-section__toggle--open {
+            transform: rotate(180deg);
+        }
+
+        .filter-section__content {
+            padding: 0 16px 16px;
+        }
+
+        /* Range Slider */
+        .range-slider {
+            padding: 8px 0;
+        }
+
+        .range-slider__values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .range-slider__track {
+            position: relative;
+            height: 4px;
+            background: #E5E7EB;
+            border-radius: 2px;
+            margin: 8px 0;
+        }
+
+        .range-slider__fill {
+            position: absolute;
+            height: 100%;
+            background: #1E40AF;
+            border-radius: 2px;
+            left: 20%;
+            right: 30%;
+        }
+
+        .range-slider__handle {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid #1E40AF;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .range-slider__handle--min {
+            left: 20%;
+        }
+
+        .range-slider__handle--max {
+            left: 70%;
+        }
+
+        .range-slider__inputs {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .range-slider__input-group {
+            flex: 1;
+        }
+
+        .range-slider__label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #6B7280;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .range-slider__input {
+            width: 100%;
+            height: 36px;
+            padding: 0 10px;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Checkbox List */
+        .checkbox-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item__box {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #D1D5DB;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .checkbox-item__box--checked {
+            background: #1E40AF;
+            border-color: #1E40AF;
+            color: white;
+        }
+
+        .checkbox-item__label {
+            flex: 1;
+            font-size: 14px;
+            color: #4B5563;
+        }
+
+        .checkbox-item__count {
+            font-size: 13px;
+            color: #9CA3AF;
+        }
+
+        .checkbox-list__more {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1E40AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            padding: 4px 0;
+        }
+
+        .checkbox-list__more:hover {
+            text-decoration: underline;
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .radio-item__circle {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #D1D5DB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .radio-item__circle--selected {
+            border-color: #1E40AF;
+        }
+
+        .radio-item__circle--selected::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #1E40AF;
+            border-radius: 50%;
+        }
+
+        .radio-item__label {
+            flex: 1;
+            font-size: 14px;
+            color: #4B5563;
+        }
+
+        .radio-item__count {
+            font-size: 13px;
+            color: #9CA3AF;
+        }
+
+        /* Toggle Switch */
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-item__label {
+            font-size: 14px;
+            color: #4B5563;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: #E5E7EB;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-switch--active {
+            background: #1E40AF;
+        }
+
+        .toggle-switch__handle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: left 0.2s;
+        }
+
+        .toggle-switch--active .toggle-switch__handle {
+            left: 22px;
+        }
+
+        /* Applied Filters */
+        .applied-filters {
+            padding: 16px;
+            background: #F9FAFB;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .applied-filters__label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6B7280;
+            margin-bottom: 8px;
+        }
+
+        .applied-filters__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .applied-filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 28px;
+            padding: 0 10px;
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 14px;
+            font-size: 13px;
+            color: #1E40AF;
+        }
+
+        .applied-filter-tag__remove {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1E40AF;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .filter-footer {
+            padding: 16px;
+            background: #F9FAFB;
+        }
+
+        .filter-footer__btn {
+            width: 100%;
+            height: 44px;
+            background: #1E40AF;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .filter-footer__btn:hover {
+            background: #1E3A8A;
+        }
+
+        /* Mobile Drawer */
+        .filter-drawer {
+            width: 100%;
+            max-width: 375px;
+            height: 600px;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-drawer__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .filter-drawer__back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1F2937;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-drawer__clear {
+            font-size: 14px;
+            color: #1E40AF;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-drawer__body {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .filter-drawer__footer {
+            padding: 16px;
+            border-top: 1px solid #E5E7EB;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Desktop Sidebar -->
+    <section class="component-section">
+        <h2 class="section-title">Desktop Filter Sidebar</h2>
+        <div class="component-wrapper">
+            <aside class="filter-sidebar">
+                <div class="filter-header">
+                    <h2 class="filter-header__title">Filters</h2>
+                    <button class="filter-header__clear">Clear All</button>
+                </div>
+
+                <!-- Applied Filters -->
+                <div class="applied-filters">
+                    <div class="applied-filters__label">Applied Filters</div>
+                    <div class="applied-filters__tags">
+                        <span class="applied-filter-tag">
+                            SUV
+                            <button class="applied-filter-tag__remove">✕</button>
+                        </span>
+                        <span class="applied-filter-tag">
+                            Honda
+                            <button class="applied-filter-tag__remove">✕</button>
+                        </span>
+                        <span class="applied-filter-tag">
+                            2020-2023
+                            <button class="applied-filter-tag__remove">✕</button>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Price Range -->
+                <div class="filter-section">
+                    <div class="filter-section__header">
+                        <span class="filter-section__title">Price Range</span>
+                        <svg class="filter-section__toggle filter-section__toggle--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </div>
+                    <div class="filter-section__content">
+                        <div class="range-slider">
+                            <div class="range-slider__values">
+                                <span>$15,000</span>
+                                <span>$35,000</span>
+                            </div>
+                            <div class="range-slider__track">
+                                <div class="range-slider__fill"></div>
+                                <div class="range-slider__handle range-slider__handle--min"></div>
+                                <div class="range-slider__handle range-slider__handle--max"></div>
+                            </div>
+                            <div class="range-slider__inputs">
+                                <div class="range-slider__input-group">
+                                    <div class="range-slider__label">Min</div>
+                                    <input type="text" class="range-slider__input" value="$15,000">
+                                </div>
+                                <div class="range-slider__input-group">
+                                    <div class="range-slider__label">Max</div>
+                                    <input type="text" class="range-slider__input" value="$35,000">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Make -->
+                <div class="filter-section">
+                    <div class="filter-section__header">
+                        <span class="filter-section__title">Make</span>
+                        <svg class="filter-section__toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Body Type -->
+                <div class="filter-section">
+                    <div class="filter-section__header">
+                        <span class="filter-section__title">Body Type</span>
+                        <svg class="filter-section__toggle filter-section__toggle--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </div>
+                    <div class="filter-section__content">
+                        <div class="checkbox-list">
+                            <label class="checkbox-item">
+                                <span class="checkbox-item__box checkbox-item__box--checked">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </span>
+                                <span class="checkbox-item__label">SUV</span>
+                                <span class="checkbox-item__count">(234)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <span class="checkbox-item__box"></span>
+                                <span class="checkbox-item__label">Sedan</span>
+                                <span class="checkbox-item__count">(156)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <span class="checkbox-item__box"></span>
+                                <span class="checkbox-item__label">Truck</span>
+                                <span class="checkbox-item__count">(89)</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <span class="checkbox-item__box"></span>
+                                <span class="checkbox-item__label">Hatchback</span>
+                                <span class="checkbox-item__count">(45)</span>
+                            </label>
+                            <button class="checkbox-list__more">Show 3 more</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transmission -->
+                <div class="filter-section">
+                    <div class="filter-section__header">
+                        <span class="filter-section__title">Transmission</span>
+                        <svg class="filter-section__toggle filter-section__toggle--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </div>
+                    <div class="filter-section__content">
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <span class="radio-item__circle"></span>
+                                <span class="radio-item__label">Any</span>
+                            </label>
+                            <label class="radio-item">
+                                <span class="radio-item__circle radio-item__circle--selected"></span>
+                                <span class="radio-item__label">Automatic</span>
+                                <span class="radio-item__count">(412)</span>
+                            </label>
+                            <label class="radio-item">
+                                <span class="radio-item__circle"></span>
+                                <span class="radio-item__label">Manual</span>
+                                <span class="radio-item__count">(45)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certified Only -->
+                <div class="filter-section">
+                    <div class="filter-section__header">
+                        <span class="filter-section__title">Certified Only</span>
+                        <div class="toggle-switch toggle-switch--active">
+                            <div class="toggle-switch__handle"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-footer">
+                    <button class="filter-footer__btn">Show 234 Results</button>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- Mobile Drawer -->
+    <section class="component-section">
+        <h2 class="section-title">Mobile Filter Drawer</h2>
+        <div class="component-wrapper">
+            <div class="filter-drawer">
+                <div class="filter-drawer__header">
+                    <button class="filter-drawer__back">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Filters
+                    </button>
+                    <button class="filter-drawer__clear">Clear All</button>
+                </div>
+
+                <div class="filter-drawer__body">
+                    <!-- Applied Filters -->
+                    <div class="applied-filters">
+                        <div class="applied-filters__label">Applied Filters</div>
+                        <div class="applied-filters__tags">
+                            <span class="applied-filter-tag">
+                                SUV
+                                <button class="applied-filter-tag__remove">✕</button>
+                            </span>
+                            <span class="applied-filter-tag">
+                                Honda
+                                <button class="applied-filter-tag__remove">✕</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="filter-section">
+                        <div class="filter-section__header">
+                            <span class="filter-section__title">Price Range</span>
+                            <svg class="filter-section__toggle filter-section__toggle--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                        <div class="filter-section__content">
+                            <div class="range-slider">
+                                <div class="range-slider__values">
+                                    <span>$15,000</span>
+                                    <span>$35,000</span>
+                                </div>
+                                <div class="range-slider__track">
+                                    <div class="range-slider__fill"></div>
+                                    <div class="range-slider__handle range-slider__handle--min"></div>
+                                    <div class="range-slider__handle range-slider__handle--max"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Body Type -->
+                    <div class="filter-section">
+                        <div class="filter-section__header">
+                            <span class="filter-section__title">Body Type</span>
+                            <svg class="filter-section__toggle filter-section__toggle--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                        <div class="filter-section__content">
+                            <div class="checkbox-list">
+                                <label class="checkbox-item">
+                                    <span class="checkbox-item__box checkbox-item__box--checked">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"/>
+                                        </svg>
+                                    </span>
+                                    <span class="checkbox-item__label">SUV</span>
+                                    <span class="checkbox-item__count">(234)</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <span class="checkbox-item__box"></span>
+                                    <span class="checkbox-item__label">Sedan</span>
+                                    <span class="checkbox-item__count">(156)</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <span class="checkbox-item__box"></span>
+                                    <span class="checkbox-item__label">Truck</span>
+                                    <span class="checkbox-item__count">(89)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-drawer__footer">
+                    <button class="filter-footer__btn">Show 234 Results</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

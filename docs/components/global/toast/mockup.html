@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast/Notification Component - All Variants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .component-section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #1E40AF;
+        }
+
+        .component-wrapper {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 420px;
+        }
+
+        /* Toast Base */
+        .toast {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            min-width: 320px;
+            max-width: 420px;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        /* Toast Types */
+        .toast--success {
+            background: #F0FDF4;
+            border-color: #22C55E;
+        }
+
+        .toast--success .toast__icon {
+            color: #16A34A;
+        }
+
+        .toast--success .toast__title {
+            color: #166534;
+        }
+
+        .toast--success .toast__message {
+            color: #15803D;
+        }
+
+        .toast--error {
+            background: #FEF2F2;
+            border-color: #EF4444;
+        }
+
+        .toast--error .toast__icon {
+            color: #DC2626;
+        }
+
+        .toast--error .toast__title {
+            color: #991B1B;
+        }
+
+        .toast--error .toast__message {
+            color: #B91C1C;
+        }
+
+        .toast--warning {
+            background: #FFFBEB;
+            border-color: #F59E0B;
+        }
+
+        .toast--warning .toast__icon {
+            color: #D97706;
+        }
+
+        .toast--warning .toast__title {
+            color: #92400E;
+        }
+
+        .toast--warning .toast__message {
+            color: #B45309;
+        }
+
+        .toast--info {
+            background: #EFF6FF;
+            border-color: #3B82F6;
+        }
+
+        .toast--info .toast__icon {
+            color: #2563EB;
+        }
+
+        .toast--info .toast__title {
+            color: #1E40AF;
+        }
+
+        .toast--info .toast__message {
+            color: #1D4ED8;
+        }
+
+        .toast--neutral {
+            background: #F9FAFB;
+            border-color: #D1D5DB;
+        }
+
+        .toast--neutral .toast__icon {
+            color: #6B7280;
+        }
+
+        .toast--neutral .toast__title {
+            color: #374151;
+        }
+
+        .toast--neutral .toast__message {
+            color: #4B5563;
+        }
+
+        /* Toast Icon */
+        .toast__icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Toast Content */
+        .toast__content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast__title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .toast__message {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Toast Close */
+        .toast__close {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: #9CA3AF;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toast__close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #6B7280;
+        }
+
+        /* Toast Actions */
+        .toast__actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .toast__action {
+            font-size: 14px;
+            font-weight: 500;
+            color: inherit;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            opacity: 0.9;
+        }
+
+        .toast__action:hover {
+            opacity: 1;
+        }
+
+        .toast__action--primary {
+            color: #1E40AF;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .toast__action--primary:hover {
+            background: #F9FAFB;
+        }
+
+        /* Progress Bar */
+        .toast__progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 12px 0;
+            overflow: hidden;
+        }
+
+        .toast__progress-bar {
+            height: 100%;
+            background: currentColor;
+            opacity: 0.5;
+            animation: progress 5s linear forwards;
+        }
+
+        @keyframes progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        /* Stacked Demo */
+        .stacked-demo {
+            position: relative;
+            padding: 24px;
+            background: #1F2937;
+            border-radius: 12px;
+            min-height: 300px;
+        }
+
+        .stacked-toasts {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Position Demo */
+        .position-demo {
+            position: relative;
+            height: 400px;
+            background: #E5E7EB;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .position-demo::before {
+            content: 'Page Content';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 600;
+            color: #9CA3AF;
+        }
+
+        .toast--positioned {
+            position: absolute;
+        }
+
+        .toast--top-right {
+            top: 24px;
+            right: 24px;
+        }
+
+        .toast--top-center {
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .toast--bottom-right {
+            bottom: 24px;
+            right: 24px;
+        }
+
+        /* Mobile variant */
+        .toast--mobile {
+            min-width: auto;
+            width: calc(100% - 32px);
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Success Toast -->
+    <section class="component-section">
+        <h2 class="section-title">Success Toast</h2>
+        <div class="component-wrapper">
+            <div class="toast-container">
+                <div class="toast toast--success">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Action completed successfully</p>
+                    </div>
+                    <button class="toast__close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="toast toast--success">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Vehicle Added to Favorites</p>
+                        <p class="toast__message">2021 Honda Civic EX has been saved to your list.</p>
+                    </div>
+                    <button class="toast__close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Error Toast -->
+    <section class="component-section">
+        <h2 class="section-title">Error Toast</h2>
+        <div class="component-wrapper">
+            <div class="toast-container">
+                <div class="toast toast--error">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Failed to save changes</p>
+                        <p class="toast__message">Please check your connection and try again.</p>
+                        <div class="toast__actions">
+                            <button class="toast__action">Retry</button>
+                            <button class="toast__action">Dismiss</button>
+                        </div>
+                    </div>
+                    <button class="toast__close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warning Toast -->
+    <section class="component-section">
+        <h2 class="section-title">Warning Toast</h2>
+        <div class="component-wrapper">
+            <div class="toast-container">
+                <div class="toast toast--warning">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Session Expiring Soon</p>
+                        <p class="toast__message">Your session will expire in 5 minutes.</p>
+                        <div class="toast__actions">
+                            <button class="toast__action--primary">Extend Session</button>
+                        </div>
+                    </div>
+                    <button class="toast__close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Toast -->
+    <section class="component-section">
+        <h2 class="section-title">Info Toast</h2>
+        <div class="component-wrapper">
+            <div class="toast-container">
+                <div class="toast toast--info">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">New Feature Available</p>
+                        <p class="toast__message">You can now schedule test drives directly from vehicle listings.</p>
+                    </div>
+                    <button class="toast__close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Neutral Toast -->
+    <section class="component-section">
+        <h2 class="section-title">Neutral Toast</h2>
+        <div class="component-wrapper">
+            <div class="toast-container">
+                <div class="toast toast--neutral">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Message Sent</p>
+                        <p class="toast__message">Your message has been sent to the seller.</p>
+                    </div>
+                    <button class="toast__close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- With Progress Bar -->
+    <section class="component-section">
+        <h2 class="section-title">With Progress Bar (Auto-dismiss)</h2>
+        <div class="component-wrapper">
+            <div class="toast-container">
+                <div class="toast toast--success" style="padding-bottom: 19px;">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Changes Saved</p>
+                        <p class="toast__message">Your preferences have been updated.</p>
+                    </div>
+                    <button class="toast__close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="toast__progress">
+                        <div class="toast__progress-bar" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stacked Toasts -->
+    <section class="component-section">
+        <h2 class="section-title">Stacked Toasts</h2>
+        <div class="component-wrapper" style="padding: 0;">
+            <div class="stacked-demo">
+                <div class="stacked-toasts">
+                    <div class="toast toast--success">
+                        <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <div class="toast__content">
+                            <p class="toast__title">Vehicle Added to Favorites</p>
+                        </div>
+                        <button class="toast__close">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="toast toast--info">
+                        <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        <div class="toast__content">
+                            <p class="toast__title">Price Drop Alert</p>
+                            <p class="toast__message">3 vehicles in your watchlist have dropped in price.</p>
+                        </div>
+                        <button class="toast__close">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="toast toast--warning">
+                        <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <div class="toast__content">
+                            <p class="toast__title">Vehicle Almost Sold</p>
+                            <p class="toast__message">The Honda Civic you viewed is being reserved.</p>
+                        </div>
+                        <button class="toast__close">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Position Demo -->
+    <section class="component-section">
+        <h2 class="section-title">Position Variants</h2>
+        <div class="component-wrapper" style="padding: 0;">
+            <div class="position-demo">
+                <div class="toast toast--success toast--positioned toast--top-right" style="transform: scale(0.85);">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Top Right (Default)</p>
+                    </div>
+                    <button class="toast__close">✕</button>
+                </div>
+
+                <div class="toast toast--info toast--positioned toast--bottom-right" style="transform: scale(0.85);">
+                    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <div class="toast__content">
+                        <p class="toast__title">Bottom Right</p>
+                    </div>
+                    <button class="toast__close">✕</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
