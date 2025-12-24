@@ -1,0 +1,231 @@
+<section
+  class="vehicle-master-detail"
+  [class.vehicle-master-detail--has-detail]="hasDetail"
+  [class.vehicle-master-detail--side-layout]="config.detailLayout === 'side'"
+  [class.vehicle-master-detail--overlay-layout]="config.detailLayout === 'overlay'"
+  [class.vehicle-master-detail--full-layout]="config.detailLayout === 'full'"
+  [attr.aria-label]="ariaLabel"
+>
+  <!-- Master List -->
+  <div class="vehicle-master-detail__master" [class.vehicle-master-detail__master--hidden]="hasDetail && config.detailLayout === 'full'">
+    <div class="vehicle-master-detail__grid" [ngClass]="gridClass">
+      <!-- Loading Skeletons -->
+      <ng-container *ngIf="loading">
+        <div *ngFor="let i of [1, 2, 3, 4, 5, 6]" class="vehicle-master-detail__skeleton">
+          <div class="vehicle-master-detail__skeleton-image"></div>
+          <div class="vehicle-master-detail__skeleton-content">
+            <div class="vehicle-master-detail__skeleton-title"></div>
+            <div class="vehicle-master-detail__skeleton-price"></div>
+            <div class="vehicle-master-detail__skeleton-specs"></div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Vehicle Cards -->
+      <ng-container *ngIf="!loading">
+        <div
+          *ngFor="let vehicle of vehicles; trackBy: trackByVehicleId"
+          class="vehicle-master-detail__card-wrapper"
+          [class.vehicle-master-detail__card-wrapper--selected]="selectedVehicle?.id === vehicle.id"
+        >
+          <zl-vehicle-card
+            [vehicle]="vehicle"
+            [isFavorite]="isFavorite(vehicle.id)"
+            [href]="'javascript:void(0)'"
+            (favoriteToggle)="onFavoriteToggle($event)"
+            (click)="selectVehicle(vehicle)"
+          ></zl-vehicle-card>
+        </div>
+      </ng-container>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && vehicles.length === 0" class="vehicle-master-detail__empty">
+        <svg class="vehicle-master-detail__empty-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 002 12v4c0 .6.4 1 1 1h2"/>
+          <circle cx="7" cy="17" r="2"/>
+          <path d="M9 17h6"/>
+          <circle cx="17" cy="17" r="2"/>
+        </svg>
+        <p class="vehicle-master-detail__empty-text">No vehicles found</p>
+        <p class="vehicle-master-detail__empty-subtext">Try adjusting your search or filters</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Panel -->
+  <aside
+    *ngIf="selectedVehicle"
+    class="vehicle-master-detail__detail"
+    role="complementary"
+    [attr.aria-label]="'Details for ' + selectedVehicle.title"
+  >
+    <!-- Overlay Backdrop -->
+    <div
+      *ngIf="config.detailLayout === 'overlay' || config.detailLayout === 'full'"
+      class="vehicle-master-detail__backdrop"
+      (click)="closeDetail()"
+    ></div>
+
+    <div class="vehicle-master-detail__detail-content">
+      <!-- Detail Header -->
+      <div class="vehicle-master-detail__detail-header">
+        <button
+          class="vehicle-master-detail__close-btn"
+          (click)="closeDetail()"
+          aria-label="Close details"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <h2 class="vehicle-master-detail__detail-title">{{ selectedVehicle.title }}</h2>
+        <div class="vehicle-master-detail__detail-badges">
+          <zl-badge *ngIf="selectedVehicle.isFeatured" variant="warning" size="sm">Featured</zl-badge>
+          <zl-badge *ngIf="selectedVehicle.isCertified" variant="success" size="sm">Certified</zl-badge>
+          <zl-badge *ngIf="selectedVehicle.status === 'sold'" variant="secondary" size="sm">Sold</zl-badge>
+          <zl-badge *ngIf="selectedVehicle.status === 'reserved'" variant="warning" size="sm">Reserved</zl-badge>
+        </div>
+      </div>
+
+      <!-- Image Gallery -->
+      <div class="vehicle-master-detail__gallery">
+        <zl-image-gallery
+          [images]="galleryImages"
+          [showThumbnails]="true"
+          [ariaLabel]="'Gallery for ' + selectedVehicle.title"
+        ></zl-image-gallery>
+      </div>
+
+      <!-- Pricing Section -->
+      <div class="vehicle-master-detail__pricing">
+        <span class="vehicle-master-detail__price">{{ formatPrice(selectedVehicle.price) }}</span>
+        <span *ngIf="selectedVehicle.monthlyPayment" class="vehicle-master-detail__monthly">
+          Est. {{ formatPrice(selectedVehicle.monthlyPayment) }}/mo
+        </span>
+      </div>
+
+      <!-- Quick Specs -->
+      <div class="vehicle-master-detail__quick-specs">
+        <div *ngIf="selectedVehicle.mileage" class="vehicle-master-detail__spec-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          <span>{{ formatMileage(selectedVehicle.mileage) }}</span>
+        </div>
+        <div *ngIf="selectedVehicle.transmission" class="vehicle-master-detail__spec-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M6 8v8M10 8v8M14 8v8M18 8v8"/>
+          </svg>
+          <span>{{ selectedVehicle.transmission }}</span>
+        </div>
+        <div *ngIf="selectedVehicle.fuelType" class="vehicle-master-detail__spec-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 22V4a2 2 0 012-2h6a2 2 0 012 2v18"/>
+            <path d="M13 10h4a2 2 0 012 2v10"/>
+            <path d="M19 6V4a2 2 0 00-2-2h-1"/>
+          </svg>
+          <span>{{ selectedVehicle.fuelType }}</span>
+        </div>
+        <div *ngIf="selectedVehicle.drivetrain" class="vehicle-master-detail__spec-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 3v6M12 15v6M3 12h6M15 12h6"/>
+          </svg>
+          <span>{{ selectedVehicle.drivetrain }}</span>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div *ngIf="selectedVehicle.description" class="vehicle-master-detail__description">
+        <h3 class="vehicle-master-detail__section-title">Description</h3>
+        <p>{{ selectedVehicle.description }}</p>
+      </div>
+
+      <!-- Highlights -->
+      <div *ngIf="selectedVehicle.highlights && selectedVehicle.highlights.length > 0" class="vehicle-master-detail__highlights">
+        <h3 class="vehicle-master-detail__section-title">Highlights</h3>
+        <ul class="vehicle-master-detail__highlights-list">
+          <li *ngFor="let highlight of selectedVehicle.highlights">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20,6 9,17 4,12"/>
+            </svg>
+            {{ highlight }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Vehicle Details -->
+      <div class="vehicle-master-detail__specs-section">
+        <h3 class="vehicle-master-detail__section-title">Vehicle Details</h3>
+        <dl class="vehicle-master-detail__specs-grid">
+          <div class="vehicle-master-detail__spec-row">
+            <dt>Year</dt>
+            <dd>{{ selectedVehicle.year }}</dd>
+          </div>
+          <div class="vehicle-master-detail__spec-row">
+            <dt>Make</dt>
+            <dd>{{ selectedVehicle.make }}</dd>
+          </div>
+          <div class="vehicle-master-detail__spec-row">
+            <dt>Model</dt>
+            <dd>{{ selectedVehicle.model }}</dd>
+          </div>
+          <div *ngIf="selectedVehicle.trim" class="vehicle-master-detail__spec-row">
+            <dt>Trim</dt>
+            <dd>{{ selectedVehicle.trim }}</dd>
+          </div>
+          <div *ngIf="selectedVehicle.exteriorColor" class="vehicle-master-detail__spec-row">
+            <dt>Exterior Color</dt>
+            <dd>{{ selectedVehicle.exteriorColor }}</dd>
+          </div>
+          <div *ngIf="selectedVehicle.interiorColor" class="vehicle-master-detail__spec-row">
+            <dt>Interior Color</dt>
+            <dd>{{ selectedVehicle.interiorColor }}</dd>
+          </div>
+          <div *ngIf="selectedVehicle.vin" class="vehicle-master-detail__spec-row">
+            <dt>VIN</dt>
+            <dd class="vehicle-master-detail__vin">{{ selectedVehicle.vin }}</dd>
+          </div>
+          <div *ngIf="selectedVehicle.stockNumber" class="vehicle-master-detail__spec-row">
+            <dt>Stock #</dt>
+            <dd>{{ selectedVehicle.stockNumber }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Features -->
+      <div *ngIf="selectedVehicle.features && selectedVehicle.features.length > 0" class="vehicle-master-detail__features">
+        <h3 class="vehicle-master-detail__section-title">Features</h3>
+        <div class="vehicle-master-detail__features-list">
+          <zl-badge *ngFor="let feature of selectedVehicle.features" variant="secondary" size="sm" [pill]="true">
+            {{ feature }}
+          </zl-badge>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="vehicle-master-detail__actions">
+        <zl-button
+          variant="primary"
+          size="lg"
+          [fullWidth]="true"
+          (click)="onContactDealer()"
+          [disabled]="selectedVehicle.status === 'sold'"
+        >
+          Contact Dealer
+        </zl-button>
+        <zl-button
+          variant="outline"
+          size="lg"
+          [fullWidth]="true"
+          (click)="onScheduleTestDrive()"
+          [disabled]="selectedVehicle.status === 'sold'"
+        >
+          Schedule Test Drive
+        </zl-button>
+      </div>
+    </div>
+  </aside>
+</section>

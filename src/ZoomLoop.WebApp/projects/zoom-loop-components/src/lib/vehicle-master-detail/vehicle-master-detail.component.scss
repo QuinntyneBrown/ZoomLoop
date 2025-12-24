@@ -1,0 +1,471 @@
+// Vehicle Master Detail Component - BEM Methodology
+// Block: .vehicle-master-detail
+
+@import '../styles/tokens';
+@import '../styles/mixins';
+
+.vehicle-master-detail {
+  display: flex;
+  width: 100%;
+  min-height: 400px;
+  position: relative;
+
+  // Layout Modifiers
+  &--side-layout {
+    gap: $spacing-6;
+  }
+
+  &--overlay-layout,
+  &--full-layout {
+    .vehicle-master-detail__detail {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: $z-index-modal;
+    }
+  }
+
+  &--full-layout {
+    .vehicle-master-detail__detail {
+      left: 0;
+    }
+  }
+
+  // Master List
+  &__master {
+    flex: 1;
+    min-width: 0;
+
+    &--hidden {
+      display: none;
+    }
+  }
+
+  // Grid
+  &__grid {
+    display: grid;
+    gap: $spacing-6;
+
+    &--1-col {
+      grid-template-columns: 1fr;
+    }
+
+    &--2-col {
+      grid-template-columns: repeat(2, 1fr);
+
+      @include max-md {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &--3-col {
+      grid-template-columns: repeat(3, 1fr);
+
+      @include max-lg {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include max-md {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &--4-col {
+      grid-template-columns: repeat(4, 1fr);
+
+      @media (max-width: #{$breakpoint-xl - 1px}) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @include max-lg {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include max-md {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  // Card Wrapper
+  &__card-wrapper {
+    cursor: pointer;
+    transition: all $transition-base;
+    border-radius: $radius-xl;
+
+    &--selected {
+      box-shadow: 0 0 0 3px $color-primary-500;
+    }
+  }
+
+  // Loading Skeleton
+  &__skeleton {
+    @include card;
+    border-radius: $radius-xl;
+    overflow: hidden;
+  }
+
+  &__skeleton-image {
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(90deg, $color-neutral-200 25%, $color-neutral-100 50%, $color-neutral-200 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  &__skeleton-content {
+    padding: $spacing-4;
+  }
+
+  &__skeleton-title {
+    height: 20px;
+    width: 70%;
+    background: $color-neutral-200;
+    border-radius: $radius-sm;
+    margin-bottom: $spacing-2;
+  }
+
+  &__skeleton-price {
+    height: 24px;
+    width: 40%;
+    background: $color-neutral-200;
+    border-radius: $radius-sm;
+    margin-bottom: $spacing-3;
+  }
+
+  &__skeleton-specs {
+    height: 24px;
+    width: 90%;
+    background: $color-neutral-200;
+    border-radius: $radius-sm;
+  }
+
+  // Empty State
+  &__empty {
+    grid-column: 1 / -1;
+    @include flex-center;
+    @include flex-column;
+    padding: $spacing-16 $spacing-4;
+    text-align: center;
+    color: $color-text-muted;
+  }
+
+  &__empty-icon {
+    margin-bottom: $spacing-4;
+    opacity: 0.5;
+  }
+
+  &__empty-text {
+    font-family: $font-family-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-2;
+  }
+
+  &__empty-subtext {
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+
+  // Detail Panel
+  &__detail {
+    display: flex;
+    width: 100%;
+    max-width: 480px;
+    flex-shrink: 0;
+
+    .vehicle-master-detail--side-layout & {
+      position: sticky;
+      top: $spacing-4;
+      height: fit-content;
+      max-height: calc(100vh - #{$spacing-8});
+      overflow-y: auto;
+    }
+
+    .vehicle-master-detail--overlay-layout & {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .vehicle-master-detail--full-layout & {
+      max-width: none;
+    }
+  }
+
+  // Backdrop
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $color-bg-overlay;
+    z-index: -1;
+    @include fade-in;
+  }
+
+  // Detail Content
+  &__detail-content {
+    @include card;
+    width: 100%;
+    padding: $spacing-6;
+    overflow-y: auto;
+    background: $color-bg-primary;
+
+    .vehicle-master-detail--overlay-layout &,
+    .vehicle-master-detail--full-layout & {
+      position: relative;
+      z-index: 1;
+      max-height: 100vh;
+      border-radius: 0;
+      box-shadow: $shadow-2xl;
+    }
+
+    .vehicle-master-detail--overlay-layout & {
+      margin-left: auto;
+    }
+
+    .vehicle-master-detail--full-layout & {
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 0;
+
+      @include lg {
+        margin-top: $spacing-8;
+        margin-bottom: $spacing-8;
+        max-height: calc(100vh - #{$spacing-16});
+        border-radius: $radius-xl;
+      }
+    }
+  }
+
+  // Detail Header
+  &__detail-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: $spacing-3;
+    margin-bottom: $spacing-4;
+    padding-bottom: $spacing-4;
+    border-bottom: 1px solid $color-border-primary;
+  }
+
+  &__close-btn {
+    @include reset-button;
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-full;
+    background: $color-neutral-100;
+    color: $color-text-secondary;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: $color-neutral-200;
+      color: $color-text-primary;
+    }
+
+    &:focus-visible {
+      @include focus-ring-primary;
+    }
+  }
+
+  &__detail-title {
+    flex: 1;
+    font-family: $font-family-primary;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+    line-height: $line-height-tight;
+
+    @include lg {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__detail-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+    width: 100%;
+  }
+
+  // Gallery
+  &__gallery {
+    margin-bottom: $spacing-6;
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  // Pricing
+  &__pricing {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-3;
+    margin-bottom: $spacing-4;
+  }
+
+  &__price {
+    font-family: $font-family-primary;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+
+  &__monthly {
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+  }
+
+  // Quick Specs
+  &__quick-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+    padding: $spacing-4;
+    background: $color-bg-secondary;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-6;
+  }
+
+  &__spec-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+
+    svg {
+      color: $color-text-muted;
+    }
+  }
+
+  // Section Title
+  &__section-title {
+    font-family: $font-family-primary;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-3;
+  }
+
+  // Description
+  &__description {
+    margin-bottom: $spacing-6;
+
+    p {
+      font-family: $font-family-primary;
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      line-height: $line-height-relaxed;
+      margin: 0;
+    }
+  }
+
+  // Highlights
+  &__highlights {
+    margin-bottom: $spacing-6;
+  }
+
+  &__highlights-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: $spacing-2;
+      font-family: $font-family-primary;
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+      padding: $spacing-2 0;
+
+      svg {
+        color: $color-success;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  // Specs Section
+  &__specs-section {
+    margin-bottom: $spacing-6;
+  }
+
+  &__specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-2;
+    margin: 0;
+
+    @include max-sm {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__spec-row {
+    display: flex;
+    justify-content: space-between;
+    padding: $spacing-2 $spacing-3;
+    background: $color-bg-secondary;
+    border-radius: $radius-sm;
+
+    dt {
+      font-family: $font-family-primary;
+      font-size: $font-size-sm;
+      color: $color-text-muted;
+    }
+
+    dd {
+      font-family: $font-family-primary;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: $color-text-primary;
+      margin: 0;
+      text-align: right;
+    }
+  }
+
+  &__vin {
+    font-family: $font-family-mono;
+    font-size: $font-size-xs;
+  }
+
+  // Features
+  &__features {
+    margin-bottom: $spacing-6;
+  }
+
+  &__features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+    padding-top: $spacing-4;
+    border-top: 1px solid $color-border-primary;
+    margin-top: auto;
+  }
+}
+
+// Shimmer Animation
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
