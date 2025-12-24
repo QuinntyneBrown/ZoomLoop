@@ -41,6 +41,7 @@ export * from './lib/toast/toast.component';
 
 // Auth Components
 export * from './lib/login-dialog';
+export * from './lib/create-account-form';
 
 // Dialog Components
 export * from './lib/vehicle-ingestion-dialog';

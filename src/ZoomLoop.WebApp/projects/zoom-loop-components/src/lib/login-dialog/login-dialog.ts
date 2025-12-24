@@ -48,6 +48,7 @@ export class LoginDialog {
   @Output() register = new EventEmitter<RegisterData>();
   @Output() forgotPassword = new EventEmitter<ForgotPasswordData>();
   @Output() modeChanged = new EventEmitter<LoginDialogMode>();
+  @Output() navigateToCreateAccount = new EventEmitter<void>();
 
   loginData: LoginData = {
     email: '',
@@ -169,6 +170,12 @@ export class LoginDialog {
 
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  onNavigateToCreateAccount(): void {
+    this.resetForms();
+    this.closed.emit();
+    this.navigateToCreateAccount.emit();
   }
 
   private resetForms(): void {
