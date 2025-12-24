@@ -58,8 +58,8 @@ public partial class RegisterHandler : IRequestHandler<RegisterRequest, Register
             Status = UserStatus.Active,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            EmailVerificationToken = Guid.NewGuid().ToString("N"),
-            EmailVerificationTokenExpiry = DateTime.UtcNow.AddHours(24),
+            EmailVerified = true,
+            EmailVerifiedAt = DateTime.UtcNow,
             Roles = userRole != null ? [userRole] : []
         };
 

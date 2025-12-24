@@ -1,0 +1,8 @@
+<div class="create-account-page">
+  <zl-create-account-form
+    [isLoading]="isLoading"
+    [errorMessage]="errorMessage"
+    (submitted)="onSubmit($event)"
+    (signInClick)="onSignInClick()"
+  ></zl-create-account-form>
+</div>

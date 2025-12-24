@@ -1,0 +1,8 @@
+.create-account-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl, 2rem) var(--spacing-md, 1rem);
+  background-color: var(--background-secondary, #f9fafb);
+}

@@ -209,4 +209,9 @@ export class Layout implements OnInit, OnDestroy {
       }
     });
   }
+
+  onNavigateToCreateAccount(): void {
+    this.isLoginDialogOpen = false;
+    this.router.navigate(['/create-account']);
+  }
 }

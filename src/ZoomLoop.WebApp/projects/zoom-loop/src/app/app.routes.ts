@@ -34,6 +34,10 @@ export const routes: Routes = [
         path: 'my-dashboard',
         loadComponent: () => import('./pages').then(m => m.MyDashboard),
         canActivate: [authGuard]
+      },
+      {
+        path: 'create-account',
+        loadComponent: () => import('./pages').then(m => m.CreateAccount)
       }
     ]
   }

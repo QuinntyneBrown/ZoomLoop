@@ -1,0 +1,144 @@
+<div class="create-account-form">
+  <div class="create-account-form__header">
+    <h1 class="create-account-form__title">Create Account</h1>
+    <p class="create-account-form__subtitle">Join ZoomLoop to find your perfect vehicle</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="create-account-form__error">
+    {{ errorMessage }}
+  </div>
+
+  <form class="create-account-form__form" (ngSubmit)="onSubmit()">
+    <div class="create-account-form__row">
+      <div class="create-account-form__field">
+        <label class="create-account-form__label" for="firstName">First Name</label>
+        <input
+          id="firstName"
+          type="text"
+          class="create-account-form__input"
+          [(ngModel)]="formData.firstName"
+          name="firstName"
+          placeholder="First name"
+          autocomplete="given-name"
+          required
+        />
+      </div>
+
+      <div class="create-account-form__field">
+        <label class="create-account-form__label" for="lastName">Last Name</label>
+        <input
+          id="lastName"
+          type="text"
+          class="create-account-form__input"
+          [(ngModel)]="formData.lastName"
+          name="lastName"
+          placeholder="Last name"
+          autocomplete="family-name"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="create-account-form__field">
+      <label class="create-account-form__label" for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        class="create-account-form__input"
+        [(ngModel)]="formData.email"
+        name="email"
+        placeholder="Enter your email"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <div class="create-account-form__field">
+      <label class="create-account-form__label" for="phone">Phone (optional)</label>
+      <input
+        id="phone"
+        type="tel"
+        class="create-account-form__input"
+        [(ngModel)]="formData.phone"
+        name="phone"
+        placeholder="Enter your phone number"
+        autocomplete="tel"
+      />
+    </div>
+
+    <div class="create-account-form__field">
+      <label class="create-account-form__label" for="password">Password</label>
+      <div class="create-account-form__password-wrapper">
+        <input
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          class="create-account-form__input"
+          [(ngModel)]="formData.password"
+          name="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+          required
+        />
+        <button
+          type="button"
+          class="create-account-form__password-toggle"
+          (click)="togglePasswordVisibility()"
+        >
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </button>
+      </div>
+      <div *ngIf="formData.password" class="create-account-form__password-strength" [ngClass]="getPasswordStrengthClass()">
+        {{ getPasswordStrength() }}
+      </div>
+      <div class="create-account-form__hint">
+        At least 8 characters with 1 uppercase letter and 1 number
+      </div>
+    </div>
+
+    <div class="create-account-form__field">
+      <label class="create-account-form__label" for="confirmPassword">Confirm Password</label>
+      <div class="create-account-form__password-wrapper">
+        <input
+          id="confirmPassword"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          class="create-account-form__input"
+          [(ngModel)]="formData.confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          autocomplete="new-password"
+          required
+        />
+        <button
+          type="button"
+          class="create-account-form__password-toggle"
+          (click)="toggleConfirmPasswordVisibility()"
+        >
+          {{ showConfirmPassword ? 'Hide' : 'Show' }}
+        </button>
+      </div>
+      <div *ngIf="formData.confirmPassword && formData.password !== formData.confirmPassword" class="create-account-form__error-text">
+        Passwords do not match
+      </div>
+    </div>
+
+    <label class="create-account-form__checkbox">
+      <input type="checkbox" [(ngModel)]="formData.marketingOptIn" name="marketingOptIn" />
+      <span>Send me news, updates, and promotions</span>
+    </label>
+
+    <button
+      type="submit"
+      class="create-account-form__submit"
+      [disabled]="!isFormValid || isLoading"
+    >
+      {{ isLoading ? 'Creating account...' : 'Create Account' }}
+    </button>
+
+    <div class="create-account-form__switch">
+      <span>Already have an account?</span>
+      <button type="button" class="create-account-form__link" (click)="onSignInClick()">
+        Sign in
+      </button>
+    </div>
+  </form>
+</div>
