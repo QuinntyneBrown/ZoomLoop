@@ -1,0 +1,376 @@
+<section
+  class="vehicles"
+  [class.vehicles--has-detail]="hasDetail"
+  [attr.aria-label]="ariaLabel"
+>
+  <!-- Master List -->
+  <div class="vehicles__master">
+    <!-- Header with Search and Create -->
+    <div class="vehicles__header">
+      <div class="vehicles__search" *ngIf="config.showSearch">
+        <input
+          type="text"
+          class="vehicles__search-input"
+          placeholder="Search vehicles..."
+          [(ngModel)]="searchTerm"
+          aria-label="Search vehicles"
+        />
+        <svg class="vehicles__search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+      </div>
+      <zl-button variant="primary" size="sm" (click)="onCreate()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        Add Vehicle
+      </zl-button>
+    </div>
+
+    <!-- Vehicle Table -->
+    <div class="vehicles__table-wrapper">
+      <!-- Loading State -->
+      <div *ngIf="loading" class="vehicles__loading">
+        <div *ngFor="let i of [1, 2, 3, 4, 5]" class="vehicles__skeleton-row">
+          <div class="vehicles__skeleton-cell vehicles__skeleton-cell--title"></div>
+          <div class="vehicles__skeleton-cell vehicles__skeleton-cell--short"></div>
+          <div class="vehicles__skeleton-cell vehicles__skeleton-cell--short"></div>
+          <div class="vehicles__skeleton-cell vehicles__skeleton-cell--medium"></div>
+          <div class="vehicles__skeleton-cell vehicles__skeleton-cell--short"></div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <table *ngIf="!loading" class="vehicles__table" role="grid">
+        <thead>
+          <tr>
+            <th class="vehicles__th vehicles__th--sortable" (click)="sort('title')">
+              Vehicle {{ getSortIcon('title') }}
+            </th>
+            <th class="vehicles__th vehicles__th--sortable" (click)="sort('year')">
+              Year {{ getSortIcon('year') }}
+            </th>
+            <th class="vehicles__th vehicles__th--sortable" (click)="sort('price')">
+              Price {{ getSortIcon('price') }}
+            </th>
+            <th class="vehicles__th vehicles__th--sortable" (click)="sort('mileage')">
+              Mileage {{ getSortIcon('mileage') }}
+            </th>
+            <th class="vehicles__th">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let vehicle of filteredVehicles; trackBy: trackByVehicleId"
+            class="vehicles__row"
+            [class.vehicles__row--selected]="selectedVehicle?.id === vehicle.id"
+            (click)="selectVehicle(vehicle)"
+            tabindex="0"
+            role="row"
+            [attr.aria-selected]="selectedVehicle?.id === vehicle.id"
+          >
+            <td class="vehicles__td vehicles__td--title">
+              <div class="vehicles__vehicle-info">
+                <span class="vehicles__vehicle-title">{{ vehicle.title }}</span>
+                <span class="vehicles__vehicle-subtitle">{{ vehicle.make }} {{ vehicle.model }}</span>
+              </div>
+            </td>
+            <td class="vehicles__td">{{ vehicle.year }}</td>
+            <td class="vehicles__td vehicles__td--price">{{ formatPrice(vehicle.price) }}</td>
+            <td class="vehicles__td">{{ formatMileage(vehicle.mileage) }}</td>
+            <td class="vehicles__td">
+              <zl-badge [variant]="getStatusVariant(vehicle.status)" size="sm">
+                {{ vehicle.status || 'available' }}
+              </zl-badge>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && filteredVehicles.length === 0" class="vehicles__empty">
+        <svg class="vehicles__empty-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 002 12v4c0 .6.4 1 1 1h2"/>
+          <circle cx="7" cy="17" r="2"/>
+          <path d="M9 17h6"/>
+          <circle cx="17" cy="17" r="2"/>
+        </svg>
+        <p class="vehicles__empty-text">No vehicles found</p>
+        <p class="vehicles__empty-subtext">Try adjusting your search or add a new vehicle</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Form Panel -->
+  <aside
+    *ngIf="selectedVehicle"
+    class="vehicles__detail"
+    role="complementary"
+    [attr.aria-label]="'Edit ' + selectedVehicle.title"
+  >
+    <div class="vehicles__detail-content">
+      <!-- Detail Header -->
+      <div class="vehicles__detail-header">
+        <button
+          class="vehicles__close-btn"
+          (click)="closeDetail()"
+          aria-label="Close form"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <h2 class="vehicles__detail-title">Edit Vehicle</h2>
+      </div>
+
+      <!-- Vehicle Form -->
+      <form [formGroup]="vehicleForm" class="vehicles__form" (ngSubmit)="onSave()">
+        <!-- Basic Info Section -->
+        <div class="vehicles__form-section">
+          <h3 class="vehicles__section-title">Basic Information</h3>
+
+          <div class="vehicles__form-group">
+            <label class="vehicles__label" for="title">Title</label>
+            <input
+              id="title"
+              type="text"
+              class="vehicles__input"
+              formControlName="title"
+              placeholder="e.g., 2024 BMW X5 xDrive40i"
+            />
+          </div>
+
+          <div class="vehicles__form-row">
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="year">Year *</label>
+              <input
+                id="year"
+                type="number"
+                class="vehicles__input"
+                formControlName="year"
+                min="1900"
+                max="2100"
+              />
+            </div>
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="make">Make *</label>
+              <input
+                id="make"
+                type="text"
+                class="vehicles__input"
+                formControlName="make"
+                placeholder="e.g., BMW"
+              />
+            </div>
+          </div>
+
+          <div class="vehicles__form-row">
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="model">Model *</label>
+              <input
+                id="model"
+                type="text"
+                class="vehicles__input"
+                formControlName="model"
+                placeholder="e.g., X5"
+              />
+            </div>
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="trim">Trim</label>
+              <input
+                id="trim"
+                type="text"
+                class="vehicles__input"
+                formControlName="trim"
+                placeholder="e.g., xDrive40i"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Pricing Section -->
+        <div class="vehicles__form-section">
+          <h3 class="vehicles__section-title">Pricing</h3>
+
+          <div class="vehicles__form-row">
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="price">Price (CAD) *</label>
+              <input
+                id="price"
+                type="number"
+                class="vehicles__input"
+                formControlName="price"
+                min="0"
+              />
+            </div>
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="monthlyPayment">Monthly Payment</label>
+              <input
+                id="monthlyPayment"
+                type="number"
+                class="vehicles__input"
+                formControlName="monthlyPayment"
+                min="0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Specifications Section -->
+        <div class="vehicles__form-section">
+          <h3 class="vehicles__section-title">Specifications</h3>
+
+          <div class="vehicles__form-row">
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="mileage">Mileage (km)</label>
+              <input
+                id="mileage"
+                type="number"
+                class="vehicles__input"
+                formControlName="mileage"
+                min="0"
+              />
+            </div>
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="fuelType">Fuel Type</label>
+              <select id="fuelType" class="vehicles__input" formControlName="fuelType">
+                <option value="">Select...</option>
+                <option value="Gasoline">Gasoline</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="vehicles__form-row">
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="transmission">Transmission</label>
+              <select id="transmission" class="vehicles__input" formControlName="transmission">
+                <option value="">Select...</option>
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option>
+                <option value="CVT">CVT</option>
+              </select>
+            </div>
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="drivetrain">Drivetrain</label>
+              <select id="drivetrain" class="vehicles__input" formControlName="drivetrain">
+                <option value="">Select...</option>
+                <option value="FWD">FWD</option>
+                <option value="RWD">RWD</option>
+                <option value="AWD">AWD</option>
+                <option value="4WD">4WD</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colors Section -->
+        <div class="vehicles__form-section">
+          <h3 class="vehicles__section-title">Colors</h3>
+
+          <div class="vehicles__form-row">
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="exteriorColor">Exterior Color</label>
+              <input
+                id="exteriorColor"
+                type="text"
+                class="vehicles__input"
+                formControlName="exteriorColor"
+                placeholder="e.g., Alpine White"
+              />
+            </div>
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="interiorColor">Interior Color</label>
+              <input
+                id="interiorColor"
+                type="text"
+                class="vehicles__input"
+                formControlName="interiorColor"
+                placeholder="e.g., Black Leather"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Identification Section -->
+        <div class="vehicles__form-section">
+          <h3 class="vehicles__section-title">Identification</h3>
+
+          <div class="vehicles__form-row">
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="vin">VIN</label>
+              <input
+                id="vin"
+                type="text"
+                class="vehicles__input vehicles__input--mono"
+                formControlName="vin"
+                placeholder="17-character VIN"
+                maxlength="17"
+              />
+            </div>
+            <div class="vehicles__form-group">
+              <label class="vehicles__label" for="stockNumber">Stock Number</label>
+              <input
+                id="stockNumber"
+                type="text"
+                class="vehicles__input"
+                formControlName="stockNumber"
+                placeholder="e.g., P12345"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Section -->
+        <div class="vehicles__form-section">
+          <h3 class="vehicles__section-title">Status & Flags</h3>
+
+          <div class="vehicles__form-group">
+            <label class="vehicles__label" for="status">Status</label>
+            <select id="status" class="vehicles__input" formControlName="status">
+              <option value="available">Available</option>
+              <option value="reserved">Reserved</option>
+              <option value="sold">Sold</option>
+            </select>
+          </div>
+
+          <div class="vehicles__form-checkboxes">
+            <label class="vehicles__checkbox-label">
+              <input type="checkbox" formControlName="isFeatured" />
+              <span>Featured Vehicle</span>
+            </label>
+            <label class="vehicles__checkbox-label">
+              <input type="checkbox" formControlName="isCertified" />
+              <span>Certified Pre-Owned</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="vehicles__actions">
+          <zl-button
+            type="submit"
+            variant="primary"
+            size="lg"
+            [fullWidth]="true"
+            [disabled]="!vehicleForm.valid"
+          >
+            Save Changes
+          </zl-button>
+          <zl-button
+            type="button"
+            variant="outline"
+            size="lg"
+            [fullWidth]="true"
+            (click)="onDelete()"
+          >
+            Delete Vehicle
+          </zl-button>
+        </div>
+      </form>
+    </div>
+  </aside>
+</section>
