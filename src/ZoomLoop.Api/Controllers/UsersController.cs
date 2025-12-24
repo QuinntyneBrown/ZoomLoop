@@ -38,7 +38,7 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPut("me", Name = "UpdateProfileRoute")]
+    [HttpPut("me", Name = "UpdateUserProfileRoute")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)

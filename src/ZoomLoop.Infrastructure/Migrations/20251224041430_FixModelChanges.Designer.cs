@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZoomLoop.Infrastructure;
 
@@ -11,9 +12,11 @@ using ZoomLoop.Infrastructure;
 namespace ZoomLoop.Infrastructure.Migrations
 {
     [DbContext(typeof(ZoomLoopDbContext))]
-    partial class ZoomLoopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251224041430_FixModelChanges")]
+    partial class FixModelChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
