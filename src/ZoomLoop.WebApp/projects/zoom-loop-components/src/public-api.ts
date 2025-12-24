@@ -46,5 +46,8 @@ export * from './lib/create-account-form';
 // Dialog Components
 export * from './lib/vehicle-ingestion-dialog';
 
+// Dialog Service (MatDialog wrapper)
+export * from './lib/dialog';
+
 // User Components
 export * from './lib/my-profile/my-profile';
