@@ -7,5 +7,6 @@ export * from './vehicle-detail';
 export * from './sell';
 export * from './how-it-works';
 export * from './my-dashboard';
+export * from './my-profile';
 export * from './create-account';
 export * from './car-loan-calculator';

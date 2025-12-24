@@ -148,7 +148,7 @@ export class MyDashboard implements OnInit, OnDestroy {
   onCardAction(cardId: string): void {
     switch (cardId) {
       case 'personal-info':
-        // Navigate to profile edit
+        this.router.navigate(['/my-profile']);
         break;
       case 'my-cars':
         // Navigate to my cars
