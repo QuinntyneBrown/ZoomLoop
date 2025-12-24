@@ -1,0 +1,149 @@
+<div class="my-profile" [class.my-profile--compact]="compact">
+  <div class="my-profile__container">
+    <!-- Header -->
+    <div class="my-profile__header">
+      <h2 class="my-profile__title">My Profile</h2>
+      <p class="my-profile__subtitle">Update your personal information</p>
+    </div>
+
+    <!-- Avatar Section -->
+    <div *ngIf="showAvatar" class="my-profile__avatar-section">
+      <div class="my-profile__avatar-wrapper">
+        <div class="my-profile__avatar" [class.my-profile__avatar--has-image]="profile.avatarUrl">
+          <img *ngIf="profile.avatarUrl" [src]="profile.avatarUrl" alt="Profile avatar" class="my-profile__avatar-image" />
+          <div *ngIf="!profile.avatarUrl" class="my-profile__avatar-placeholder">
+            {{ getInitials() || '?' }}
+          </div>
+        </div>
+        <button
+          *ngIf="!readonly"
+          type="button"
+          class="my-profile__avatar-button"
+          (click)="triggerFileInput()"
+          [disabled]="loading"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </button>
+        <input
+          id="avatar-upload"
+          type="file"
+          accept="image/*"
+          class="my-profile__avatar-input"
+          (change)="onAvatarFileChange($event)"
+        />
+      </div>
+      <div *ngIf="errors['avatar']" class="my-profile__avatar-error">
+        {{ errors['avatar'] }}
+      </div>
+    </div>
+
+    <!-- Form Fields -->
+    <form class="my-profile__form" (ngSubmit)="onSubmit()">
+      <div class="my-profile__row">
+        <div class="my-profile__field">
+          <zl-input
+            label="First Name"
+            placeholder="Enter your first name"
+            [value]="profile.firstName"
+            (valueChange)="onFieldChange('firstName', $event)"
+            (inputBlur)="onFieldBlur('firstName')"
+            [state]="getFieldState('firstName')"
+            [errorText]="errors['firstName'] || ''"
+            [disabled]="loading"
+            [readonly]="readonly"
+            required
+          ></zl-input>
+        </div>
+
+        <div class="my-profile__field">
+          <zl-input
+            label="Last Name"
+            placeholder="Enter your last name"
+            [value]="profile.lastName"
+            (valueChange)="onFieldChange('lastName', $event)"
+            (inputBlur)="onFieldBlur('lastName')"
+            [state]="getFieldState('lastName')"
+            [errorText]="errors['lastName'] || ''"
+            [disabled]="loading"
+            [readonly]="readonly"
+            required
+          ></zl-input>
+        </div>
+      </div>
+
+      <div class="my-profile__field">
+        <zl-input
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+          [value]="profile.email"
+          (valueChange)="onFieldChange('email', $event)"
+          (inputBlur)="onFieldBlur('email')"
+          [state]="getFieldState('email')"
+          [errorText]="errors['email'] || ''"
+          [disabled]="loading"
+          [readonly]="readonly"
+          required
+        ></zl-input>
+      </div>
+
+      <div class="my-profile__field">
+        <zl-input
+          label="Phone Number"
+          type="tel"
+          placeholder="Enter your phone number"
+          [value]="profile.phone || ''"
+          (valueChange)="onFieldChange('phone', $event)"
+          (inputBlur)="onFieldBlur('phone')"
+          [state]="getFieldState('phone')"
+          [errorText]="errors['phone'] || ''"
+          helperText="Optional"
+          [disabled]="loading"
+          [readonly]="readonly"
+        ></zl-input>
+      </div>
+
+      <div *ngIf="showBio" class="my-profile__field">
+        <label class="my-profile__label">
+          Bio
+        </label>
+        <textarea
+          class="my-profile__textarea"
+          placeholder="Tell us about yourself..."
+          rows="4"
+          [value]="profile.bio || ''"
+          (input)="onFieldChange('bio', $any($event.target).value)"
+          [disabled]="loading"
+          [readonly]="readonly"
+          maxlength="500"
+        ></textarea>
+        <div class="my-profile__textarea-hint">
+          {{ (profile.bio || '').length }}/500 characters
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div *ngIf="!readonly" class="my-profile__actions">
+        <zl-button
+          type="button"
+          variant="outline"
+          (buttonClick)="onCancel()"
+          [disabled]="loading"
+        >
+          Cancel
+        </zl-button>
+        <zl-button
+          type="submit"
+          variant="primary"
+          [loading]="loading"
+          [disabled]="!isValid || loading"
+        >
+          {{ loading ? 'Saving...' : 'Save Changes' }}
+        </zl-button>
+      </div>
+    </form>
+  </div>
+</div>
