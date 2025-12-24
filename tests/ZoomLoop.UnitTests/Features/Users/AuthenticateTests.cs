@@ -215,4 +215,98 @@ public class AuthenticateTests
         Assert.That(result, Is.Not.Null);
         Assert.That(result!.User.UserId, Is.EqualTo(userId));
     }
+
+    [Test]
+    public async Task ShouldIncludeRolesInResponse()
+    {
+        // Arrange
+        var password = "TestPassword123";
+        var hashedPassword = _passwordHasher.HashPassword(password);
+
+        var adminRole = new Role
+        {
+            RoleId = Guid.NewGuid(),
+            Name = "Admin",
+            Users = new List<User>(),
+            Privileges = new List<Privilege>()
+        };
+
+        var userRole = new Role
+        {
+            RoleId = Guid.NewGuid(),
+            Name = "User",
+            Users = new List<User>(),
+            Privileges = new List<Privilege>()
+        };
+
+        _context.Roles.AddRange(adminRole, userRole);
+
+        var userId = Guid.NewGuid();
+        var user = new User
+        {
+            UserId = userId,
+            Email = "admin@example.com",
+            PasswordHash = hashedPassword,
+            FirstName = "Admin",
+            LastName = "User",
+            Status = UserStatus.Active,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Roles = new List<Role> { adminRole, userRole },
+            Sessions = new List<Session>(),
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        var handler = new LoginHandler(_context, _passwordHasher, _tokenBuilder, _tokenProvider, _httpContextAccessor.Object, _logger.Object);
+        var request = new LoginRequest(user.Email, password, false);
+
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result!.User.Roles, Is.Not.Null);
+        Assert.That(result.User.Roles.Count, Is.EqualTo(2));
+        Assert.That(result.User.Roles.Any(r => r.Name == "Admin"), Is.True);
+        Assert.That(result.User.Roles.Any(r => r.Name == "User"), Is.True);
+    }
+
+    [Test]
+    public async Task ShouldReturnEmptyRolesWhenUserHasNoRoles()
+    {
+        // Arrange
+        var password = "TestPassword123";
+        var hashedPassword = _passwordHasher.HashPassword(password);
+
+        var userId = Guid.NewGuid();
+        var user = new User
+        {
+            UserId = userId,
+            Email = "noroles@example.com",
+            PasswordHash = hashedPassword,
+            FirstName = "No",
+            LastName = "Roles",
+            Status = UserStatus.Active,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Roles = new List<Role>(),
+            Sessions = new List<Session>(),
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        var handler = new LoginHandler(_context, _passwordHasher, _tokenBuilder, _tokenProvider, _httpContextAccessor.Object, _logger.Object);
+        var request = new LoginRequest(user.Email, password, false);
+
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result!.User.Roles, Is.Not.Null);
+        Assert.That(result.User.Roles.Count, Is.EqualTo(0));
+    }
 }

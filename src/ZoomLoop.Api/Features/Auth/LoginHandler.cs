@@ -113,7 +113,8 @@ public class LoginHandler : IRequestHandler<LoginRequest, LoginResponse?>
                 user.EmailVerified,
                 user.PhoneVerified,
                 user.CreatedAt,
-                user.LastLoginAt));
+                user.LastLoginAt,
+                user.Roles.Select(r => new RoleDto(r.RoleId, r.Name)).ToList()));
     }
 
     private async Task EnforceSessionLimit(User user, CancellationToken cancellationToken)

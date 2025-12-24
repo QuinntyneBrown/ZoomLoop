@@ -93,10 +93,18 @@ export class MyDashboard implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authSubscription = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
+      this.isAdmin = this.checkIfAdmin(user);
       if (!user) {
         this.router.navigate(['/']);
       }
     });
+  }
+
+  private checkIfAdmin(user: User | null): boolean {
+    if (!user || !user.roles) {
+      return false;
+    }
+    return user.roles.some(role => role.name.toLowerCase() === 'admin');
   }
 
   ngOnDestroy(): void {

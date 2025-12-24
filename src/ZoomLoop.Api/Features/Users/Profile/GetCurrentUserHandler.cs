@@ -33,7 +33,9 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserRequest, GetC
             return null;
         }
 
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId, cancellationToken);
+        var user = await _context.Users
+            .Include(u => u.Roles)
+            .FirstOrDefaultAsync(u => u.UserId == userId, cancellationToken);
 
         if (user == null)
         {
@@ -50,6 +52,7 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserRequest, GetC
             user.EmailVerified,
             user.PhoneVerified,
             user.CreatedAt,
-            user.LastLoginAt);
+            user.LastLoginAt,
+            user.Roles.Select(r => new RoleDto(r.RoleId, r.Name)).ToList());
     }
 }
