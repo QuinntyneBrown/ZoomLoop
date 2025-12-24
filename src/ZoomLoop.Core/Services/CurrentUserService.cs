@@ -21,14 +21,14 @@ public class CurrentUserService : ICurrentUserService
 
     public async Task<User?> GetAsync(CancellationToken cancellationToken = default)
     {
-        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        if (string.IsNullOrEmpty(email))
         {
             return null;
         }
 
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId, cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         return user;
     }

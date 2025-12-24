@@ -47,7 +47,7 @@ public class CurrentUserServiceTests
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userId.ToString());
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userEmail);
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
@@ -76,7 +76,7 @@ public class CurrentUserServiceTests
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, targetUserId.ToString());
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, targetEmail);
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
@@ -147,7 +147,7 @@ public class CurrentUserServiceTests
     public async Task GetAsync_WhenUserNotFound_ReturnsNull()
     {
         // Arrange
-        var nonExistentUserId = Guid.NewGuid();
+        var nonExistentEmail = "nonexistent@example.com";
         var users = new List<User>
         {
             new User { UserId = Guid.NewGuid(), Email = "other@example.com", FirstName = "Other", LastName = "User" }
@@ -156,7 +156,7 @@ public class CurrentUserServiceTests
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, nonExistentUserId.ToString());
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, nonExistentEmail);
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
@@ -171,13 +171,13 @@ public class CurrentUserServiceTests
     public async Task GetAsync_WhenNoUsersInDatabase_ReturnsNull()
     {
         // Arrange
-        var userId = Guid.NewGuid();
+        var userEmail = "test@example.com";
         var users = new List<User>();
 
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userId.ToString());
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userEmail);
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
@@ -190,12 +190,12 @@ public class CurrentUserServiceTests
 
     #endregion
 
-    #region GetAsync - UserId Matching Behavior
+    #region GetAsync - Email Matching Behavior
 
     [Test]
-    public async Task GetAsync_MatchesByUserId()
+    public async Task GetAsync_MatchesByEmail()
     {
-        // Arrange: The claim contains a UserId GUID
+        // Arrange: The claim contains the user's email
         var userEmail = "user@example.com";
         var userId = Guid.NewGuid();
         var users = new List<User>
@@ -206,8 +206,8 @@ public class CurrentUserServiceTests
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        // Claim value is the UserId GUID
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userId.ToString());
+        // Claim value is the user's email
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userEmail);
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
@@ -221,9 +221,9 @@ public class CurrentUserServiceTests
     }
 
     [Test]
-    public async Task GetAsync_WhenClaimContainsInvalidGuid_ReturnsNull()
+    public async Task GetAsync_WhenClaimContainsGuid_DoesNotMatchByUserId()
     {
-        // Arrange: If the claim contains a non-GUID string, it should return null
+        // Arrange: If the claim contains a GUID, it will try to match by email (and fail)
         var userId = Guid.NewGuid();
         var users = new List<User>
         {
@@ -233,41 +233,41 @@ public class CurrentUserServiceTests
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        // Claim value is not a valid GUID
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, "not-a-valid-guid");
+        // Claim value is a GUID string (not an email)
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userId.ToString());
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
         // Act
         var result = await _service.GetAsync();
 
-        // Assert: Should be null because the claim is not a valid GUID
+        // Assert: Should be null because we match by Email, not UserId
         Assert.That(result, Is.Null);
     }
 
     [Test]
-    public async Task GetAsync_WhenClaimContainsEmailInsteadOfGuid_ReturnsNull()
+    public async Task GetAsync_EmailMatchingIsCaseSensitive()
     {
-        // Arrange: If someone passes an email as the claim, it should fail to parse as GUID
-        var userId = Guid.NewGuid();
-        var userEmail = "user@example.com";
+        // Arrange
+        var userEmail = "Test@Example.com";
         var users = new List<User>
         {
-            new User { UserId = userId, Email = userEmail, FirstName = "Test", LastName = "User" }
+            new User { UserId = Guid.NewGuid(), Email = userEmail, FirstName = "Test", LastName = "User" }
         };
 
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        // Claim value is an email (not a GUID)
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userEmail);
+        // Different case in claim
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, "test@example.com");
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
         // Act
         var result = await _service.GetAsync();
 
-        // Assert: Should be null because email is not a valid GUID
+        // Assert: Depending on database collation, this may or may not match
+        // With in-memory mock, string comparison is case-sensitive by default
         Assert.That(result, Is.Null);
     }
 
@@ -293,7 +293,7 @@ public class CurrentUserServiceTests
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userId.ToString());
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userEmail);
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
@@ -321,7 +321,7 @@ public class CurrentUserServiceTests
         var usersDbSet = CreateMockDbSet(users);
         _context.Users.Returns(usersDbSet);
 
-        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userId.ToString());
+        SetupHttpContextWithClaim(ClaimTypes.NameIdentifier, userEmail);
 
         _service = new CurrentUserService(_httpContextAccessor, _context);
 
