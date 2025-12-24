@@ -1,8 +1,7 @@
 // Vehicles Component - BEM Methodology
 // Block: .vehicles
 
-@import '../styles/tokens';
-@import '../styles/mixins';
+@use '../styles/index' as *;
 
 .vehicles {
   display: flex;
