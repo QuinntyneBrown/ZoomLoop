@@ -40,3 +40,71 @@ export interface SearchResult {
   page: number;
   pageSize: number;
 }
+
+// API Request/Response types matching backend
+export interface PriceRange {
+  min?: number;
+  max?: number;
+}
+
+export interface IntRange {
+  min?: number;
+  max?: number;
+}
+
+export interface ApiSearchFilters {
+  isNewest?: boolean;
+  colors?: string[];
+  interiorCondition?: string;
+  exteriorCondition?: string;
+  doors?: number;
+  transmissions?: string[];
+  price?: PriceRange;
+  age?: IntRange;
+  year?: IntRange;
+  makes?: string[];
+  models?: string[];
+  accidentFree?: boolean;
+  kilometers?: IntRange;
+}
+
+export interface SortCriteria {
+  field: string;
+  direction: 'asc' | 'desc';
+}
+
+export interface SearchVehiclesRequest {
+  filters?: ApiSearchFilters;
+  sort?: SortCriteria[];
+  page?: number;
+  pageSize?: number;
+}
+
+export interface VehicleSearchResultDto {
+  vehicleId: string;
+  vin: string;
+  stockNumber: string;
+  make: string;
+  model: string;
+  year: number;
+  trim: string;
+  mileage: number;
+  exteriorColor: string;
+  interiorColor: string;
+  transmission: string;
+  doors: number;
+  price?: number;
+  isNew: boolean;
+  isCertified: boolean;
+  accidentFree?: boolean;
+  primaryImageUrl?: string;
+  listedDate?: string;
+}
+
+export interface SearchVehiclesResponse {
+  items: VehicleSearchResultDto[];
+  total: number;
+  page: number;
+  pageSize: number;
+  appliedFilters?: ApiSearchFilters;
+}
