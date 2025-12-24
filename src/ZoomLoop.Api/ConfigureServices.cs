@@ -16,6 +16,7 @@ using ZoomLoop.Core.Services.VehicleIngestion;
 using ZoomLoop.Core.Services.VehicleValuation;
 using Microsoft.OpenApi.Models;
 using ZoomLoop.Infrastructure;
+using ZoomLoop.Core.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -65,6 +66,9 @@ public static class ConfigureServices
         services.AddSingleton<ITokenBuilder, TokenBuilder>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.Configure<Authentication>(authenticationSection);
+
+        // Current user service
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         // Email services
         var emailSection = configuration.GetSection("Email");
