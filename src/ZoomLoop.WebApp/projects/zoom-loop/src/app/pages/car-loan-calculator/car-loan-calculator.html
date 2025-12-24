@@ -1,0 +1,49 @@
+<div class="car-loan-calculator">
+  <div class="car-loan-calculator__container">
+    <header class="car-loan-calculator__header">
+      <h1 class="car-loan-calculator__title">Car Loan Calculator</h1>
+      <p class="car-loan-calculator__subtitle">
+        Estimate your monthly car payments and find the financing plan that works for you.
+      </p>
+    </header>
+
+    <div class="car-loan-calculator__content">
+      <zl-finance-calculator
+        [title]="'Calculate Your Payment'"
+        [vehiclePrice]="30000"
+        [defaultDownPayment]="5000"
+        [defaultLoanTerm]="60"
+        [defaultInterestRate]="6.99"
+        [ctaText]="'Get Pre-Approved'"
+        (preApprovalClick)="onPreApprovalClick($event)"
+        (calculationChange)="onCalculationChange($event)"
+      ></zl-finance-calculator>
+    </div>
+
+    <section class="car-loan-calculator__info">
+      <h2 class="car-loan-calculator__info-title">How It Works</h2>
+      <div class="car-loan-calculator__info-grid">
+        <div class="car-loan-calculator__info-card">
+          <div class="car-loan-calculator__info-icon">1</div>
+          <h3>Enter Vehicle Price</h3>
+          <p>Input the total price of the vehicle you're interested in purchasing.</p>
+        </div>
+        <div class="car-loan-calculator__info-card">
+          <div class="car-loan-calculator__info-icon">2</div>
+          <h3>Adjust Down Payment</h3>
+          <p>Set your down payment amount. A higher down payment means lower monthly payments.</p>
+        </div>
+        <div class="car-loan-calculator__info-card">
+          <div class="car-loan-calculator__info-icon">3</div>
+          <h3>Choose Loan Term</h3>
+          <p>Select your preferred loan duration. Longer terms mean lower payments but more interest.</p>
+        </div>
+        <div class="car-loan-calculator__info-card">
+          <div class="car-loan-calculator__info-icon">4</div>
+          <h3>Get Pre-Approved</h3>
+          <p>Ready to move forward? Click to start your pre-approval process.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

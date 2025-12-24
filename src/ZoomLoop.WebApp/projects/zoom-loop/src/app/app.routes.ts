@@ -38,6 +38,10 @@ export const routes: Routes = [
       {
         path: 'create-account',
         loadComponent: () => import('./pages').then(m => m.CreateAccount)
+      },
+      {
+        path: 'car-loan-calculator',
+        loadComponent: () => import('./pages').then(m => m.CarLoanCalculator)
       }
     ]
   }
