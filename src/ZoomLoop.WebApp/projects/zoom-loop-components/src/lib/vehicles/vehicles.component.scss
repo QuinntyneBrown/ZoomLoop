@@ -1,0 +1,427 @@
+// Vehicles Component - BEM Methodology
+// Block: .vehicles
+
+@import '../styles/tokens';
+@import '../styles/mixins';
+
+.vehicles {
+  display: flex;
+  width: 100%;
+  min-height: 400px;
+  gap: $spacing-6;
+  position: relative;
+
+  // Master List
+  &__master {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  // Header
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+  }
+
+  // Search
+  &__search {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+    min-width: 200px;
+  }
+
+  &__search-input {
+    width: 100%;
+    padding: $spacing-2 $spacing-3 $spacing-2 $spacing-10;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    border: 1px solid $color-border-primary;
+    border-radius: $radius-md;
+    background: $color-bg-primary;
+    color: $color-text-primary;
+    transition: all $transition-fast;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+  }
+
+  &__search-icon {
+    position: absolute;
+    left: $spacing-3;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-text-muted;
+    pointer-events: none;
+  }
+
+  // Table Wrapper
+  &__table-wrapper {
+    @include card;
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  // Table
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  &__th {
+    padding: $spacing-3 $spacing-4;
+    text-align: left;
+    font-family: $font-family-primary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: $color-bg-secondary;
+    border-bottom: 1px solid $color-border-primary;
+    white-space: nowrap;
+
+    &--sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  &__row {
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: $color-bg-secondary;
+    }
+
+    &--selected {
+      background: rgba($color-primary, 0.05);
+
+      &:hover {
+        background: rgba($color-primary, 0.08);
+      }
+    }
+  }
+
+  &__td {
+    padding: $spacing-3 $spacing-4;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    border-bottom: 1px solid $color-border-primary;
+    vertical-align: middle;
+
+    &--title {
+      min-width: 200px;
+    }
+
+    &--price {
+      font-weight: $font-weight-semibold;
+      color: $color-primary;
+    }
+  }
+
+  &__vehicle-info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  &__vehicle-title {
+    font-weight: $font-weight-medium;
+  }
+
+  &__vehicle-subtitle {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+
+  // Loading Skeleton
+  &__loading {
+    padding: $spacing-4;
+  }
+
+  &__skeleton-row {
+    display: flex;
+    gap: $spacing-4;
+    padding: $spacing-3 0;
+    border-bottom: 1px solid $color-border-primary;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__skeleton-cell {
+    height: 20px;
+    background: linear-gradient(90deg, $color-neutral-200 25%, $color-neutral-100 50%, $color-neutral-200 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: $radius-sm;
+
+    &--title {
+      flex: 2;
+    }
+
+    &--short {
+      flex: 1;
+    }
+
+    &--medium {
+      flex: 1.5;
+    }
+  }
+
+  // Empty State
+  &__empty {
+    @include flex-center;
+    @include flex-column;
+    padding: $spacing-16 $spacing-4;
+    text-align: center;
+    color: $color-text-muted;
+  }
+
+  &__empty-icon {
+    margin-bottom: $spacing-4;
+    opacity: 0.5;
+  }
+
+  &__empty-text {
+    font-family: $font-family-primary;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-2;
+  }
+
+  &__empty-subtext {
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+
+  // Detail Panel
+  &__detail {
+    width: 100%;
+    max-width: 480px;
+    flex-shrink: 0;
+    position: sticky;
+    top: $spacing-4;
+    height: fit-content;
+    max-height: calc(100vh - #{$spacing-8});
+    overflow-y: auto;
+
+    @include max-lg {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      max-width: 100%;
+      width: 100%;
+      max-height: 100vh;
+      z-index: $z-index-modal;
+    }
+
+    @include md {
+      max-width: 500px;
+    }
+  }
+
+  // Detail Content
+  &__detail-content {
+    @include card;
+    width: 100%;
+    padding: $spacing-6;
+    overflow-y: auto;
+    background: $color-bg-primary;
+
+    @include max-lg {
+      border-radius: 0;
+      height: 100%;
+      box-shadow: $shadow-2xl;
+    }
+  }
+
+  // Detail Header
+  &__detail-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    margin-bottom: $spacing-6;
+    padding-bottom: $spacing-4;
+    border-bottom: 1px solid $color-border-primary;
+  }
+
+  &__close-btn {
+    @include reset-button;
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-full;
+    background: $color-neutral-100;
+    color: $color-text-secondary;
+    transition: all $transition-fast;
+
+    &:hover {
+      background: $color-neutral-200;
+      color: $color-text-primary;
+    }
+
+    &:focus-visible {
+      @include focus-ring-primary;
+    }
+  }
+
+  &__detail-title {
+    flex: 1;
+    font-family: $font-family-primary;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+    line-height: $line-height-tight;
+  }
+
+  // Form
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-6;
+  }
+
+  &__form-section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__section-title {
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+    padding-bottom: $spacing-2;
+    border-bottom: 1px solid $color-border-primary;
+  }
+
+  &__form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4;
+
+    @include max-sm {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+
+  &__label {
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__input {
+    width: 100%;
+    padding: $spacing-2 $spacing-3;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    border: 1px solid $color-border-primary;
+    border-radius: $radius-md;
+    background: $color-bg-primary;
+    color: $color-text-primary;
+    transition: all $transition-fast;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+
+    &:disabled {
+      background: $color-bg-secondary;
+      cursor: not-allowed;
+    }
+
+    &--mono {
+      font-family: $font-family-mono;
+      font-size: $font-size-xs;
+      text-transform: uppercase;
+    }
+  }
+
+  &__form-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+
+  &__checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: $color-primary;
+      cursor: pointer;
+    }
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+    padding-top: $spacing-4;
+    border-top: 1px solid $color-border-primary;
+    margin-top: auto;
+  }
+}
+
+// Shimmer Animation
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
