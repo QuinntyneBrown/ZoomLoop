@@ -1,0 +1,347 @@
+<h2 mat-dialog-title class="vehicle-ingestion-dialog-content__title">{{ modalTitle }}</h2>
+
+<mat-dialog-content class="vehicle-ingestion-dialog-content">
+  <!-- Upload State -->
+  <ng-container *ngIf="processingStep === 'idle' && !error">
+    <p class="vehicle-ingestion-dialog-content__description">
+      Upload vehicle images to automatically extract information
+    </p>
+
+    <!-- Upload Zone -->
+    <div
+      class="vehicle-ingestion-dialog-content__upload-zone"
+      [class.vehicle-ingestion-dialog-content__upload-zone--dragover]="isDragOver"
+      [class.vehicle-ingestion-dialog-content__upload-zone--has-images]="uploadedImages.length > 0"
+      (dragenter)="onDragEnter($event)"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <div class="vehicle-ingestion-dialog-content__upload-content">
+        <div class="vehicle-ingestion-dialog-content__upload-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <p class="vehicle-ingestion-dialog-content__upload-text">
+          Drag and drop images here
+        </p>
+        <span class="vehicle-ingestion-dialog-content__upload-or">or</span>
+        <zl-button variant="outline" size="md" (click)="triggerFileInput()">
+          Browse Files
+        </zl-button>
+        <p class="vehicle-ingestion-dialog-content__upload-hint">
+          {{ acceptedFormatsText }} &bull; Max {{ maxFileSizeMB }}MB each &bull; Up to {{ maxImages }} images
+        </p>
+      </div>
+      <input
+        #fileInput
+        type="file"
+        class="vehicle-ingestion-dialog-content__file-input"
+        [accept]="acceptedFormats.join(',')"
+        multiple
+        (change)="onFileSelect($event)"
+      />
+    </div>
+
+    <!-- Upload Error -->
+    <div *ngIf="uploadError" class="vehicle-ingestion-dialog-content__upload-error">
+      {{ uploadError }}
+    </div>
+
+    <!-- VIN Guidance -->
+    <div class="vehicle-ingestion-dialog-content__vin-guidance">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      <span>
+        <strong>Tip:</strong> Include an image with the VIN visible (dashboard or door jamb) for automatic vehicle identification
+      </span>
+    </div>
+
+    <!-- Image Preview Grid -->
+    <div *ngIf="uploadedImages.length > 0" class="vehicle-ingestion-dialog-content__preview-section">
+      <div class="vehicle-ingestion-dialog-content__preview-header">
+        <span class="vehicle-ingestion-dialog-content__preview-count">
+          Uploaded Images ({{ uploadedImages.length }})
+        </span>
+        <zl-button variant="ghost" size="sm" (click)="triggerFileInput()">
+          + Add More
+        </zl-button>
+      </div>
+
+      <div class="vehicle-ingestion-dialog-content__preview-grid">
+        <div
+          *ngFor="let image of uploadedImages; let i = index"
+          class="vehicle-ingestion-dialog-content__preview-card"
+        >
+          <img [src]="image.preview" [alt]="'Vehicle image ' + (i + 1)" />
+          <div *ngIf="i === 0" class="vehicle-ingestion-dialog-content__primary-badge">
+            Primary
+          </div>
+          <div class="vehicle-ingestion-dialog-content__preview-actions">
+            <button
+              *ngIf="i > 0"
+              type="button"
+              class="vehicle-ingestion-dialog-content__preview-action"
+              (click)="moveImage(i, i - 1)"
+              title="Move left"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button
+              *ngIf="i < uploadedImages.length - 1"
+              type="button"
+              class="vehicle-ingestion-dialog-content__preview-action"
+              (click)="moveImage(i, i + 1)"
+              title="Move right"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="vehicle-ingestion-dialog-content__preview-action vehicle-ingestion-dialog-content__preview-action--remove"
+              (click)="removeImage(image.id)"
+              title="Remove image"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="vehicle-ingestion-dialog-content__reorder-hint">
+        Drag images to reorder. First image will be the primary image.
+      </p>
+
+      <div class="vehicle-ingestion-dialog-content__actions">
+        <zl-button
+          variant="primary"
+          size="lg"
+          [disabled]="!canStartIngestion"
+          [loading]="isLoading"
+          (click)="startIngestion()"
+        >
+          Start Ingestion
+        </zl-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Processing State -->
+  <ng-container *ngIf="isProcessing">
+    <div class="vehicle-ingestion-dialog-content__processing">
+      <div class="vehicle-ingestion-dialog-content__progress-bar">
+        <div
+          class="vehicle-ingestion-dialog-content__progress-fill"
+          [style.width.%]="processingProgress"
+        ></div>
+      </div>
+      <span class="vehicle-ingestion-dialog-content__progress-text">{{ processingProgress }}%</span>
+
+      <div class="vehicle-ingestion-dialog-content__steps">
+        <div
+          *ngFor="let step of processingSteps"
+          class="vehicle-ingestion-dialog-content__step"
+          [class.vehicle-ingestion-dialog-content__step--completed]="step.status === 'completed'"
+          [class.vehicle-ingestion-dialog-content__step--active]="step.status === 'active'"
+          [class.vehicle-ingestion-dialog-content__step--pending]="step.status === 'pending'"
+        >
+          <span class="vehicle-ingestion-dialog-content__step-icon">
+            <svg *ngIf="step.status === 'completed'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span *ngIf="step.status === 'active'" class="vehicle-ingestion-dialog-content__step-spinner"></span>
+            <span *ngIf="step.status === 'pending'" class="vehicle-ingestion-dialog-content__step-pending-dot"></span>
+          </span>
+          <span class="vehicle-ingestion-dialog-content__step-label">{{ step.label }}</span>
+        </div>
+      </div>
+
+      <p *ngIf="estimatedTimeRemaining !== null" class="vehicle-ingestion-dialog-content__estimated-time">
+        Estimated time remaining: ~{{ estimatedTimeRemaining }} seconds
+      </p>
+
+      <div class="vehicle-ingestion-dialog-content__actions">
+        <zl-button variant="outline" size="md" (click)="cancelIngestion()">
+          Cancel
+        </zl-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Error State -->
+  <ng-container *ngIf="error && !isManualEntry">
+    <div class="vehicle-ingestion-dialog-content__error">
+      <div class="vehicle-ingestion-dialog-content__error-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+
+      <p class="vehicle-ingestion-dialog-content__error-message">
+        {{ error.message }}
+      </p>
+
+      <div *ngIf="error.code === 'VIN_NOT_FOUND'" class="vehicle-ingestion-dialog-content__error-tips">
+        <p><strong>Try these tips:</strong></p>
+        <ul>
+          <li>Include a clear photo of the VIN on the dashboard</li>
+          <li>Ensure the VIN plate on the door jamb is visible</li>
+          <li>Avoid glare and shadows on the VIN</li>
+          <li>VIN should be 17 characters and clearly readable</li>
+        </ul>
+      </div>
+
+      <div class="vehicle-ingestion-dialog-content__error-divider">
+        <span>OR</span>
+      </div>
+
+      <p class="vehicle-ingestion-dialog-content__manual-prompt">Enter VIN manually:</p>
+
+      <div class="vehicle-ingestion-dialog-content__actions vehicle-ingestion-dialog-content__actions--column">
+        <zl-button
+          *ngIf="error.retryable"
+          variant="outline"
+          size="md"
+          [fullWidth]="true"
+          (click)="retryWithNewImages()"
+        >
+          Try Again with New Images
+        </zl-button>
+        <zl-button
+          variant="primary"
+          size="md"
+          [fullWidth]="true"
+          (click)="enableManualEntry()"
+        >
+          Enter VIN Manually
+        </zl-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Manual VIN Entry -->
+  <ng-container *ngIf="isManualEntry">
+    <div class="vehicle-ingestion-dialog-content__manual-entry">
+      <p class="vehicle-ingestion-dialog-content__description">
+        Enter the 17-character Vehicle Identification Number (VIN)
+      </p>
+
+      <div class="vehicle-ingestion-dialog-content__field">
+        <label class="vehicle-ingestion-dialog-content__label" for="manual-vin">VIN</label>
+        <input
+          id="manual-vin"
+          type="text"
+          class="vehicle-ingestion-dialog-content__input"
+          [(ngModel)]="manualVIN"
+          name="manualVIN"
+          placeholder="e.g., 1HGCV1F19MA123456"
+          maxlength="17"
+          autocomplete="off"
+        />
+        <p class="vehicle-ingestion-dialog-content__hint">
+          VIN must be exactly 17 alphanumeric characters
+        </p>
+      </div>
+
+      <div class="vehicle-ingestion-dialog-content__actions">
+        <zl-button variant="outline" size="md" (click)="retryWithNewImages()">
+          Back
+        </zl-button>
+        <zl-button
+          variant="primary"
+          size="md"
+          [disabled]="!isValidVIN || isLoading"
+          [loading]="isLoading"
+          (click)="submitManualVIN()"
+        >
+          Continue with Manual VIN
+        </zl-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Success State -->
+  <ng-container *ngIf="processingStep === 'completed' && result">
+    <div class="vehicle-ingestion-dialog-content__result">
+      <div class="vehicle-ingestion-dialog-content__result-header">
+        <div class="vehicle-ingestion-dialog-content__result-image">
+          <img
+            *ngIf="result.images.length > 0"
+            [src]="result.images[0].url"
+            [alt]="result.year + ' ' + result.make + ' ' + result.model"
+          />
+          <div *ngIf="result.images.length === 0" class="vehicle-ingestion-dialog-content__result-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+        </div>
+        <div class="vehicle-ingestion-dialog-content__result-info">
+          <div class="vehicle-ingestion-dialog-content__vin-display">
+            <span class="vehicle-ingestion-dialog-content__vin-label">VIN:</span>
+            <span class="vehicle-ingestion-dialog-content__vin-value">{{ result.vin }}</span>
+          </div>
+          <h3 class="vehicle-ingestion-dialog-content__vehicle-title">
+            {{ result.year }} {{ result.make }} {{ result.model }}
+          </h3>
+          <div class="vehicle-ingestion-dialog-content__vehicle-details">
+            <span>Doors: {{ result.doors }}</span>
+            <span class="vehicle-ingestion-dialog-content__condition">
+              Interior: <zl-badge [variant]="getConditionBadgeVariant(result.interiorCondition)" size="sm">{{ result.interiorCondition }}</zl-badge>
+            </span>
+            <span class="vehicle-ingestion-dialog-content__condition">
+              Exterior: <zl-badge [variant]="getConditionBadgeVariant(result.exteriorCondition)" size="sm">{{ result.exteriorCondition }}</zl-badge>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vehicle-ingestion-dialog-content__result-description">
+        <h4>Description</h4>
+        <p>{{ result.description }}</p>
+      </div>
+
+      <div *ngIf="result.images.length > 1" class="vehicle-ingestion-dialog-content__result-images">
+        <h4>Images ({{ result.images.length }})</h4>
+        <div class="vehicle-ingestion-dialog-content__result-thumbnails">
+          <div
+            *ngFor="let image of result.images; let i = index"
+            class="vehicle-ingestion-dialog-content__result-thumbnail"
+            [class.vehicle-ingestion-dialog-content__result-thumbnail--primary]="image.isPrimary"
+          >
+            <img [src]="image.url" [alt]="'Vehicle image ' + (i + 1)" />
+            <span *ngIf="image.isPrimary" class="vehicle-ingestion-dialog-content__thumbnail-star">&#9733;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vehicle-ingestion-dialog-content__result-actions">
+        <zl-button variant="primary" size="lg" [fullWidth]="true" (click)="onSaveAndView()">
+          Save & View Vehicle Listing
+        </zl-button>
+        <div class="vehicle-ingestion-dialog-content__secondary-actions">
+          <zl-button variant="ghost" size="md" (click)="onIngestAnother()">
+            Ingest Another Vehicle
+          </zl-button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</mat-dialog-content>

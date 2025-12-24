@@ -1,0 +1,246 @@
+<h2 mat-dialog-title class="login-dialog-content__title">{{ modalTitle }}</h2>
+
+<mat-dialog-content class="login-dialog-content">
+  <div *ngIf="errorMessage" class="login-dialog-content__error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Login Form -->
+  <form *ngIf="mode === 'login'" class="login-dialog-content__form" (ngSubmit)="onLogin()">
+    <div class="login-dialog-content__field">
+      <label class="login-dialog-content__label" for="login-email">Email</label>
+      <input
+        id="login-email"
+        type="email"
+        class="login-dialog-content__input"
+        [(ngModel)]="loginData.email"
+        name="email"
+        placeholder="Enter your email"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <div class="login-dialog-content__field">
+      <label class="login-dialog-content__label" for="login-password">Password</label>
+      <div class="login-dialog-content__password-wrapper">
+        <input
+          id="login-password"
+          [type]="showPassword ? 'text' : 'password'"
+          class="login-dialog-content__input"
+          [(ngModel)]="loginData.password"
+          name="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        />
+        <button
+          type="button"
+          class="login-dialog-content__password-toggle"
+          (click)="togglePasswordVisibility()"
+        >
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="login-dialog-content__options">
+      <label class="login-dialog-content__checkbox">
+        <input type="checkbox" [(ngModel)]="loginData.rememberMe" name="rememberMe" />
+        <span>Remember me</span>
+      </label>
+      <button
+        type="button"
+        class="login-dialog-content__link"
+        (click)="switchMode('forgot-password')"
+      >
+        Forgot password?
+      </button>
+    </div>
+
+    <button
+      type="submit"
+      class="login-dialog-content__submit"
+      [disabled]="!isLoginValid || isLoading"
+    >
+      {{ isLoading ? 'Signing in...' : 'Sign In' }}
+    </button>
+
+    <div class="login-dialog-content__switch">
+      <span>Don't have an account?</span>
+      <button type="button" class="login-dialog-content__link" (click)="onNavigateToCreateAccount()">
+        Create one
+      </button>
+    </div>
+  </form>
+
+  <!-- Register Form -->
+  <form *ngIf="mode === 'register'" class="login-dialog-content__form" (ngSubmit)="onRegister()">
+    <div class="login-dialog-content__row">
+      <div class="login-dialog-content__field">
+        <label class="login-dialog-content__label" for="register-firstName">First Name</label>
+        <input
+          id="register-firstName"
+          type="text"
+          class="login-dialog-content__input"
+          [(ngModel)]="registerData.firstName"
+          name="firstName"
+          placeholder="First name"
+          autocomplete="given-name"
+          required
+        />
+      </div>
+
+      <div class="login-dialog-content__field">
+        <label class="login-dialog-content__label" for="register-lastName">Last Name</label>
+        <input
+          id="register-lastName"
+          type="text"
+          class="login-dialog-content__input"
+          [(ngModel)]="registerData.lastName"
+          name="lastName"
+          placeholder="Last name"
+          autocomplete="family-name"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="login-dialog-content__field">
+      <label class="login-dialog-content__label" for="register-email">Email</label>
+      <input
+        id="register-email"
+        type="email"
+        class="login-dialog-content__input"
+        [(ngModel)]="registerData.email"
+        name="email"
+        placeholder="Enter your email"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <div class="login-dialog-content__field">
+      <label class="login-dialog-content__label" for="register-phone">Phone (optional)</label>
+      <input
+        id="register-phone"
+        type="tel"
+        class="login-dialog-content__input"
+        [(ngModel)]="registerData.phone"
+        name="phone"
+        placeholder="Enter your phone number"
+        autocomplete="tel"
+      />
+    </div>
+
+    <div class="login-dialog-content__field">
+      <label class="login-dialog-content__label" for="register-password">Password</label>
+      <div class="login-dialog-content__password-wrapper">
+        <input
+          id="register-password"
+          [type]="showPassword ? 'text' : 'password'"
+          class="login-dialog-content__input"
+          [(ngModel)]="registerData.password"
+          name="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+          required
+        />
+        <button
+          type="button"
+          class="login-dialog-content__password-toggle"
+          (click)="togglePasswordVisibility()"
+        >
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </button>
+      </div>
+      <div *ngIf="registerData.password" class="login-dialog-content__password-strength" [ngClass]="getPasswordStrengthClass()">
+        {{ getPasswordStrength() }}
+      </div>
+      <div class="login-dialog-content__hint">
+        At least 8 characters with 1 uppercase letter and 1 number
+      </div>
+    </div>
+
+    <div class="login-dialog-content__field">
+      <label class="login-dialog-content__label" for="register-confirmPassword">Confirm Password</label>
+      <div class="login-dialog-content__password-wrapper">
+        <input
+          id="register-confirmPassword"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          class="login-dialog-content__input"
+          [(ngModel)]="registerData.confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          autocomplete="new-password"
+          required
+        />
+        <button
+          type="button"
+          class="login-dialog-content__password-toggle"
+          (click)="toggleConfirmPasswordVisibility()"
+        >
+          {{ showConfirmPassword ? 'Hide' : 'Show' }}
+        </button>
+      </div>
+      <div *ngIf="registerData.confirmPassword && registerData.password !== registerData.confirmPassword" class="login-dialog-content__error-text">
+        Passwords do not match
+      </div>
+    </div>
+
+    <label class="login-dialog-content__checkbox">
+      <input type="checkbox" [(ngModel)]="registerData.marketingOptIn" name="marketingOptIn" />
+      <span>Send me news, updates, and promotions</span>
+    </label>
+
+    <button
+      type="submit"
+      class="login-dialog-content__submit"
+      [disabled]="!isRegisterValid || isLoading"
+    >
+      {{ isLoading ? 'Creating account...' : 'Create Account' }}
+    </button>
+
+    <div class="login-dialog-content__switch">
+      <span>Already have an account?</span>
+      <button type="button" class="login-dialog-content__link" (click)="switchMode('login')">
+        Sign in
+      </button>
+    </div>
+  </form>
+
+  <!-- Forgot Password Form -->
+  <form *ngIf="mode === 'forgot-password'" class="login-dialog-content__form" (ngSubmit)="onForgotPassword()">
+    <p class="login-dialog-content__description">
+      Enter your email address and we'll send you a link to reset your password.
+    </p>
+
+    <div class="login-dialog-content__field">
+      <label class="login-dialog-content__label" for="forgot-email">Email</label>
+      <input
+        id="forgot-email"
+        type="email"
+        class="login-dialog-content__input"
+        [(ngModel)]="forgotPasswordData.email"
+        name="email"
+        placeholder="Enter your email"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="login-dialog-content__submit"
+      [disabled]="!isForgotPasswordValid || isLoading"
+    >
+      {{ isLoading ? 'Sending...' : 'Send Reset Link' }}
+    </button>
+
+    <div class="login-dialog-content__switch">
+      <button type="button" class="login-dialog-content__link" (click)="switchMode('login')">
+        Back to sign in
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
