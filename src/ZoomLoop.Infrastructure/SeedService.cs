@@ -32,6 +32,7 @@ public class SeedService : ISeedService
         await SeedRolesAndPrivilegesAsync();
         await SeedUsersAsync();
         await SeedMakesAndModelsAsync();
+        await SeedVehiclesAsync();
 
         _logger.LogInformation("Database seeding completed successfully.");
     }
@@ -206,5 +207,97 @@ public class SeedService : ISeedService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Vehicle makes and models seeded successfully.");
+    }
+
+    private async Task SeedVehiclesAsync()
+    {
+        if (await _context.Vehicles.AnyAsync())
+        {
+            _logger.LogInformation("Vehicles already exist, skipping vehicle seeding.");
+            return;
+        }
+
+        _logger.LogInformation("Seeding vehicles...");
+
+        var makes = await _context.Makes.Include(m => m.VehicleModels).ToListAsync();
+
+        if (!makes.Any())
+        {
+            _logger.LogWarning("No makes found, cannot seed vehicles.");
+            return;
+        }
+
+        var random = new Random(42);
+        var exteriorColors = new[] { "Sonic Gray", "Magnetic Gray", "Pearl White", "Agate Black", "Soul Red", "Alpine White", "Gravity Gray", "Amazon Gray", "Midnight Blue", "Silver Metallic" };
+        var interiorColors = new[] { "Black", "Gray", "Beige", "Tan", "Parchment", "Brown" };
+        var transmissions = new[] { "Automatic", "Manual" };
+        var fuelTypes = new[] { "Gasoline", "Diesel", "Electric", "Hybrid" };
+        var driveTypes = new[] { "FWD", "RWD", "AWD", "4WD" };
+        var bodyTypes = new[] { "Sedan", "SUV", "Truck", "Coupe", "Hatchback", "Wagon" };
+        var trims = new[] { "Base", "Sport", "Limited", "Touring", "XLE", "SE", "XLT", "GT", "Premium", "Platinum" };
+
+        var vehicles = new List<Vehicle>();
+        var now = DateTime.UtcNow;
+
+        for (int i = 1; i <= 20; i++)
+        {
+            var make = makes[random.Next(makes.Count)];
+            var model = make.VehicleModels[random.Next(make.VehicleModels.Count)];
+            var year = random.Next(2019, 2025);
+            var isNew = year >= 2024;
+            var mileage = isNew ? random.Next(0, 500) : random.Next(5000, 120000);
+            var basePrice = random.Next(20000, 65000);
+            var vehicleId = Guid.NewGuid();
+
+            var vehicle = new Vehicle
+            {
+                VehicleId = vehicleId,
+                VIN = $"1HGCM{random.Next(10000, 99999)}A{random.Next(100000, 999999)}",
+                StockNumber = $"STK{i:D4}",
+                MakeId = make.MakeId,
+                VehicleModelId = model.VehicleModelId,
+                Year = year,
+                Trim = trims[random.Next(trims.Length)],
+                Mileage = mileage,
+                ExteriorColor = exteriorColors[random.Next(exteriorColors.Length)],
+                InteriorColor = interiorColors[random.Next(interiorColors.Length)],
+                Transmission = transmissions[random.Next(transmissions.Length)],
+                FuelType = fuelTypes[random.Next(fuelTypes.Length)],
+                DriveType = driveTypes[random.Next(driveTypes.Length)],
+                BodyType = bodyTypes[random.Next(bodyTypes.Length)],
+                Doors = random.Next(2, 5) == 2 ? 2 : 4,
+                Seats = random.Next(4, 8),
+                EngineSize = Math.Round((decimal)(1.5 + random.NextDouble() * 2.5), 1),
+                Cylinders = random.Next(3, 9),
+                Horsepower = random.Next(150, 400),
+                CityFuelConsumption = Math.Round((decimal)(7 + random.NextDouble() * 6), 1),
+                HighwayFuelConsumption = Math.Round((decimal)(5 + random.NextDouble() * 4), 1),
+                Description = $"Well-maintained {year} {make.Name} {model.Name} in excellent condition.",
+                IsNew = isNew,
+                IsCertified = !isNew && random.Next(0, 2) == 1,
+                ManufactureDate = new DateTime(year, random.Next(1, 13), 1),
+                Images =
+                [
+                    new VehicleImage
+                    {
+                        VehicleImageId = Guid.NewGuid(),
+                        VehicleId = vehicleId,
+                        ImageUrl = $"https://images.unsplash.com/photo-{1550000000 + i * 1000}?w=800",
+                        ThumbnailUrl = $"https://images.unsplash.com/photo-{1550000000 + i * 1000}?w=200",
+                        Caption = $"{year} {make.Name} {model.Name} - Exterior",
+                        DisplayOrder = 1,
+                        IsPrimary = true,
+                        CreatedDate = now
+                    }
+                ]
+            };
+
+            vehicles.Add(vehicle);
+        }
+
+        _context.Vehicles.AddRange(vehicles);
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Seeded {Count} vehicles successfully.", vehicles.Count);
     }
 }
