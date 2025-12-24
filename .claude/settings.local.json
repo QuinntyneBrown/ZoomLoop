@@ -28,7 +28,8 @@
       "Bash(dotnet ef migrations:*)",
       "Bash(curl:*)",
       "Bash(npm run start)",
-      "Bash(npm run ng:*)"
+      "Bash(npm run ng:*)",
+      "Bash(dotnet ef:*)"
     ],
     "deny": [],
     "ask": []

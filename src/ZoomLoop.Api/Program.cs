@@ -85,7 +85,9 @@ try
             try
             {
                 var context = services.GetRequiredService<ZoomLoopDbContext>();
-                await context.Database.MigrateAsync();
+                await context.Database.EnsureDeletedAsync();
+                await context.Database.EnsureCreatedAsync();
+                //await context.Database.MigrateAsync();
 
                 var seedService = services.GetRequiredService<ISeedService>();
                 await seedService.SeedAsync();

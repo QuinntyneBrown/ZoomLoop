@@ -256,6 +256,13 @@ namespace ZoomLoop.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Fix duplicate empty email addresses before creating unique index
+            migrationBuilder.Sql(@"
+                UPDATE Users
+                SET Email = 'temp_' + CAST(UserId AS NVARCHAR(50)) + '@placeholder.local'
+                WHERE Email IS NULL OR Email = ''
+            ");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
