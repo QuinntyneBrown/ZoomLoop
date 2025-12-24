@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ZoomLoop.Api.Features.Vehicles;
 
+// Vehicle search endpoint allows anonymous access for public car browsing
+
 namespace ZoomLoop.Api.Controllers;
 
 [Authorize]
@@ -108,6 +110,7 @@ public class VehicleController
         return await _mediator.Send(request);
     }
 
+    [AllowAnonymous]
     [HttpPost("search", Name = "SearchVehiclesRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
