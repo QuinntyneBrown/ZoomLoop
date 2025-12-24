@@ -28,7 +28,7 @@ export const routes: Routes = [
       },
       {
         path: 'how-it-works',
-        loadComponent: () => import('./pages').then(m => m.Sell)
+        loadComponent: () => import('./pages').then(m => m.HowItWorks)
       },
       {
         path: 'my-dashboard',
