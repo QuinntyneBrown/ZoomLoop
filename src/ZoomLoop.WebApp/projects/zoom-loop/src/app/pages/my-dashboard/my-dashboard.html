@@ -1,12 +1,17 @@
 <div class="my-dashboard">
   <div class="my-dashboard__header">
     <h1 class="my-dashboard__title">My Dashboard</h1>
-    <p class="my-dashboard__welcome" *ngIf="currentUser">
+    <p class="my-dashboard__welcome" *ngIf="currentUser && !isLoading">
       Welcome back, {{ currentUser.firstName }}!
     </p>
   </div>
 
-  <div class="my-dashboard__grid">
+  <div *ngIf="isLoading" class="my-dashboard__loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading your dashboard...</p>
+  </div>
+
+  <div class="my-dashboard__grid" *ngIf="!isLoading">
     <mat-card *ngFor="let card of visibleCards" class="my-dashboard__card">
       <mat-card-header>
         <mat-icon mat-card-avatar class="my-dashboard__card-icon">{{ card.icon }}</mat-icon>

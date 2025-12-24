@@ -4,7 +4,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { vi, describe, it, expect, beforeEach, Mock, afterEach } from 'vitest';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { MyDashboard } from './my-dashboard';
 import { AuthService } from '../../services';
 import { User } from '../../models';
@@ -12,7 +12,7 @@ import { User } from '../../models';
 describe('MyDashboard', () => {
   let component: MyDashboard;
   let fixture: ComponentFixture<MyDashboard>;
-  let authServiceSpy: { currentUser$: BehaviorSubject<User | null> };
+  let authServiceSpy: { currentUser$: BehaviorSubject<User | null>; getCurrentUser: Mock };
   let routerSpy: { navigate: Mock };
 
   const mockUserWithAdminRole: User = {
@@ -55,7 +55,8 @@ describe('MyDashboard', () => {
 
   beforeEach(async () => {
     authServiceSpy = {
-      currentUser$: new BehaviorSubject<User | null>(null)
+      currentUser$: new BehaviorSubject<User | null>(null),
+      getCurrentUser: vi.fn().mockReturnValue(of(mockUserWithUserRole))
     };
 
     routerSpy = {
@@ -242,6 +243,44 @@ describe('MyDashboard', () => {
       component.ngOnDestroy();
 
       expect(unsubscribeSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('loading state', () => {
+    it('should start with isLoading true', () => {
+      expect(component.isLoading).toBe(true);
+    });
+
+    it('should set isLoading to false after getCurrentUser succeeds', () => {
+      authServiceSpy.getCurrentUser.mockReturnValue(of(mockUserWithUserRole));
+      component.ngOnInit();
+
+      expect(component.isLoading).toBe(false);
+    });
+
+    it('should set isLoading to false and navigate on getCurrentUser error', () => {
+      authServiceSpy.getCurrentUser.mockReturnValue(throwError(() => new Error('Unauthorized')));
+      component.ngOnInit();
+
+      expect(component.isLoading).toBe(false);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+    });
+
+    it('should call getCurrentUser on init', () => {
+      component.ngOnInit();
+
+      expect(authServiceSpy.getCurrentUser).toHaveBeenCalled();
+    });
+  });
+
+  describe('HTTP-driven role updates', () => {
+    it('should fetch fresh user data from backend on init', () => {
+      authServiceSpy.getCurrentUser.mockReturnValue(of(mockUserWithAdminRole));
+      authServiceSpy.currentUser$.next(mockUserWithAdminRole);
+      component.ngOnInit();
+
+      expect(authServiceSpy.getCurrentUser).toHaveBeenCalled();
+      expect(component.isAdmin).toBe(true);
     });
   });
 });
