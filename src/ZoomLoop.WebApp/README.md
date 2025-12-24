@@ -1,59 +1,129 @@
-# ZoomLoopWebApp
+# ZoomLoop Web Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
+ZoomLoop is an Angular-based web application built with Angular 21 and Angular Material. This workspace contains both the main application and a reusable component library.
 
-## Development server
+## Project Structure
 
-To start a local development server, run:
+This Angular workspace contains two projects:
+
+- **zoom-loop** - Main web application
+- **zoom-loop-components** - Reusable component library with Storybook integration
+
+## Prerequisites
+
+- Node.js (npm 10.9.4 or later)
+- Angular CLI 21.0.4
+
+## Getting Started
+
+### Installation
 
 ```bash
+npm install
+```
+
+### Development Server
+
+To start the development server:
+
+```bash
+npm start
+# or
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`. The application will automatically reload when you modify source files.
 
-## Code scaffolding
+## Available Scripts
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Application Development
 
+- `npm start` - Start development server
+- `npm run build` - Build the application for production
+- `npm run watch` - Build in watch mode for development
+- `npm test` - Run unit tests with Vitest
+- `npm run e2e` - Run end-to-end tests with Playwright
+
+### Component Library
+
+- `npm run storybook` - Start Storybook for component development
+- `npm run build-storybook` - Build Storybook for deployment
+
+## Technology Stack
+
+### Core Framework
+- Angular 21.0
+- TypeScript 5.9
+- RxJS 7.8
+
+### UI Components
+- Angular Material 21.0
+- Angular CDK 21.0
+
+### Testing
+- Vitest 4.0 - Unit testing
+- Playwright 1.57 - End-to-end testing
+- JSDOM 27.1 - DOM manipulation and testing
+
+### Development Tools
+- Storybook 10.1 - Component development and documentation
+- ng-packagr 21.0 - Library packaging
+
+## Development Workflows
+
+### Creating Components
+
+For the main application:
 ```bash
-ng generate component component-name
+ng generate component component-name --project=zoom-loop
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+For the component library:
 ```bash
-ng generate --help
+ng generate component component-name --project=zoom-loop-components
 ```
 
-## Building
-
-To build the project run:
+### Building for Production
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+### Running Tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+**Unit tests:**
+```bash
+npm test
+```
+
+**E2E tests:**
+```bash
+npm run e2e
+```
+
+### Component Development with Storybook
+
+Start Storybook to develop and test components in isolation:
 
 ```bash
-ng test
+npm run storybook
 ```
 
-## Running end-to-end tests
+Storybook will be available at `http://localhost:6006/`.
 
-For end-to-end (e2e) testing, run:
+## Code Style
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+This project uses Prettier for code formatting with the following configuration:
+- Print width: 100 characters
+- Single quotes
+- Angular parser for HTML files
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular Documentation](https://angular.dev)
+- [Angular Material Documentation](https://material.angular.io)
+- [Storybook Documentation](https://storybook.js.org)
+- [Vitest Documentation](https://vitest.dev)
+- [Playwright Documentation](https://playwright.dev)

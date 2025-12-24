@@ -77,7 +77,7 @@ public class LoginHandler : IRequestHandler<LoginRequest, LoginResponse?>
             UserAgent = httpContext?.Request.Headers.UserAgent.ToString() ?? "Unknown",
             CreatedAt = DateTime.UtcNow,
             ExpiresAt = DateTime.UtcNow.AddDays(RefreshTokenExpiryDays),
-            LastActiveAt = DateTime.UtcNow
+            LastActiveAt = DateTime.UtcNow,
         };
 
         _context.Sessions.Add(session);
