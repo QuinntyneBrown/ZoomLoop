@@ -113,7 +113,12 @@
             "configDir": "projects/zoom-loop-components/.storybook",
             "browserTarget": "zoom-loop:build",
             "compodoc": false,
-            "port": 6006
+            "port": 6006,
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/zoom-loop-components/src/lib"
+              ]
+            }
           }
         },
         "build-storybook": {
@@ -122,7 +127,12 @@
             "configDir": "projects/zoom-loop-components/.storybook",
             "browserTarget": "zoom-loop:build",
             "compodoc": false,
-            "outputDir": "dist/storybook"
+            "outputDir": "dist/storybook",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/zoom-loop-components/src/lib"
+              ]
+            }
           }
         }
       }
