@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { MyProfileComponent, UserProfile } from './my-profile.component';
+import { MyProfile, UserProfile } from './my-profile';
 
-const meta: Meta<MyProfileComponent> = {
+const meta: Meta<MyProfile> = {
   title: 'Components/User/MyProfile',
-  component: MyProfileComponent,
+  component: MyProfile,
   tags: ['autodocs'],
   argTypes: {
     loading: {
@@ -42,7 +42,7 @@ const meta: Meta<MyProfileComponent> = {
 };
 
 export default meta;
-type Story = StoryObj<MyProfileComponent>;
+type Story = StoryObj<MyProfile>;
 
 const sampleProfile: UserProfile = {
   firstName: 'John',

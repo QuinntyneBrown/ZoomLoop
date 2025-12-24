@@ -35,25 +35,24 @@
           (change)="onAvatarFileChange($event)"
         />
       </div>
-      <div *ngIf="errors['avatar']" class="my-profile__avatar-error">
-        {{ errors['avatar'] }}
+      <div *ngIf="avatarError" class="my-profile__avatar-error">
+        {{ avatarError }}
       </div>
     </div>
 
     <!-- Form Fields -->
-    <form class="my-profile__form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="profileForm" class="my-profile__form" (ngSubmit)="onSubmit()">
       <div class="my-profile__row">
         <div class="my-profile__field">
           <zl-input
             label="First Name"
             placeholder="Enter your first name"
-            [value]="profile.firstName"
-            (valueChange)="onFieldChange('firstName', $event)"
-            (inputBlur)="onFieldBlur('firstName')"
+            [value]="profileForm.get('firstName')?.value"
+            (valueChange)="profileForm.get('firstName')?.setValue($event)"
+            (inputBlur)="profileForm.get('firstName')?.markAsTouched()"
             [state]="getFieldState('firstName')"
-            [errorText]="errors['firstName'] || ''"
-            [disabled]="loading"
-            [readonly]="readonly"
+            [errorText]="getFieldError('firstName')"
+            [disabled]="loading || readonly"
             required
           ></zl-input>
         </div>
@@ -62,13 +61,12 @@
           <zl-input
             label="Last Name"
             placeholder="Enter your last name"
-            [value]="profile.lastName"
-            (valueChange)="onFieldChange('lastName', $event)"
-            (inputBlur)="onFieldBlur('lastName')"
+            [value]="profileForm.get('lastName')?.value"
+            (valueChange)="profileForm.get('lastName')?.setValue($event)"
+            (inputBlur)="profileForm.get('lastName')?.markAsTouched()"
             [state]="getFieldState('lastName')"
-            [errorText]="errors['lastName'] || ''"
-            [disabled]="loading"
-            [readonly]="readonly"
+            [errorText]="getFieldError('lastName')"
+            [disabled]="loading || readonly"
             required
           ></zl-input>
         </div>
@@ -79,13 +77,12 @@
           label="Email"
           type="email"
           placeholder="Enter your email"
-          [value]="profile.email"
-          (valueChange)="onFieldChange('email', $event)"
-          (inputBlur)="onFieldBlur('email')"
+          [value]="profileForm.get('email')?.value"
+          (valueChange)="profileForm.get('email')?.setValue($event)"
+          (inputBlur)="profileForm.get('email')?.markAsTouched()"
           [state]="getFieldState('email')"
-          [errorText]="errors['email'] || ''"
-          [disabled]="loading"
-          [readonly]="readonly"
+          [errorText]="getFieldError('email')"
+          [disabled]="loading || readonly"
           required
         ></zl-input>
       </div>
@@ -95,14 +92,13 @@
           label="Phone Number"
           type="tel"
           placeholder="Enter your phone number"
-          [value]="profile.phone || ''"
-          (valueChange)="onFieldChange('phone', $event)"
-          (inputBlur)="onFieldBlur('phone')"
+          [value]="profileForm.get('phone')?.value || ''"
+          (valueChange)="profileForm.get('phone')?.setValue($event)"
+          (inputBlur)="profileForm.get('phone')?.markAsTouched()"
           [state]="getFieldState('phone')"
-          [errorText]="errors['phone'] || ''"
+          [errorText]="getFieldError('phone')"
           helperText="Optional"
-          [disabled]="loading"
-          [readonly]="readonly"
+          [disabled]="loading || readonly"
         ></zl-input>
       </div>
 
@@ -111,17 +107,15 @@
           Bio
         </label>
         <textarea
+          formControlName="bio"
           class="my-profile__textarea"
           placeholder="Tell us about yourself..."
           rows="4"
-          [value]="profile.bio || ''"
-          (input)="onFieldChange('bio', $any($event.target).value)"
-          [disabled]="loading"
-          [readonly]="readonly"
+          [disabled]="loading || readonly"
           maxlength="500"
         ></textarea>
         <div class="my-profile__textarea-hint">
-          {{ (profile.bio || '').length }}/500 characters
+          {{ bioCharacterCount }}/500 characters
         </div>
       </div>
 
@@ -139,7 +133,7 @@
           type="submit"
           variant="primary"
           [loading]="loading"
-          [disabled]="!isValid || loading"
+          [disabled]="!profileForm.valid || loading"
         >
           {{ loading ? 'Saving...' : 'Save Changes' }}
         </zl-button>
