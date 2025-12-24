@@ -1,0 +1,56 @@
+<div class="how-it-works">
+  <!-- Hero -->
+  <section class="how-it-works__hero">
+    <h1 class="how-it-works__hero-title">How It Works</h1>
+    <p class="how-it-works__hero-subtitle">Whether you're buying or selling, we make the process simple, transparent, and hassle-free</p>
+  </section>
+
+  <!-- Buying Section -->
+  <section class="how-it-works__section">
+    <zl-how-it-works
+      title="Buying a Car"
+      subtitle="Find your perfect car in 3 simple steps"
+      [steps]="buyingSteps"
+    ></zl-how-it-works>
+    <div class="how-it-works__cta">
+      <a routerLink="/cars">
+        <zl-button variant="primary" size="lg">Browse Cars</zl-button>
+      </a>
+    </div>
+  </section>
+
+  <!-- Selling Section -->
+  <section class="how-it-works__section how-it-works__section--alt">
+    <zl-how-it-works
+      title="Selling Your Car"
+      subtitle="Get cash for your car in 3 easy steps"
+      [steps]="sellingSteps"
+    ></zl-how-it-works>
+    <div class="how-it-works__cta">
+      <a routerLink="/sell">
+        <zl-button variant="primary" size="lg">Get Your Offer</zl-button>
+      </a>
+    </div>
+  </section>
+
+  <!-- Trust Badges -->
+  <section class="how-it-works__trust">
+    <zl-trust-badges [showDividers]="true"></zl-trust-badges>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="how-it-works__final-cta">
+    <div class="how-it-works__container">
+      <h2 class="how-it-works__final-title">Ready to Get Started?</h2>
+      <p class="how-it-works__final-text">Join thousands of happy customers who found their perfect car with ZoomLoop</p>
+      <div class="how-it-works__final-buttons">
+        <a routerLink="/cars">
+          <zl-button variant="primary" size="xl">Browse Cars</zl-button>
+        </a>
+        <a routerLink="/sell">
+          <zl-button variant="outline" size="xl">Sell Your Car</zl-button>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

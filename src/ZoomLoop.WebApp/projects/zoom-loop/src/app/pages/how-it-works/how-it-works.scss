@@ -1,0 +1,84 @@
+.how-it-works {
+  display: flex;
+  flex-direction: column;
+
+  &__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  &__hero {
+    padding: 4rem 1rem;
+    text-align: center;
+    background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+    color: #fff;
+  }
+
+  &__hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+  }
+
+  &__hero-subtitle {
+    font-size: 1.25rem;
+    margin: 0;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__section {
+    padding: 3rem 0;
+
+    &--alt {
+      background: #f5f5f5;
+    }
+  }
+
+  &__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  &__trust {
+    padding: 2rem 0;
+    background: #fff;
+  }
+
+  &__final-cta {
+    padding: 4rem 1rem;
+    background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+    text-align: center;
+  }
+
+  &__final-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 0.5rem;
+  }
+
+  &__final-text {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 2rem;
+  }
+
+  &__final-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    a {
+      text-decoration: none;
+    }
+  }
+}
