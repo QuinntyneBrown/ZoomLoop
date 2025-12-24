@@ -44,8 +44,6 @@ public class LoginHandler : IRequestHandler<LoginRequest, LoginResponse?>
     {
         _logger.LogInformation("Login attempt for email: {Email}", request.Email);
 
-        var users = _context.Users.ToList();
-
         var user = await _context.Users
             .Include(u => u.Roles)
             .ThenInclude(r => r.Privileges)
