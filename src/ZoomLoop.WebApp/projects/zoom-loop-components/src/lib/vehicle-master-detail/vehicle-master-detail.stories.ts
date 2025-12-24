@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 import { Meta, StoryObj, moduleMetadata } from '@storybook/angular';
 import { VehicleMasterDetailComponent, VehicleDetailData } from './vehicle-master-detail.component';
 import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';

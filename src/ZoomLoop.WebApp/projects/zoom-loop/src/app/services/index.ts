@@ -1,3 +1,6 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
 export * from './vehicle.service';
 export * from './favorites.service';
 export * from './auth.service';

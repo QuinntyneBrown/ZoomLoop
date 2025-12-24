@@ -29,7 +29,8 @@
       "Bash(curl:*)",
       "Bash(npm run start)",
       "Bash(npm run ng:*)",
-      "Bash(dotnet ef:*)"
+      "Bash(dotnet ef:*)",
+      "Bash(node add-copyright-headers.js:*)"
     ],
     "deny": [],
     "ask": []
