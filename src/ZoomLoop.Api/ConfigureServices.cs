@@ -140,6 +140,8 @@ public static class ConfigureServices
                 Description = "ZoomLoop Car Marketplace API - Identity and Authentication Endpoints"
             });
 
+            options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
+
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"",
