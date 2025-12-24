@@ -1,7 +1,7 @@
 // Mixins for zoom-loop-components
 // Reusable style patterns and utilities
 
-@import './tokens';
+@use './tokens' as *;
 
 // ==================================================
 // FOCUS STATE MIXIN

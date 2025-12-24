@@ -1,7 +1,7 @@
 // Toast Component - BEM Methodology
 // Block: .toast
 
-@import '../styles/index';
+@use '../styles/index' as *;
 
 .toast {
   display: flex;

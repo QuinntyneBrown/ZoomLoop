@@ -1,7 +1,7 @@
 // Badge Component - BEM Methodology
 // Block: .badge
 
-@import '../styles/index';
+@use '../styles/index' as *;
 
 :host {
   display: inline-flex;

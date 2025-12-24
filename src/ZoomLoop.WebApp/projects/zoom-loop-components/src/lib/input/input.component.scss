@@ -1,7 +1,7 @@
 // Input Component - BEM Methodology
 // Block: .input
 
-@import '../styles/index';
+@use '../styles/index' as *;
 
 .input {
   display: flex;
