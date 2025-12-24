@@ -225,7 +225,7 @@
             *ngIf="error.retryable"
             variant="outline"
             size="md"
-            fullWidth
+            [fullWidth]="true"
             (click)="retryWithNewImages()"
           >
             Try Again with New Images
@@ -233,7 +233,7 @@
           <zl-button
             variant="primary"
             size="md"
-            fullWidth
+            [fullWidth]="true"
             (click)="enableManualEntry()"
           >
             Enter VIN Manually
@@ -341,7 +341,7 @@
         </div>
 
         <div class="vehicle-ingestion-dialog__result-actions">
-          <zl-button variant="primary" size="lg" fullWidth (click)="onSaveAndView()">
+          <zl-button variant="primary" size="lg" [fullWidth]="true" (click)="onSaveAndView()">
             Save & View Vehicle Listing
           </zl-button>
           <div class="vehicle-ingestion-dialog__secondary-actions">
