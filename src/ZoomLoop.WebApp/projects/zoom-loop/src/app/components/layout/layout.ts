@@ -43,6 +43,12 @@ export class Layout implements OnInit, OnDestroy {
   navItems: NavItem[] = [
     { label: 'Buy', href: '/cars' },
     { label: 'Sell/Trade', href: '/sell' },
+    {
+      label: 'Financing',
+      children: [
+        { label: 'Car Loan Calculator', href: '/car-loan-calculator' }
+      ]
+    },
     { label: 'How It Works', href: '/how-it-works' }
   ];
 
