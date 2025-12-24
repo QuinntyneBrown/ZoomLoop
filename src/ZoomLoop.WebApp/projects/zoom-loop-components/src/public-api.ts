@@ -25,11 +25,13 @@ export * from './lib/how-it-works/how-it-works.component';
 export * from './lib/trust-badges/trust-badges.component';
 
 // Vehicle Components
-export * from './lib/vehicle-card/vehicle-card.component';
+export { VehicleCardComponent } from './lib/vehicle-card/vehicle-card.component';
+export type { VehicleData, VehicleSpec } from './lib/vehicle-card/vehicle-card.component';
 export * from './lib/finance-calculator/finance-calculator.component';
 export * from './lib/image-gallery/image-gallery.component';
 export * from './lib/vehicle-master-detail/vehicle-master-detail.component';
-export * from './lib/vehicles/vehicles.component';
+export { VehiclesComponent } from './lib/vehicles/vehicles.component';
+export type { VehiclesConfig } from './lib/vehicles/vehicles.component';
 
 // Feedback Components
 export * from './lib/toast/toast.component';

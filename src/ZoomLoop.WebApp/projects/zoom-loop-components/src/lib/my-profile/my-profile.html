@@ -47,13 +47,12 @@
           <zl-input
             label="First Name"
             placeholder="Enter your first name"
-            [value]="profileForm.get('firstName')?.value"
-            (valueChange)="profileForm.get('firstName')?.setValue($event)"
+            formControlName="firstName"
             (inputBlur)="profileForm.get('firstName')?.markAsTouched()"
             [state]="getFieldState('firstName')"
             [errorText]="getFieldError('firstName')"
             [disabled]="loading || readonly"
-            required
+            [required]="true"
           ></zl-input>
         </div>
 
@@ -61,13 +60,12 @@
           <zl-input
             label="Last Name"
             placeholder="Enter your last name"
-            [value]="profileForm.get('lastName')?.value"
-            (valueChange)="profileForm.get('lastName')?.setValue($event)"
+            formControlName="lastName"
             (inputBlur)="profileForm.get('lastName')?.markAsTouched()"
             [state]="getFieldState('lastName')"
             [errorText]="getFieldError('lastName')"
             [disabled]="loading || readonly"
-            required
+            [required]="true"
           ></zl-input>
         </div>
       </div>
@@ -77,13 +75,12 @@
           label="Email"
           type="email"
           placeholder="Enter your email"
-          [value]="profileForm.get('email')?.value"
-          (valueChange)="profileForm.get('email')?.setValue($event)"
+          formControlName="email"
           (inputBlur)="profileForm.get('email')?.markAsTouched()"
           [state]="getFieldState('email')"
           [errorText]="getFieldError('email')"
           [disabled]="loading || readonly"
-          required
+          [required]="true"
         ></zl-input>
       </div>
 
@@ -92,8 +89,7 @@
           label="Phone Number"
           type="tel"
           placeholder="Enter your phone number"
-          [value]="profileForm.get('phone')?.value || ''"
-          (valueChange)="profileForm.get('phone')?.setValue($event)"
+          formControlName="phone"
           (inputBlur)="profileForm.get('phone')?.markAsTouched()"
           [state]="getFieldState('phone')"
           [errorText]="getFieldError('phone')"
