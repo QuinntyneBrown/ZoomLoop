@@ -30,7 +30,8 @@ describe('AuthService', () => {
     phoneVerified: false,
     twoFactorEnabled: false,
     createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z'
+    updatedAt: '2024-01-01T00:00:00Z',
+    roles: []
   };
 
   const mockLoginResponse: LoginResponse = {

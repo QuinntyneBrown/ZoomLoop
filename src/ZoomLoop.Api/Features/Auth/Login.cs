@@ -17,4 +17,7 @@ public record UserDto(
     bool EmailVerified,
     bool PhoneVerified,
     DateTime CreatedAt,
-    DateTime? LastLoginAt);
+    DateTime? LastLoginAt,
+    List<RoleDto> Roles);
+
+public record RoleDto(Guid RoleId, string Name);

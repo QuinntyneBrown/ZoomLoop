@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services';
 import { User } from '../../models';
@@ -28,7 +29,8 @@ interface DashboardCard {
     CommonModule,
     MatCardModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './my-dashboard.html',
   styleUrl: './my-dashboard.scss'
@@ -40,6 +42,7 @@ export class MyDashboard implements OnInit, OnDestroy {
 
   currentUser: User | null = null;
   isAdmin = false;
+  isLoading = true;
 
   dashboardCards: DashboardCard[] = [
     {
@@ -91,12 +94,32 @@ export class MyDashboard implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
+    // Subscribe to user updates
     this.authSubscription = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
+      this.isAdmin = this.checkIfAdmin(user);
       if (!user) {
         this.router.navigate(['/']);
       }
     });
+
+    // Fetch current user from backend to get latest roles
+    this.authService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
+  private checkIfAdmin(user: User | null): boolean {
+    if (!user || !user.roles) {
+      return false;
+    }
+    return user.roles.some(role => role.name.toLowerCase() === 'Administrator'.toLowerCase());
   }
 
   ngOnDestroy(): void {

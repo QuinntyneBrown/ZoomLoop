@@ -39,6 +39,11 @@ export interface RefreshTokenResponse {
   expiresIn: number;
 }
 
+export interface Role {
+  roleId: string;
+  name: string;
+}
+
 export interface User {
   userId: string;
   email: string;
@@ -51,6 +56,7 @@ export interface User {
   createdAt: string;
   updatedAt?: string;
   lastLoginAt?: string;
+  roles: Role[];
 }
 
 export interface ForgotPasswordRequest {
