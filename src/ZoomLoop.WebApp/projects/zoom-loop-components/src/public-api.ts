@@ -37,3 +37,6 @@ export * from './lib/login-dialog';
 
 // Dialog Components
 export * from './lib/vehicle-ingestion-dialog';
+
+// User Components
+export * from './lib/my-profile/my-profile';
