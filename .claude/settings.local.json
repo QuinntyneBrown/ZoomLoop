@@ -19,7 +19,11 @@
       "Bash(dotnet run:*)",
       "Bash(timeout /t 5 /nobreak)",
       "Bash(dir:*)",
-      "Bash(dotnet test:*)"
+      "Bash(dotnet test:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(ping:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []

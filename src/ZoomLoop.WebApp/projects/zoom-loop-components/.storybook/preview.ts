@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/angular';
+import type { Preview} from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
 

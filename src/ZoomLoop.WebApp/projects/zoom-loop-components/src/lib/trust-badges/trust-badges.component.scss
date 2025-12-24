@@ -1,7 +1,7 @@
 // Trust Badges Component - BEM Methodology
 // Block: .trust-badges
 
-@import '../styles/index';
+@use '../styles/index' as *;
 
 .trust-badges {
   background: $color-white;

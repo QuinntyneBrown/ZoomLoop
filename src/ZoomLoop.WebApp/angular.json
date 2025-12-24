@@ -23,6 +23,11 @@
             "browser": "projects/zoom-loop/src/main.ts",
             "tsConfig": "projects/zoom-loop/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/zoom-loop-components/src/lib"
+              ]
+            },
             "assets": [
               {
                 "glob": "**/*",
