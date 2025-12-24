@@ -119,7 +119,7 @@ export class MyDashboard implements OnInit, OnDestroy {
     if (!user || !user.roles) {
       return false;
     }
-    return user.roles.some(role => role.name.toLowerCase() === 'admin');
+    return user.roles.some(role => role.name.toLowerCase() === 'Administrator'.toLowerCase());
   }
 
   ngOnDestroy(): void {

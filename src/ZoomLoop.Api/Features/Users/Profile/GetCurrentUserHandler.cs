@@ -28,14 +28,14 @@ public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserRequest, GetC
     {
         var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        if (string.IsNullOrEmpty(userIdClaim))
         {
             return null;
         }
 
         var user = await _context.Users
             .Include(u => u.Roles)
-            .FirstOrDefaultAsync(u => u.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email == userIdClaim, cancellationToken);
 
         if (user == null)
         {
