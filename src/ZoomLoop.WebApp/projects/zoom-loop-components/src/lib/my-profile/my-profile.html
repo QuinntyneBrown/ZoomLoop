@@ -45,56 +45,48 @@
       <div class="my-profile__row">
         <div class="my-profile__field">
           <zl-input
+            formControlName="firstName"
             label="First Name"
             placeholder="Enter your first name"
-            [value]="profileForm.get('firstName')?.value"
-            (valueChange)="profileForm.get('firstName')?.setValue($event)"
-            (inputBlur)="profileForm.get('firstName')?.markAsTouched()"
             [state]="getFieldState('firstName')"
             [errorText]="getFieldError('firstName')"
             [disabled]="loading || readonly"
-            required
+            [required]="true"
           ></zl-input>
         </div>
 
         <div class="my-profile__field">
           <zl-input
+            formControlName="lastName"
             label="Last Name"
             placeholder="Enter your last name"
-            [value]="profileForm.get('lastName')?.value"
-            (valueChange)="profileForm.get('lastName')?.setValue($event)"
-            (inputBlur)="profileForm.get('lastName')?.markAsTouched()"
             [state]="getFieldState('lastName')"
             [errorText]="getFieldError('lastName')"
             [disabled]="loading || readonly"
-            required
+            [required]="true"
           ></zl-input>
         </div>
       </div>
 
       <div class="my-profile__field">
         <zl-input
+          formControlName="email"
           label="Email"
           type="email"
           placeholder="Enter your email"
-          [value]="profileForm.get('email')?.value"
-          (valueChange)="profileForm.get('email')?.setValue($event)"
-          (inputBlur)="profileForm.get('email')?.markAsTouched()"
           [state]="getFieldState('email')"
           [errorText]="getFieldError('email')"
           [disabled]="loading || readonly"
-          required
+          [required]="true"
         ></zl-input>
       </div>
 
       <div class="my-profile__field">
         <zl-input
+          formControlName="phone"
           label="Phone Number"
           type="tel"
           placeholder="Enter your phone number"
-          [value]="profileForm.get('phone')?.value || ''"
-          (valueChange)="profileForm.get('phone')?.setValue($event)"
-          (inputBlur)="profileForm.get('phone')?.markAsTouched()"
           [state]="getFieldState('phone')"
           [errorText]="getFieldError('phone')"
           helperText="Optional"
