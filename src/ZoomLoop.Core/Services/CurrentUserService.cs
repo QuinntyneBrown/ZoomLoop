@@ -23,12 +23,12 @@ public class CurrentUserService : ICurrentUserService
     {
         var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (string.IsNullOrEmpty(userIdClaim))
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
         {
             return null;
         }
 
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userIdClaim, cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId, cancellationToken);
 
         return user;
     }

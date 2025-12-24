@@ -1,14 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using ZoomLoop.Api.Features.Users.Profile;
 using ZoomLoop.Core.Models;
+using ZoomLoop.Core.Services;
 
 namespace ZoomLoop.UnitTests.Features.Users;
 
@@ -16,7 +15,7 @@ namespace ZoomLoop.UnitTests.Features.Users;
 public class GetCurrentUserHandlerTests
 {
     private InMemoryZoomLoopContext _context = default!;
-    private Mock<IHttpContextAccessor> _httpContextAccessor = default!;
+    private Mock<ICurrentUserService> _currentUserService = default!;
     private Mock<ILogger<GetCurrentUserHandler>> _logger = default!;
 
     [SetUp]
@@ -27,7 +26,7 @@ public class GetCurrentUserHandlerTests
             .Options;
 
         _context = new InMemoryZoomLoopContext(options);
-        _httpContextAccessor = new Mock<IHttpContextAccessor>();
+        _currentUserService = new Mock<ICurrentUserService>();
         _logger = new Mock<ILogger<GetCurrentUserHandler>>();
     }
 
@@ -36,23 +35,6 @@ public class GetCurrentUserHandlerTests
     {
         _context.Database.EnsureDeleted();
         _context.Dispose();
-    }
-
-    private void SetupHttpContextWithUserId(Guid userId)
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-        };
-        var identity = new ClaimsIdentity(claims, "TestAuth");
-        var claimsPrincipal = new ClaimsPrincipal(identity);
-
-        var mockHttpContext = new DefaultHttpContext
-        {
-            User = claimsPrincipal
-        };
-
-        _httpContextAccessor.Setup(x => x.HttpContext).Returns(mockHttpContext);
     }
 
     [Test]
@@ -95,9 +77,12 @@ public class GetCurrentUserHandlerTests
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        SetupHttpContextWithUserId(userId);
+        // Retrieve the tracked entity from the context
+        var trackedUser = await _context.Users.FirstAsync(u => u.UserId == userId);
+        _currentUserService.Setup(x => x.GetAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(trackedUser);
 
-        var handler = new GetCurrentUserHandler(_context, _httpContextAccessor.Object, _logger.Object);
+        var handler = new GetCurrentUserHandler(_context, _currentUserService.Object, _logger.Object);
         var request = new GetCurrentUserRequest();
 
         // Act
@@ -134,9 +119,12 @@ public class GetCurrentUserHandlerTests
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        SetupHttpContextWithUserId(userId);
+        // Retrieve the tracked entity from the context
+        var trackedUser = await _context.Users.FirstAsync(u => u.UserId == userId);
+        _currentUserService.Setup(x => x.GetAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(trackedUser);
 
-        var handler = new GetCurrentUserHandler(_context, _httpContextAccessor.Object, _logger.Object);
+        var handler = new GetCurrentUserHandler(_context, _currentUserService.Object, _logger.Object);
         var request = new GetCurrentUserRequest();
 
         // Act
@@ -153,10 +141,10 @@ public class GetCurrentUserHandlerTests
     public async Task ShouldReturnNullWhenUserNotFound()
     {
         // Arrange
-        var nonExistentUserId = Guid.NewGuid();
-        SetupHttpContextWithUserId(nonExistentUserId);
+        _currentUserService.Setup(x => x.GetAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync((User?)null);
 
-        var handler = new GetCurrentUserHandler(_context, _httpContextAccessor.Object, _logger.Object);
+        var handler = new GetCurrentUserHandler(_context, _currentUserService.Object, _logger.Object);
         var request = new GetCurrentUserRequest();
 
         // Act
@@ -169,11 +157,11 @@ public class GetCurrentUserHandlerTests
     [Test]
     public async Task ShouldReturnNullWhenNoUserIdClaim()
     {
-        // Arrange
-        var mockHttpContext = new DefaultHttpContext();
-        _httpContextAccessor.Setup(x => x.HttpContext).Returns(mockHttpContext);
+        // Arrange - CurrentUserService returns null when no claim is present
+        _currentUserService.Setup(x => x.GetAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync((User?)null);
 
-        var handler = new GetCurrentUserHandler(_context, _httpContextAccessor.Object, _logger.Object);
+        var handler = new GetCurrentUserHandler(_context, _currentUserService.Object, _logger.Object);
         var request = new GetCurrentUserRequest();
 
         // Act
@@ -215,9 +203,12 @@ public class GetCurrentUserHandlerTests
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        SetupHttpContextWithUserId(userId);
+        // Retrieve the tracked entity from the context
+        var trackedUser = await _context.Users.FirstAsync(u => u.UserId == userId);
+        _currentUserService.Setup(x => x.GetAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(trackedUser);
 
-        var handler = new GetCurrentUserHandler(_context, _httpContextAccessor.Object, _logger.Object);
+        var handler = new GetCurrentUserHandler(_context, _currentUserService.Object, _logger.Object);
         var request = new GetCurrentUserRequest();
 
         // Act

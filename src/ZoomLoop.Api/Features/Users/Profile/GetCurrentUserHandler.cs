@@ -1,46 +1,40 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.Security.Claims;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ZoomLoop.Core;
+using ZoomLoop.Core.Services;
 
 namespace ZoomLoop.Api.Features.Users.Profile;
 
 public class GetCurrentUserHandler : IRequestHandler<GetCurrentUserRequest, GetCurrentUserResponse?>
 {
     private readonly IZoomLoopContext _context;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICurrentUserService _currentUserService;
     private readonly ILogger<GetCurrentUserHandler> _logger;
 
     public GetCurrentUserHandler(
         IZoomLoopContext context,
-        IHttpContextAccessor httpContextAccessor,
+        ICurrentUserService currentUserService,
         ILogger<GetCurrentUserHandler> logger)
     {
         _context = context;
-        _httpContextAccessor = httpContextAccessor;
+        _currentUserService = currentUserService;
         _logger = logger;
     }
 
     public async Task<GetCurrentUserResponse?> Handle(GetCurrentUserRequest request, CancellationToken cancellationToken)
     {
-        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(userIdClaim))
-        {
-            return null;
-        }
-
-        var user = await _context.Users
-            .Include(u => u.Roles)
-            .FirstOrDefaultAsync(u => u.Email == userIdClaim, cancellationToken);
+        var user = await _currentUserService.GetAsync(cancellationToken);
 
         if (user == null)
         {
             return null;
         }
+
+        // Load roles eagerly since CurrentUserService returns user without navigation properties
+        await _context.Entry(user).Collection(u => u.Roles).LoadAsync(cancellationToken);
 
         return new GetCurrentUserResponse(
             user.UserId,
