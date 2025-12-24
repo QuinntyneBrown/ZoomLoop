@@ -17,6 +17,9 @@ public class InMemoryZoomLoopContext : DbContext, IZoomLoopContext
     public DbSet<User> Users { get; set; } = default!;
     public DbSet<Role> Roles { get; set; } = default!;
     public DbSet<Privilege> Privileges { get; set; } = default!;
+    public DbSet<Session> Sessions { get; set; } = default!;
+    public DbSet<UserPreferences> UserPreferences { get; set; } = default!;
+    public DbSet<UserAddress> UserAddresses { get; set; } = default!;
     public DbSet<Dealer> Dealers { get; set; } = default!;
     public DbSet<DealerLocation> DealerLocations { get; set; } = default!;
     public DbSet<Vehicle> Vehicles { get; set; } = default!;
@@ -68,6 +71,19 @@ public class InMemoryZoomLoopContext : DbContext, IZoomLoopContext
         {
             entity.HasKey(e => e.ProfileId);
             entity.OwnsOne(e => e.HomeAddress);
+        });
+
+        // Configure UserPreferences entity
+        modelBuilder.Entity<UserPreferences>(entity =>
+        {
+            entity.HasKey(e => e.UserPreferencesId);
+            entity.OwnsOne(e => e.Notifications, notif =>
+            {
+                notif.OwnsOne(n => n.Email);
+                notif.OwnsOne(n => n.Sms);
+                notif.OwnsOne(n => n.Push);
+            });
+            entity.OwnsOne(e => e.Search);
         });
     }
 }

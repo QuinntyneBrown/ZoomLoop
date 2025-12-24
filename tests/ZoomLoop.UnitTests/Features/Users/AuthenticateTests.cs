@@ -1,12 +1,13 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
-using System.Security.Cryptography;
-using ZoomLoop.Api.Features.Users;
-using ZoomLoop.Core;
+using ZoomLoop.Api.Features.Auth;
 using ZoomLoop.Core.Models;
 using ZoomLoop.Core.Services.Security;
 
@@ -18,6 +19,9 @@ public class AuthenticateTests
     private InMemoryZoomLoopContext _context = default!;
     private IPasswordHasher _passwordHasher = default!;
     private ITokenBuilder _tokenBuilder = default!;
+    private ITokenProvider _tokenProvider = default!;
+    private Mock<IHttpContextAccessor> _httpContextAccessor = default!;
+    private Mock<ILogger<LoginHandler>> _logger = default!;
 
     [SetUp]
     public void Setup()
@@ -35,11 +39,20 @@ public class AuthenticateTests
                 ["Authentication:JwtKey"] = "0123456789ABCDEF0123456789ABCDEF",
                 ["Authentication:JwtIssuer"] = "ZoomLoop",
                 ["Authentication:JwtAudience"] = "ZoomLoop",
-                ["Authentication:ExpirationMinutes"] = "60"
+                ["Authentication:ExpirationMinutes"] = "60",
             })
             .Build();
 
-        _tokenBuilder = new TokenBuilder(new TokenProvider(configuration));
+        _tokenProvider = new TokenProvider(configuration);
+        _tokenBuilder = new TokenBuilder(_tokenProvider);
+        _httpContextAccessor = new Mock<IHttpContextAccessor>();
+        _logger = new Mock<ILogger<LoginHandler>>();
+
+        // Setup default HTTP context
+        var mockHttpContext = new DefaultHttpContext();
+        mockHttpContext.Connection.RemoteIpAddress = System.Net.IPAddress.Parse("127.0.0.1");
+        mockHttpContext.Request.Headers.UserAgent = "Test User Agent";
+        _httpContextAccessor.Setup(x => x.HttpContext).Returns(mockHttpContext);
     }
 
     [TearDown]
@@ -53,25 +66,28 @@ public class AuthenticateTests
     public async Task ShouldAuthenticateValidUser()
     {
         // Arrange
-        var salt = RandomNumberGenerator.GetBytes(16);
         var password = "TestPassword123";
-        var hashedPassword = _passwordHasher.HashPassword(salt, password);
+        var hashedPassword = _passwordHasher.HashPassword(password);
 
         var user = new User
         {
             UserId = Guid.NewGuid(),
-            Username = "testuser",
-            Password = hashedPassword,
-            Salt = salt,
-            IsDeleted = false,
-            Roles = new List<Role>()
+            Email = "testuser@example.com",
+            PasswordHash = hashedPassword,
+            FirstName = "Test",
+            LastName = "User",
+            Status = UserStatus.Active,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Roles = new List<Role>(),
+            Sessions = new List<Session>(),
         };
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        var handler = new AuthenticateHandler(_context, _passwordHasher, _tokenBuilder);
-        var request = new AuthenticateRequest("testuser", password);
+        var handler = new LoginHandler(_context, _passwordHasher, _tokenBuilder, _tokenProvider, _httpContextAccessor.Object, _logger.Object);
+        var request = new LoginRequest(user.Email, password, false);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -79,15 +95,15 @@ public class AuthenticateTests
         // Assert
         Assert.That(result, Is.Not.Null);
         Assert.That(result!.AccessToken, Is.Not.Null.And.Not.Empty);
-        Assert.That(result.UserId, Is.EqualTo(user.UserId));
+        Assert.That(result.User.UserId, Is.EqualTo(user.UserId));
     }
 
     [Test]
-    public async Task ShouldReturnNullForInvalidUsername()
+    public async Task ShouldReturnNullForInvalidEmail()
     {
         // Arrange
-        var handler = new AuthenticateHandler(_context, _passwordHasher, _tokenBuilder);
-        var request = new AuthenticateRequest("nonexistent", "password");
+        var handler = new LoginHandler(_context, _passwordHasher, _tokenBuilder, _tokenProvider, _httpContextAccessor.Object, _logger.Object);
+        var request = new LoginRequest("nonexistent@example.com", "password", false);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -100,25 +116,28 @@ public class AuthenticateTests
     public async Task ShouldReturnNullForInvalidPassword()
     {
         // Arrange
-        var salt = RandomNumberGenerator.GetBytes(16);
         var password = "CorrectPassword";
-        var hashedPassword = _passwordHasher.HashPassword(salt, password);
+        var hashedPassword = _passwordHasher.HashPassword(password);
 
         var user = new User
         {
             UserId = Guid.NewGuid(),
-            Username = "testuser",
-            Password = hashedPassword,
-            Salt = salt,
-            IsDeleted = false,
-            Roles = new List<Role>()
+            Email = "testuser@example.com",
+            PasswordHash = hashedPassword,
+            FirstName = "Test",
+            LastName = "User",
+            Status = UserStatus.Active,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Roles = new List<Role>(),
+            Sessions = new List<Session>(),
         };
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        var handler = new AuthenticateHandler(_context, _passwordHasher, _tokenBuilder);
-        var request = new AuthenticateRequest("testuser", "WrongPassword");
+        var handler = new LoginHandler(_context, _passwordHasher, _tokenBuilder, _tokenProvider, _httpContextAccessor.Object, _logger.Object);
+        var request = new LoginRequest(user.Email, "WrongPassword", false);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -128,28 +147,31 @@ public class AuthenticateTests
     }
 
     [Test]
-    public async Task ShouldNotAuthenticateDeletedUser()
+    public async Task ShouldNotAuthenticateInactiveUser()
     {
         // Arrange
-        var salt = RandomNumberGenerator.GetBytes(16);
         var password = "TestPassword123";
-        var hashedPassword = _passwordHasher.HashPassword(salt, password);
+        var hashedPassword = _passwordHasher.HashPassword(password);
 
         var user = new User
         {
             UserId = Guid.NewGuid(),
-            Username = "deleteduser",
-            Password = hashedPassword,
-            Salt = salt,
-            IsDeleted = true,
-            Roles = new List<Role>()
+            Email = "inactive@example.com",
+            PasswordHash = hashedPassword,
+            FirstName = "Inactive",
+            LastName = "User",
+            Status = UserStatus.Suspended,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Roles = new List<Role>(),
+            Sessions = new List<Session>(),
         };
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        var handler = new AuthenticateHandler(_context, _passwordHasher, _tokenBuilder);
-        var request = new AuthenticateRequest("deleteduser", password);
+        var handler = new LoginHandler(_context, _passwordHasher, _tokenBuilder, _tokenProvider, _httpContextAccessor.Object, _logger.Object);
+        var request = new LoginRequest(user.Email, password, false);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -159,35 +181,38 @@ public class AuthenticateTests
     }
 
     [Test]
-    public async Task ShouldIncludeUserIdInToken()
+    public async Task ShouldIncludeUserIdInResponse()
     {
         // Arrange
-        var salt = RandomNumberGenerator.GetBytes(16);
         var password = "TestPassword123";
-        var hashedPassword = _passwordHasher.HashPassword(salt, password);
+        var hashedPassword = _passwordHasher.HashPassword(password);
 
         var userId = Guid.NewGuid();
         var user = new User
         {
             UserId = userId,
-            Username = "testuser",
-            Password = hashedPassword,
-            Salt = salt,
-            IsDeleted = false,
-            Roles = new List<Role>()
+            Email = "testuser@example.com",
+            PasswordHash = hashedPassword,
+            FirstName = "Test",
+            LastName = "User",
+            Status = UserStatus.Active,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Roles = new List<Role>(),
+            Sessions = new List<Session>(),
         };
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        var handler = new AuthenticateHandler(_context, _passwordHasher, _tokenBuilder);
-        var request = new AuthenticateRequest("testuser", password);
+        var handler = new LoginHandler(_context, _passwordHasher, _tokenBuilder, _tokenProvider, _httpContextAccessor.Object, _logger.Object);
+        var request = new LoginRequest(user.Email, password, false);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         Assert.That(result, Is.Not.Null);
-        Assert.That(result!.UserId, Is.EqualTo(userId));
+        Assert.That(result!.User.UserId, Is.EqualTo(userId));
     }
 }

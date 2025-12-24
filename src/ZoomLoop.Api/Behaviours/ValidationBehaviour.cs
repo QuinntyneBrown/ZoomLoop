@@ -6,7 +6,7 @@ using MediatR;
 namespace ZoomLoop.Api.Behaviours;
 
 public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull
+    where TRequest : IRequest<TResponse>
 {
     private readonly ILogger<ValidationBehaviour<TRequest, TResponse>> logger;
 

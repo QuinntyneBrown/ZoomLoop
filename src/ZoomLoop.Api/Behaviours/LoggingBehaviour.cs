@@ -7,7 +7,7 @@ using MediatR;
 namespace ZoomLoop.Api.Behaviours;
 
 public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull
+    where TRequest : IRequest<TResponse>
 {
     private readonly ILogger<LoggingBehaviour<TRequest, TResponse>> logger;
 

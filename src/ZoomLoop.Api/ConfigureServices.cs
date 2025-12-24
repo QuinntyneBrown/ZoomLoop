@@ -25,12 +25,9 @@ public static class ConfigureServices
     {
         services.AddHttpContextAccessor();
 
-        services.AddMediatR(config =>
-        {
-            config.RegisterServicesFromAssembly(typeof(Program).Assembly);
-            config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
-            config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-        });
+        services.AddMediatR(typeof(Program).Assembly);
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
         // Database configuration
         var connectionString = configuration.GetConnectionString("DefaultConnection");

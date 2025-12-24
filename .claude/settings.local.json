@@ -13,7 +13,13 @@
       "Bash(npm run storybook:zoom-loop-components:*)",
       "Bash(dotnet --version:*)",
       "Bash(dotnet run)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(dotnet add:*)",
+      "Bash(findstr:*)",
+      "Bash(dotnet run:*)",
+      "Bash(timeout /t 5 /nobreak)",
+      "Bash(dir:*)",
+      "Bash(dotnet test:*)"
     ],
     "deny": [],
     "ask": []

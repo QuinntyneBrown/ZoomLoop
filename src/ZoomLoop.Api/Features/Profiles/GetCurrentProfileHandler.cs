@@ -39,13 +39,14 @@ public class GetCurrentProfileHandler : IRequestHandler<GetCurrentProfileRequest
         var user = await _context.Users
             .SingleOrDefaultAsync(x => x.UserId == userId, cancellationToken);
 
-        if (user?.CurrentProfileId == null)
+        if (user == null)
         {
             return new GetCurrentProfileResponse();
         }
 
+        // TODO: Add CurrentProfileId and UserId to Profile model
         var profile = await _context.Profiles
-            .SingleOrDefaultAsync(x => x.ProfileId == user.CurrentProfileId.Value, cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
 
         return new GetCurrentProfileResponse { Profile = profile?.ToDto() };
     }

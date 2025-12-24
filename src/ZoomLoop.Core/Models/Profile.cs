@@ -6,6 +6,7 @@ namespace ZoomLoop.Core.Models;
 public class Profile
 {
     public Guid ProfileId { get; set; }
+    public Guid UserId { get; set; }
     public string ProfileImageUrl { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

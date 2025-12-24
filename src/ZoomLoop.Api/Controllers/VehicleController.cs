@@ -63,7 +63,7 @@ public class VehicleController
     [ProducesResponseType(typeof(CreateVehicleResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<CreateVehicleResponse>> Create([FromBody] CreateVehicleRequest request)
     {
-        _logger.LogInformation("Creating new vehicle: {Make} {Model} {Year}", request.Make, request.Model, request.Year);
+        _logger.LogInformation("Creating new vehicle");
         var response = await _mediator.Send(request);
         _logger.LogInformation("Vehicle created successfully: {VehicleId}", response.Vehicle?.VehicleId);
         return response;

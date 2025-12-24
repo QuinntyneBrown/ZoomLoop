@@ -43,4 +43,5 @@ public class User
     public List<Session> Sessions { get; set; }
     public List<UserAddress> Addresses { get; set; }
     public UserPreferences? Preferences { get; set; }
+    public Guid? CurrentProfileId { get; set; }
 }
