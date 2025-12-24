@@ -1,9 +1,9 @@
-# New Ingestion - Frontend Specification
+# Vehicle Ingestion - Frontend Specification
 
 **Version:** 1.0
 **Date:** December 23, 2025
 **Feature:** Vehicle Ingestion
-**Platform:** Clutch Clone - Online Used Car Marketplace
+**Platform:** Online Used Car Marketplace
 **Phase:** A
 
 ---

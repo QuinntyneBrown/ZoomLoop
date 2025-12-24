@@ -8,7 +8,7 @@ namespace ZoomLoop.Core.Services.Security;
 
 public interface ITokenProvider
 {
-    string Get(string uniqueName, IEnumerable<Claim> customClaims = null);
+    string Get(string uniqueName, IEnumerable<Claim>? customClaims = null);
     ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     string GenerateRefreshToken();
 }

@@ -19,7 +19,7 @@ public class TokenProvider : ITokenProvider
     public TokenProvider(IConfiguration configuration)
         => _configuration = configuration;
 
-    public string Get(string uniqueName, IEnumerable<Claim> customClaims = null)
+    public string Get(string uniqueName, IEnumerable<Claim>? customClaims = null)
     {
         var now = DateTime.UtcNow;
         var nowDateTimeOffset = new DateTimeOffset(now);
@@ -45,7 +45,7 @@ public class TokenProvider : ITokenProvider
             notBefore: now,
             expires: now.AddMinutes(Convert.ToInt16(_configuration[$"{nameof(Authentication)}:{nameof(Authentication.ExpirationMinutes)}"])),
             signingCredentials: new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration[$"{nameof(Authentication)}:{nameof(Authentication.JwtKey)}"])),
+                new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration[$"{nameof(Authentication)}:{nameof(Authentication.JwtKey)}"] ?? throw new InvalidOperationException("JwtKey not configured"))),
                 SecurityAlgorithms.HmacSha256));
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -58,7 +58,7 @@ public class TokenProvider : ITokenProvider
             ValidateAudience = true,
             ValidateIssuer = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration[$"{nameof(Authentication)}:{nameof(Authentication.JwtKey)}"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration[$"{nameof(Authentication)}:{nameof(Authentication.JwtKey)}"] ?? throw new InvalidOperationException("JwtKey not configured"))),
             ValidateLifetime = false
         };
 

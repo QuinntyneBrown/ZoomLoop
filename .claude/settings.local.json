@@ -10,7 +10,10 @@
       "Bash(npm run)",
       "Bash(rm:*)",
       "Bash(npm run build:*)",
-      "Bash(npm run storybook:zoom-loop-components:*)"
+      "Bash(npm run storybook:zoom-loop-components:*)",
+      "Bash(dotnet --version:*)",
+      "Bash(dotnet run)",
+      "Bash(dotnet build:*)"
     ],
     "deny": [],
     "ask": []

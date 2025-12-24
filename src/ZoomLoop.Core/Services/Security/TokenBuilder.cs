@@ -10,7 +10,7 @@ namespace ZoomLoop.Core.Services.Security;
 public class TokenBuilder : ITokenBuilder
 {
     private readonly ITokenProvider _tokenProvider;
-    private string _username;
+    private string _username = string.Empty;
     private List<Claim> _claims = [];
 
     public TokenBuilder(ITokenProvider tokenProvider)
@@ -26,18 +26,24 @@ public class TokenBuilder : ITokenBuilder
 
     public TokenBuilder FromClaimsPrincipal(ClaimsPrincipal claimsPrincipal)
     {
-        _username = claimsPrincipal.Identity?.Name;
+        _username = claimsPrincipal.Identity?.Name ?? string.Empty;
         if (string.IsNullOrEmpty(_username))
         {
-            _username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+            _username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value ?? string.Empty;
         }
+
         _claims = claimsPrincipal.Claims.ToList();
         return this;
     }
 
     public TokenBuilder RemoveClaim(Claim claim)
     {
-        _claims.Remove(_claims.SingleOrDefault(x => x.Type == claim.Type));
+        var existingClaim = _claims.SingleOrDefault(x => x.Type == claim.Type);
+        if (existingClaim != null)
+        {
+            _claims.Remove(existingClaim);
+        }
+
         return this;
     }
 
