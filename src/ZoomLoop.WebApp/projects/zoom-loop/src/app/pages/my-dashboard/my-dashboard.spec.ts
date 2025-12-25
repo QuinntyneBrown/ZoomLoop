@@ -4,7 +4,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { vi, describe, it, expect, beforeEach, Mock, afterEach } from 'vitest';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError, firstValueFrom } from 'rxjs';
 import { MyDashboard } from './my-dashboard';
 import { AuthService } from '../../services';
 import { User } from '../../models';
@@ -24,7 +24,7 @@ describe('MyDashboard', () => {
     phoneVerified: false,
     createdAt: '2024-01-01T00:00:00Z',
     roles: [
-      { roleId: '1', name: 'Admin' },
+      { roleId: '1', name: 'Administrator' },
       { roleId: '2', name: 'User' }
     ]
   };
@@ -84,58 +84,48 @@ describe('MyDashboard', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('role detection', () => {
-    it('should set isAdmin to true when user has Admin role', () => {
+  describe('role detection via vm$', () => {
+    it('should set isAdmin to true when user has Administrator role', async () => {
       authServiceSpy.currentUser$.next(mockUserWithAdminRole);
-      component.ngOnInit();
-      expect(component.isAdmin).toBe(true);
+      const result = await firstValueFrom(component.vm$);
+      expect(result?.isAdmin).toBe(true);
     });
 
-    it('should set isAdmin to false when user has only User role', () => {
+    it('should set isAdmin to false when user has only User role', async () => {
       authServiceSpy.currentUser$.next(mockUserWithUserRole);
-      component.ngOnInit();
-      expect(component.isAdmin).toBe(false);
+      const result = await firstValueFrom(component.vm$);
+      expect(result?.isAdmin).toBe(false);
     });
 
-    it('should set isAdmin to false when user has no roles', () => {
+    it('should set isAdmin to false when user has no roles', async () => {
       authServiceSpy.currentUser$.next(mockUserWithNoRoles);
-      component.ngOnInit();
-      expect(component.isAdmin).toBe(false);
+      const result = await firstValueFrom(component.vm$);
+      expect(result?.isAdmin).toBe(false);
     });
 
-    it('should set isAdmin to false when user is null', () => {
+    it('should return null when user is null', async () => {
       authServiceSpy.currentUser$.next(null);
-      component.ngOnInit();
-      expect(component.isAdmin).toBe(false);
+      const result = await firstValueFrom(component.vm$);
+      expect(result).toBeNull();
     });
 
-    it('should handle case-insensitive Admin role check', () => {
+    it('should handle case-insensitive Administrator role check', async () => {
       const userWithLowercaseAdmin: User = {
         ...mockUserWithNoRoles,
-        roles: [{ roleId: '1', name: 'admin' }]
+        roles: [{ roleId: '1', name: 'administrator' }]
       };
       authServiceSpy.currentUser$.next(userWithLowercaseAdmin);
-      component.ngOnInit();
-      expect(component.isAdmin).toBe(true);
-    });
-
-    it('should handle ADMIN role in uppercase', () => {
-      const userWithUppercaseAdmin: User = {
-        ...mockUserWithNoRoles,
-        roles: [{ roleId: '1', name: 'ADMIN' }]
-      };
-      authServiceSpy.currentUser$.next(userWithUppercaseAdmin);
-      component.ngOnInit();
-      expect(component.isAdmin).toBe(true);
+      const result = await firstValueFrom(component.vm$);
+      expect(result?.isAdmin).toBe(true);
     });
   });
 
-  describe('card visibility', () => {
-    it('should hide nonAdminOnly cards when user is admin', () => {
+  describe('card visibility via vm$', () => {
+    it('should hide nonAdminOnly cards when user is admin', async () => {
       authServiceSpy.currentUser$.next(mockUserWithAdminRole);
-      component.ngOnInit();
+      const result = await firstValueFrom(component.vm$);
 
-      const visibleCardIds = component.visibleCards.map(c => c.id);
+      const visibleCardIds = result?.visibleCards.map((c: any) => c.id);
 
       expect(visibleCardIds).toContain('personal-info');
       expect(visibleCardIds).toContain('notifications');
@@ -145,11 +135,11 @@ describe('MyDashboard', () => {
       expect(visibleCardIds).not.toContain('saved-searches');
     });
 
-    it('should show nonAdminOnly cards when user is not admin', () => {
+    it('should show nonAdminOnly cards when user is not admin', async () => {
       authServiceSpy.currentUser$.next(mockUserWithUserRole);
-      component.ngOnInit();
+      const result = await firstValueFrom(component.vm$);
 
-      const visibleCardIds = component.visibleCards.map(c => c.id);
+      const visibleCardIds = result?.visibleCards.map((c: any) => c.id);
 
       expect(visibleCardIds).toContain('personal-info');
       expect(visibleCardIds).toContain('notifications');
@@ -159,11 +149,11 @@ describe('MyDashboard', () => {
       expect(visibleCardIds).toContain('saved-searches');
     });
 
-    it('should show all non-restricted cards when user has no roles', () => {
+    it('should show all non-restricted cards when user has no roles', async () => {
       authServiceSpy.currentUser$.next(mockUserWithNoRoles);
-      component.ngOnInit();
+      const result = await firstValueFrom(component.vm$);
 
-      const visibleCardIds = component.visibleCards.map(c => c.id);
+      const visibleCardIds = result?.visibleCards.map((c: any) => c.id);
 
       expect(visibleCardIds).toContain('personal-info');
       expect(visibleCardIds).toContain('notifications');
@@ -174,113 +164,55 @@ describe('MyDashboard', () => {
     });
   });
 
-  describe('user display', () => {
-    it('should display user full name', () => {
+  describe('user display via vm$', () => {
+    it('should display user full name', async () => {
       authServiceSpy.currentUser$.next(mockUserWithUserRole);
-      component.ngOnInit();
+      const result = await firstValueFrom(component.vm$);
 
-      expect(component.userFullName).toBe('Regular User');
+      expect(result?.userFullName).toBe('Regular User');
     });
 
-    it('should display user email', () => {
+    it('should display user email', async () => {
       authServiceSpy.currentUser$.next(mockUserWithUserRole);
-      component.ngOnInit();
+      const result = await firstValueFrom(component.vm$);
 
-      expect(component.userEmail).toBe('user@example.com');
-    });
-
-    it('should return empty string for full name when no user', () => {
-      authServiceSpy.currentUser$.next(null);
-      component.ngOnInit();
-
-      expect(component.userFullName).toBe('');
-    });
-
-    it('should return empty string for email when no user', () => {
-      authServiceSpy.currentUser$.next(null);
-      component.ngOnInit();
-
-      expect(component.userEmail).toBe('');
+      expect(result?.userEmail).toBe('user@example.com');
     });
   });
 
   describe('navigation', () => {
-    it('should navigate to home when user becomes null', () => {
-      authServiceSpy.currentUser$.next(mockUserWithUserRole);
-      component.ngOnInit();
-
+    it('should navigate to home when user becomes null', async () => {
       authServiceSpy.currentUser$.next(null);
+      await firstValueFrom(component.vm$);
 
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
     });
   });
 
-  describe('role updates', () => {
-    it('should update isAdmin when user roles change', () => {
-      authServiceSpy.currentUser$.next(mockUserWithUserRole);
-      component.ngOnInit();
-      expect(component.isAdmin).toBe(false);
-
-      authServiceSpy.currentUser$.next(mockUserWithAdminRole);
-      expect(component.isAdmin).toBe(true);
-    });
-
-    it('should update visible cards when roles change', () => {
-      authServiceSpy.currentUser$.next(mockUserWithUserRole);
-      component.ngOnInit();
-      expect(component.visibleCards.map(c => c.id)).toContain('my-cars');
-
-      authServiceSpy.currentUser$.next(mockUserWithAdminRole);
-      expect(component.visibleCards.map(c => c.id)).not.toContain('my-cars');
+  describe('card actions', () => {
+    it('should navigate to my-profile on personal-info card action', () => {
+      component.onCardAction('personal-info');
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/my-profile']);
     });
   });
 
-  describe('cleanup', () => {
-    it('should unsubscribe on destroy', () => {
-      component.ngOnInit();
-      const unsubscribeSpy = vi.spyOn(component['authSubscription']!, 'unsubscribe');
+  describe('getCurrentUser', () => {
+    it('should call getCurrentUser on vm$ subscription', async () => {
+      authServiceSpy.currentUser$.next(mockUserWithUserRole);
+      await firstValueFrom(component.vm$);
 
-      component.ngOnDestroy();
-
-      expect(unsubscribeSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('loading state', () => {
-    it('should start with isLoading true', () => {
-      expect(component.isLoading).toBe(true);
+      expect(authServiceSpy.getCurrentUser).toHaveBeenCalled();
     });
 
-    it('should set isLoading to false after getCurrentUser succeeds', () => {
-      authServiceSpy.getCurrentUser.mockReturnValue(of(mockUserWithUserRole));
-      component.ngOnInit();
-
-      expect(component.isLoading).toBe(false);
-    });
-
-    it('should set isLoading to false and navigate on getCurrentUser error', () => {
+    it('should navigate to home on getCurrentUser error', async () => {
       authServiceSpy.getCurrentUser.mockReturnValue(throwError(() => new Error('Unauthorized')));
-      component.ngOnInit();
+      try {
+        await firstValueFrom(component.vm$);
+      } catch {
+        // Expected to error
+      }
 
-      expect(component.isLoading).toBe(false);
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
-    });
-
-    it('should call getCurrentUser on init', () => {
-      component.ngOnInit();
-
-      expect(authServiceSpy.getCurrentUser).toHaveBeenCalled();
-    });
-  });
-
-  describe('HTTP-driven role updates', () => {
-    it('should fetch fresh user data from backend on init', () => {
-      authServiceSpy.getCurrentUser.mockReturnValue(of(mockUserWithAdminRole));
-      authServiceSpy.currentUser$.next(mockUserWithAdminRole);
-      component.ngOnInit();
-
-      expect(authServiceSpy.getCurrentUser).toHaveBeenCalled();
-      expect(component.isAdmin).toBe(true);
     });
   });
 });

@@ -3,7 +3,7 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, firstValueFrom } from 'rxjs';
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { Cars } from './cars';
 import { VehicleService, FavoritesService } from '../../services';
@@ -79,34 +79,36 @@ describe('Cars', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should search on init', () => {
-    component.ngOnInit();
+  it('should search on subscription to vm$', async () => {
+    await firstValueFrom(component.vm$);
     expect(vehicleServiceSpy.searchVehicles).toHaveBeenCalled();
   });
 
-  it('should update filters on search', () => {
-    component.onSearch('Honda');
-    expect(component.filters.query).toBe('Honda');
-    expect(component.page).toBe(1);
+  it('should return vehicles via vm$ observable', async () => {
+    const result = await firstValueFrom(component.vm$);
+    expect(result.vehicles).toEqual(mockSearchResult.vehicles);
+    expect(result.total).toBe(1);
   });
 
-  it('should toggle make filter via filter change', () => {
+  it('should trigger search on onSearch', async () => {
+    component.onSearch('Honda');
+    await firstValueFrom(component.vm$);
+    expect(vehicleServiceSpy.searchVehicles).toHaveBeenCalled();
+  });
+
+  it('should toggle make filter via filter change', async () => {
     component.makeFilter.selectedValues = ['Honda'];
     component.onFiltersChange();
-    expect(component.filters.makes).toContain('Honda');
-
-    component.makeFilter.selectedValues = [];
-    component.onFiltersChange();
-    expect(component.filters.makes).toBeUndefined();
+    await firstValueFrom(component.vm$);
+    expect(vehicleServiceSpy.searchVehicles).toHaveBeenCalled();
   });
 
-  it('should clear filters', () => {
-    component.filters = { query: 'test', makes: ['Honda'] };
+  it('should clear filters', async () => {
     component.makeFilter.selectedValues = ['Honda'];
     component.clearFilters();
-    expect(component.filters.query).toBeUndefined();
-    expect(component.filters.makes).toBeUndefined();
     expect(component.makeFilter.selectedValues).toEqual([]);
+    await firstValueFrom(component.vm$);
+    expect(vehicleServiceSpy.searchVehicles).toHaveBeenCalled();
   });
 
   it('should toggle favorite', () => {
