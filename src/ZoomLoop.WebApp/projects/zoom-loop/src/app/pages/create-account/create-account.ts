@@ -4,6 +4,8 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
 import { CreateAccountForm, CreateAccountData } from 'zoom-loop-components';
 import { AuthService } from '../../services';
 
@@ -32,23 +34,25 @@ export class CreateAccount {
       lastName: data.lastName,
       phone: data.phone,
       marketingOptIn: data.marketingOptIn
-    }).subscribe({
-      next: () => {
-        this.isLoading = false;
-        // Auto-login after successful registration
+    }).pipe(
+      switchMap(() =>
         this.authService.login({
           email: data.email,
           password: data.password,
           rememberMe: false
-        }).subscribe({
-          next: () => {
-            this.router.navigate(['/my-dashboard']);
-          },
-          error: () => {
-            // Registration succeeded but login failed, redirect to home
+        }).pipe(
+          catchError(() => {
             this.router.navigate(['/']);
-          }
-        });
+            return of(null);
+          })
+        )
+      )
+    ).subscribe({
+      next: (result) => {
+        this.isLoading = false;
+        if (result !== null) {
+          this.router.navigate(['/my-dashboard']);
+        }
       },
       error: (error) => {
         this.isLoading = false;

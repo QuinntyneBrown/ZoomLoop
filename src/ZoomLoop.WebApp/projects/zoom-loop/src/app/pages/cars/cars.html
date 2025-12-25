@@ -1,48 +1,50 @@
-<div class="cars">
-  <!-- Search Header -->
-  <div class="cars__header">
-    <div class="cars__container">
-      <zl-search-bar
-        variant="inline"
-        placeholder="Search by make, model, or keyword..."
-        (search)="onSearch($event)"
-      ></zl-search-bar>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="cars">
+    <!-- Search Header -->
+    <div class="cars__header">
+      <div class="cars__container">
+        <zl-search-bar
+          variant="inline"
+          placeholder="Search by make, model, or keyword..."
+          (search)="onSearch($event)"
+        ></zl-search-bar>
+      </div>
+    </div>
+
+    <div class="cars__content">
+      <!-- Filters Sidebar -->
+      <zl-filter-sidebar
+        title="Filters"
+        [checkboxFilters]="[makeFilter]"
+        [appliedFilters]="vm.appliedFilters"
+        [resultCount]="vm.total"
+        (filtersChange)="onFiltersChange()"
+        (filterRemove)="onFilterRemove($event)"
+        (filtersClear)="clearFilters()"
+      ></zl-filter-sidebar>
+
+      <!-- Results -->
+      <main class="cars__results">
+        <div class="cars__results-header">
+          <span class="cars__results-count">{{ vm.total }} vehicles found</span>
+        </div>
+
+        <div class="cars__grid">
+          @for (vehicle of vm.vehicles; track vehicle.id) {
+            <zl-vehicle-card
+              [vehicle]="toVehicleCard(vehicle)"
+              [href]="'/cars/' + vehicle.id"
+              [isFavorite]="isFavorite(vehicle.id)"
+              (favoriteToggle)="onFavoriteToggle($event)"
+            ></zl-vehicle-card>
+          } @empty {
+            <div class="cars__empty">
+              <p>No vehicles found</p>
+              <zl-button variant="primary" (click)="clearFilters()">Clear Filters</zl-button>
+            </div>
+          }
+        </div>
+      </main>
     </div>
   </div>
-
-  <div class="cars__content">
-    <!-- Filters Sidebar -->
-    <zl-filter-sidebar
-      title="Filters"
-      [checkboxFilters]="[makeFilter]"
-      [appliedFilters]="appliedFilters"
-      [resultCount]="total"
-      (filtersChange)="onFiltersChange()"
-      (filterRemove)="onFilterRemove($event)"
-      (filtersClear)="clearFilters()"
-    ></zl-filter-sidebar>
-
-    <!-- Results -->
-    <main class="cars__results">
-      <div class="cars__results-header">
-        <span class="cars__results-count">{{ total }} vehicles found</span>
-      </div>
-
-      <div class="cars__grid">
-        @for (vehicle of vehicles; track vehicle.id) {
-          <zl-vehicle-card
-            [vehicle]="toVehicleCard(vehicle)"
-            [href]="'/cars/' + vehicle.id"
-            [isFavorite]="isFavorite(vehicle.id)"
-            (favoriteToggle)="onFavoriteToggle($event)"
-          ></zl-vehicle-card>
-        } @empty {
-          <div class="cars__empty">
-            <p>No vehicles found</p>
-            <zl-button variant="primary" (click)="clearFilters()">Clear Filters</zl-button>
-          </div>
-        }
-      </div>
-    </main>
-  </div>
-</div>
+</ng-container>

@@ -1,10 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, inject, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   HeaderComponent,
   FooterComponent,
@@ -18,7 +18,6 @@ import {
   ForgotPasswordData
 } from 'zoom-loop-components';
 import { AuthService } from '../../services';
-import { User } from '../../models';
 
 @Component({
   selector: 'app-layout',
@@ -27,18 +26,36 @@ import { User } from '../../models';
   templateUrl: './layout.html',
   styleUrl: './layout.scss'
 })
-export class Layout implements OnInit, OnDestroy {
+export class Layout {
   private router = inject(Router);
   private authService = inject(AuthService);
-  private authSubscription?: Subscription;
 
   isScrolled = false;
-  isLoggedIn = false;
-  currentUser: User | null = null;
   isLoginDialogOpen = false;
   loginDialogMode: LoginDialogMode = 'login';
   isAuthLoading = false;
   authErrorMessage = '';
+
+  currentUser$ = this.authService.currentUser$;
+
+  isLoggedIn$ = this.currentUser$.pipe(
+    map(user => !!user)
+  );
+
+  userInitials$ = this.currentUser$.pipe(
+    map(user => {
+      if (user) {
+        const first = user.firstName.charAt(0).toUpperCase();
+        const last = user.lastName.charAt(0).toUpperCase();
+        return `${first}${last}`;
+      }
+      return '';
+    })
+  );
+
+  userName$ = this.currentUser$.pipe(
+    map(user => user?.firstName || '')
+  );
 
   navItems: NavItem[] = [
     { label: 'Buy', href: '/cars' },
@@ -87,30 +104,6 @@ export class Layout implements OnInit, OnDestroy {
     { label: 'Privacy', href: '/privacy' },
     { label: 'Terms', href: '/terms' }
   ];
-
-  get userInitials(): string {
-    if (this.currentUser) {
-      const first = this.currentUser.firstName.charAt(0).toUpperCase();
-      const last = this.currentUser.lastName.charAt(0).toUpperCase();
-      return `${first}${last}`;
-    }
-    return '';
-  }
-
-  get userName(): string {
-    return this.currentUser?.firstName || '';
-  }
-
-  ngOnInit(): void {
-    this.authSubscription = this.authService.currentUser$.subscribe(user => {
-      this.currentUser = user;
-      this.isLoggedIn = !!user;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.authSubscription?.unsubscribe();
-  }
 
   @HostListener('window:scroll')
   onScroll(): void {
