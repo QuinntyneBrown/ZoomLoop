@@ -1,90 +1,94 @@
 <div class="my-dashboard">
-  <div class="my-dashboard__header">
-    <h1 class="my-dashboard__title">My Dashboard</h1>
-    <p class="my-dashboard__welcome" *ngIf="currentUser && !isLoading">
-      Welcome back, {{ currentUser.firstName }}!
-    </p>
-  </div>
+  <ng-container *ngIf="vm$ | async as vm; else loading">
+    <div class="my-dashboard__header">
+      <h1 class="my-dashboard__title">My Dashboard</h1>
+      <p class="my-dashboard__welcome">
+        Welcome back, {{ vm.currentUser.firstName }}!
+      </p>
+    </div>
 
-  <div *ngIf="isLoading" class="my-dashboard__loading">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Loading your dashboard...</p>
-  </div>
+    <div class="my-dashboard__grid">
+      <mat-card *ngFor="let card of vm.visibleCards" class="my-dashboard__card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="my-dashboard__card-icon">{{ card.icon }}</mat-icon>
+          <mat-card-title>{{ card.title }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="my-dashboard__card-description">{{ card.description }}</p>
 
-  <div class="my-dashboard__grid" *ngIf="!isLoading">
-    <mat-card *ngFor="let card of visibleCards" class="my-dashboard__card">
-      <mat-card-header>
-        <mat-icon mat-card-avatar class="my-dashboard__card-icon">{{ card.icon }}</mat-icon>
-        <mat-card-title>{{ card.title }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p class="my-dashboard__card-description">{{ card.description }}</p>
-
-        <!-- Personal Info Card Content -->
-        <div *ngIf="card.id === 'personal-info'" class="my-dashboard__card-details">
-          <div class="my-dashboard__detail-row">
-            <span class="my-dashboard__detail-label">Name:</span>
-            <span class="my-dashboard__detail-value">{{ userFullName }}</span>
-          </div>
-          <div class="my-dashboard__detail-row">
-            <span class="my-dashboard__detail-label">Email:</span>
-            <span class="my-dashboard__detail-value">{{ userEmail }}</span>
-          </div>
-          <div class="my-dashboard__detail-row" *ngIf="currentUser?.phone">
-            <span class="my-dashboard__detail-label">Phone:</span>
-            <span class="my-dashboard__detail-value">{{ currentUser?.phone }}</span>
-          </div>
-        </div>
-
-        <!-- My Cars Card Content -->
-        <div *ngIf="card.id === 'my-cars'" class="my-dashboard__card-details">
-          <p class="my-dashboard__card-empty">No saved vehicles yet</p>
-        </div>
-
-        <!-- My Orders Card Content -->
-        <div *ngIf="card.id === 'my-orders'" class="my-dashboard__card-details">
-          <p class="my-dashboard__card-empty">No orders yet</p>
-        </div>
-
-        <!-- Notifications Card Content -->
-        <div *ngIf="card.id === 'notifications'" class="my-dashboard__card-details">
-          <div class="my-dashboard__toggle-row">
-            <span>Email notifications</span>
-            <span class="my-dashboard__toggle-status my-dashboard__toggle-status--on">On</span>
-          </div>
-          <div class="my-dashboard__toggle-row">
-            <span>SMS notifications</span>
-            <span class="my-dashboard__toggle-status">Off</span>
-          </div>
-          <div class="my-dashboard__toggle-row">
-            <span>Push notifications</span>
-            <span class="my-dashboard__toggle-status my-dashboard__toggle-status--on">On</span>
-          </div>
-        </div>
-
-        <!-- Rewards Card Content -->
-        <div *ngIf="card.id === 'rewards'" class="my-dashboard__card-details">
-          <div class="my-dashboard__rewards-summary">
-            <div class="my-dashboard__rewards-points">
-              <span class="my-dashboard__rewards-value">0</span>
-              <span class="my-dashboard__rewards-label">Points</span>
+          <!-- Personal Info Card Content -->
+          <div *ngIf="card.id === 'personal-info'" class="my-dashboard__card-details">
+            <div class="my-dashboard__detail-row">
+              <span class="my-dashboard__detail-label">Name:</span>
+              <span class="my-dashboard__detail-value">{{ vm.userFullName }}</span>
             </div>
-            <div class="my-dashboard__rewards-level">
-              <span class="my-dashboard__rewards-badge">New Member</span>
+            <div class="my-dashboard__detail-row">
+              <span class="my-dashboard__detail-label">Email:</span>
+              <span class="my-dashboard__detail-value">{{ vm.userEmail }}</span>
+            </div>
+            <div class="my-dashboard__detail-row" *ngIf="vm.currentUser.phone">
+              <span class="my-dashboard__detail-label">Phone:</span>
+              <span class="my-dashboard__detail-value">{{ vm.currentUser.phone }}</span>
             </div>
           </div>
-        </div>
 
-        <!-- Saved Searches Card Content -->
-        <div *ngIf="card.id === 'saved-searches'" class="my-dashboard__card-details">
-          <p class="my-dashboard__card-empty">No saved searches yet</p>
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="onCardAction(card.id)">
-          {{ card.actionLabel }}
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+          <!-- My Cars Card Content -->
+          <div *ngIf="card.id === 'my-cars'" class="my-dashboard__card-details">
+            <p class="my-dashboard__card-empty">No saved vehicles yet</p>
+          </div>
+
+          <!-- My Orders Card Content -->
+          <div *ngIf="card.id === 'my-orders'" class="my-dashboard__card-details">
+            <p class="my-dashboard__card-empty">No orders yet</p>
+          </div>
+
+          <!-- Notifications Card Content -->
+          <div *ngIf="card.id === 'notifications'" class="my-dashboard__card-details">
+            <div class="my-dashboard__toggle-row">
+              <span>Email notifications</span>
+              <span class="my-dashboard__toggle-status my-dashboard__toggle-status--on">On</span>
+            </div>
+            <div class="my-dashboard__toggle-row">
+              <span>SMS notifications</span>
+              <span class="my-dashboard__toggle-status">Off</span>
+            </div>
+            <div class="my-dashboard__toggle-row">
+              <span>Push notifications</span>
+              <span class="my-dashboard__toggle-status my-dashboard__toggle-status--on">On</span>
+            </div>
+          </div>
+
+          <!-- Rewards Card Content -->
+          <div *ngIf="card.id === 'rewards'" class="my-dashboard__card-details">
+            <div class="my-dashboard__rewards-summary">
+              <div class="my-dashboard__rewards-points">
+                <span class="my-dashboard__rewards-value">0</span>
+                <span class="my-dashboard__rewards-label">Points</span>
+              </div>
+              <div class="my-dashboard__rewards-level">
+                <span class="my-dashboard__rewards-badge">New Member</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Saved Searches Card Content -->
+          <div *ngIf="card.id === 'saved-searches'" class="my-dashboard__card-details">
+            <p class="my-dashboard__card-empty">No saved searches yet</p>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="onCardAction(card.id)">
+            {{ card.actionLabel }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="my-dashboard__loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading your dashboard...</p>
+    </div>
+  </ng-template>
 </div>

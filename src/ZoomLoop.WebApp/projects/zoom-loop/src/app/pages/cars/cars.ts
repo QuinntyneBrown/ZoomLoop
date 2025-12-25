@@ -1,12 +1,12 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, shareReplay, switchMap, startWith } from 'rxjs/operators';
 import {
   SearchBarComponent,
   VehicleCardComponent,
@@ -18,6 +18,12 @@ import {
 } from 'zoom-loop-components';
 import { VehicleService, FavoritesService } from '../../services';
 import { Vehicle, SearchFilters, SearchResult } from '../../models';
+
+interface CarsViewModel {
+  vehicles: Vehicle[];
+  total: number;
+  appliedFilters: AppliedFilter[];
+}
 
 @Component({
   selector: 'app-cars',
@@ -33,18 +39,17 @@ import { Vehicle, SearchFilters, SearchResult } from '../../models';
   templateUrl: './cars.html',
   styleUrl: './cars.scss'
 })
-export class Cars implements OnInit, OnDestroy {
+export class Cars {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private vehicleService = inject(VehicleService);
   private favoritesService = inject(FavoritesService);
-  private destroy$ = new Subject<void>();
 
-  vehicles: Vehicle[] = [];
-  total = 0;
-  page = 1;
-  pageSize = 12;
-  filters: SearchFilters = {};
+  private pageSize = 12;
+  private searchTrigger$ = new BehaviorSubject<{ filters: SearchFilters; page: number }>({
+    filters: {},
+    page: 1
+  });
 
   makeFilter: CheckboxFilter = {
     id: 'make',
@@ -63,48 +68,67 @@ export class Cars implements OnInit, OnDestroy {
     maxVisible: 5
   };
 
-  appliedFilters: AppliedFilter[] = [];
-
-  ngOnInit(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      this.filters = {
+  private routeParams$ = this.route.queryParams.pipe(
+    map(params => {
+      const filters: SearchFilters = {
         query: params['q'] || undefined,
         makes: params['make'] ? [params['make']] : undefined
       };
-      this.makeFilter.selectedValues = this.filters.makes || [];
-      this.updateAppliedFilters();
-      this.search();
-    });
+      this.makeFilter.selectedValues = filters.makes || [];
+      return { filters, page: 1 };
+    })
+  );
+
+  private searchParams$ = combineLatest([
+    this.routeParams$,
+    this.searchTrigger$.pipe(startWith(null))
+  ]).pipe(
+    map(([routeParams, triggerParams]) => triggerParams || routeParams)
+  );
+
+  vm$: Observable<CarsViewModel> = this.searchParams$.pipe(
+    switchMap(({ filters, page }) =>
+      this.vehicleService.searchVehicles(filters, page, this.pageSize).pipe(
+        map(result => this.createViewModel(result, filters))
+      )
+    ),
+    shareReplay(1)
+  );
+
+  private createViewModel(result: SearchResult, filters: SearchFilters): CarsViewModel {
+    return {
+      vehicles: result.vehicles,
+      total: result.total,
+      appliedFilters: this.getAppliedFilters(filters)
+    };
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  search(): void {
-    this.vehicleService.searchVehicles(this.filters, this.page, this.pageSize)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(result => {
-        this.vehicles = result.vehicles;
-        this.total = result.total;
+  private getAppliedFilters(filters: SearchFilters): AppliedFilter[] {
+    const applied: AppliedFilter[] = [];
+    if (filters.makes) {
+      filters.makes.forEach(make => {
+        applied.push({ id: 'make', label: make, value: make });
       });
+    }
+    return applied;
   }
 
   onSearch(query: string): void {
-    this.filters.query = query || undefined;
-    this.page = 1;
-    this.updateUrl();
-    this.search();
+    const currentSearch = this.searchTrigger$.getValue();
+    const newFilters = { ...currentSearch.filters, query: query || undefined };
+    this.updateUrl(newFilters);
+    this.searchTrigger$.next({ filters: newFilters, page: 1 });
   }
 
   onFiltersChange(): void {
-    this.filters.makes = this.makeFilter.selectedValues.length > 0
-      ? [...this.makeFilter.selectedValues]
-      : undefined;
-    this.updateAppliedFilters();
-    this.page = 1;
-    this.search();
+    const currentSearch = this.searchTrigger$.getValue();
+    const newFilters = {
+      ...currentSearch.filters,
+      makes: this.makeFilter.selectedValues.length > 0
+        ? [...this.makeFilter.selectedValues]
+        : undefined
+    };
+    this.searchTrigger$.next({ filters: newFilters, page: 1 });
   }
 
   onFilterRemove(filter: AppliedFilter): void {
@@ -115,20 +139,9 @@ export class Cars implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    this.filters = {};
     this.makeFilter.selectedValues = [];
-    this.appliedFilters = [];
-    this.page = 1;
-    this.updateUrl();
-    this.search();
-  }
-
-  private updateAppliedFilters(): void {
-    this.appliedFilters = this.makeFilter.selectedValues.map(make => ({
-      id: 'make',
-      label: make,
-      value: make
-    }));
+    this.updateUrl({});
+    this.searchTrigger$.next({ filters: {}, page: 1 });
   }
 
   onFavoriteToggle(event: { id: string }): void {
@@ -163,10 +176,10 @@ export class Cars implements OnInit, OnDestroy {
     };
   }
 
-  private updateUrl(): void {
+  private updateUrl(filters: SearchFilters): void {
     const queryParams: Record<string, string | undefined> = {};
-    if (this.filters.query) queryParams['q'] = this.filters.query;
-    if (this.filters.makes?.length === 1) queryParams['make'] = this.filters.makes[0];
+    if (filters.query) queryParams['q'] = filters.query;
+    if (filters.makes?.length === 1) queryParams['make'] = filters.makes[0];
     this.router.navigate([], { relativeTo: this.route, queryParams });
   }
 }

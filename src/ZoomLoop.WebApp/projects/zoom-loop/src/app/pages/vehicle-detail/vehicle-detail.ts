@@ -1,11 +1,10 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {
   ImageGalleryComponent,
   FinanceCalculatorComponent,
@@ -16,6 +15,14 @@ import {
 } from 'zoom-loop-components';
 import { VehicleService, FavoritesService } from '../../services';
 import { Vehicle } from '../../models';
+
+interface VehicleDetailViewModel {
+  vehicle: Vehicle;
+  isFavorite: boolean;
+  galleryImages: GalleryImage[];
+  formattedPrice: string;
+  formattedMonthlyPayment: string | null;
+}
 
 @Component({
   selector: 'app-vehicle-detail',
@@ -32,45 +39,40 @@ import { Vehicle } from '../../models';
   templateUrl: './vehicle-detail.html',
   styleUrl: './vehicle-detail.scss'
 })
-export class VehicleDetail implements OnInit, OnDestroy {
+export class VehicleDetail {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private vehicleService = inject(VehicleService);
   private favoritesService = inject(FavoritesService);
-  private destroy$ = new Subject<void>();
 
-  vehicle: Vehicle | null = null;
-  isFavorite = false;
-
-  ngOnInit(): void {
-    this.route.params.pipe(
-      switchMap(params => this.vehicleService.getVehicleById(params['id'])),
-      takeUntil(this.destroy$)
-    ).subscribe(vehicle => {
-      if (vehicle) {
-        this.vehicle = vehicle;
-        this.isFavorite = this.favoritesService.isFavoriteSync(vehicle.id);
-      } else {
+  vm$ = this.route.params.pipe(
+    switchMap(params => this.vehicleService.getVehicleById(params['id'])),
+    tap(vehicle => {
+      if (!vehicle) {
         this.router.navigate(['/cars']);
       }
-    });
+    }),
+    map(vehicle => vehicle ? this.createViewModel(vehicle) : null),
+    shareReplay(1)
+  );
+
+  private createViewModel(vehicle: Vehicle): VehicleDetailViewModel {
+    return {
+      vehicle,
+      isFavorite: this.favoritesService.isFavoriteSync(vehicle.id),
+      galleryImages: vehicle.images.map((url, i) => ({
+        src: url,
+        alt: `${vehicle.title} - Image ${i + 1}`,
+        category: 'exterior' as const
+      })),
+      formattedPrice: this.formatPrice(vehicle.price),
+      formattedMonthlyPayment: vehicle.monthlyPayment
+        ? this.formatPrice(vehicle.monthlyPayment)
+        : null
+    };
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  get galleryImages(): GalleryImage[] {
-    if (!this.vehicle) return [];
-    return this.vehicle.images.map((url, i) => ({
-      src: url,
-      alt: `${this.vehicle!.title} - Image ${i + 1}`,
-      category: 'exterior' as const
-    }));
-  }
-
-  formatPrice(price: number): string {
+  private formatPrice(price: number): string {
     return new Intl.NumberFormat('en-CA', {
       style: 'currency',
       currency: 'CAD',
@@ -78,11 +80,12 @@ export class VehicleDetail implements OnInit, OnDestroy {
     }).format(price);
   }
 
-  toggleFavorite(): void {
-    if (this.vehicle) {
-      this.favoritesService.toggle(this.vehicle.id);
-      this.isFavorite = !this.isFavorite;
-    }
+  toggleFavorite(vehicleId: string): void {
+    this.favoritesService.toggle(vehicleId);
+  }
+
+  isFavorite(vehicleId: string): boolean {
+    return this.favoritesService.isFavoriteSync(vehicleId);
   }
 
   onPreApproval(): void {
